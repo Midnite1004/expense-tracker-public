@@ -1,527 +1,516 @@
-import React, { useState, useEffect } from 'react';
-import { PlusCircle, TrendingUp, TrendingDown, Target, Calendar, CreditCard, AlertTriangle, CheckCircle, X, Edit3, Trash2 } from 'lucide-react';
-
-const ExpenseTracker = () => {
-  const [expenses, setExpenses] = useState([
-    { id: 1, name: 'Mortgage', cost: 1840.63, type: 'Essential', frequency: 'Monthly', bank: 'Natwest', status: 'active', category: 'Housing' },
-    { id: 2, name: 'Service Charge', cost: 175.94, type: 'Essential', frequency: 'Monthly', bank: 'Natwest', status: 'active', category: 'Housing' },
-    { id: 3, name: 'Mortgage Protection', cost: 126.06, type: 'Non Essential', frequency: 'Monthly', bank: 'Natwest', status: 'active', category: 'Insurance' },
-    { id: 4, name: 'Council Tax', cost: 117, type: 'Essential', frequency: 'Monthly', bank: 'Natwest', status: 'active', category: 'Housing' },
-    { id: 5, name: 'BG Electricity', cost: 41.11, type: 'Essential', frequency: 'Monthly', bank: 'Natwest', status: 'active', category: 'Utilities' },
-    { id: 6, name: 'Sky Internet', cost: 38, type: 'Essential', frequency: 'Monthly', bank: 'Natwest', status: 'active', category: 'Utilities' },
-    { id: 7, name: 'Contribution SMBC', cost: 300, type: 'Essential', frequency: 'Monthly', bank: 'Revolut', status: 'active', category: 'Savings' },
-    { id: 8, name: 'Content Insurance', cost: 350, type: 'Essential', frequency: 'Annual', bank: 'Natwest', status: 'active', category: 'Insurance' },
-    { id: 9, name: 'Microsoft 365', cost: 84.99, type: 'Essential', frequency: 'Annual', bank: 'Amex', status: 'active', category: 'Software' },
-    { id: 10, name: 'Gym Membership', cost: 55, type: 'Non Essential', frequency: 'Monthly', bank: 'Revolut', status: 'active', category: 'Health' },
-    { id: 11, name: 'Apple Music', cost: 10.99, type: 'Non Essential', frequency: 'Monthly', bank: 'Amex', status: 'active', category: 'Entertainment' },
-    { id: 12, name: 'Netflix', cost: 15.99, type: 'Non Essential', frequency: 'Monthly', bank: 'Amex', status: 'active', category: 'Entertainment' },
-    { id: 13, name: 'Amazon Prime', cost: 8.99, type: 'Non Essential', frequency: 'Monthly', bank: 'Amex', status: 'active', category: 'Shopping' },
-    { id: 14, name: 'Shopify', cost: 40, type: 'Non Essential', frequency: 'Monthly', bank: '', status: 'cancelled', category: 'Business' },
-    { id: 15, name: 'Google Gemini Advanced', cost: 19.99, type: 'Non Essential', frequency: 'Monthly', bank: 'Revolut', status: 'active', category: 'Software' },
-    { id: 16, name: 'Anthropic', cost: 18, type: 'Non Essential', frequency: 'Monthly', bank: 'Amex', status: 'active', category: 'Software' },
-    { id: 17, name: 'OpenAI', cost: 20, type: 'Non Essential', frequency: 'Monthly', bank: 'Amex', status: 'active', category: 'Software' }
-  ]);
-
-  const [monthlyBudget, setMonthlyBudget] = useState(4000);
-  const [savingsGoal, setSavingsGoal] = useState(1000);
-  const [activeTab, setActiveTab] = useState('overview');
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [editingExpense, setEditingExpense] = useState(null);
-
-  const [newExpense, setNewExpense] = useState({
-    name: '',
-    cost: '',
-    type: 'Essential',
-    frequency: 'Monthly',
-    bank: 'Natwest',
-    category: 'Other'
-  });
-
-  // Calculate monthly totals
-  const calculateMonthlyTotal = () => {
-    return expenses
-      .filter(expense => expense.status === 'active')
-      .reduce((total, expense) => {
-        const monthlyCost = expense.frequency === 'Annual' ? expense.cost / 12 : expense.cost;
-        return total + monthlyCost;
-      }, 0);
-  };
-
-  const monthlyTotal = calculateMonthlyTotal();
-  const budgetRemaining = monthlyBudget - monthlyTotal;
-  const budgetUsagePercent = Math.min((monthlyTotal / monthlyBudget) * 100, 100);
-
-  // Calculate category breakdowns
-  const categoryTotals = expenses
-    .filter(expense => expense.status === 'active')
-    .reduce((acc, expense) => {
-      const monthlyCost = expense.frequency === 'Annual' ? expense.cost / 12 : expense.cost;
-      acc[expense.category] = (acc[expense.category] || 0) + monthlyCost;
-      return acc;
-    }, {});
-
-  const essentialVsNonEssential = expenses
-    .filter(expense => expense.status === 'active')
-    .reduce((acc, expense) => {
-      const monthlyCost = expense.frequency === 'Annual' ? expense.cost / 12 : expense.cost;
-      acc[expense.type] = (acc[expense.type] || 0) + monthlyCost;
-      return acc;
-    }, {});
-
-  const handleAddExpense = () => {
-    if (!newExpense.name || !newExpense.cost) return;
-    
-    const expense = {
-      id: Date.now(),
-      ...newExpense,
-      cost: parseFloat(newExpense.cost),
-      status: 'active'
-    };
-    
-    setExpenses([...expenses, expense]);
-    setNewExpense({ name: '', cost: '', type: 'Essential', frequency: 'Monthly', bank: 'Natwest', category: 'Other' });
-    setShowAddForm(false);
-  };
-
-  const handleEditExpense = (expense) => {
-    setEditingExpense(expense);
-    setNewExpense({
-      name: expense.name,
-      cost: expense.cost.toString(),
-      type: expense.type,
-      frequency: expense.frequency,
-      bank: expense.bank,
-      category: expense.category
-    });
-    setShowAddForm(true);
-  };
-
-  const handleUpdateExpense = () => {
-    if (!newExpense.name || !newExpense.cost) return;
-    
-    setExpenses(expenses.map(expense => 
-      expense.id === editingExpense.id 
-        ? { ...expense, ...newExpense, cost: parseFloat(newExpense.cost) }
-        : expense
-    ));
-    
-    setEditingExpense(null);
-    setNewExpense({ name: '', cost: '', type: 'Essential', frequency: 'Monthly', bank: 'Natwest', category: 'Other' });
-    setShowAddForm(false);
-  };
-
-  const toggleExpenseStatus = (id) => {
-    setExpenses(expenses.map(expense => 
-      expense.id === id 
-        ? { ...expense, status: expense.status === 'active' ? 'cancelled' : 'active' }
-        : expense
-    ));
-  };
-
-  const deleteExpense = (id) => {
-    setExpenses(expenses.filter(expense => expense.id !== id));
-  };
-
-  const categories = ['Housing', 'Utilities', 'Insurance', 'Savings', 'Software', 'Health', 'Entertainment', 'Shopping', 'Business', 'Other'];
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
-            <CreditCard className="text-blue-600" />
-            Personal Finance Tracker
-          </h1>
-          <p className="text-gray-600 mt-2">Take control of your finances with smart tracking and insights</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+    <div class="container mx-auto px-4 py-6 max-w-6xl">
+        <!-- Header -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border border-slate-200">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-800 mb-2">Personal Finance Tracker</h1>
+                    <p class="text-slate-600">Take control of your finances with smart tracking and insights</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex flex-wrap gap-2">
+                    <button onclick="exportData()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Export
+                    </button>
+                    <button onclick="document.getElementById('importFile').click()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+                        <i data-lucide="upload" class="w-4 h-4"></i>
+                        Import
+                    </button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+                </div>
+            </div>
         </div>
 
-        {/* Navigation */}
-        <div className="bg-white rounded-xl shadow-lg p-2 mb-6">
-          <div className="flex gap-2">
-            {['overview', 'expenses', 'analytics'].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 rounded-lg font-medium capitalize transition-all ${
-                  activeTab === tab
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+        <!-- Navigation -->
+        <div class="bg-white rounded-xl shadow-lg mb-6 border border-slate-200">
+            <div class="flex overflow-x-auto">
+                <button onclick="setActiveTab('overview')" class="px-6 py-3 rounded-lg font-medium capitalize transition-all bg-blue-600 text-white shadow-lg text-gray-600 hover:bg-gray-100">Overview</button>
+                <button onclick="setActiveTab('expenses')" class="px-6 py-3 rounded-lg font-medium capitalize transition-all text-gray-600 hover:bg-gray-100">Expenses</button>
+                <button onclick="setActiveTab('analytics')" class="px-6 py-3 rounded-lg font-medium capitalize transition-all text-gray-600 hover:bg-gray-100">Analytics</button>
+            </div>
         </div>
 
-        {activeTab === 'overview' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Budget Overview */}
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <Target className="text-green-600" />
-                  Monthly Budget Overview
-                </h2>
-                
-                {/* Budget Progress Bar */}
-                <div className="mb-6">
-                  <div className="flex justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-600">Budget Usage</span>
-                    <span className="text-sm font-medium text-gray-800">{budgetUsagePercent.toFixed(1)}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-4">
-                    <div 
-                      className={`h-4 rounded-full transition-all duration-500 ${
-                        budgetUsagePercent > 90 ? 'bg-red-500' : 
-                        budgetUsagePercent > 75 ? 'bg-yellow-500' : 'bg-green-500'
-                      }`}
-                      style={{ width: `${Math.min(budgetUsagePercent, 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                {/* Budget Stats */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-blue-50 rounded-lg p-4">
-                    <div className="text-sm text-blue-600 font-medium">Monthly Budget</div>
-                    <div className="text-2xl font-bold text-blue-800">£{monthlyBudget.toFixed(2)}</div>
-                  </div>
-                  <div className="bg-purple-50 rounded-lg p-4">
-                    <div className="text-sm text-purple-600 font-medium">Total Expenses</div>
-                    <div className="text-2xl font-bold text-purple-800">£{monthlyTotal.toFixed(2)}</div>
-                  </div>
-                  <div className={`rounded-lg p-4 ${budgetRemaining >= 0 ? 'bg-green-50' : 'bg-red-50'}`}>
-                    <div className={`text-sm font-medium ${budgetRemaining >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {budgetRemaining >= 0 ? 'Remaining' : 'Over Budget'}
+        <!-- Budget Overview Tab -->
+        <div id="overview" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Budget Card -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-slate-800">Monthly Budget</h3>
+                        <button onclick="editBudget()" class="text-blue-600 hover:text-blue-800">
+                            <i data-lucide="edit-2" class="w-4 h-4"></i>
+                        </button>
                     </div>
-                    <div className={`text-2xl font-bold ${budgetRemaining >= 0 ? 'text-green-800' : 'text-red-800'}`}>
-                      £{Math.abs(budgetRemaining).toFixed(2)}
+                    <div class="space-y-2">
+                        <div class="text-3xl font-bold text-slate-800" id="budgetAmount">£0</div>
+                        <div class="text-sm text-slate-600">
+                            <span id="budgetUsage">£0 used</span> • <span id="budgetRemaining">£0 remaining</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="budgetProgress" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <div class="text-xs text-slate-500" id="budgetPercentage">0% of budget used</div>
                     </div>
-                  </div>
-                  <div className="bg-indigo-50 rounded-lg p-4">
-                    <div className="text-sm text-indigo-600 font-medium">Annual Cost</div>
-                    <div className="text-2xl font-bold text-indigo-800">£{(monthlyTotal * 12).toFixed(2)}</div>
-                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Quick Actions */}
-            <div className="space-y-6">
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Quick Actions</h3>
-                <div className="space-y-3">
-                  <button
-                    onClick={() => setShowAddForm(true)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <PlusCircle size={20} />
-                    Add New Expense
-                  </button>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-600">Monthly Budget</label>
-                    <input
-                      type="number"
-                      value={monthlyBudget}
-                      onChange={(e) => setMonthlyBudget(parseFloat(e.target.value) || 0)}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Essential vs Non-Essential */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Spending Breakdown</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-green-600 font-medium">Essential</span>
-                    <span className="font-bold">£{(essentialVsNonEssential.Essential || 0).toFixed(2)}</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="h-2 bg-green-500 rounded-full"
-                      style={{ width: `${((essentialVsNonEssential.Essential || 0) / monthlyTotal) * 100}%` }}
-                    ></div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-orange-600 font-medium">Non-Essential</span>
-                    <span className="font-bold">£{(essentialVsNonEssential['Non Essential'] || 0).toFixed(2)}</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="h-2 bg-orange-500 rounded-full"
-                      style={{ width: `${((essentialVsNonEssential['Non Essential'] || 0) / monthlyTotal) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'expenses' && (
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-800">All Expenses</h2>
-                <button
-                  onClick={() => setShowAddForm(true)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium flex items-center gap-2 transition-colors"
-                >
-                  <PlusCircle size={18} />
-                  Add Expense
-                </button>
-              </div>
-            </div>
-            
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Frequency</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bank</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {expenses.map((expense) => (
-                    <tr key={expense.id} className={expense.status === 'cancelled' ? 'opacity-50' : ''}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="font-medium text-gray-900">{expense.name}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-gray-900">£{expense.cost.toFixed(2)}</div>
-                        {expense.frequency === 'Annual' && (
-                          <div className="text-xs text-gray-500">£{(expense.cost / 12).toFixed(2)}/month</div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          expense.type === 'Essential' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-orange-100 text-orange-800'
-                        }`}>
-                          {expense.type}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-900">{expense.frequency}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-900">{expense.category}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-900">{expense.bank}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          expense.status === 'active' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {expense.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                        <button
-                          onClick={() => handleEditExpense(expense)}
-                          className="text-blue-600 hover:text-blue-900"
-                        >
-                          <Edit3 size={16} />
-                        </button>
-                        <button
-                          onClick={() => toggleExpenseStatus(expense.id)}
-                          className={expense.status === 'active' ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'}
-                        >
-                          {expense.status === 'active' ? <X size={16} /> : <CheckCircle size={16} />}
-                        </button>
-                        <button
-                          onClick={() => deleteExpense(expense.id)}
-                          className="text-red-600 hover:text-red-900"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'analytics' && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Category Breakdown */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-6">Spending by Category</h2>
-              <div className="space-y-4">
-                {Object.entries(categoryTotals)
-                  .sort(([,a], [,b]) => b - a)
-                  .map(([category, amount]) => (
-                    <div key={category} className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="flex justify-between mb-1">
-                          <span className="text-sm font-medium text-gray-700">{category}</span>
-                          <span className="text-sm font-bold text-gray-900">£{amount.toFixed(2)}</span>
+                <!-- Monthly Totals -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-4">Monthly Totals</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600">Essential</span>
+                            <span class="font-semibold text-slate-800" id="essentialTotal">£0</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="h-2 bg-blue-500 rounded-full"
-                            style={{ width: `${(amount / monthlyTotal) * 100}%` }}
-                          ></div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600">Non-Essential</span>
+                            <span class="font-semibold text-slate-800" id="nonEssentialTotal">£0</span>
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">
-                          {((amount / monthlyTotal) * 100).toFixed(1)}% of total
+                        <div class="border-t pt-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-800 font-semibold">Total Spend</span>
+                                <span class="font-bold text-lg text-slate-800" id="totalSpend">£0</span>
+                            </div>
                         </div>
-                      </div>
                     </div>
-                  ))}
-              </div>
-            </div>
+                </div>
 
-            {/* Savings Opportunities */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-6">Optimization Suggestions</h2>
-              <div className="space-y-4">
-                {expenses
-                  .filter(expense => expense.type === 'Non Essential' && expense.status === 'active')
-                  .sort((a, b) => {
-                    const aMonthly = a.frequency === 'Annual' ? a.cost / 12 : a.cost;
-                    const bMonthly = b.frequency === 'Annual' ? b.cost / 12 : b.cost;
-                    return bMonthly - aMonthly;
-                  })
-                  .slice(0, 5)
-                  .map((expense) => {
-                    const monthlyCost = expense.frequency === 'Annual' ? expense.cost / 12 : expense.cost;
-                    return (
-                      <div key={expense.id} className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                        <div>
-                          <div className="font-medium text-gray-800">{expense.name}</div>
-                          <div className="text-sm text-gray-600">
-                            Consider cancelling to save £{monthlyCost.toFixed(2)}/month
-                          </div>
+                <!-- Quick Stats -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-4">Quick Stats</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600">Active Expenses</span>
+                            <span class="font-semibold text-slate-800" id="activeCount">0</span>
                         </div>
-                        <button
-                          onClick={() => toggleExpenseStatus(expense.id)}
-                          className="text-red-600 hover:text-red-800 font-medium text-sm"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    );
-                  })}
-              </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600">Cancelled</span>
+                            <span class="font-semibold text-slate-800" id="cancelledCount">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600">Avg per Expense</span>
+                            <span class="font-semibold text-slate-800" id="avgExpense">£0</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        )}
 
-        {/* Add/Edit Expense Modal */}
-        {showAddForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">
-                {editingExpense ? 'Edit Expense' : 'Add New Expense'}
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input
-                    type="text"
-                    value={newExpense.name}
-                    onChange={(e) => setNewExpense({ ...newExpense, name: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Expense name"
-                  />
+            <!-- Category Breakdown -->
+            <div class="mt-6 bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+                <h3 class="text-xl font-semibold text-slate-800 mb-6">Spending by Category</h3>
+                <div id="categoryBreakdown" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Category cards will be populated here -->
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Cost (£)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={newExpense.cost}
-                    onChange={(e) => setNewExpense({ ...newExpense, cost: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="0.00"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                    <select
-                      value={newExpense.type}
-                      onChange={(e) => setNewExpense({ ...newExpense, type: e.target.value })}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="Essential">Essential</option>
-                      <option value="Non Essential">Non Essential</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
-                    <select
-                      value={newExpense.frequency}
-                      onChange={(e) => setNewExpense({ ...newExpense, frequency: e.target.value })}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="Monthly">Monthly</option>
-                      <option value="Annual">Annual</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                    <select
-                      value={newExpense.category}
-                      onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      {categories.map(category => (
-                        <option key={category} value={category}>{category}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Bank</label>
-                    <select
-                      value={newExpense.bank}
-                      onChange={(e) => setNewExpense({ ...newExpense, bank: e.target.value })}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="Natwest">Natwest</option>
-                      <option value="Revolut">Revolut</option>
-                      <option value="Amex">Amex</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div className="flex gap-3 mt-6">
-                <button
-                  onClick={editingExpense ? handleUpdateExpense : handleAddExpense}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
-                >
-                  {editingExpense ? 'Update' : 'Add'} Expense
-                </button>
-                <button
-                  onClick={() => {
-                    setShowAddForm(false);
-                    setEditingExpense(null);
-                    setNewExpense({ name: '', cost: '', type: 'Essential', frequency: 'Monthly', bank: 'Natwest', category: 'Other' });
-                  }}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
             </div>
-          </div>
-        )}
-      </div>
+        </div>
+
+        <!-- Expenses Tab -->
+        <div id="expenses" class="tab-content hidden">
+            <!-- Add Expense Form -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border border-slate-200">
+                <h3 class="text-xl font-semibold text-slate-800 mb-4">Add New Expense</h3>
+                <form id="expenseForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
+                        <input type="text" id="expenseName" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Expense name" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Cost (£)</label>
+                        <input type="number" id="expenseCost" step="0.01" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Type</label>
+                        <select id="expenseType" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="essential">Essential</option>
+                            <option value="non-essential">Non-Essential</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Frequency</label>
+                        <select id="expenseFrequency" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="monthly">Monthly</option>
+                            <option value="annual">Annual</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="daily">Daily</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                        <select id="expenseCategory" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="housing">Housing</option>
+                            <option value="utilities">Utilities</option>
+                            <option value="insurance">Insurance</option>
+                            <option value="savings">Savings</option>
+                            <option value="software">Software</option>
+                            <option value="health">Health</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="business">Business</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Bank</label>
+                        <select id="expenseBank" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="natwest">NatWest</option>
+                            <option value="amex">Amex</option>
+                            <option value="revolut">Revolut</option>
+                            <option value="hsbc">HSBC</option>
+                            <option value="barclays">Barclays</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2 lg:col-span-2 flex items-end">
+                        <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            Add Expense
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Expenses List -->
+            <div class="bg-white rounded-xl shadow-lg border border-slate-200">
+                <div class="p-6 border-b border-slate-200">
+                    <h3 class="text-xl font-semibold text-slate-800">Your Expenses</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Cost</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Type</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Frequency</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Category</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Bank</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expensesList" class="bg-white divide-y divide-slate-200">
+                            <!-- Expenses will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analytics" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Bank Distribution -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Spending by Bank</h3>
+                    <div id="bankDistribution" class="space-y-3">
+                        <!-- Bank breakdown will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Frequency Analysis -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Payment Frequency</h3>
+                    <div id="frequencyAnalysis" class="space-y-3">
+                        <!-- Frequency breakdown will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expense Optimization -->
+            <div class="mt-6 bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+                <h3 class="text-xl font-semibold text-slate-800 mb-4">Optimization Suggestions</h3>
+                <div id="optimizationSuggestions" class="space-y-3">
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600 mt-0.5"></i>
+                            <div>
+                                <h4 class="font-medium text-amber-800">Add your first expense to see optimization suggestions!</h4>
+                                <p class="text-amber-700 text-sm mt-1">Once you start tracking expenses, we'll provide personalized recommendations to help you save money.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  );
-};
 
-export default ExpenseTracker;
+    <!-- Edit Expense Modal -->
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 m-4 max-w-md w-full">
+            <h3 class="text-lg font-semibold text-slate-800 mb-4">Edit Expense</h3>
+            <form id="editForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
+                    <input type="text" id="editName" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Cost (£)</label>
+                    <input type="number" id="editCost" step="0.01" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Type</label>
+                    <select id="editType" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="essential">Essential</option>
+                        <option value="non-essential">Non-Essential</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Frequency</label>
+                    <select id="editFrequency" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="monthly">Monthly</option>
+                        <option value="annual">Annual</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="daily">Daily</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                    <select id="editCategory" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="housing">Housing</option>
+                        <option value="utilities">Utilities</option>
+                        <option value="insurance">Insurance</option>
+                        <option value="savings">Savings</option>
+                        <option value="software">Software</option>
+                        <option value="health">Health</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="business">Business</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Bank</label>
+                    <select id="editBank" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="natwest">NatWest</option>
+                        <option value="amex">Amex</option>
+                        <option value="revolut">Revolut</option>
+                        <option value="hsbc">HSBC</option>
+                        <option value="barclays">Barclays</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        Save Changes
+                    </button>
+                    <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize with empty data
+        if (!localStorage.getItem('expenses')) {
+            localStorage.setItem('expenses', JSON.stringify([]));
+        }
+        
+        // Initialize with default budget
+        if (!localStorage.getItem('monthlyBudget')) {
+            localStorage.setItem('monthlyBudget', '3000');
+        }
+
+        let expenses = JSON.parse(localStorage.getItem('expenses') || '[]');
+        let monthlyBudget = parseFloat(localStorage.getItem('monthlyBudget') || '3000');
+        let activeTab = 'overview';
+        let editingExpense = null;
+
+        // Tab Management
+        function setActiveTab(tab) {
+            activeTab = tab;
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+            document.getElementById(tab).classList.remove('hidden');
+            
+            document.querySelectorAll('[onclick^="setActiveTab"]').forEach(btn => {
+                btn.className = 'px-6 py-3 rounded-lg font-medium capitalize transition-all text-gray-600 hover:bg-gray-100';
+            });
+            document.querySelector(`[onclick="setActiveTab('${tab}')"]`).className = 'px-6 py-3 rounded-lg font-medium capitalize transition-all bg-blue-600 text-white shadow-lg';
+        }
+
+        // Budget Management
+        function editBudget() {
+            const newBudget = prompt('Enter your monthly budget:', monthlyBudget);
+            if (newBudget && !isNaN(newBudget) && newBudget > 0) {
+                monthlyBudget = parseFloat(newBudget);
+                localStorage.setItem('monthlyBudget', monthlyBudget.toString());
+                updateDashboard();
+            }
+        }
+
+        // Expense Management
+        function addExpense(expense) {
+            expense.id = Date.now() + Math.random();
+            expense.status = 'active';
+            expenses.push(expense);
+            saveExpenses();
+            updateDashboard();
+            renderExpenses();
+        }
+
+        function saveExpenses() {
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+        }
+
+        // Calculate monthly total
+        function calculateMonthlyTotal() {
+            return expenses.filter(expense => expense.status === 'active').reduce((total, expense) => {
+                const monthlyCost = expense.frequency === 'annual' ? expense.cost / 12 : expense.cost;
+                return total + monthlyCost;
+            }, 0);
+        }
+
+        // Calculate category breakdown
+        function calculateCategoryTotals() {
+            return expenses.filter(expense => expense.status === 'active').reduce((acc, expense) => {
+                const monthlyCost = expense.frequency === 'annual' ? expense.cost / 12 : expense.cost;
+                acc[expense.category] = (acc[expense.category] || 0) + monthlyCost;
+                return acc;
+            }, {});
+        }
+
+        // Update Dashboard
+        function updateDashboard() {
+            const monthlyTotal = calculateMonthlyTotal();
+            const budgetUsagePercent = Math.min((monthlyTotal / monthlyBudget) * 100, 100);
+            
+            // Budget Overview
+            document.getElementById('budgetAmount').textContent = `£${monthlyBudget.toFixed(2)}`;
+            document.getElementById('budgetUsage').textContent = `£${monthlyTotal.toFixed(2)} used`;
+            document.getElementById('budgetRemaining').textContent = `£${Math.max(monthlyBudget - monthlyTotal, 0).toFixed(2)} remaining`;
+            document.getElementById('budgetProgress').style.width = `${budgetUsagePercent}%`;
+            document.getElementById('budgetPercentage').textContent = `${budgetUsagePercent.toFixed(1)}% of budget used`;
+
+            // Essential vs Non-Essential
+            const essentialTotal = expenses.filter(expense => expense.status === 'active' && expense.type === 'essential')
+                .reduce((total, expense) => total + (expense.frequency === 'annual' ? expense.cost / 12 : expense.cost), 0);
+            const nonEssentialTotal = monthlyTotal - essentialTotal;
+
+            document.getElementById('essentialTotal').textContent = `£${essentialTotal.toFixed(2)}`;
+            document.getElementById('nonEssentialTotal').textContent = `£${nonEssentialTotal.toFixed(2)}`;
+            document.getElementById('totalSpend').textContent = `£${monthlyTotal.toFixed(2)}`;
+
+            // Quick Stats
+            const activeExpenses = expenses.filter(expense => expense.status === 'active');
+            const cancelledExpenses = expenses.filter(expense => expense.status === 'cancelled');
+            document.getElementById('activeCount').textContent = activeExpenses.length;
+            document.getElementById('cancelledCount').textContent = cancelledExpenses.length;
+            document.getElementById('avgExpense').textContent = activeExpenses.length > 0 ? 
+                `£${(monthlyTotal / activeExpenses.length).toFixed(2)}` : '£0';
+
+            // Category Breakdown
+            updateCategoryBreakdown();
+            updateAnalytics();
+        }
+
+        function updateCategoryBreakdown() {
+            const categoryTotals = calculateCategoryTotals();
+            const monthlyTotal = calculateMonthlyTotal();
+            const container = document.getElementById('categoryBreakdown');
+            
+            if (Object.keys(categoryTotals).length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-slate-500">
+                        <i data-lucide="pie-chart" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                        <p>No expenses yet. Add your first expense to see category breakdown.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            
+            container.innerHTML = Object.entries(categoryTotals)
+                .sort(([,a], [,b]) => b - a)
+                .map(([category, amount]) => {
+                    const percentage = monthlyTotal > 0 ? (amount / monthlyTotal) * 100 : 0;
+                    return `
+                        <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-medium text-slate-800 capitalize">${category}</span>
+                                <span class="text-slate-600">£${amount.toFixed(2)}</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: ${percentage}%"></div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1">${percentage.toFixed(1)}% of total</div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        function updateAnalytics() {
+            updateBankDistribution();
+            updateFrequencyAnalysis();
+            updateOptimizationSuggestions();
+        }
+
+        function updateBankDistribution() {
+            const bankTotals = expenses.filter(expense => expense.status === 'active').reduce((acc, expense) => {
+                const monthlyCost = expense.frequency === 'annual' ? expense.cost / 12 : expense.cost;
+                acc[expense.bank] = (acc[expense.bank] || 0) + monthlyCost;
+                return acc;
+            }, {});
+
+            const total = Object.values(bankTotals).reduce((sum, amount) => sum + amount, 0);
+            const container = document.getElementById('bankDistribution');
+            
+            if (total === 0) {
+                container.innerHTML = '<p class="text-slate-500 text-center py-4">No active expenses to analyze</p>';
+                return;
+            }
+
+            container.innerHTML = Object.entries(bankTotals)
+                .sort(([,a], [,b]) => b - a)
+                .map(([bank, amount]) => {
+                    const percentage = (amount / total) * 100;
+                    return `
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                            <span class="font-medium capitalize">${bank}</span>
+                            <div class="text-right">
+                                <div class="font-semibold">£${amount.toFixed(2)}</div>
+                                <div class="text-sm text-slate-500">${percentage.toFixed(1)}%</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        function updateFrequencyAnalysis() {
+            const frequencyTotals = expenses.filter(expense => expense.status === 'active').reduce((acc, expense) => {
+                const monthlyCost = expense.frequency === 'annual' ? expense.cost / 12 : expense.cost;
+                acc[expense.frequency] = (acc[expense.frequency] || 0) + monthlyCost;
+                return acc;
+            }, {});
+
+            const total = Object.values(frequencyTotals).reduce((sum, amount) => sum + amount, 0);
+            const container = document.getElementById('frequencyAnalysis');
+            
+            if (total === 0) {
+                container.innerHTML = '<p class="text-slate-500 text-center py-4">No active expenses to analyze</p>';
+                return;
+            }
+
+            container.innerHTML = Object.entries(frequencyTotals)
+                .sort(([,a], [,b]) => b - a)
+                .map(([frequency, amount]) => {
+                    const percentage = (amount / total) * 100;
+                    return `
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                            <span class="font-medium capitalize">${frequency}</span>
+                            <div class="text-right">
+                                <div class="font-semibold">£${amount.toFixed(2)}</div>
+                                <div class="text-sm text-slate-500">${percentage.toFixed(1)}%</div>
+                            </div>
