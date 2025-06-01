@@ -6,511 +6,294 @@
     <title>Personal Finance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
 </head>
-<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
-    <div class="container mx-auto px-4 py-6 max-w-6xl">
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-6 max-w-4xl">
         <!-- Header -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border border-slate-200">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-slate-800 mb-2">Personal Finance Tracker</h1>
-                    <p class="text-slate-600">Take control of your finances with smart tracking and insights</p>
-                </div>
-                <div class="mt-4 md:mt-0 flex flex-wrap gap-2">
-                    <button onclick="exportData()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2">
-                        <i data-lucide="download" class="w-4 h-4"></i>
-                        Export
-                    </button>
-                    <button onclick="document.getElementById('importFile').click()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
-                        <i data-lucide="upload" class="w-4 h-4"></i>
-                        Import
-                    </button>
-                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
-                </div>
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Personal Finance Tracker</h1>
+            <p class="text-gray-600">Take control of your finances with smart tracking</p>
+            <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded">
+                <p class="text-sm text-blue-700">💡 <strong>Note:</strong> Data is stored in memory only. Use Export to save your data, and Import to restore it.</p>
             </div>
         </div>
 
-        <!-- Navigation -->
-        <div class="bg-white rounded-xl shadow-lg mb-6 border border-slate-200">
-            <div class="flex overflow-x-auto">
-                <button onclick="setActiveTab('overview')" class="px-6 py-3 rounded-lg font-medium capitalize transition-all bg-blue-600 text-white shadow-lg text-gray-600 hover:bg-gray-100">Overview</button>
-                <button onclick="setActiveTab('expenses')" class="px-6 py-3 rounded-lg font-medium capitalize transition-all text-gray-600 hover:bg-gray-100">Expenses</button>
-                <button onclick="setActiveTab('analytics')" class="px-6 py-3 rounded-lg font-medium capitalize transition-all text-gray-600 hover:bg-gray-100">Analytics</button>
+        <!-- Budget Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold mb-2">Monthly Budget</h3>
+                <div class="text-2xl font-bold text-blue-600" id="budgetAmount">£3000</div>
+                <button onclick="editBudget()" class="text-sm text-blue-500 hover:underline">Edit Budget</button>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold mb-2">Total Spent</h3>
+                <div class="text-2xl font-bold text-green-600" id="totalSpent">£0</div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold mb-2">Remaining</h3>
+                <div class="text-2xl font-bold text-purple-600" id="remaining">£3000</div>
             </div>
         </div>
 
-        <!-- Budget Overview Tab -->
-        <div id="overview" class="tab-content">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Budget Card -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-slate-800">Monthly Budget</h3>
-                        <button onclick="editBudget()" class="text-blue-600 hover:text-blue-800">
-                            <i data-lucide="edit-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="text-3xl font-bold text-slate-800" id="budgetAmount">£0</div>
-                        <div class="text-sm text-slate-600">
-                            <span id="budgetUsage">£0 used</span> • <span id="budgetRemaining">£0 remaining</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div id="budgetProgress" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-                        </div>
-                        <div class="text-xs text-slate-500" id="budgetPercentage">0% of budget used</div>
-                    </div>
-                </div>
-
-                <!-- Monthly Totals -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
-                    <h3 class="text-lg font-semibold text-slate-800 mb-4">Monthly Totals</h3>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-slate-600">Essential</span>
-                            <span class="font-semibold text-slate-800" id="essentialTotal">£0</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-slate-600">Non-Essential</span>
-                            <span class="font-semibold text-slate-800" id="nonEssentialTotal">£0</span>
-                        </div>
-                        <div class="border-t pt-2">
-                            <div class="flex justify-between items-center">
-                                <span class="text-slate-800 font-semibold">Total Spend</span>
-                                <span class="font-bold text-lg text-slate-800" id="totalSpend">£0</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Stats -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
-                    <h3 class="text-lg font-semibold text-slate-800 mb-4">Quick Stats</h3>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-slate-600">Active Expenses</span>
-                            <span class="font-semibold text-slate-800" id="activeCount">0</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-slate-600">Cancelled</span>
-                            <span class="font-semibold text-slate-800" id="cancelledCount">0</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-slate-600">Avg per Expense</span>
-                            <span class="font-semibold text-slate-800" id="avgExpense">£0</span>
-                        </div>
-                    </div>
-                </div>
+        <!-- Progress Bar -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-2">Budget Progress</h3>
+            <div class="w-full bg-gray-200 rounded-full h-4">
+                <div id="progressBar" class="bg-blue-600 h-4 rounded-full transition-all duration-300" style="width: 0%"></div>
             </div>
-
-            <!-- Category Breakdown -->
-            <div class="mt-6 bg-white rounded-xl shadow-lg p-6 border border-slate-200">
-                <h3 class="text-xl font-semibold text-slate-800 mb-6">Spending by Category</h3>
-                <div id="categoryBreakdown" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Category cards will be populated here -->
-                </div>
-            </div>
+            <p class="text-sm text-gray-600 mt-2" id="progressText">0% of budget used</p>
         </div>
 
-        <!-- Expenses Tab -->
-        <div id="expenses" class="tab-content hidden">
-            <!-- Add Expense Form -->
-            <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border border-slate-200">
-                <h3 class="text-xl font-semibold text-slate-800 mb-4">Add New Expense</h3>
-                <form id="expenseForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
-                        <input type="text" id="expenseName" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Expense name" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Cost (£)</label>
-                        <input type="number" id="expenseCost" step="0.01" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Type</label>
-                        <select id="expenseType" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="essential">Essential</option>
-                            <option value="non-essential">Non-Essential</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Frequency</label>
-                        <select id="expenseFrequency" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="monthly">Monthly</option>
-                            <option value="annual">Annual</option>
-                            <option value="weekly">Weekly</option>
-                            <option value="daily">Daily</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Category</label>
-                        <select id="expenseCategory" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="housing">Housing</option>
-                            <option value="utilities">Utilities</option>
-                            <option value="insurance">Insurance</option>
-                            <option value="savings">Savings</option>
-                            <option value="software">Software</option>
-                            <option value="health">Health</option>
-                            <option value="entertainment">Entertainment</option>
-                            <option value="shopping">Shopping</option>
-                            <option value="business">Business</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Bank</label>
-                        <select id="expenseBank" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="natwest">NatWest</option>
-                            <option value="amex">Amex</option>
-                            <option value="revolut">Revolut</option>
-                            <option value="hsbc">HSBC</option>
-                            <option value="barclays">Barclays</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="md:col-span-2 lg:col-span-2 flex items-end">
-                        <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                            <i data-lucide="plus" class="w-4 h-4"></i>
-                            Add Expense
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Expenses List -->
-            <div class="bg-white rounded-xl shadow-lg border border-slate-200">
-                <div class="p-6 border-b border-slate-200">
-                    <h3 class="text-xl font-semibold text-slate-800">Your Expenses</h3>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-slate-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Cost</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Type</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Frequency</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Category</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Bank</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="expensesList" class="bg-white divide-y divide-slate-200">
-                            <!-- Expenses will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics Tab -->
-        <div id="analytics" class="tab-content hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Bank Distribution -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
-                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Spending by Bank</h3>
-                    <div id="bankDistribution" class="space-y-3">
-                        <!-- Bank breakdown will be populated here -->
-                    </div>
-                </div>
-
-                <!-- Frequency Analysis -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
-                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Payment Frequency</h3>
-                    <div id="frequencyAnalysis" class="space-y-3">
-                        <!-- Frequency breakdown will be populated here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Expense Optimization -->
-            <div class="mt-6 bg-white rounded-xl shadow-lg p-6 border border-slate-200">
-                <h3 class="text-xl font-semibold text-slate-800 mb-4">Optimization Suggestions</h3>
-                <div id="optimizationSuggestions" class="space-y-3">
-                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                        <div class="flex items-start gap-3">
-                            <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600 mt-0.5"></i>
-                            <div>
-                                <h4 class="font-medium text-amber-800">Add your first expense to see optimization suggestions!</h4>
-                                <p class="text-amber-700 text-sm mt-1">Once you start tracking expenses, we'll provide personalized recommendations to help you save money.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Expense Modal -->
-    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 m-4 max-w-md w-full">
-            <h3 class="text-lg font-semibold text-slate-800 mb-4">Edit Expense</h3>
-            <form id="editForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
-                    <input type="text" id="editName" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Cost (£)</label>
-                    <input type="number" id="editCost" step="0.01" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Type</label>
-                    <select id="editType" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="essential">Essential</option>
-                        <option value="non-essential">Non-Essential</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Frequency</label>
-                    <select id="editFrequency" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="monthly">Monthly</option>
-                        <option value="annual">Annual</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="daily">Daily</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Category</label>
-                    <select id="editCategory" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="housing">Housing</option>
-                        <option value="utilities">Utilities</option>
-                        <option value="insurance">Insurance</option>
-                        <option value="savings">Savings</option>
-                        <option value="software">Software</option>
-                        <option value="health">Health</option>
-                        <option value="entertainment">Entertainment</option>
-                        <option value="shopping">Shopping</option>
-                        <option value="business">Business</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Bank</label>
-                    <select id="editBank" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="natwest">NatWest</option>
-                        <option value="amex">Amex</option>
-                        <option value="revolut">Revolut</option>
-                        <option value="hsbc">HSBC</option>
-                        <option value="barclays">Barclays</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="flex gap-3 pt-4">
-                    <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        Save Changes
-                    </button>
-                    <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors">
-                        Cancel
-                    </button>
-                </div>
+        <!-- Add Expense Form -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Add New Expense</h3>
+            <form id="expenseForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <input type="text" id="expenseName" placeholder="Expense name" class="border rounded p-2" required>
+                <input type="number" id="expenseCost" placeholder="Cost" step="0.01" class="border rounded p-2" required>
+                <select id="expenseType" class="border rounded p-2">
+                    <option value="essential">Essential</option>
+                    <option value="non-essential">Non-Essential</option>
+                </select>
+                <select id="expenseCategory" class="border rounded p-2">
+                    <option value="housing">Housing</option>
+                    <option value="food">Food</option>
+                    <option value="transport">Transport</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="utilities">Utilities</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="health">Health</option>
+                    <option value="other">Other</option>
+                </select>
+                <button type="submit" class="bg-blue-600 text-white rounded p-2 hover:bg-blue-700">Add Expense</button>
             </form>
+        </div>
+
+        <!-- Category Summary -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Spending by Category</h3>
+            <div id="categoryBreakdown" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <p class="text-gray-500 col-span-full text-center py-4">Add expenses to see category breakdown</p>
+            </div>
+        </div>
+
+        <!-- Expenses List -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Your Expenses</h3>
+            <div id="expensesList" class="space-y-2">
+                <p class="text-gray-500 text-center py-8">No expenses yet. Add your first expense above!</p>
+            </div>
+        </div>
+
+        <!-- Export/Import -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold mb-4">Data Management</h3>
+            <div class="flex flex-wrap gap-4">
+                <button onclick="exportData()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    📥 Export Data
+                </button>
+                <button onclick="document.getElementById('importFile').click()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    📤 Import Data
+                </button>
+                <button onclick="clearAllData()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                    🗑️ Clear All
+                </button>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+            </div>
+            <p class="text-sm text-gray-600 mt-2">Remember to export your data regularly to avoid losing it!</p>
         </div>
     </div>
 
     <script>
-        // Initialize with empty data
-        if (!localStorage.getItem('expenses')) {
-            localStorage.setItem('expenses', JSON.stringify([]));
-        }
-        
-        // Initialize with default budget
-        if (!localStorage.getItem('monthlyBudget')) {
-            localStorage.setItem('monthlyBudget', '3000');
+        // In-memory storage only (no localStorage)
+        let expenses = [];
+        let monthlyBudget = 3000;
+
+        function updateDisplay() {
+            const totalSpent = expenses.reduce((sum, expense) => sum + expense.cost, 0);
+            const remaining = monthlyBudget - totalSpent;
+            const percentUsed = monthlyBudget > 0 ? (totalSpent / monthlyBudget) * 100 : 0;
+
+            document.getElementById('budgetAmount').textContent = `£${monthlyBudget.toFixed(2)}`;
+            document.getElementById('totalSpent').textContent = `£${totalSpent.toFixed(2)}`;
+            document.getElementById('remaining').textContent = `£${remaining.toFixed(2)}`;
+            document.getElementById('progressBar').style.width = `${Math.min(percentUsed, 100)}%`;
+            document.getElementById('progressText').textContent = `${percentUsed.toFixed(1)}% of budget used`;
+
+            // Change progress bar color based on usage
+            const progressBar = document.getElementById('progressBar');
+            if (percentUsed > 90) {
+                progressBar.className = 'bg-red-600 h-4 rounded-full transition-all duration-300';
+            } else if (percentUsed > 75) {
+                progressBar.className = 'bg-yellow-600 h-4 rounded-full transition-all duration-300';
+            } else {
+                progressBar.className = 'bg-blue-600 h-4 rounded-full transition-all duration-300';
+            }
+
+            renderExpenses();
+            renderCategoryBreakdown();
         }
 
-        let expenses = JSON.parse(localStorage.getItem('expenses') || '[]');
-        let monthlyBudget = parseFloat(localStorage.getItem('monthlyBudget') || '3000');
-        let activeTab = 'overview';
-        let editingExpense = null;
-
-        // Tab Management
-        function setActiveTab(tab) {
-            activeTab = tab;
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
-            document.getElementById(tab).classList.remove('hidden');
+        function renderExpenses() {
+            const container = document.getElementById('expensesList');
             
-            document.querySelectorAll('[onclick^="setActiveTab"]').forEach(btn => {
-                btn.className = 'px-6 py-3 rounded-lg font-medium capitalize transition-all text-gray-600 hover:bg-gray-100';
-            });
-            document.querySelector(`[onclick="setActiveTab('${tab}')"]`).className = 'px-6 py-3 rounded-lg font-medium capitalize transition-all bg-blue-600 text-white shadow-lg';
+            if (expenses.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">No expenses yet. Add your first expense above!</p>';
+                return;
+            }
+
+            container.innerHTML = expenses.map((expense, index) => `
+                <div class="flex justify-between items-center p-4 bg-gray-50 rounded border hover:bg-gray-100 transition-colors">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3">
+                            <span class="font-medium">${expense.name}</span>
+                            <span class="text-sm px-2 py-1 rounded ${expense.type === 'essential' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}">
+                                ${expense.type}
+                            </span>
+                            <span class="text-sm px-2 py-1 rounded bg-gray-200 text-gray-700 capitalize">
+                                ${expense.category}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="font-semibold text-lg">£${expense.cost.toFixed(2)}</span>
+                        <button onclick="deleteExpense(${index})" class="text-red-600 hover:text-red-800 hover:bg-red-50 px-2 py-1 rounded">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // Budget Management
+        function renderCategoryBreakdown() {
+            const container = document.getElementById('categoryBreakdown');
+            
+            if (expenses.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 col-span-full text-center py-4">Add expenses to see category breakdown</p>';
+                return;
+            }
+
+            // Calculate category totals
+            const categoryTotals = expenses.reduce((acc, expense) => {
+                acc[expense.category] = (acc[expense.category] || 0) + expense.cost;
+                return acc;
+            }, {});
+
+            const totalSpent = expenses.reduce((sum, expense) => sum + expense.cost, 0);
+
+            container.innerHTML = Object.entries(categoryTotals)
+                .sort(([,a], [,b]) => b - a)
+                .map(([category, amount]) => {
+                    const percentage = totalSpent > 0 ? (amount / totalSpent) * 100 : 0;
+                    return `
+                        <div class="p-3 bg-gray-50 rounded border">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-medium capitalize">${category}</span>
+                                <span class="font-semibold">£${amount.toFixed(2)}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: ${percentage}%"></div>
+                            </div>
+                            <p class="text-xs text-gray-600 mt-1">${percentage.toFixed(1)}% of total</p>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        function addExpense(expense) {
+            expenses.push(expense);
+            updateDisplay();
+        }
+
+        function deleteExpense(index) {
+            if (confirm('Delete this expense?')) {
+                expenses.splice(index, 1);
+                updateDisplay();
+            }
+        }
+
         function editBudget() {
             const newBudget = prompt('Enter your monthly budget:', monthlyBudget);
             if (newBudget && !isNaN(newBudget) && newBudget > 0) {
                 monthlyBudget = parseFloat(newBudget);
-                localStorage.setItem('monthlyBudget', monthlyBudget.toString());
-                updateDashboard();
+                updateDisplay();
             }
         }
 
-        // Expense Management
-        function addExpense(expense) {
-            expense.id = Date.now() + Math.random();
-            expense.status = 'active';
-            expenses.push(expense);
-            saveExpenses();
-            updateDashboard();
-            renderExpenses();
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone!')) {
+                expenses = [];
+                monthlyBudget = 3000;
+                updateDisplay();
+            }
         }
 
-        function saveExpenses() {
-            localStorage.setItem('expenses', JSON.stringify(expenses));
+        function exportData() {
+            const data = { 
+                expenses, 
+                monthlyBudget, 
+                exportDate: new Date().toISOString(),
+                totalExpenses: expenses.length,
+                totalSpent: expenses.reduce((sum, expense) => sum + expense.cost, 0)
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `expense-tracker-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('Data exported successfully!');
         }
 
-        // Calculate monthly total
-        function calculateMonthlyTotal() {
-            return expenses.filter(expense => expense.status === 'active').reduce((total, expense) => {
-                const monthlyCost = expense.frequency === 'annual' ? expense.cost / 12 : expense.cost;
-                return total + monthlyCost;
-            }, 0);
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.expenses && Array.isArray(data.expenses)) {
+                        if (confirm('This will replace all current data. Are you sure?')) {
+                            expenses = data.expenses;
+                            if (data.monthlyBudget) monthlyBudget = data.monthlyBudget;
+                            updateDisplay();
+                            alert(`Data imported successfully! Loaded ${expenses.length} expenses.`);
+                        }
+                    } else {
+                        alert('Invalid file format. Please select a valid expense tracker export file.');
+                    }
+                } catch (error) {
+                    alert('Error reading file: ' + error.message);
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
         }
 
-        // Calculate category breakdown
-        function calculateCategoryTotals() {
-            return expenses.filter(expense => expense.status === 'active').reduce((acc, expense) => {
-                const monthlyCost = expense.frequency === 'annual' ? expense.cost / 12 : expense.cost;
-                acc[expense.category] = (acc[expense.category] || 0) + monthlyCost;
-                return acc;
-            }, {});
-        }
+        // Form handler
+        document.getElementById('expenseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const expense = {
+                name: document.getElementById('expenseName').value,
+                cost: parseFloat(document.getElementById('expenseCost').value),
+                type: document.getElementById('expenseType').value,
+                category: document.getElementById('expenseCategory').value,
+                date: new Date().toISOString().split('T')[0]
+            };
+            addExpense(expense);
+            this.reset();
+        });
 
-        // Update Dashboard
-        function updateDashboard() {
-            const monthlyTotal = calculateMonthlyTotal();
-            const budgetUsagePercent = Math.min((monthlyTotal / monthlyBudget) * 100, 100);
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDisplay();
             
-            // Budget Overview
-            document.getElementById('budgetAmount').textContent = `£${monthlyBudget.toFixed(2)}`;
-            document.getElementById('budgetUsage').textContent = `£${monthlyTotal.toFixed(2)} used`;
-            document.getElementById('budgetRemaining').textContent = `£${Math.max(monthlyBudget - monthlyTotal, 0).toFixed(2)} remaining`;
-            document.getElementById('budgetProgress').style.width = `${budgetUsagePercent}%`;
-            document.getElementById('budgetPercentage').textContent = `${budgetUsagePercent.toFixed(1)}% of budget used`;
-
-            // Essential vs Non-Essential
-            const essentialTotal = expenses.filter(expense => expense.status === 'active' && expense.type === 'essential')
-                .reduce((total, expense) => total + (expense.frequency === 'annual' ? expense.cost / 12 : expense.cost), 0);
-            const nonEssentialTotal = monthlyTotal - essentialTotal;
-
-            document.getElementById('essentialTotal').textContent = `£${essentialTotal.toFixed(2)}`;
-            document.getElementById('nonEssentialTotal').textContent = `£${nonEssentialTotal.toFixed(2)}`;
-            document.getElementById('totalSpend').textContent = `£${monthlyTotal.toFixed(2)}`;
-
-            // Quick Stats
-            const activeExpenses = expenses.filter(expense => expense.status === 'active');
-            const cancelledExpenses = expenses.filter(expense => expense.status === 'cancelled');
-            document.getElementById('activeCount').textContent = activeExpenses.length;
-            document.getElementById('cancelledCount').textContent = cancelledExpenses.length;
-            document.getElementById('avgExpense').textContent = activeExpenses.length > 0 ? 
-                `£${(monthlyTotal / activeExpenses.length).toFixed(2)}` : '£0';
-
-            // Category Breakdown
-            updateCategoryBreakdown();
-            updateAnalytics();
-        }
-
-        function updateCategoryBreakdown() {
-            const categoryTotals = calculateCategoryTotals();
-            const monthlyTotal = calculateMonthlyTotal();
-            const container = document.getElementById('categoryBreakdown');
-            
-            if (Object.keys(categoryTotals).length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-8 text-slate-500">
-                        <i data-lucide="pie-chart" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
-                        <p>No expenses yet. Add your first expense to see category breakdown.</p>
-                    </div>
-                `;
+            // Initialize Lucide icons if available
+            if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
-                return;
             }
-            
-            container.innerHTML = Object.entries(categoryTotals)
-                .sort(([,a], [,b]) => b - a)
-                .map(([category, amount]) => {
-                    const percentage = monthlyTotal > 0 ? (amount / monthlyTotal) * 100 : 0;
-                    return `
-                        <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="font-medium text-slate-800 capitalize">${category}</span>
-                                <span class="text-slate-600">£${amount.toFixed(2)}</span>
-                            </div>
-                            <div class="w-full bg-slate-200 rounded-full h-2">
-                                <div class="bg-blue-600 h-2 rounded-full" style="width: ${percentage}%"></div>
-                            </div>
-                            <div class="text-xs text-slate-500 mt-1">${percentage.toFixed(1)}% of total</div>
-                        </div>
-                    `;
-                }).join('');
-        }
-
-        function updateAnalytics() {
-            updateBankDistribution();
-            updateFrequencyAnalysis();
-            updateOptimizationSuggestions();
-        }
-
-        function updateBankDistribution() {
-            const bankTotals = expenses.filter(expense => expense.status === 'active').reduce((acc, expense) => {
-                const monthlyCost = expense.frequency === 'annual' ? expense.cost / 12 : expense.cost;
-                acc[expense.bank] = (acc[expense.bank] || 0) + monthlyCost;
-                return acc;
-            }, {});
-
-            const total = Object.values(bankTotals).reduce((sum, amount) => sum + amount, 0);
-            const container = document.getElementById('bankDistribution');
-            
-            if (total === 0) {
-                container.innerHTML = '<p class="text-slate-500 text-center py-4">No active expenses to analyze</p>';
-                return;
-            }
-
-            container.innerHTML = Object.entries(bankTotals)
-                .sort(([,a], [,b]) => b - a)
-                .map(([bank, amount]) => {
-                    const percentage = (amount / total) * 100;
-                    return `
-                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
-                            <span class="font-medium capitalize">${bank}</span>
-                            <div class="text-right">
-                                <div class="font-semibold">£${amount.toFixed(2)}</div>
-                                <div class="text-sm text-slate-500">${percentage.toFixed(1)}%</div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-        }
-
-        function updateFrequencyAnalysis() {
-            const frequencyTotals = expenses.filter(expense => expense.status === 'active').reduce((acc, expense) => {
-                const monthlyCost = expense.frequency === 'annual' ? expense.cost / 12 : expense.cost;
-                acc[expense.frequency] = (acc[expense.frequency] || 0) + monthlyCost;
-                return acc;
-            }, {});
-
-            const total = Object.values(frequencyTotals).reduce((sum, amount) => sum + amount, 0);
-            const container = document.getElementById('frequencyAnalysis');
-            
-            if (total === 0) {
-                container.innerHTML = '<p class="text-slate-500 text-center py-4">No active expenses to analyze</p>';
-                return;
-            }
-
-            container.innerHTML = Object.entries(frequencyTotals)
-                .sort(([,a], [,b]) => b - a)
-                .map(([frequency, amount]) => {
-                    const percentage = (amount / total) * 100;
-                    return `
-                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
-                            <span class="font-medium capitalize">${frequency}</span>
-                            <div class="text-right">
-                                <div class="font-semibold">£${amount.toFixed(2)}</div>
-                                <div class="text-sm text-slate-500">${percentage.toFixed(1)}%</div>
-                            </div>
+        });
+    </script>
+</body>
+</html>
