@@ -1,12 +1,14 @@
+
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Expense Tracker v1.1</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Personal Expense Tracker v1.1</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
@@ -41,336 +43,343 @@
     </style>
 </head>
 <body class="gradient-bg min-h-screen">
-    <div id="app" class="p-4 max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="bg-white rounded-2xl shadow-xl p-4 md:p-6 mb-4 md:mb-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
+<div class="p-4 max-w-7xl mx-auto" id="app">
+<!-- Header -->
+<div class="bg-white rounded-2xl shadow-xl p-2 md:p-4 mb-4 md:mb-6">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
                         💳 <span id="header-title">Personal Finance Tracker</span>
-                        <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">v1.1</span>
-                    </h1>
-                    <p class="text-gray-600 mt-1 text-sm md:text-base">Track & control your finances</p>
-                </div>
-                <div class="flex gap-2 w-full md:w-auto">
-                    <button onclick="exportData()" class="flex-1 md:flex-none bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-medium">
-                        📥 Export
-                    </button>
-                    <label class="flex-1 md:flex-none bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium cursor-pointer text-center">
-                        📤 Import
-                        <input type="file" accept=".json" onchange="importData(event)" class="hidden">
-                    </label>
-                </div>
-            </div>
-        </div>
+<span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">v1.1</span>
+</h1>
+<p class="text-gray-600 mt-1 text-sm md:text-base">Track &amp; control your finances</p>
+</div>
+<div class="flex gap-2 w-full md:w-auto">
 
-        <!-- Navigation -->
-        <div class="bg-white rounded-xl shadow-lg p-1 md:p-2 mb-4 md:mb-6">
-            <div class="flex gap-1 md:gap-2">
-                <button onclick="showTab('overview')" id="tab-overview" class="flex-1 px-3 py-2 rounded-lg font-medium transition-all bg-blue-600 text-white">Overview</button>
-                <button onclick="showTab('expenses')" id="tab-expenses" class="flex-1 px-3 py-2 rounded-lg font-medium transition-all text-gray-600 hover:bg-gray-100">Expenses</button>
-                <button onclick="showTab('analytics')" id="tab-analytics" class="flex-1 px-3 py-2 rounded-lg font-medium transition-all text-gray-600 hover:bg-gray-100">Analytics</button>
-                <button onclick="showTab('trends')" id="tab-trends" class="flex-1 px-3 py-2 rounded-lg font-medium transition-all text-gray-600 hover:bg-gray-100">Trends</button>
-            </div>
-        </div>
 
-        <!-- Content -->
-        <div id="overview-tab" class="tab-content">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-                <!-- Budget Overview & Health Score -->
-                <div class="lg:col-span-2">
-                    <!-- Budget Health Score Card -->
-                    <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 fade-in">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg md:text-xl font-bold text-gray-800">🏥 Budget Health Score</h2>
-                            <div class="relative w-24 h-24">
-                                <svg class="w-full h-full">
-                                    <circle cx="48" cy="48" r="36" stroke="#e5e7eb" stroke-width="8" fill="none"></circle>
-                                    <circle id="health-score-circle" class="health-score-ring" cx="48" cy="48" r="36" 
-                                            stroke="#10b981" stroke-width="8" fill="none"
-                                            stroke-dasharray="226" stroke-dashoffset="226"
-                                            stroke-linecap="round"></circle>
-                                </svg>
-                                <div class="absolute inset-0 flex items-center justify-center flex-col">
-                                    <span id="health-score-value" class="text-2xl font-bold text-gray-800">0</span>
-                                    <span class="text-xs text-gray-500">/ 100</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="health-insights" class="space-y-2">
-                            <!-- Health insights will be populated here -->
-                        </div>
-                    </div>
+</div>
 
-                    <!-- Main Budget Card -->
-                    <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                        <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+<div class="relative">
+<button class="flex items-center gap-1 text-gray-600 hover:text-gray-800 text-sm font-medium" onclick="toggleSettings()" title="Settings"><span>⚙️ Settings</span></button>
+<div class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50" id="settings-menu">
+<div class="p-2">
+<label class="flex items-center gap-2 text-sm text-gray-700">
+<input class="cursor-pointer" id="theme-toggle" type="checkbox"/>
+                    🌗 Dark Mode
+                </label>
+<hr class="my-2"/>
+<button class="text-sm text-left w-full text-blue-600 hover:underline" onclick="exportData()">📥 Export Data</button>
+<label class="text-sm text-blue-600 cursor-pointer hover:underline block">
+                    📤 Import Data
+                    <input accept=".json" class="hidden" onchange="importData(event)" type="file"/>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Navigation -->
+<div class="bg-white rounded-xl shadow-lg p-1 md:p-2 mb-4 md:mb-6">
+<div class="flex gap-1 md:gap-2">
+<button class="flex-1 px-3 py-2 rounded-lg font-medium transition-all bg-blue-600 text-white" id="tab-overview" onclick="showTab('overview')">Overview</button>
+<button class="flex-1 px-3 py-2 rounded-lg font-medium transition-all text-gray-600 hover:bg-gray-100" id="tab-expenses" onclick="showTab('expenses')">Expenses</button>
+<button class="flex-1 px-3 py-2 rounded-lg font-medium transition-all text-gray-600 hover:bg-gray-100" id="tab-analytics" onclick="showTab('analytics')">Analytics</button>
+<button class="flex-1 px-3 py-2 rounded-lg font-medium transition-all text-gray-600 hover:bg-gray-100" id="tab-trends" onclick="showTab('trends')">Trends</button>
+<button class="flex-1 px-3 py-2 rounded-lg font-medium transition-all text-gray-600 hover:bg-gray-100" id="tab-help" onclick="showTab('help')">
+        Help
+    </button>
+</div>
+</div>
+<!-- Content -->
+<div class="tab-content" id="overview-tab">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+<!-- Budget Overview & Health Score -->
+<div class="lg:col-span-2">
+<!-- Budget Health Score Card -->
+<div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4 fade-in">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg md:text-xl font-bold text-gray-800">🏥 Budget Health Score</h2>
+<div class="relative w-24 h-24">
+<svg class="w-full h-full">
+<circle cx="48" cy="48" fill="none" r="36" stroke="#e5e7eb" stroke-width="8"></circle>
+<circle class="health-score-ring" cx="48" cy="48" fill="none" id="health-score-circle" r="36" stroke="#10b981" stroke-dasharray="226" stroke-dashoffset="226" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center flex-col">
+<span class="text-2xl font-bold text-gray-800" id="health-score-value">0</span>
+<span class="text-xs text-gray-500">/ 100</span>
+</div>
+</div>
+</div>
+<div class="space-y-2" id="health-insights">
+<!-- Health insights will be populated here -->
+</div>
+</div>
+<!-- Main Budget Card -->
+<div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+<h2 class="text-lg md:text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                             🎯 Monthly Budget Overview
                         </h2>
-                        
-                        <div class="mb-4">
-                            <div class="flex justify-between mb-2">
-                                <span class="text-sm font-medium text-gray-600">Budget Usage</span>
-                                <span class="text-sm font-medium text-gray-800" id="budget-percentage">0%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-3">
-                                <div id="budget-bar" class="progress-bar h-3 rounded-full bg-green-500" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3 md:gap-4">
-                            <div class="bg-blue-50 rounded-lg p-3">
-                                <div class="text-xs md:text-sm text-blue-600 font-medium">Monthly Budget</div>
-                                <div class="text-lg md:text-2xl font-bold text-blue-800" id="monthly-budget">£3000.00</div>
-                            </div>
-                            <div class="bg-purple-50 rounded-lg p-3">
-                                <div class="text-xs md:text-sm text-purple-600 font-medium">Total Expenses</div>
-                                <div class="text-lg md:text-2xl font-bold text-purple-800" id="total-expenses">£0.00</div>
-                            </div>
-                            <div id="remaining-card" class="bg-green-50 rounded-lg p-3">
-                                <div class="text-xs md:text-sm text-green-600 font-medium" id="remaining-label">Remaining</div>
-                                <div class="text-lg md:text-2xl font-bold text-green-800" id="remaining-amount">£3000.00</div>
-                            </div>
-                            <div class="bg-indigo-50 rounded-lg p-3">
-                                <div class="text-xs md:text-sm text-indigo-600 font-medium">Annual Cost</div>
-                                <div class="text-lg md:text-2xl font-bold text-indigo-800" id="annual-cost">£0.00</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Actions & Quick Add -->
-                <div class="space-y-4">
-                    <!-- Quick Add Section -->
-                    <div class="bg-white rounded-xl shadow-lg p-4">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">⚡ Quick Add</h3>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="quickAddExpense('Coffee', 5, 'Non Essential', 'Entertainment')" 
-                                    class="bg-amber-100 hover:bg-amber-200 text-amber-800 p-3 rounded-lg text-center touch-feedback">
-                                <div class="text-2xl mb-1">☕</div>
-                                <div class="text-xs font-medium">Coffee</div>
-                                <div class="text-xs">£5</div>
-                            </button>
-                            <button onclick="quickAddExpense('Lunch', 15, 'Non Essential', 'Entertainment')" 
-                                    class="bg-orange-100 hover:bg-orange-200 text-orange-800 p-3 rounded-lg text-center touch-feedback">
-                                <div class="text-2xl mb-1">🍕</div>
-                                <div class="text-xs font-medium">Lunch</div>
-                                <div class="text-xs">£15</div>
-                            </button>
-                            <button onclick="quickAddExpense('Transport', 10, 'Essential', 'Transport')" 
-                                    class="bg-blue-100 hover:bg-blue-200 text-blue-800 p-3 rounded-lg text-center touch-feedback">
-                                <div class="text-2xl mb-1">🚌</div>
-                                <div class="text-xs font-medium">Transport</div>
-                                <div class="text-xs">£10</div>
-                            </button>
-                            <button onclick="quickAddExpense('Groceries', 50, 'Essential', 'Shopping')" 
-                                    class="bg-green-100 hover:bg-green-200 text-green-800 p-3 rounded-lg text-center touch-feedback">
-                                <div class="text-2xl mb-1">🛒</div>
-                                <div class="text-xs font-medium">Groceries</div>
-                                <div class="text-xs">£50</div>
-                            </button>
-                        </div>
-                        <button onclick="showAddForm()" class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium">
+<div class="mb-4">
+<div class="flex justify-between mb-2">
+<span class="text-sm font-medium text-gray-600">Budget Usage</span>
+<span class="text-sm font-medium text-gray-800" id="budget-percentage">0%</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-3">
+<div class="progress-bar h-3 rounded-full bg-green-500" id="budget-bar" style="width: 0%"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 md:gap-4">
+<div class="bg-blue-50 rounded-lg p-3">
+<div class="text-xs md:text-sm text-blue-600 font-medium">Monthly Budget</div>
+<div class="text-lg md:text-2xl font-bold text-blue-800" id="monthly-budget">£4000.00</div>
+</div>
+<div class="bg-purple-50 rounded-lg p-3">
+<div class="text-xs md:text-sm text-purple-600 font-medium">Total Expenses</div>
+<div class="text-lg md:text-2xl font-bold text-purple-800" id="total-expenses">£0.00</div>
+</div>
+<div class="bg-green-50 rounded-lg p-3" id="remaining-card">
+<div class="text-xs md:text-sm text-green-600 font-medium" id="remaining-label">Remaining</div>
+<div class="text-lg md:text-2xl font-bold text-green-800" id="remaining-amount">£0.00</div>
+</div>
+<div class="bg-indigo-50 rounded-lg p-3">
+<div class="text-xs md:text-sm text-indigo-600 font-medium">Annual Cost</div>
+<div class="text-lg md:text-2xl font-bold text-indigo-800" id="annual-cost">£0.00</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions & Quick Add -->
+<div class="space-y-4">
+<!-- Quick Add Section -->
+<div class="bg-white rounded-xl shadow-lg p-4">
+<h3 class="text-lg font-bold text-gray-800 mb-4">⚡ Quick Add</h3>
+<div class="grid grid-cols-2 gap-2">
+<button class="bg-amber-100 hover:bg-amber-200 text-amber-800 p-3 rounded-lg text-center touch-feedback" onclick="quickAddExpense('Coffee', 5, 'Non Essential', 'Entertainment')">
+<div class="text-2xl mb-1">☕</div>
+<div class="text-xs font-medium">Coffee</div>
+<div class="text-xs">£5</div>
+</button>
+<button class="bg-orange-100 hover:bg-orange-200 text-orange-800 p-3 rounded-lg text-center touch-feedback" onclick="quickAddExpense('Lunch', 15, 'Non Essential', 'Entertainment')">
+<div class="text-2xl mb-1">🍕</div>
+<div class="text-xs font-medium">Lunch</div>
+<div class="text-xs">£15</div>
+</button>
+<button class="bg-blue-100 hover:bg-blue-200 text-blue-800 p-3 rounded-lg text-center touch-feedback" onclick="quickAddExpense('Transport', 10, 'Essential', 'Transport')">
+<div class="text-2xl mb-1">🚌</div>
+<div class="text-xs font-medium">Transport</div>
+<div class="text-xs">£10</div>
+</button>
+<button class="bg-green-100 hover:bg-green-200 text-green-800 p-3 rounded-lg text-center touch-feedback" onclick="quickAddExpense('Groceries', 50, 'Essential', 'Shopping')">
+<div class="text-2xl mb-1">🛒</div>
+<div class="text-xs font-medium">Groceries</div>
+<div class="text-xs">£50</div>
+</button>
+</div>
+<button class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium" onclick="showAddForm()">
                             ➕ Custom Expense
                         </button>
-                    </div>
-
-                    <!-- Quick Actions -->
-                    <div class="bg-white rounded-xl shadow-lg p-4">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">🚀 Quick Actions</h3>
-                        <div class="space-y-3">
-                            <div class="space-y-2">
-                                <label class="text-sm font-medium text-gray-600">Monthly Budget</label>
-                                <input type="number" id="budget-input" value="3000" onchange="updateBudget(this.value)" 
-                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <button onclick="showTab('trends')" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg font-medium">
+</div>
+<!-- Quick Actions -->
+<div class="bg-white rounded-xl shadow-lg p-4">
+<div class="space-y-2">
+<label class="text-sm font-medium text-gray-600">Currency</label>
+<select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" id="currency-selector" onchange="changeCurrency(this.value)"><option value="£">£ GBP</option><option value="$">$ USD</option><option value="€">€ EUR</option><option value="¥">¥ JPY</option></select>
+</div>
+<h3 class="text-lg font-bold text-gray-800 mb-4">🚀 Quick Actions</h3>
+<div class="space-y-3">
+<div class="space-y-2">
+<label class="text-sm font-medium text-gray-600">Monthly Budget</label>
+<input class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" id="budget-input" onchange="updateBudget(this.value)" type="number" value="4000"/>
+</div>
+<button class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg font-medium" onclick="showTab('trends')">
                                 📊 View Trends
                             </button>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-lg p-4">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">💰 Spending Breakdown</h3>
-                        <div id="spending-breakdown" class="space-y-3">
-                            <div class="text-center py-8 text-gray-500">
-                                <div class="text-4xl mb-2">📊</div>
-                                <p>Add expenses to see breakdown</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="expenses-tab" class="tab-content hidden">
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="p-4 border-b border-gray-200">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-gray-800">All Expenses</h2>
-                        <button onclick="showAddForm()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg font-medium">
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-lg p-4">
+<h3 class="text-lg font-bold text-gray-800 mb-4">💰 Spending Breakdown</h3>
+<div class="space-y-3" id="spending-breakdown">
+<!-- Will be populated by JS -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tab-content hidden" id="expenses-tab">
+<div class="bg-white rounded-xl shadow-lg overflow-hidden">
+<div class="p-4 border-b border-gray-200">
+<div class="flex justify-between items-center">
+<h2 class="text-lg font-bold text-gray-800">All Expenses</h2>
+<button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg font-medium" onclick="showAddForm()">
                             ➕ <span class="mobile-hidden">Add Expense</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                                <th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cost</th>
-                                <th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase mobile-hidden">Type</th>
-                                <th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase mobile-hidden">Category</th>
-                                <th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="expenses-table" class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td colspan="6" class="px-6 py-12 text-center text-gray-500">
-                                    <div class="text-4xl mb-4">💰</div>
-                                    <p class="text-lg font-medium mb-2">No expenses yet</p>
-                                    <p class="text-sm">Start tracking by adding your first expense!</p>
-                                    <button onclick="showAddForm()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium">
-                                        ➕ Add First Expense
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="analytics-tab" class="tab-content hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div class="bg-white rounded-xl shadow-lg p-4">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">📊 Spending by Category</h2>
-                    <div id="category-breakdown" class="space-y-3">
-                        <div class="text-center py-8 text-gray-500">
-                            <div class="text-4xl mb-2">📈</div>
-                            <p>Add expenses to see category breakdown</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-lg p-4">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">💡 Optimization Suggestions</h2>
-                    <div id="optimization-suggestions" class="space-y-3">
-                        <div class="text-center py-8 text-gray-500">
-                            <div class="text-4xl mb-2">💡</div>
-                            <p>Add expenses to get optimization tips</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- New Trends Tab -->
-        <div id="trends-tab" class="tab-content hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div class="bg-white rounded-xl shadow-lg p-4">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">📈 Monthly Spending Trend</h2>
-                    <canvas id="spending-chart" width="400" height="200"></canvas>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-lg p-4">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">🎯 Spending Patterns</h2>
-                    <div id="spending-patterns" class="space-y-3">
-                        <div class="text-center py-8 text-gray-500">
-                            <div class="text-4xl mb-2">🎯</div>
-                            <p>Add expenses to see spending patterns</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-4 bg-white rounded-xl shadow-lg p-4">
-                <h2 class="text-lg font-bold text-gray-800 mb-4">📊 Category Trend</h2>
-                <canvas id="category-chart" width="400" height="200"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add/Edit Modal -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full">
-            <div class="p-4">
-                <h3 class="text-lg font-bold text-gray-800 mb-4" id="modal-title">Add New Expense</h3>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                        <input type="text" id="expense-name" class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Expense name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Cost (£)</label>
-                        <input type="number" step="0.01" id="expense-cost" class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                            <select id="expense-type" class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="Essential">Essential</option>
-                                <option value="Non Essential">Non Essential</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
-                            <select id="expense-frequency" class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="Monthly">Monthly</option>
-                                <option value="Annual">Annual</option>
-                                <option value="One-time">One-time</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                            <select id="expense-category" class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="Housing">Housing</option>
-                                <option value="Utilities">Utilities</option>
-                                <option value="Insurance">Insurance</option>
-                                <option value="Savings">Savings</option>
-                                <option value="Software">Software</option>
-                                <option value="Health">Health</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Shopping">Shopping</option>
-                                <option value="Business">Business</option>
-                                <option value="Transport">Transport</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Bank</label>
-                            <select id="expense-bank" class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="Natwest">Natwest</option>
-                                <option value="Revolut">Revolut</option>
-                                <option value="Amex">Amex</option>
-                                <option value="Cash">Cash</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex gap-3 mt-6">
-                    <button onclick="saveExpense()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium">
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full">
+<thead class="bg-gray-50">
+<tr>
+<th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+<th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cost</th>
+<th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase mobile-hidden">Date</th>
+<th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase mobile-hidden">Type</th>
+<th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase mobile-hidden">Category</th>
+<th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+<th class="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+</tr>
+</thead>
+<tbody class="bg-white divide-y divide-gray-200" id="expenses-table">
+<!-- Will be populated by JS -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="tab-content hidden" id="analytics-tab">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+<div class="bg-white rounded-xl shadow-lg p-4">
+<h2 class="text-lg font-bold text-gray-800 mb-4">📊 Spending by Category</h2>
+<div class="space-y-3" id="category-breakdown">
+<!-- Will be populated by JS -->
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-lg p-4">
+<h2 class="text-lg font-bold text-gray-800 mb-4">💡 Optimization Suggestions</h2>
+<div class="space-y-3" id="optimization-suggestions">
+<!-- Will be populated by JS -->
+</div>
+</div>
+</div>
+</div>
+<!-- New Trends Tab -->
+<div class="tab-content hidden" id="trends-tab">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+<div class="bg-white rounded-xl shadow-lg p-4">
+<h2 class="text-lg font-bold text-gray-800 mb-4">📈 Monthly Spending Trend</h2>
+<div style="position: relative; height: 300px;">
+<canvas id="spending-chart"></canvas>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-lg p-4">
+<h2 class="text-lg font-bold text-gray-800 mb-4">🎯 Spending Patterns</h2>
+<div class="space-y-3" id="spending-patterns">
+<!-- Will be populated by JS -->
+</div>
+</div>
+</div>
+<div class="mt-4 bg-white rounded-xl shadow-lg p-4">
+<h2 class="text-lg font-bold text-gray-800 mb-4">📊 Category Trend</h2>
+<div style="position: relative; height: 300px;">
+<canvas id="category-chart"></canvas>
+</div>
+</div>
+</div>
+<div class="tab-content hidden" id="help-tab">
+<div class="bg-white rounded-xl shadow-lg p-6 space-y-4">
+<h2 class="text-2xl font-bold text-gray-800 mb-4">📘 How to Use This Tracker</h2>
+<ul class="list-disc pl-6 space-y-2 text-gray-700 text-base">
+<li>💰 Set your monthly budget in the Overview tab.</li>
+<li>🧾 Add expenses with the “Add Expense” button or Quick Add options.</li>
+<li>📊 Use the Analytics and Trends tabs to understand your spending patterns.</li>
+<li>🕹️ Switch between currencies: £, $, €, ¥ in the Quick Actions panel.</li>
+<li>💳 Choose your payment method: Credit/Debit Card, Bank Transfer, or Direct Debit.</li>
+<li>🌗 Toggle Dark Mode via the ⚙️ Settings menu.</li>
+<li>📤 Import and 📥 Export your data through the Settings menu.</li>
+<li>📝 Export a Monthly Summary with detailed stats and top 3 categories.</li>
+<li>📱 Tip: On mobile, tap the tab buttons to switch views.</li>
+</ul>
+<p class="text-sm text-red-500 font-medium mt-4">🔁 Don’t forget to export your data regularly to avoid losing it if your browser is cleared.</p>
+</div>
+</div>
+</div>
+<!-- Add/Edit Modal -->
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden" id="modal">
+<div class="bg-white rounded-xl shadow-2xl max-w-md w-full">
+<div class="p-4">
+<h3 class="text-lg font-bold text-gray-800 mb-4" id="modal-title">Add New Expense</h3>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+<input class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="expense-name" placeholder="Expense name" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Cost (£)</label>
+<input class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="expense-cost" placeholder="0.00" step="0.01" type="number"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+<select class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="expense-type">
+<option value="Essential">Essential</option>
+<option value="Non Essential">Non Essential</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
+<select class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="expense-frequency">
+<option value="Monthly">Monthly</option>
+<option value="Annual">Annual</option>
+<option value="One-time">One-time</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+<input class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="expense-date" type="date"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+<select class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="expense-category">
+<option value="Housing">Housing</option>
+<option value="Utilities">Utilities</option>
+<option value="Insurance">Insurance</option>
+<option value="Savings">Savings</option>
+<option value="Software">Software</option>
+<option value="Health">Health</option>
+<option value="Entertainment">Entertainment</option>
+<option value="Shopping">Shopping</option>
+<option value="Business">Business</option>
+<option value="Transport">Transport</option>
+<option value="Other">Other</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+<select class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" id="expense-bank"><option value="Credit/Debit Card">Credit/Debit Card</option><option value="Bank Transfer">Bank Transfer</option><option value="Direct Debit">Direct Debit</option></select>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mt-6">
+<button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium" onclick="saveExpense()">
                         Save Expense
                     </button>
-                    <button onclick="closeModal()" class="px-4 py-3 text-gray-600 hover:text-gray-800">
+<button class="px-4 py-3 text-gray-600 hover:text-gray-800" onclick="closeModal()">
                         Cancel
                     </button>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Toast Notifications -->
+<div class="fixed top-4 left-4 right-4 p-3 rounded-lg text-white z-50 hidden" id="toast"></div>
+<script>
+        let currentCurrency = '£';
 
-    <!-- Toast Notifications -->
-    <div id="toast" class="fixed top-4 left-4 right-4 p-3 rounded-lg text-white z-50 hidden"></div>
+        function changeCurrency(symbol) {
+            currentCurrency = symbol;
+            updateDisplay();
+        }
 
-    <script>
-        // App state - stored in memory (empty by default)
+        function formatCurrency(value) {
+            return currentCurrency + parseFloat(value).toFixed(2);
+        }
+        
+
+        // App state - stored in memory
         let expenses = [];
-        let monthlyBudget = 3000;
+
+        let monthlyBudget = 4000;
         let activeTab = 'overview';
         let editingExpense = null;
         let spendingChart = null;
@@ -403,6 +412,15 @@
                 
                 if (savedExpenses) {
                     expenses = JSON.parse(savedExpenses);
+                    // Ensure all expenses have dates
+                    expenses = expenses.map(expense => ({
+                        ...expense,
+                        date: expense.date || new Date().toISOString()
+                    }));
+                } else {
+                    // Add some historical one-time expenses for demo purposes
+                    const historicalExpenses = [];
+                    expenses = [...expenses, ...historicalExpenses];
                 }
                 if (savedBudget) {
                     monthlyBudget = parseFloat(savedBudget);
@@ -431,8 +449,6 @@
 
         // Calculate budget health score
         function calculateHealthScore() {
-            if (expenses.length === 0) return 100;
-            
             const monthlyTotal = calculateMonthlyTotal();
             const budgetUsage = (monthlyTotal / monthlyBudget) * 100;
             
@@ -503,45 +519,822 @@
             // Generate insights
             const insights = [];
             
-            if (expenses.length === 0) {
+            if (budgetUsage > 90) {
+                insights.push({
+                    type: 'warning',
+                    icon: '⚠️',
+                    text: 'You\'re using over 90% of your budget'
+                });
+            } else if (budgetUsage < 70) {
+                insights.push({
+                    type: 'success',
+                    icon: '✅',
+                    text: 'Great job! You\'re well within budget'
+                });
+            }
+            
+            const essentialTotal = expenses
+                .filter(e => e.status === 'active' && e.type === 'Essential')
+                .reduce((sum, e) => sum + (e.frequency === 'Annual' ? e.cost / 12 : e.cost), 0);
+            const essentialRatio = monthlyTotal > 0 ? (essentialTotal / monthlyTotal) * 100 : 0;
+            
+            if (essentialRatio < 60) {
+                insights.push({
+                    type: 'warning',
+                    icon: '💸',
+                    text: 'Consider reducing non-essential spending'
+                });
+            }
+            
+            const savingsAmount = expenses
+                .filter(e => e.status === 'active' && e.category === 'Savings')
+                .reduce((sum, e) => sum + (e.frequency === 'Annual' ? e.cost / 12 : e.cost), 0);
+            
+            if (savingsAmount < monthlyBudget * 0.1) {
                 insights.push({
                     type: 'info',
-                    icon: '🎯',
-                    text: 'Start by adding your first expense to track your budget health'
+                    icon: '💰',
+                    text: 'Try to save at least 10% of your budget'
                 });
+            }
+            
+            document.getElementById('health-insights').innerHTML = insights.map(insight => `
+                <div class="flex items-start gap-2 p-2 rounded-lg ${
+                    insight.type === 'success' ? 'bg-green-50' : 
+                    insight.type === 'warning' ? 'bg-yellow-50' : 'bg-blue-50'
+                }">
+                    <span class="text-lg">${insight.icon}</span>
+                    <span class="text-sm ${
+                        insight.type === 'success' ? 'text-green-700' : 
+                        insight.type === 'warning' ? 'text-yellow-700' : 'text-blue-700'
+                    }">${insight.text}</span>
+                </div>
+            `).join('');
+        }
+
+        // Quick add expense
+        function quickAddExpense(name, cost, type, category) {
+            const expense = {
+                id: Date.now(),
+                name: name,
+                cost: cost,
+                type: type,
+                frequency: 'One-time',
+                category: category,
+                bank: 'Cash',
+                status: 'active',
+                date: new Date().toISOString()
+            };
+            
+            expenses.push(expense);
+            saveData();
+            updateDisplay();
+            showToast(`${name} added - £${cost}`, 'success');
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `fixed top-4 left-4 right-4 p-3 rounded-lg text-white z-50 ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Tab management
+        function showTab(tabName) {
+            activeTab = tabName;
+            
+            // Update tab buttons
+            document.querySelectorAll('[id^="tab-"]').forEach(btn => {
+                btn.className = 'flex-1 px-3 py-2 rounded-lg font-medium transition-all text-gray-600 hover:bg-gray-100';
+            });
+            document.getElementById(`tab-${tabName}`).className = 'flex-1 px-3 py-2 rounded-lg font-medium transition-all bg-blue-600 text-white';
+            
+            // Show/hide content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+            
+            // Update charts if showing trends tab
+            if (tabName === 'trends') {
+                updateCharts();
+            }
+            
+            updateDisplay();
+        }
+
+        // Update budget
+        function updateBudget(value) {
+            monthlyBudget = parseFloat(value) || 0;
+            saveData();
+            updateDisplay();
+        }
+
+        // Modal management
+        function showAddForm() {
+            editingExpense = null;
+            document.getElementById('modal-title').textContent = 'Add New Expense';
+            document.getElementById('expense-name').value = '';
+            document.getElementById('expense-cost').value = '';
+            document.getElementById('expense-type').value = 'Essential';
+            document.getElementById('expense-frequency').value = 'Monthly';
+            document.getElementById('expense-category').value = 'Other';
+            document.getElementById('expense-bank').value = 'Natwest';
+            document.getElementById('expense-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function editExpense(id) {
+            const expense = expenses.find(e => e.id === id);
+            if (!expense) return;
+            
+            editingExpense = expense;
+            document.getElementById('modal-title').textContent = 'Edit Expense';
+            document.getElementById('expense-name').value = expense.name;
+            document.getElementById('expense-cost').value = expense.cost;
+            document.getElementById('expense-type').value = expense.type;
+            document.getElementById('expense-frequency').value = expense.frequency;
+            document.getElementById('expense-category').value = expense.category;
+            document.getElementById('expense-bank').value = expense.bank;
+            document.getElementById('expense-date').value = expense.date ? expense.date.split('T')[0] : new Date().toISOString().split('T')[0];
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            editingExpense = null;
+        }
+
+        function saveExpense() {
+            const name = document.getElementById('expense-name').value.trim();
+            const cost = parseFloat(document.getElementById('expense-cost').value);
+            
+            if (!name || !cost) {
+                showToast('Please fill in name and cost', 'error');
+                return;
+            }
+            
+            const expenseData = {
+                name,
+                cost,
+                type: document.getElementById('expense-type').value,
+                frequency: document.getElementById('expense-frequency').value,
+                category: document.getElementById('expense-category').value,
+                bank: document.getElementById('expense-bank').value,
+                status: 'active',
+                date: document.getElementById('expense-date').value ? new Date(document.getElementById('expense-date').value).toISOString() : new Date().toISOString()
+            };
+            
+            if (editingExpense) {
+                // Update existing expense
+                Object.assign(editingExpense, expenseData);
+                showToast('Expense updated successfully!', 'success');
             } else {
-                if (budgetUsage > 90) {
-                    insights.push({
-                        type: 'warning',
-                        icon: '⚠️',
-                        text: 'You\'re using over 90% of your budget'
-                    });
-                } else if (budgetUsage < 70) {
-                    insights.push({
-                        type: 'success',
-                        icon: '✅',
-                        text: 'Great job! You\'re well within budget'
-                    });
+                // Add new expense
+                expenseData.id = Date.now();
+                expenses.push(expenseData);
+                showToast('Expense added successfully!', 'success');
+            }
+            
+            saveData();
+            closeModal();
+            updateDisplay();
+        }
+
+        function toggleExpenseStatus(id) {
+            const expense = expenses.find(e => e.id === id);
+            if (expense) {
+                expense.status = expense.status === 'active' ? 'cancelled' : 'active';
+                saveData();
+                showToast('Expense status updated!', 'success');
+                updateDisplay();
+            }
+        }
+
+        function deleteExpense(id) {
+            if (confirm('Are you sure you want to delete this expense?')) {
+                expenses = expenses.filter(e => e.id !== id);
+                saveData();
+                showToast('Expense deleted!', 'success');
+                updateDisplay();
+            }
+        }
+
+        // Export data
+        function exportData() {
+            const data = {
+                expenses,
+                monthlyBudget,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'expense-tracker-backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Data exported successfully!', 'success');
+        }
+
+        // Import data
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.expenses && Array.isArray(data.expenses)) {
+                        expenses = data.expenses;
+                        monthlyBudget = data.monthlyBudget || 4000;
+                        document.getElementById('budget-input').value = monthlyBudget;
+                        saveData();
+                        updateDisplay();
+                        showToast('Data imported successfully!', 'success');
+                    }
+                } catch (error) {
+                    showToast('Error importing data. Please check the file format.', 'error');
                 }
-                
-                const essentialTotal = expenses
-                    .filter(e => e.status === 'active' && e.type === 'Essential')
-                    .reduce((sum, e) => sum + (e.frequency === 'Annual' ? e.cost / 12 : e.cost), 0);
-                const essentialRatio = monthlyTotal > 0 ? (essentialTotal / monthlyTotal) * 100 : 0;
-                
-                if (essentialRatio < 60) {
-                    insights.push({
-                        type: 'warning',
-                        icon: '💸',
-                        text: 'Consider reducing non-essential spending'
-                    });
+            };
+            reader.readAsText(file);
+        }
+
+        // Update charts
+        function updateCharts() {
+            // Generate monthly data for the last 6 months
+            const monthlyData = generateMonthlyData();
+            
+            // Update spending trend chart
+            const ctx1 = document.getElementById('spending-chart').getContext('2d');
+            
+            if (spendingChart) {
+                spendingChart.destroy();
+            }
+            
+            spendingChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: monthlyData.labels,
+                    datasets: [{
+                        label: 'Total Spending',
+                        data: monthlyData.totals,
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Budget',
+                        data: monthlyData.labels.map(() => monthlyBudget),
+                        borderColor: 'rgb(239, 68, 68)',
+                        borderDash: [5, 5],
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
                 }
+            });
+            
+            // Update category trend chart
+            const ctx2 = document.getElementById('category-chart').getContext('2d');
+            
+            if (categoryChart) {
+                categoryChart.destroy();
+            }
+            
+            const categoryData = generateCategoryData();
+            
+            categoryChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: categoryData.labels,
+                    datasets: [{
+                        label: 'Spending by Category',
+                        data: categoryData.values,
+                        backgroundColor: [
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(236, 72, 153, 0.8)'
+                        ],
+                        barThickness: 40,
+                        maxBarThickness: 60
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            updateSpendingPatterns();
+        }
+
+        // Generate monthly data for charts
+        function generateMonthlyData() {
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const now = new Date();
+            const labels = [];
+            const totals = [];
+            
+            // Get data for last 6 months
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const month = date.getMonth();
+                const year = date.getFullYear();
+                labels.push(`${monthNames[month]} ${year}`);
                 
-                const savingsAmount = expenses
-                    .filter(e => e.status === 'active' && e.category === 'Savings')
-                    .reduce((sum, e) => sum + (e.frequency === 'Annual' ? e.cost / 12 : e.cost), 0);
+                // Calculate total for this month
+                let monthTotal = 0;
                 
-                if (savingsAmount < monthlyBudget * 0.1) {
-                    insights.push({
-                        type: 'info',
-                        icon: '💰',
+                // Add recurring monthly expenses
+                expenses.forEach(expense => {
+                    if (expense.status === 'active' && expense.frequency === 'Monthly') {
+                        const expenseDate = new Date(expense.date);
+                        // If expense started before or during this month
+                        if (expenseDate <= new Date(year, month + 1, 0)) {
+                            monthTotal += expense.cost;
+                        }
+                    }
+                });
+                
+                // Add one-time expenses for this specific month
+                expenses.forEach(expense => {
+                    if (expense.frequency === 'One-time') {
+                        const expenseDate = new Date(expense.date);
+                        if (expenseDate.getMonth() === month && expenseDate.getFullYear() === year) {
+                            monthTotal += expense.cost;
+                        }
+                    }
+                });
+                
+                // Add annual expenses if they fall in this month
+                expenses.forEach(expense => {
+                    if (expense.status === 'active' && expense.frequency === 'Annual') {
+                        const expenseDate = new Date(expense.date);
+                        if (expenseDate.getMonth() === month) {
+                            monthTotal += expense.cost / 12;
+                        }
+                    }
+                });
+                
+                totals.push(Math.round(monthTotal));
+            }
+            
+            return { labels, totals };
+        }
+
+        // Generate category data for charts
+        function generateCategoryData() {
+            const categoryTotals = expenses
+                .filter(expense => expense.status === 'active')
+                .reduce((acc, expense) => {
+                    const monthlyCost = expense.frequency === 'Annual' ? expense.cost / 12 : expense.cost;
+                    acc[expense.category] = (acc[expense.category] || 0) + monthlyCost;
+                    return acc;
+                }, {});
+            
+            const sorted = Object.entries(categoryTotals)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 6);
+            
+            return {
+                labels: sorted.map(([category]) => category),
+                values: sorted.map(([, value]) => Math.round(value))
+            };
+        }
+
+        // Update spending patterns
+        function updateSpendingPatterns() {
+            const patterns = [];
+            
+            // Calculate average daily spending
+            const monthlyTotal = calculateMonthlyTotal();
+            const dailyAverage = monthlyTotal / 30;
+            
+            patterns.push({
+                icon: '📅',
+                label: 'Daily Average',
+                value: `£${dailyAverage.toFixed(2)}`,
+                color: 'blue'
+            });
+            
+            // Find most expensive category
+            const categoryTotals = expenses
+                .filter(expense => expense.status === 'active')
+                .reduce((acc, expense) => {
+                    const monthlyCost = expense.frequency === 'Annual' ? expense.cost / 12 : expense.cost;
+                    acc[expense.category] = (acc[expense.category] || 0) + monthlyCost;
+                    return acc;
+                }, {});
+            
+            const topCategory = Object.entries(categoryTotals)
+                .sort(([,a], [,b]) => b - a)[0];
+            
+            if (topCategory) {
+                patterns.push({
+                    icon: '🏆',
+                    label: 'Top Category',
+                    value: topCategory[0],
+                    color: 'purple'
+                });
+            }
+            
+            // Calculate subscriptions
+            const subscriptionCount = expenses
+                .filter(e => e.status === 'active' && e.frequency === 'Monthly' && 
+                       ['Entertainment', 'Software'].includes(e.category))
+                .length;
+            
+            patterns.push({
+                icon: '🔁',
+                label: 'Active Subscriptions',
+                value: subscriptionCount,
+                color: 'green'
+            });
+            
+            // One-time expenses this month
+            const oneTimeExpenses = expenses
+                .filter(e => e.frequency === 'One-time' && e.status === 'active')
+                .reduce((sum, e) => sum + e.cost, 0);
+            
+            patterns.push({
+                icon: '💸',
+                label: 'One-time Expenses',
+                value: `£${oneTimeExpenses.toFixed(2)}`,
+                color: 'orange'
+            });
+            
+            document.getElementById('spending-patterns').innerHTML = patterns.map(pattern => `
+                <div class="flex items-center justify-between p-3 bg-${pattern.color}-50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">${pattern.icon}</span>
+                        <span class="font-medium text-gray-700">${pattern.label}</span>
+                    </div>
+                    <span class="font-bold text-${pattern.color}-700">${pattern.value}</span>
+                </div>
+            `).join('');
+        }
+
+        // Update display
+        function updateDisplay() {
+            const monthlyTotal = calculateMonthlyTotal();
+            const budgetRemaining = monthlyBudget - monthlyTotal;
+            const budgetUsagePercent = Math.min((monthlyTotal / monthlyBudget) * 100, 100);
+            
+            // Update overview
+            document.getElementById('monthly-budget').textContent = formatCurrency(monthlyBudget);
+            document.getElementById('total-expenses').textContent = formatCurrency(monthlyTotal);
+            document.getElementById('remaining-amount').textContent = formatCurrency(Math.abs(budgetRemaining));
+            document.getElementById('annual-cost').textContent = formatCurrency(monthlyTotal * 12);
+            document.getElementById('budget-percentage').textContent = `${budgetUsagePercent.toFixed(1)}%`;
+            
+            // Update progress bar
+            const budgetBar = document.getElementById('budget-bar');
+            budgetBar.style.width = `${Math.min(budgetUsagePercent, 100)}%`;
+            budgetBar.className = `progress-bar h-3 rounded-full ${
+                budgetUsagePercent > 90 ? 'bg-red-500' : 
+                budgetUsagePercent > 75 ? 'bg-yellow-500' : 'bg-green-500'
+            }`;
+            
+            // Update remaining card
+            const remainingCard = document.getElementById('remaining-card');
+            const remainingLabel = document.getElementById('remaining-label');
+            if (budgetRemaining >= 0) {
+                remainingCard.className = 'bg-green-50 rounded-lg p-3';
+                remainingLabel.className = 'text-xs md:text-sm text-green-600 font-medium';
+                remainingLabel.textContent = 'Remaining';
+                document.getElementById('remaining-amount').className = 'text-lg md:text-2xl font-bold text-green-800';
+            } else {
+                remainingCard.className = 'bg-red-50 rounded-lg p-3';
+                remainingLabel.className = 'text-xs md:text-sm text-red-600 font-medium';
+                remainingLabel.textContent = 'Over Budget';
+                document.getElementById('remaining-amount').className = 'text-lg md:text-2xl font-bold text-red-800';
+            }
+            
+            updateHealthScore();
+            updateSpendingBreakdown();
+            updateExpensesTable();
+            updateAnalytics();
+        }
+
+        function updateSpendingBreakdown() {
+            const essentialVsNonEssential = expenses
+                .filter(expense => expense.status === 'active')
+                .reduce((acc, expense) => {
+                    const monthlyCost = expense.frequency === 'Annual' ? expense.cost / 12 : expense.cost;
+                    acc[expense.type] = (acc[expense.type] || 0) + monthlyCost;
+                    return acc;
+                }, {});
+            
+            const monthlyTotal = calculateMonthlyTotal();
+            const essential = essentialVsNonEssential.Essential || 0;
+            const nonEssential = essentialVsNonEssential['Non Essential'] || 0;
+            
+            document.getElementById('spending-breakdown').innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="text-green-600 font-medium">Essential</span>
+                    <span class="font-bold">${formatCurrency(essential)}</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="h-2 bg-green-500 rounded-full progress-bar" style="width: ${monthlyTotal ? (essential / monthlyTotal) * 100 : 0}%"></div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-orange-600 font-medium">Non-Essential</span>
+                    <span class="font-bold">${formatCurrency(nonEssential)}</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="h-2 bg-orange-500 rounded-full progress-bar" style="width: ${monthlyTotal ? (nonEssential / monthlyTotal) * 100 : 0}%"></div>
+                </div>
+            `;
+        }
+
+        function updateExpensesTable() {
+            const tbody = document.getElementById('expenses-table');
+            tbody.innerHTML = expenses.map(expense => {
+                const expenseDate = new Date(expense.date);
+                const formattedDate = expenseDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+                
+                return `
+                <tr class="${expense.status === 'cancelled' ? 'opacity-50' : ''}">
+                    <td class="px-2 md:px-6 py-4 whitespace-nowrap">
+                        <div class="font-medium text-gray-900 text-sm">${expense.name}</div>
+                        <div class="text-xs text-gray-500 md:hidden">${expense.type} • ${expense.category} • ${formattedDate}</div>
+                    </td>
+                    <td class="px-2 md:px-6 py-4 whitespace-nowrap">
+                        <div class="text-gray-900 text-sm font-medium">${formatCurrency(expense.cost)}</div>
+                        ${expense.frequency === 'Annual' ? `<div class="text-xs text-gray-500">${formatCurrency(expense.cost / 12)}/month</div>` : ''}
+                    </td>
+                    <td class="px-2 md:px-6 py-4 whitespace-nowrap text-gray-900 text-sm mobile-hidden">${formattedDate}</td>
+                    <td class="px-2 md:px-6 py-4 whitespace-nowrap mobile-hidden">
+                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            expense.type === 'Essential' 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-orange-100 text-orange-800'
+                        }">
+                            ${expense.type}
+                        </span>
+                    </td>
+                    <td class="px-2 md:px-6 py-4 whitespace-nowrap text-gray-900 text-sm mobile-hidden">${expense.category}</td>
+                    <td class="px-2 md:px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            expense.status === 'active' 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-red-100 text-red-800'
+                        }">
+                            ${expense.status}
+                        </span>
+                    </td>
+                    <td class="px-2 md:px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex space-x-1">
+                            <button onclick="editExpense(${expense.id})" class="text-blue-600 hover:text-blue-900 p-1 touch-feedback" title="Edit">
+                                ✏️
+                            </button>
+                            <button onclick="toggleExpenseStatus(${expense.id})" class="${expense.status === 'active' ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'} p-1 touch-feedback" title="${expense.status === 'active' ? 'Cancel' : 'Activate'}">
+                                ${expense.status === 'active' ? '❌' : '✅'}
+                            </button>
+                            <button onclick="deleteExpense(${expense.id})" class="text-red-600 hover:text-red-900 p-1 touch-feedback" title="Delete">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `}).join('');
+        }
+
+        function updateAnalytics() {
+            // Category breakdown
+            const categoryTotals = expenses
+                .filter(expense => expense.status === 'active')
+                .reduce((acc, expense) => {
+                    const monthlyCost = expense.frequency === 'Annual' ? expense.cost / 12 : expense.cost;
+                    acc[expense.category] = (acc[expense.category] || 0) + monthlyCost;
+                    return acc;
+                }, {});
+
+            const monthlyTotal = calculateMonthlyTotal();
+            const categoryBreakdown = document.getElementById('category-breakdown');
+            
+            if (monthlyTotal > 0) {
+                categoryBreakdown.innerHTML = Object.entries(categoryTotals)
+                    .sort(([,a], [,b]) => b - a)
+                    .map(([category, amount]) => `
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium text-gray-700">${category}</span>
+                                    <span class="text-sm font-bold text-gray-900">${formatCurrency(amount)}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 bg-blue-500 rounded-full progress-bar" style="width: ${(amount / monthlyTotal) * 100}%"></div>
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    ${((amount / monthlyTotal) * 100).toFixed(1)}% of total
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+            } else {
+                categoryBreakdown.innerHTML = '<p class="text-gray-500">No active expenses to analyze</p>';
+            }
+
+            // Optimization suggestions
+            const nonEssentialExpenses = expenses
+                .filter(expense => expense.type === 'Non Essential' && expense.status === 'active')
+                .sort((a, b) => {
+                    const aMonthly = a.frequency === 'Annual' ? a.cost / 12 : a.cost;
+                    const bMonthly = b.frequency === 'Annual' ? b.cost / 12 : b.cost;
+                    return bMonthly - aMonthly;
+                })
+                .slice(0, 5);
+
+            const optimizationSuggestions = document.getElementById('optimization-suggestions');
+            
+            if (nonEssentialExpenses.length > 0) {
+                optimizationSuggestions.innerHTML = nonEssentialExpenses.map(expense => {
+                    const monthlyCost = expense.frequency === 'Annual' ? expense.cost / 12 : expense.cost;
+                    return `
+                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                            <div class="flex-1 min-w-0">
+                                <div class="font-medium text-gray-800 text-sm truncate">${expense.name}</div>
+                                <div class="text-xs text-gray-600">
+                                    Save £${monthlyCost.toFixed(2)}/month
+                                </div>
+                            </div>
+                            <button onclick="toggleExpenseStatus(${expense.id})" class="text-red-600 hover:text-red-800 font-medium text-sm ml-2 touch-feedback">
+                                Cancel
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                optimizationSuggestions.innerHTML = '<p class="text-gray-500">No optimization suggestions available</p>';
+            }
+        }
+
+        // Mobile detection
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+
+        // Update header title for mobile
+        function updateHeaderTitle() {
+            const headerTitle = document.getElementById('header-title');
+            if (isMobile()) {
+                headerTitle.textContent = 'Expenses';
+            } else {
+                headerTitle.textContent = 'Personal Finance Tracker';
+            }
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateDisplay();
+            updateHeaderTitle();
+            
+            // Handle window resize
+            window.addEventListener('resize', updateHeaderTitle);
+        });
+
+        // Handle clicks outside modal to close it
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Make functions globally available
+        // currency logic above
+window.showTab = showTab;
+        window.showAddForm = showAddForm;
+        window.editExpense = editExpense;
+        window.toggleExpenseStatus = toggleExpenseStatus;
+        window.deleteExpense = deleteExpense;
+        window.updateBudget = updateBudget;
+        window.closeModal = closeModal;
+        window.saveExpense = saveExpense;
+        window.exportData = exportData;
+        window.importData = importData;
+        window.quickAddExpense = quickAddExpense;
+    
+function toggleSettings() {
+    const menu = document.getElementById('settings-menu');
+    if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+    } else {
+        menu.classList.add('hidden');
+    }
+}
+</script>
+<script>
+// Backup Reminder
+const lastReminder = localStorage.getItem('lastBackupReminder');
+const now = new Date();
+if (!lastReminder || (now - new Date(lastReminder)) > 14 * 24 * 60 * 60 * 1000) {
+    setTimeout(() => {
+        alert("🔁 Reminder: Export your data to avoid loss!");
+        localStorage.setItem('lastBackupReminder', new Date().toISOString());
+    }, 3000);
+}
+
+// Light/Dark Mode
+document.addEventListener("DOMContentLoaded", () => {
+    const themeToggle = document.getElementById("theme-toggle");
+    if (!themeToggle) return;
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.className = savedTheme;
+    themeToggle.checked = savedTheme === "dark";
+
+    themeToggle.addEventListener("change", () => {
+        const theme = themeToggle.checked ? "dark" : "light";
+        document.documentElement.className = theme;
+        localStorage.setItem("theme", theme);
+    });
+});
+
+// Mobile Hint
+if (window.innerWidth < 768) {
+    const hint = document.createElement("div");
+    hint.className = "fixed bottom-4 left-4 right-4 bg-yellow-100 text-yellow-800 text-sm text-center py-2 rounded-lg shadow-lg z-50";
+    hint.innerText = "📱 Tip: Tap the tabs above to switch views.";
+    document.body.appendChild(hint);
+    setTimeout(() => hint.remove(), 5000);
+}
+
+// Export Monthly Summary
+function exportMonthlySummary() {
+    let summary = "📅 Monthly Summary\n\n";
+    const essentials = expenses.filter(e => e.type === "Essential");
+    const nonEssentials = expenses.filter(e => e.type === "Non Essential");
+
+    const total = essentials.concat(nonEssentials).reduce((sum, e) => sum + e.cost, 0);
+    const nonEssentialTotal = nonEssentials.reduce((sum, e) => sum + e.cost, 0);
+    const topCategory = [...new Set(nonEssentials.map(e => e.category))]
+        .map(cat => ({
+            name: cat,
+            total: nonEssentials.filter(e => e.category === cat).reduce((s, e) => s + e.cost, 0)
+        }))
+        .sort((a, b) => b.total - a.total)[0]?.name || "N/A";
+
+    summary += `You spent ${((nonEssentialTotal / total) * 100).toFixed(1)}% on Non-Essentials.\n`;
+    summary += `Top category: ${topCategory}.\n`;
+
+    const blob = new Blob([summary], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "monthly_summary.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script></body>
+</html>
