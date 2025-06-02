@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -6,6 +7,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Personal Expense Tracker v1.1</title>
+<script>tailwind.config = { darkMode: "class" };</script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
@@ -15,6 +17,14 @@
         .gradient-bg {
             background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
         }
+        /* Dark-mode overrides */
+        .dark .bg-white { background-color: #1f2937 !important; }
+        .dark .bg-gray-50 { background-color: #374151 !important; }
+        .dark .bg-gray-100 { background-color: #1f2937 !important; }
+        .dark .text-gray-800, .dark .text-gray-700 { color: #e5e7eb !important; }
+        .dark .text-gray-600 { color: #9ca3af !important; }
+        .dark .border-gray-200 { border-color: #374151 !important; }
+
         @media (max-width: 768px) {
             .mobile-hidden { display: none; }
             button { min-height: 44px; }
@@ -1336,5 +1346,15 @@ function exportMonthlySummary() {
     a.click();
     URL.revokeObjectURL(url);
 }
-</script></body>
+</script>
+<script>
+document.addEventListener('click',function(e){
+ const menu=document.getElementById('settings-menu');
+ const btn=document.querySelector('[onclick*="toggleSettings"]');
+ if(menu && !menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)){
+    menu.classList.add('hidden');
+ }
+});
+</script>
+</body>
 </html>
