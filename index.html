@@ -494,7 +494,7 @@
                                 </button>
                                 <div id="settings-menu" class="dropdown-menu absolute right-0 mt-2 w-60 origin-top-right hidden">
                                     <div class="py-1" role="menu" aria-orientation="vertical">
-                                        <div class="dropdown-item">
+                                        <div class="dropdown-item flex items-center justify-between">
                                             <label for="theme-toggle" class="flex-grow text-sm leading-5">Dark Mode</label>
                                             <label class="toggle-switch">
                                                 <input type="checkbox" id="theme-toggle" onchange="toggleTheme(this.checked)">
@@ -502,7 +502,7 @@
                                             </label>
                                         </div>
                                         <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-                                        <div class="dropdown-item">
+                                        <div class="dropdown-item flex items-center justify-between">
                                             <label for="currency-select" class="text-sm leading-5">Currency</label>
                                             <select id="currency-select" onchange="changeCurrency(this.value)" class="modern-select text-sm flex-grow ml-2">
                                                 <option value="GBP">GBP (£)</option>
@@ -512,12 +512,12 @@
                                             </select>
                                         </div>
                                         <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-                                        <div class="dropdown-item" onclick="exportData()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                        <div class="dropdown-item flex items-center" onclick="exportData()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                                             <span class="text-sm">Export Data (JSON)</span>
                                         </div>
-                                        <label class="dropdown-item cursor-pointer">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                        <label class="dropdown-item flex items-center cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                                             <span class="text-sm">Import Data (JSON)</span>
                                             <input type="file" accept=".json" onchange="importData(event)" class="hidden">
                                         </label>
@@ -528,7 +528,7 @@
                     </div>
                 </div>
                  <div class="border-b border-gray-200 dark:border-gray-700">
-                    <nav class="-mb-px flex space-x-4 sm:space-x-8 px-4 md:px-6 overflow-x-auto" aria-label="Tabs">
+                    <nav class="-mb-px flex space-x-4 sm:space-x-8 px-4 md:px-6" aria-label="Tabs">
                         <button onclick="showTab('overview')" id="tab-overview" class="tab-button active">Overview</button>
                         <button onclick="showTab('expenses')" id="tab-expenses" class="tab-button">Expenses</button>
                         <button onclick="showTab('recurring')" id="tab-recurring" class="tab-button">Recurring</button>
@@ -607,6 +607,14 @@
                                 <div>
                                     <p class="text-sm text-gray-500 dark:text-gray-400">Non-Essential</p>
                                     <p class="text-2xl font-semibold text-pink-600 dark:text-pink-400" id="non-essential-spending">£0.00</p>
+                                </div>
+                                <div class="relative group">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div class="absolute bottom-full mb-2 right-0 w-64 bg-white dark:bg-gray-800 p-2 rounded shadow-lg text-xs hidden group-hover:block z-10">
+                                        <p>The orange bar shows essential expenses, pink shows non-essential expenses. The remaining space (if any) represents your unspent budget.</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
@@ -929,58 +937,101 @@
                     <h2 class="text-2xl font-semibold mb-6">Help & Documentation</h2>
                     <div class="space-y-6 text-sm leading-relaxed">
                         <section>
-                            <h3 class="text-lg font-semibold mb-2">Welcome!</h3>
+                            <h3 class="text-lg font-semibold mb-2">Overview Tab <span class="text-red-500">🎯</span></h3>
+                            <p>This is your financial dashboard. Here you can:</p>
+                            <ul class="list-disc ml-5 mt-2 space-y-1">
+                                <li>Monthly Budget Overview: See your set budget, total expenses for the current month, remaining budget, and annual cost.</li>
+                                <li>Budget Usage Bar: A visual representation of how much of your monthly budget you've used.</li>
+                                <li>Spending Breakdown: A quick look at where your money is going by category.</li>
+                                <li>Quick Actions: Easily adjust your monthly budget and currency.</li>
+                                <li>Quick Add: Add common expenses with a single click.</li>
+                            </ul>
+                        </section>
+                        <section>
+                            <h3 class="text-lg font-semibold mb-2">Expenses Tab <span class="text-yellow-500">💸</span></h3>
+                            <p>View and manage all your individual expenses here.</p>
+                            <ul class="list-disc ml-5 mt-2 space-y-1">
+                                <li>Add Expense: Click the "+ Add Expense" button to open a form where you can enter details like name, cost, type (Essential/Non Essential), category, and date.</li>
+                                <li>Edit/Delete: Each expense row has buttons to edit its details or delete it.</li>
+                                <li>Filters: Use the "Type" and "Category" dropdowns to filter your expenses for easier viewing.</li>
+                                <li>Status: Expenses are marked as 'Paid' or 'Pending'.</li>
+                            </ul>
+                        </section>
+                        <section>
+                            <h3 class="text-lg font-semibold mb-2">Recurring Tab <span class="text-blue-500">🔄</span></h3>
+                            <p>Manage your regular income and expenses (e.g., rent, salary, subscriptions).</p>
+                            <ul class="list-disc ml-5 mt-2 space-y-1">
+                                <li>Add Recurring Item: Click the "+ Add Recurring Item" button to set up regular transactions.</li>
+                                <li>Type: Choose between "Income" (green) or "Expense" (blue) types.</li>
+                                <li>Frequency: Set how often the item occurs (Weekly, Monthly, etc.).</li>
+                                <li>Filters: Use the filters to sort and find specific recurring items.</li>
+                                <li>Edit/Delete: Manage your recurring items with the action buttons.</li>
+                            </ul>
+                        </section>
+                        <section>
+                            <h3 class="text-lg font-semibold mb-2">Trends Tab <span class="text-purple-500">📊</span></h3>
                             <p>
-                                This AI Expense Tracker helps you manage your finances effectively. Track expenses, recurring items, income, and savings goals. Get AI-powered insights to improve your financial habits.
+                                Visualize your spending patterns with interactive charts showing monthly trends and category breakdowns. Analyze your spending habits over time and identify areas for potential savings.
                             </p>
                         </section>
                         <section>
-                            <h3 class="text-lg font-semibold mb-2">Overview Tab</h3>
+                            <h3 class="text-lg font-semibold mb-2">Savings AI Tab <span class="text-green-500">💰</span></h3>
                             <p>
-                                Your financial dashboard. See key stats like budget, spending, remaining funds, and monthly income. Monitor your budget progress and check your <strong class="font-medium">Budget Health Score</strong> (aim for 70+). Use Quick Actions to set your budget/income and add items.
+                                Set your annual savings goal and track your progress. The system calculates your projected annual savings based on your current income and spending patterns. The monthly savings trend chart helps you visualize your saving habits over time.
                             </p>
+                            <ul class="list-disc ml-5 mt-2 space-y-1">
+                                <li>Projected Annual Savings: Calculated based on your current monthly savings rate.</li>
+                                <li>On Track Status: Shows whether you're on track to meet your annual savings goal.</li>
+                                <li>AI Insights: Get personalized recommendations to improve your financial habits.</li>
+                            </ul>
                         </section>
                         <section>
-                            <h3 class="text-lg font-semibold mb-2">Expenses Tab</h3>
+                            <h3 class="text-lg font-semibold mb-2">Settings <span class="text-gray-500">⚙️</span></h3>
                             <p>
-                                Log and manage all your one-time expenses. Add, edit, cancel/reactivate, or delete expenses. Use the checkboxes for bulk deletion.
+                                Access settings via the gear icon in the top-right corner. Here you can:
                             </p>
+                            <ul class="list-disc ml-5 mt-2 space-y-1">
+                                <li>Dark Mode: Toggle between light and dark themes for comfortable viewing.</li>
+                                <li>Currency: Change your preferred currency (GBP, EUR, JPY, USD).</li>
+                                <li>Export Data: Save your financial data as a JSON file for backup.</li>
+                                <li>Import Data: Restore previously exported data.</li>
+                            </ul>
                         </section>
                         <section>
-                            <h3 class="text-lg font-semibold mb-2">Recurring Tab</h3>
+                            <h3 class="text-lg font-semibold mb-2">Budget Health Score <span class="text-teal-500">📈</span></h3>
                             <p>
-                                Manage regular income (like salary) and expenses (like rent or subscriptions). Set frequency, start/end dates.
+                                This score (0-100) reflects how well you're managing your budget this month. It considers:
                             </p>
+                            <ul class="list-disc ml-5 mt-2 space-y-1">
+                                <li>Spending vs. Budget ratio</li>
+                                <li>Spending consistency throughout the month</li>
+                                <li>Essential vs. Non-essential spending balance</li>
+                                <li><strong class="font-medium text-green-600 dark:text-green-400">Good: 70+</strong></li>
+                                <li><strong class="font-medium text-yellow-600 dark:text-yellow-400">Okay: 40-69</strong></li>
+                                <li><strong class="font-medium text-red-600 dark:text-red-400">Needs Improvement: 0-39</strong></li>
+                            </ul>
                         </section>
                         <section>
-                            <h3 class="text-lg font-semibold mb-2">Trends Tab</h3>
+                            <h3 class="text-lg font-semibold mb-2">Spending Breakdown <span class="text-orange-500">📊</span></h3>
                             <p>
-                                Visualize your spending patterns with charts showing monthly trends and category breakdowns. Get basic insights into your spending habits.
+                                The spending breakdown bar shows your monthly spending divided into:
                             </p>
+                            <ul class="list-disc ml-5 mt-2 space-y-1">
+                                <li><strong class="font-medium text-orange-500">Orange</strong>: Essential expenses (housing, utilities, food, etc.)</li>
+                                <li><strong class="font-medium text-pink-500">Pink</strong>: Non-essential expenses (entertainment, luxury items, etc.)</li>
+                                <li>The white portion represents your remaining budget</li>
+                            </ul>
                         </section>
                         <section>
-                            <h3 class="text-lg font-semibold mb-2">Savings AI Tab</h3>
+                            <h3 class="text-lg font-semibold mb-2">Data Storage <span class="text-indigo-500">💾</span></h3>
                             <p>
-                                Set your annual savings goal and track your progress. See your projected annual savings based on current income and spending. Monitor your monthly savings trend. Get <strong class="font-medium">AI-powered insights</strong> on how to optimize spending and reach your goals faster.
+                                All data is saved locally in your browser using localStorage. Important notes:
                             </p>
-                        </section>
-                        <section>
-                            <h3 class="text-lg font-semibold mb-2">Settings</h3>
-                            <p>
-                                Access settings via the ⚙️ icon. Toggle Dark Mode, change currency (GBP, EUR, JPY, USD), and <strong class="font-medium">Import/Export</strong> your data as a JSON file for backup or transfer.
-                            </p>
-                        </section>
-                         <section>
-                            <h3 class="text-lg font-semibold mb-2">Budget Health Score</h3>
-                            <p>
-                                This score (0-100) reflects how well you're managing your budget this month. It considers spending vs budget, spending consistency, and essential vs non-essential ratio. <strong class="font-medium text-green-600 dark:text-green-400">Good: 70+</strong>, <strong class="font-medium text-yellow-600 dark:text-yellow-400">Okay: 40-69</strong>, <strong class="font-medium text-red-600 dark:text-red-400">Needs Improvement: 0-39</strong>.
-                            </p>
-                        </section>
-                        <section>
-                            <h3 class="text-lg font-semibold mb-2">Data Storage</h3>
-                            <p>
-                                All data is saved locally in your browser. Clearing browser data will erase your tracker information. Use the Export feature for backups.
-                            </p>
+                            <ul class="list-disc ml-5 mt-2 space-y-1">
+                                <li>Clearing browser data will erase your tracker information</li>
+                                <li>Use the Export feature regularly for backups</li>
+                                <li>Your data stays private and never leaves your device</li>
+                            </ul>
                         </section>
                     </div>
                 </div>
@@ -1223,6 +1274,145 @@
             aiInsightsContainer: document.getElementById('ai-insights'),
         };
 
+        // Filter Functions
+        function toggleFilterPanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.classList.toggle('hidden');
+            }
+        }
+
+        // Expense filters
+        function applyExpenseFilters() {
+            const dateFrom = document.getElementById('expense-filter-date-from').value;
+            const dateTo = document.getElementById('expense-filter-date-to').value;
+            const category = document.getElementById('expense-filter-category').value;
+            const type = document.getElementById('expense-filter-type').value;
+            
+            // Store filter values in localStorage
+            localStorage.setItem('expense-filter-date-from', dateFrom);
+            localStorage.setItem('expense-filter-date-to', dateTo);
+            localStorage.setItem('expense-filter-category', category);
+            localStorage.setItem('expense-filter-type', type);
+            
+            // Apply filters and refresh table
+            renderExpensesTable(expenses.filter(expense => {
+                // Date range filter
+                if (dateFrom && new Date(expense.date) < new Date(dateFrom)) return false;
+                if (dateTo && new Date(expense.date) > new Date(dateTo)) return false;
+                
+                // Category filter
+                if (category && expense.category !== category) return false;
+                
+                // Type filter
+                if (type && expense.type !== type) return false;
+                
+                return true;
+            }));
+            
+            // Show toast notification
+            showToast('Filters applied');
+        }
+
+        function clearExpenseFilters() {
+            // Clear form inputs
+            document.getElementById('expense-filter-date-from').value = '';
+            document.getElementById('expense-filter-date-to').value = '';
+            document.getElementById('expense-filter-category').value = '';
+            document.getElementById('expense-filter-type').value = '';
+            
+            // Clear stored filters
+            localStorage.removeItem('expense-filter-date-from');
+            localStorage.removeItem('expense-filter-date-to');
+            localStorage.removeItem('expense-filter-category');
+            localStorage.removeItem('expense-filter-type');
+            
+            // Refresh table with all expenses
+            renderExpensesTable(expenses);
+            
+            // Show toast notification
+            showToast('Filters cleared');
+        }
+
+        // Recurring filters
+        function applyRecurringFilters() {
+            const type = document.getElementById('recurring-filter-type').value;
+            const category = document.getElementById('recurring-filter-category').value;
+            const frequency = document.getElementById('recurring-filter-frequency').value;
+            
+            // Store filter values in localStorage
+            localStorage.setItem('recurring-filter-type', type);
+            localStorage.setItem('recurring-filter-category', category);
+            localStorage.setItem('recurring-filter-frequency', frequency);
+            
+            // Apply filters and refresh table
+            renderRecurringTable(recurringItems.filter(item => {
+                // Type filter
+                if (type && item.type !== type) return false;
+                
+                // Category filter
+                if (category && item.category !== category) return false;
+                
+                // Frequency filter
+                if (frequency && item.frequency !== frequency) return false;
+                
+                return true;
+            }));
+            
+            // Show toast notification
+            showToast('Filters applied');
+        }
+
+        function clearRecurringFilters() {
+            // Clear form inputs
+            document.getElementById('recurring-filter-type').value = '';
+            document.getElementById('recurring-filter-category').value = '';
+            document.getElementById('recurring-filter-frequency').value = '';
+            
+            // Clear stored filters
+            localStorage.removeItem('recurring-filter-type');
+            localStorage.removeItem('recurring-filter-category');
+            localStorage.removeItem('recurring-filter-frequency');
+            
+            // Refresh table with all recurring items
+            renderRecurringTable(recurringItems);
+            
+            // Show toast notification
+            showToast('Filters cleared');
+        }
+
+        // Load saved filters on page load
+        function loadSavedFilters() {
+            // Expense filters
+            const expenseDateFrom = localStorage.getItem('expense-filter-date-from');
+            const expenseDateTo = localStorage.getItem('expense-filter-date-to');
+            const expenseCategory = localStorage.getItem('expense-filter-category');
+            const expenseType = localStorage.getItem('expense-filter-type');
+            
+            if (expenseDateFrom) document.getElementById('expense-filter-date-from').value = expenseDateFrom;
+            if (expenseDateTo) document.getElementById('expense-filter-date-to').value = expenseDateTo;
+            if (expenseCategory) document.getElementById('expense-filter-category').value = expenseCategory;
+            if (expenseType) document.getElementById('expense-filter-type').value = expenseType;
+            
+            // Recurring filters
+            const recurringType = localStorage.getItem('recurring-filter-type');
+            const recurringCategory = localStorage.getItem('recurring-filter-category');
+            const recurringFrequency = localStorage.getItem('recurring-filter-frequency');
+            
+            if (recurringType) document.getElementById('recurring-filter-type').value = recurringType;
+            if (recurringCategory) document.getElementById('recurring-filter-category').value = recurringCategory;
+            if (recurringFrequency) document.getElementById('recurring-filter-frequency').value = recurringFrequency;
+            
+            // Apply saved filters if any exist
+            if (expenseDateFrom || expenseDateTo || expenseCategory || expenseType) {
+                applyExpenseFilters();
+            }
+            
+            if (recurringType || recurringCategory || recurringFrequency) {
+                applyRecurringFilters();
+            }
+        }
+
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', function() {
             loadData();
@@ -1237,6 +1427,9 @@
             DOMElements.currentSavingsInput.value = currentSavings > 0 ? currentSavings : '';
             DOMElements.expenseDate.value = new Date().toISOString().split('T')[0];
             DOMElements.recurringStartDate.value = new Date().toISOString().split('T')[0];
+            
+            // Initialize filters
+            loadSavedFilters();
         });
 
         // --- Tab Management ---
@@ -1987,7 +2180,7 @@
                     <td class="px-6 py-4 hidden md:table-cell">${escapeHTML(item.category)}</td>
                     <td class="px-6 py-4 hidden lg:table-cell">${escapeHTML(item.paymentMethod || '-')}</td>
                     <td class="px-6 py-4 hidden md:table-cell">${item.startDate}</td>
-                    <td class="px-6 py-4"><span class="capitalize status-badge status-active">${item.type}</span></td>
+                    <td class="px-6 py-4"><span class="capitalize status-badge ${item.type === 'income' ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'}">${item.type}</span></td>
                     <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap">
                         <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg></button>
                          <button onclick="/* toggleRecurringStatus(${item.id}) */ alert('Toggle recurring status not implemented yet')" class="icon-button" title="Toggle Status (Not Implemented)"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.25 0V9M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></button>
