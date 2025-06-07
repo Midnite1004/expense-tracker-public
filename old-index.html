@@ -599,16 +599,16 @@
                                 <div class="flex justify-around items-center text-center mb-4">
                                     <div>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">Essential</p>
-                                        <p class="text-2xl font-semibold text-orange-600 dark:text-orange-400" id="essential-spending">£0.00</p>
+                                        <p class="text-2xl font-semibold text-sky-600 dark:text-sky-400" id="essential-spending">£0.00</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">Non-Essential</p>
-                                        <p class="text-2xl font-semibold text-pink-600 dark:text-pink-400" id="non-essential-spending">£0.00</p>
+                                        <p class="text-2xl font-semibold text-indigo-600 dark:text-indigo-400" id="non-essential-spending">£0.00</p>
                                     </div>
                                 </div>
                                 <div class="w-full rounded-full h-3">
-                                    <div id="essential-bar" class="bg-orange-500 h-3 rounded-l-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div><!--
-                                 --><div id="non-essential-bar" class="bg-pink-500 h-3 rounded-r-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div>
+                                    <div id="essential-bar" class="bg-sky-500 h-3 rounded-l-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div><!--
+                                 --><div id="non-essential-bar" class="bg-indigo-500 h-3 rounded-r-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div>
                                 </div>
                             </div>
                         </div>
@@ -805,7 +805,7 @@
                             </div>
                         </div>
                 
-                        <div id="recurring-filter-panel" class="hidden bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-4">
+                        <div id="recurring-filter-panel" class="hidden p-4 border-b border-gray-200 dark:border-gray-700">
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 <div>
                                     <label for="recurring-filter-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Type</label>
@@ -891,10 +891,10 @@
                         <div class="card p-6">
                             <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                                <span>AI Savings Insights</span>
+                                <span>Savings Insights</span>
                             </h2>
                             <div id="ai-savings-insights" class="space-y-4">
-                                <p class="text-gray-500 dark:text-gray-400">AI analysis will appear here once you have enough data...</p>
+                                <p class="text-gray-500 dark:text-gray-400">Analysis will appear here once you have enough data...</p>
                                 <!-- AI Insights will be populated here -->
                             </div>
                         </div>
@@ -902,7 +902,7 @@
                      <div class="card p-4 md:p-6 mt-6">
                         <div class="flex items-center mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.375 3.375 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                            <h2 class="text-xl font-bold">AI-Powered Spending Insights</h2>
+                            <h2 class="text-xl font-bold">Spending Insights</h2>
                         </div>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Your intelligent assistant providing tips to improve your financial health based on your data.</p>
                         <div id="spending-insights" class="space-y-3">
@@ -1047,7 +1047,7 @@
             <div class="space-y-4">
                  <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Type</label>
-                    <select id="recurring-item-type" class="modern-select mt-1" onchange="toggleRecurringCategory(this.value)">
+                    <select id="recurring-item-type" class="modern-select mt-1" onchange="toggleRecurringFields(this.value)">
                         <option value="expense">Expense</option>
                         <option value="income">Income</option>
                     </select>
@@ -1080,7 +1080,16 @@
                             <!-- Options loaded dynamically -->
                         </select>
                     </div>
-                    <div>
+                    <div id="recurring-essential-type-wrapper">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Expense Type</label>
+                        <select id="recurring-essential-type" class="modern-select mt-1">
+                            <option value="Essential">Essential</option>
+                            <option value="Non-Essential">Non-Essential</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method</label>
                         <select id="recurring-payment-method" class="modern-select mt-1">
                             <option value="">Not Specified</option>
@@ -1090,12 +1099,12 @@
                             <option value="Cash">Cash</option>
                         </select>
                     </div>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
                         <input type="date" id="recurring-start-date" class="modern-input mt-1">
                     </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date (Optional)</label>
                         <input type="date" id="recurring-end-date" class="modern-input mt-1">
@@ -1160,6 +1169,8 @@
             recurringAmount: document.getElementById('recurring-amount'),
             recurringFrequency: document.getElementById('recurring-frequency'),
             recurringCategory: document.getElementById('recurring-category'),
+            recurringEssentialTypeWrapper: document.getElementById('recurring-essential-type-wrapper'),
+            recurringEssentialType: document.getElementById('recurring-essential-type'),
             recurringPaymentMethod: document.getElementById('recurring-payment-method'),
             recurringStartDate: document.getElementById('recurring-start-date'),
             recurringEndDate: document.getElementById('recurring-end-date'),
@@ -1504,19 +1515,21 @@
             const allCats = [...new Set([...expenseCategories, ...incomeCategories])];
             document.getElementById('recurring-filter-category').innerHTML = '<option value="">All Categories</option>' + allCats.map(c => `<option value="${c}">${c}</option>`).join('');
 
-            toggleRecurringCategory('expense');
+            toggleRecurringFields('expense');
         }
 
-        function toggleRecurringCategory(type) {
+        function toggleRecurringFields(type) {
             const categories = type === 'income' ? incomeCategories : expenseCategories;
             DOMElements.recurringCategory.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+            
+            DOMElements.recurringEssentialTypeWrapper.style.display = type === 'expense' ? 'block' : 'none';
         }
 
          function showRecurringForm() {
             editingRecurring = null;
             DOMElements.recurringModalTitle.textContent = 'Add Recurring Item';
             DOMElements.recurringItemType.value = 'expense';
-            toggleRecurringCategory('expense');
+            toggleRecurringFields('expense');
             DOMElements.recurringName.value = '';
             DOMElements.recurringAmount.value = '';
             DOMElements.recurringFrequency.value = 'Monthly';
@@ -1550,6 +1563,7 @@
                 amount: amount,
                 frequency: DOMElements.recurringFrequency.value,
                 category: DOMElements.recurringCategory.value,
+                essentialType: type === 'expense' ? DOMElements.recurringEssentialType.value : null,
                 paymentMethod: DOMElements.recurringPaymentMethod.value,
                 startDate: startDate,
                 endDate: endDate,
@@ -1575,11 +1589,14 @@
             editingRecurring = item;
             DOMElements.recurringModalTitle.textContent = 'Edit Recurring Item';
             DOMElements.recurringItemType.value = item.type;
-            toggleRecurringCategory(item.type);
+            toggleRecurringFields(item.type);
             DOMElements.recurringName.value = item.name;
             DOMElements.recurringAmount.value = item.amount;
             DOMElements.recurringFrequency.value = item.frequency;
             DOMElements.recurringCategory.value = item.category;
+            if (item.type === 'expense') {
+                DOMElements.recurringEssentialType.value = item.essentialType || 'Non-Essential';
+            }
             DOMElements.recurringPaymentMethod.value = item.paymentMethod || '';
             DOMElements.recurringStartDate.value = item.startDate;
             DOMElements.recurringEndDate.value = item.endDate || '';
@@ -1762,30 +1779,63 @@
             const currentMonth = now.getMonth();
             const currentYear = now.getFullYear();
 
+            // Centralized calculations for all expenses this month
             const monthlyRecurring = getMonthlyRecurringTotals(currentYear, currentMonth);
             const totalMonthlyIncome = monthlyIncome + monthlyRecurring.income;
-            const totalOneTimeExpenses = getMonthlyExpenseTotal(currentYear, currentMonth);
-            const totalSpent = totalOneTimeExpenses + monthlyRecurring.expenses;
-            const remaining = totalMonthlyIncome - totalSpent;
 
+            const allMonthlyExpenses = [
+                ...expenses.filter(e => {
+                    const expenseDate = new Date(e.date);
+                    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+                }),
+                ...generateExpensesFromRecurring().filter(e => {
+                    const expenseDate = new Date(e.date);
+                    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+                })
+            ];
+            const activeMonthlyExpenses = allMonthlyExpenses.filter(e => e.status === 'active');
+            const totalSpent = activeMonthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
+
+            // --- Update UI Tiles ---
             DOMElements.monthlyBudgetDisplay.textContent = formatCurrency(monthlyBudget);
             DOMElements.totalExpensesDisplay.textContent = formatCurrency(totalSpent);
-            DOMElements.remainingAmountDisplay.textContent = formatCurrency(remaining);
             DOMElements.totalIncomeDisplay.textContent = formatCurrency(totalMonthlyIncome);
-            DOMElements.remainingAmountDisplay.classList.toggle('text-red-600', remaining < 0);
-            DOMElements.remainingAmountDisplay.classList.toggle('dark:text-red-400', remaining < 0);
-            DOMElements.remainingAmountDisplay.classList.toggle('text-green-600', remaining >= 0);
-            DOMElements.remainingAmountDisplay.classList.toggle('dark:text-green-400', remaining >= 0);
-            
-            const budgetUsedPercentage = monthlyBudget > 0 ? Math.min(100, (totalSpent / monthlyBudget) * 100) : 0;
-            DOMElements.budgetBar.style.width = `${budgetUsedPercentage}%`;
+
+            // Correctly calculate and display the "Remaining" tile based on BUDGET.
+            const remainingBudget = monthlyBudget - totalSpent;
+            const remainingAmountTile = DOMElements.remainingAmountDisplay.parentElement;
+            const remainingAmountTitle = remainingAmountTile.querySelector('.stat-card-title');
+
+            // Reset styles
+            remainingAmountTile.className = 'stat-card'; // Reset to base class
+            DOMElements.remainingAmountDisplay.classList.remove('text-red-600', 'text-green-600', 'dark:text-red-400', 'dark:text-green-400');
+
+            if (remainingBudget < 0) {
+                // Over budget state
+                remainingAmountTitle.textContent = 'Remaining';
+                DOMElements.remainingAmountDisplay.textContent = formatCurrency(0); // Show 0 as requested
+                remainingAmountTile.classList.add('bg-red-50', 'dark:bg-red-900/30', 'border-red-200', 'dark:border-red-800');
+                DOMElements.remainingAmountDisplay.classList.add('text-red-600', 'dark:text-red-400');
+            } else {
+                // Within budget state
+                remainingAmountTitle.textContent = 'Remaining';
+                DOMElements.remainingAmountDisplay.textContent = formatCurrency(remainingBudget);
+                remainingAmountTile.classList.add('bg-green-50', 'dark:bg-green-900/30', 'border-green-200', 'dark:border-green-800');
+                DOMElements.remainingAmountDisplay.classList.add('text-green-600', 'dark:text-green-400');
+            }
+
+            // Budget Progress Bar
+            const budgetUsedPercentage = monthlyBudget > 0 ? (totalSpent / monthlyBudget) * 100 : 0;
+            DOMElements.budgetBar.style.width = `${Math.min(100, budgetUsedPercentage)}%`;
+            DOMElements.budgetBar.classList.remove('bg-blue-600', 'bg-red-600');
+            DOMElements.budgetBar.classList.add(budgetUsedPercentage > 100 ? 'bg-red-600' : 'bg-blue-600');
             DOMElements.budgetPercentage.textContent = `${budgetUsedPercentage.toFixed(0)}% Used`;
             
-            updateBudgetHealthScore(totalSpent, monthlyBudget, currentYear, currentMonth);
+            updateBudgetHealthScore(totalSpent, monthlyBudget, activeMonthlyExpenses);
             
-            const monthlyExpenses = expenses.filter(e => new Date(e.date).getMonth() === currentMonth && new Date(e.date).getFullYear() === currentYear && e.status === 'active');
-            const essentialSpending = monthlyExpenses.filter(e => e.type === 'Essential').reduce((sum, e) => sum + e.cost, 0);
-            const nonEssentialSpending = monthlyExpenses.filter(e => e.type === 'Non-Essential').reduce((sum, e) => sum + e.cost, 0);
+            // Spending Breakdown
+            const essentialSpending = activeMonthlyExpenses.filter(e => e.type === 'Essential').reduce((sum, e) => sum + e.cost, 0);
+            const nonEssentialSpending = activeMonthlyExpenses.filter(e => e.type === 'Non-Essential').reduce((sum, e) => sum + e.cost, 0);
             DOMElements.essentialSpendingDisplay.textContent = formatCurrency(essentialSpending);
             DOMElements.nonEssentialSpendingDisplay.textContent = formatCurrency(nonEssentialSpending);
             const totalBreakdown = essentialSpending + nonEssentialSpending;
@@ -1804,26 +1854,33 @@
             updateDeleteSelectedRecurringButton();
         }
 
-        function updateBudgetHealthScore(totalSpent, budget, year, month) {
+        function updateBudgetHealthScore(totalSpent, budget, monthlyExpenses) {
             let score = 0;
             let label = "Poor";
             let color = 'var(--health-score-bad)';
 
             if (budget > 0) {
                 const usageRatio = totalSpent / budget;
-                if (usageRatio <= 0.8) score += 60;
-                else if (usageRatio <= 1.0) score += 60 * (1 - (usageRatio - 0.8) / 0.2);
-                score += 10; // Placeholder for consistency
-                const monthlyExpenses = expenses.filter(e => new Date(e.date).getMonth() === month && new Date(e.date).getFullYear() === year && e.status === 'active');
+                // Score based on budget usage
+                if (usageRatio <= 0.8) score += 50;
+                else if (usageRatio <= 1.0) score += 50 * (1 - (usageRatio - 0.8) / 0.2);
+                
+                // Score based on spending habits (essential vs non-essential)
                 const totalBreakdown = monthlyExpenses.reduce((s, e) => s + e.cost, 0);
                 if (totalBreakdown > 0) {
                     const nonEssentialSpending = monthlyExpenses.filter(e => e.type === 'Non-Essential').reduce((s, e) => s + e.cost, 0);
                     const nonEssentialRatio = nonEssentialSpending / totalBreakdown;
-                    if (nonEssentialRatio <= 0.3) score += 20;
-                    else if (nonEssentialRatio <= 0.5) score += 10;
+                    if (nonEssentialRatio <= 0.3) score += 30; // 30 points if non-essentials are <30%
+                    else if (nonEssentialRatio <= 0.5) score += 15; // 15 points if <50%
                 } else {
-                    score += 10;
+                    score += 15; // If no spending, give some points
                 }
+
+                // Score based on having income set vs budget
+                if (monthlyIncome > 0 && monthlyIncome >= budget) {
+                    score += 20;
+                }
+
             } else {
                 label = "Set Budget";
             }
@@ -1836,10 +1893,11 @@
 
             DOMElements.healthScoreValue.textContent = score;
             DOMElements.healthScoreLabel.textContent = label;
-            
-            const rotation = 45 + (score * 1.8);
-            DOMElements.healthScoreFill.style.transform = `rotate(${rotation}deg)`;
             DOMElements.healthScoreFill.style.borderColor = color;
+
+            // Calculate rotation for the gauge
+            const fillRotation = -135 + (score / 100) * 180;
+            DOMElements.healthScoreFill.style.transform = `rotate(${fillRotation}deg)`;
         }
         
         function renderRecentExpenses() {
@@ -2252,7 +2310,7 @@
                         id: `recurring-${item.id}-${dateStr}`, // composite ID
                         name: `${item.name} (r)`,
                         cost: item.amount,
-                        type: 'Recurring',
+                        type: item.essentialType || 'Non-Essential', // Assign essential type
                         category: item.category,
                         date: dateStr,
                         paymentMethod: item.paymentMethod,
