@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ho    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css">
     <style>
         * {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -466,6 +467,40 @@
         html.dark .health-score-gauge { border-color: var(--bg-tertiary); border-bottom-color: transparent; border-left-color: transparent; }
         html.dark .health-score-text { color: var(--text-primary); }
         html.dark .health-score-label { color: var(--text-secondary); }
+
+        /* Driver.js Customization */
+        .driver-popover {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .driver-popover-title {
+            color: var(--text-primary);
+        }
+        .driver-popover-description {
+            color: var(--text-secondary);
+        }
+        .driver-popover-progress-text {
+            color: var(--text-secondary);
+        }
+        .driver-popover-close-btn {
+            color: var(--text-secondary);
+        }
+        .driver-popover-close-btn:hover {
+            color: var(--text-primary);
+        }
+        .driver-popover-arrow-side-left.driver-popover-arrow {
+            border-left-color: var(--border-color);
+        }
+        .driver-popover-arrow-side-right.driver-popover-arrow {
+            border-right-color: var(--border-color);
+        }
+        .driver-popover-arrow-side-top.driver-popover-arrow {
+            border-top-color: var(--border-color);
+        }
+        .driver-popover-arrow-side-bottom.driver-popover-arrow {
+            border-bottom-color: var(--border-color);
+        }
 
     </style>
 </head>
@@ -1121,6 +1156,7 @@
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
     <script>
         // --- State Variables ---
         let expenses = [];
@@ -1249,7 +1285,77 @@
             // Add event listener for auto-categorization
             DOMElements.expenseName.addEventListener('input', autoCategorizeExpense);
             DOMElements.recurringName.addEventListener('input', autoCategorizeExpense);
+            
+            launchOnboardingTour();
         });
+
+        // --- Onboarding ---
+        function launchOnboardingTour() {
+            if (localStorage.getItem('onboardingComplete') === 'true') {
+                return;
+            }
+
+            const driver = window.driver.js.driver;
+            const driverObj = driver({
+                showProgress: true,
+                popoverClass: 'driver-popover',
+                steps: [
+                    { 
+                        element: '.sm\\:items-center .gap-3 h1', 
+                        popover: { 
+                            title: 'Welcome to Your Expense Tracker!', 
+                            description: "Let's take a quick tour to get you started.",
+                            side: "bottom" 
+                        } 
+                    },
+                    { 
+                        element: '#budget-input', 
+                        popover: { 
+                            title: 'Set Your Monthly Budget', 
+                            description: 'Start by entering your total monthly budget. This is the baseline for tracking your spending.',
+                            side: "bottom"
+                        } 
+                    },
+                    { 
+                        element: 'button[onclick="showAddForm()"]', 
+                        popover: { 
+                            title: 'Add a New Expense', 
+                            description: 'Use this button to log any one-time purchases or expenses.',
+                            side: "left" 
+                        } 
+                    },
+                    { 
+                        element: 'button[onclick="showRecurringForm()"]', 
+                        popover: { 
+                            title: 'Add a Recurring Item', 
+                            description: 'For regular income (like a salary) or expenses (like rent or subscriptions), use this.',
+                            side: "left"
+                        } 
+                    },
+                    { 
+                        element: '#tab-insights', 
+                        popover: { 
+                            title: 'Visualize Your Spending', 
+                            description: 'This tab contains charts and AI-powered insights to help you understand your financial habits.',
+                            side: "bottom" 
+                        } 
+                    },
+                    { 
+                        element: 'button[onclick="toggleSettings()"]', 
+                        popover: { 
+                            title: 'Settings & Data', 
+                            description: 'Change the theme, set your currency, and import or export your data here.',
+                            side: "left" 
+                        } 
+                    }
+                ],
+                onDestroyed: () => {
+                    localStorage.setItem('onboardingComplete', 'true');
+                }
+            });
+
+            driverObj.drive();
+        }
 
         // --- Tab Management ---
         function showTab(tabName) {
