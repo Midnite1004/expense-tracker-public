@@ -1213,26 +1213,24 @@
 
         // --- Tab Management ---
         function showTab(tabName) {
-            // Deactivate previous tab and hide its content
-            const activeTabButton = document.getElementById(`tab-${activeTab}`);
-            if (activeTabButton) {
-                 activeTabButton.classList.remove('active');
-            }
-            const activeTabContent = document.getElementById(`${activeTab}-tab`);
-            if (activeTabContent) {
-                activeTabContent.classList.add('hidden');
-            }
-            
-            activeTab = tabName;
-            
-            // Activate new tab and show its content
-            document.getElementById(`tab-${activeTab}`).classList.add('active');
-            document.getElementById(`${activeTab}-tab`).classList.remove('hidden');
+            // Hide all tab content and deactivate all tab buttons first
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+            document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
 
-            if (activeTab === 'insights') {
-                updateChartsAndInsights();
+            // Activate the new tab button and show its content
+            const newTabButton = document.getElementById(`tab-${tabName}`);
+            const newTabContent = document.getElementById(`${tabName}-tab`);
+
+            if (newTabButton && newTabContent) {
+                newTabButton.classList.add('active');
+                newTabContent.classList.remove('hidden');
+                activeTab = tabName;
+
+                if (activeTab === 'insights') {
+                    updateChartsAndInsights();
+                }
+                saveData();
             }
-            saveData();
         }
 
         // --- Settings & Theme ---
