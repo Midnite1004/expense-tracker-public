@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css">
     <style>
         * {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -466,7 +467,46 @@
         html.dark .health-score-gauge { border-color: var(--bg-tertiary); border-bottom-color: transparent; border-left-color: transparent; }
         html.dark .health-score-text { color: var(--text-primary); }
         html.dark .health-score-label { color: var(--text-secondary); }
-        html.dark #recurring-filter-panel { background-color: #1e293b; border-color: #334155; } /* Dark Mode Filter Fix */
+
+        /* Driver.js Customization */
+        .driver-popover {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .driver-popover-title {
+            color: var(--text-primary);
+        }
+        .driver-popover-description {
+            color: var(--text-secondary);
+        }
+        .driver-popover-progress-text {
+            color: var(--text-secondary);
+        }
+        .driver-popover-close-btn {
+            color: var(--text-secondary);
+        }
+        .driver-popover-close-btn:hover {
+            color: var(--text-primary);
+        }
+        .driver-popover-arrow-side-left.driver-popover-arrow {
+            border-left-color: var(--border-color);
+        }
+        .driver-popover-arrow-side-right.driver-popover-arrow {
+            border-right-color: var(--border-color);
+        }
+        .driver-popover-arrow-side-top.driver-popover-arrow {
+            border-top-color: var(--border-color);
+        }
+        .driver-popover-arrow-side-bottom.driver-popover-arrow {
+            border-bottom-color: var(--border-color);
+        }
+
+        /* Settings Modal Text Color Fix */
+        #settings-modal .card h4,
+        #settings-modal .card label {
+            color: var(--text-primary);
+        }
 
     </style>
 </head>
@@ -484,41 +524,10 @@
                         <div class="flex items-center gap-3">
                             <!-- Settings Button and Menu -->
                             <div class="relative inline-block text-left">
-                                <button onclick="toggleSettings()" class="modern-button modern-button-secondary">
+                                <button onclick="openSettings()" class="modern-button modern-button-secondary">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>
                                     <span class="hidden sm:inline">Settings</span>
                                 </button>
-                                <div id="settings-menu" class="dropdown-menu absolute right-0 mt-2 w-60 origin-top-right hidden">
-                                    <div class="py-1" role="menu" aria-orientation="vertical">
-                                        <div class="dropdown-item flex items-center justify-between">
-                                            <label for="theme-toggle" class="flex-grow text-sm leading-5">Dark Mode</label>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="theme-toggle" onchange="toggleTheme(this.checked)">
-                                                <span class="toggle-slider"></span>
-                                            </label>
-                                        </div>
-                                        <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-                                        <div class="dropdown-item flex items-center justify-between">
-                                            <label for="currency-select" class="text-sm leading-5">Currency</label>
-                                            <select id="currency-select" onchange="changeCurrency(this.value)" class="modern-select text-sm flex-grow ml-2">
-                                                <option value="GBP">GBP (£)</option>
-                                                <option value="EUR">EUR (€)</option>
-                                                <option value="JPY">JPY (¥)</option>
-                                                <option value="USD">USD ($)</option>
-                                            </select>
-                                        </div>
-                                        <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-                                        <div class="dropdown-item flex items-center" onclick="exportData()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                                            <span class="text-sm">Export Data (JSON)</span>
-                                        </div>
-                                        <label class="dropdown-item flex items-center cursor-pointer">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                                            <span class="text-sm">Import Data (JSON)</span>
-                                            <input type="file" accept=".json" onchange="importData(event)" class="hidden">
-                                        </label>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -552,9 +561,9 @@
                                     <div class="stat-card-title">Spent (Month)</div>
                                     <div class="stat-card-value text-red-600" id="total-expenses">£0.00</div>
                                 </div>
-                                <div id="remaining-amount-tile" class="stat-card">
+                                <div class="stat-card bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800">
                                     <div class="stat-card-title">Remaining</div>
-                                    <div class="stat-card-value" id="remaining-amount">£0.00</div>
+                                    <div class="stat-card-value text-green-600" id="remaining-amount">£0.00</div>
                                 </div>
                                  <div class="stat-card bg-purple-50 dark:bg-purple-900/30 border-purple-200 dark:border-purple-800">
                                     <div class="stat-card-title">
@@ -569,6 +578,13 @@
                                 </div>
                             </div>
                 
+                            <!-- ADDED SHORTCUT -->
+                            <div class="text-center -mt-4">
+                                <button class="text-sm text-blue-600 dark:text-blue-400 opacity-70 hover:opacity-100 hover:underline" onclick="openSettings('budget')">
+                                    Edit budget & income
+                                </button>
+                            </div>
+
                             <!-- Budget Health & Progress -->
                             <div class="card p-6">
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
@@ -619,14 +635,6 @@
                             <div class="card p-6">
                                 <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
                                 <div class="space-y-3">
-                                    <div>
-                                        <label class="text-sm font-medium mb-1 block text-gray-700 dark:text-gray-300">Set Monthly Budget</label>
-                                        <input type="number" id="budget-input" placeholder="e.g., 4000" onchange="updateBudget(this.value)" class="modern-input">
-                                    </div>
-                                     <div>
-                                        <label class="text-sm font-medium mb-1 block text-gray-700 dark:text-gray-300">Set Monthly Income</label>
-                                        <input type="number" id="income-input" placeholder="e.g., 6000" onchange="updateIncome(this.value)" class="modern-input">
-                                    </div>
                                     <button onclick="showAddForm()" class="modern-button modern-button-primary w-full">
                                         <span>➕</span> Add New Expense
                                     </button>
@@ -640,7 +648,7 @@
                                 <h3 class="text-lg font-semibold mb-4">Quick Add Common Expenses</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4">
-                                        <button onclick="quickAddExpense('Coffee', 'Food/Drink', 'Non-Essential', 5)" 
+                                        <button onclick="quickAddExpense('Coffee', 'Food', 'Non-Essential', 5)" 
                                             class="flex items-center justify-between w-full">
                                             <div class="flex items-center">
                                                 <span class="mr-2">☕</span>
@@ -660,7 +668,7 @@
                                         </button>
                                     </div>
                                     <div class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4">
-                                        <button onclick="quickAddExpense('Lunch', 'Food/Drink', 'Non-Essential', 15)" 
+                                        <button onclick="quickAddExpense('Lunch', 'Food', 'Non-Essential', 15)" 
                                             class="flex items-center justify-between w-full">
                                             <div class="flex items-center">
                                                 <span class="mr-2">🥪</span>
@@ -670,7 +678,7 @@
                                         </button>
                                     </div>
                                     <div class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4">
-                                        <button onclick="quickAddExpense('Groceries', 'Food/Drink', 'Essential', 50)" 
+                                        <button onclick="quickAddExpense('Groceries', 'Food', 'Essential', 50)" 
                                             class="flex items-center justify-between w-full">
                                             <div class="flex items-center">
                                                 <span class="mr-2">🛒</span>
@@ -720,11 +728,11 @@
                         </div>
                         
                         <!-- Filter Panel -->
-                        <div id="expense-filter-panel" class="hidden bg-gray-50 dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div id="expense-filter-panel" class="p-4 border-b border-gray-200 dark:border-gray-700 hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <!-- Date Range -->
                                 <div>
-                                    <label class="text-sm font-medium mb-1 block text-gray-700 dark:text-gray-300">Date Range</label>
+                                    <label class="text-sm font-medium mb-1 block">Date Range</label>
                                     <div class="flex gap-2">
                                         <input type="date" id="expense-filter-date-from" class="modern-input">
                                         <input type="date" id="expense-filter-date-to" class="modern-input">
@@ -732,7 +740,7 @@
                                 </div>
                                 <!-- Category -->
                                 <div>
-                                    <label class="text-sm font-medium mb-1 block text-gray-700 dark:text-gray-300">Category</label>
+                                    <label class="text-sm font-medium mb-1 block">Category</label>
                                     <select id="expense-filter-category" class="modern-select">
                                         <option value="">All Categories</option>
                                         <!-- Populated dynamically -->
@@ -740,7 +748,7 @@
                                 </div>
                                 <!-- Type -->
                                 <div>
-                                    <label class="text-sm font-medium mb-1 block text-gray-700 dark:text-gray-300">Type</label>
+                                    <label class="text-sm font-medium mb-1 block">Type</label>
                                     <select id="expense-filter-type" class="modern-select">
                                         <option value="">All Types</option>
                                         <option value="Essential">Essential</option>
@@ -748,11 +756,11 @@
                                         <option value="Recurring">Recurring</option>
                                     </select>
                                 </div>
-                            </div>
-                            <!-- Clear Filters -->
-                            <div class="flex justify-end gap-2 mt-4">
-                                <button onclick="applyExpenseFilters()" class="modern-button modern-button-primary">Apply Filters</button>
-                                <button onclick="clearExpenseFilters()" class="modern-button modern-button-secondary">Clear Filters</button>
+                                <!-- Clear Filters -->
+                                <div class="md:col-span-3 flex justify-end gap-2">
+                                    <button onclick="applyExpenseFilters()" class="modern-button modern-button-primary">Apply Filters</button>
+                                    <button onclick="clearExpenseFilters()" class="modern-button modern-button-secondary">Clear Filters</button>
+                                </div>
                             </div>
                         </div>
                         
@@ -806,7 +814,7 @@
                             </div>
                         </div>
                 
-                        <div id="recurring-filter-panel" class="hidden bg-gray-50 dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <div id="recurring-filter-panel" class="hidden p-4 border-b border-gray-200 dark:border-gray-700">
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 <div>
                                     <label for="recurring-filter-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Type</label>
@@ -987,9 +995,94 @@
         </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div id="settings-modal" onclick="closeSettings()" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
+        <div onclick="event.stopPropagation()" class="card max-w-md w-full max-h-[90vh] overflow-y-auto p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Settings</h3>
+                <button onclick="closeSettings()" class="icon-button text-2xl leading-none">&times;</button>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Budget & Income Section -->
+                <div id="settings-budget-section" class="space-y-3 p-3 rounded-lg border border-gray-200 dark:border-gray-600">
+                    <h4 class="text-md font-semibold">Budget & Income</h4>
+                    <div>
+                        <label class="block text-xs font-medium">Monthly Budget</label>
+                        <input type="number" id="settings-budget-input" placeholder="e.g., 2000" class="modern-input mt-1">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium">Monthly Income</label>
+                        <input type="number" id="settings-income-input" placeholder="e.g., 3500" class="modern-input mt-1">
+                    </div>
+                </div>
+            
+                <!-- General Settings -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                        <label for="theme-toggle" class="text-sm font-medium">Dark Mode</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="theme-toggle" onchange="toggleTheme(this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                        <label for="currency-select" class="text-sm font-medium">Currency</label>
+                        <select id="currency-select" onchange="changeCurrency(this.value)" class="modern-select text-sm w-40">
+                            <option value="GBP">GBP (£)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="JPY">JPY (¥)</option>
+                            <option value="USD">USD ($)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Data Management -->
+                <div class="space-y-2 pt-3 border-t border-gray-200 dark:border-gray-700">
+                    <button onclick="exportData()" class="modern-button modern-button-secondary w-full justify-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        <span>Export Data (JSON)</span>
+                    </button>
+                    <label class="modern-button modern-button-secondary w-full justify-start cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                        <span>Import Data (JSON)</span>
+                        <input type="file" accept=".json" onchange="importData(event)" class="hidden">
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-6 border-t border-gray-200 dark:border-gray-700 pt-3">
+                <button onclick="saveSettings()" class="modern-button modern-button-primary flex-1">Save & Close</button>
+                <button onclick="closeSettings()" class="modern-button modern-button-secondary flex-1">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- First-Time Setup Modal -->
+    <div id="setup-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
+        <div class="card max-w-md w-full p-6">
+            <h3 class="text-xl font-semibold mb-2">Welcome! Let's get you set up.</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Provide some initial details to personalize your tracker. You can change these anytime in the settings.</p>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Monthly Budget</label>
+                    <input type="number" id="setup-budget-input" placeholder="e.g., 2000" class="modern-input mt-1">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Monthly Income (Optional)</label>
+                    <input type="number" id="setup-income-input" placeholder="e.g., 3500" class="modern-input mt-1">
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="saveSetupAndStartTour()" class="modern-button modern-button-primary flex-1">Save and Continue</button>
+                <button onclick="skipSetupAndStartTour()" class="modern-button modern-button-secondary flex-1">Skip for Now</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Add/Edit Expense Modal -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
-        <div class="card max-w-lg w-full max-h-[90vh] overflow-y-auto p-6">
+    <div id="modal" onclick="closeModal()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
+        <div onclick="event.stopPropagation()" class="card max-w-md w-full max-h-[90vh] overflow-y-auto p-6">
             <h3 class="text-xl font-semibold mb-6" id="modal-title">Add New Expense</h3>
             <div class="space-y-4">
                 <div>
@@ -1042,8 +1135,8 @@
     </div>
 
     <!-- Add/Edit Recurring Item Modal -->
-    <div id="recurring-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
-        <div class="card max-w-lg w-full max-h-[90vh] overflow-y-auto p-6">
+    <div id="recurring-modal" onclick="closeRecurringModal()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
+        <div onclick="event.stopPropagation()" class="card max-w-md w-full max-h-[90vh] overflow-y-auto p-6">
             <h3 class="text-xl font-semibold mb-4" id="recurring-modal-title">Add Recurring Item</h3>
             <div class="space-y-4">
                  <div>
@@ -1090,6 +1183,16 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
+                        <input type="date" id="recurring-start-date" class="modern-input mt-1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date (Optional)</label>
+                        <input type="date" id="recurring-end-date" class="modern-input mt-1">
+                    </div>
+                </div>
+                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                      <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method</label>
                         <select id="recurring-payment-method" class="modern-select mt-1">
@@ -1099,16 +1202,6 @@
                             <option value="Direct Debit">Direct Debit</option>
                             <option value="Cash">Cash</option>
                         </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
-                        <input type="date" id="recurring-start-date" class="modern-input mt-1">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date (Optional)</label>
-                        <input type="date" id="recurring-end-date" class="modern-input mt-1">
                     </div>
                 </div>
             </div>
@@ -1122,6 +1215,7 @@
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
     <script>
         // --- State Variables ---
         let expenses = [];
@@ -1204,7 +1298,6 @@
             incomeInput: document.getElementById('income-input'),
             totalExpensesDisplay: document.getElementById('total-expenses'),
             remainingAmountDisplay: document.getElementById('remaining-amount'),
-            remainingAmountTile: document.getElementById('remaining-amount-tile'),
             totalIncomeDisplay: document.getElementById('total-income'),
             budgetBar: document.getElementById('budget-bar'),
             budgetPercentage: document.getElementById('budget-percentage'),
@@ -1251,40 +1344,106 @@
             // Add event listener for auto-categorization
             DOMElements.expenseName.addEventListener('input', autoCategorizeExpense);
             DOMElements.recurringName.addEventListener('input', autoCategorizeExpense);
+            
+            startOnboardingProcess();
         });
 
-        // --- Auto-Categorization ---
-        function autoCategorizeExpense(event) {
-            const name = event.target.value.toLowerCase();
-            if (!name) return;
-
-            let matchedCategory = 'Other';
-            let matchedEssential = 'Non-Essential';
-
-            // Find category based on keywords
-            for (const category in categoryKeywords) {
-                if (categoryKeywords[category].some(keyword => name.includes(keyword))) {
-                    matchedCategory = category;
-                    break;
-                }
+        // --- Onboarding ---
+        function startOnboardingProcess() {
+            if (localStorage.getItem('onboardingComplete') !== 'true') {
+                document.getElementById('setup-modal').classList.remove('hidden');
             }
+        }
 
-            // Determine if essential based on keywords
-            if (essentialKeywords.some(keyword => name.includes(keyword))) {
-                matchedEssential = 'Essential';
+        function saveSetupAndStartTour() {
+            const budget = document.getElementById('setup-budget-input').value;
+            const income = document.getElementById('setup-income-input').value;
+
+            if (budget) {
+                updateBudget(budget);
             }
-
-            // Update the form fields
-            const formPrefix = event.target.id.startsWith('recurring') ? 'recurring-' : 'expense-';
-            const categorySelect = document.getElementById(`${formPrefix}category`);
-            const typeSelect = document.getElementById(`${formPrefix}type`) || document.getElementById(`${formPrefix}essential-type`);
+            if (income) {
+                updateIncome(income);
+            }
             
-            if (categorySelect) {
-                categorySelect.value = matchedCategory;
-            }
-            if (typeSelect) {
-                typeSelect.value = matchedEssential;
-            }
+            document.getElementById('setup-modal').classList.add('hidden');
+            launchOnboardingTour();
+        }
+
+        function skipSetupAndStartTour() {
+            document.getElementById('setup-modal').classList.add('hidden');
+            launchOnboardingTour();
+        }
+
+        function launchOnboardingTour() {
+            const driver = window.driver.js.driver;
+            const driverObj = driver({
+                showProgress: true,
+                popoverClass: 'driver-popover',
+                steps: [
+                    { 
+                        element: '.sm\\:items-center .gap-3 h1', 
+                        popover: { 
+                            title: 'Welcome to Your Expense Tracker!', 
+                            description: "Let's take a quick tour to get you started.",
+                            side: "bottom" 
+                        } 
+                    },
+                    { 
+                        element: '#budget-input', 
+                        popover: { 
+                            title: 'Set Your Monthly Budget', 
+                            description: 'Start by entering your total monthly budget. This is the baseline for tracking your spending.',
+                            side: "bottom"
+                        } 
+                    },
+                    { 
+                        element: 'button[onclick="showAddForm()"]', 
+                        popover: { 
+                            title: 'Add a New Expense', 
+                            description: 'Use this button to log any one-time purchases or expenses.',
+                            side: "left" 
+                        } 
+                    },
+                    { 
+                        element: 'button[onclick="showRecurringForm()"]', 
+                        popover: { 
+                            title: 'Add a Recurring Item', 
+                            description: 'For regular income (like a salary) or expenses (like rent or subscriptions), use this.',
+                            side: "left"
+                        } 
+                    },
+                    { 
+                        element: '#tab-insights', 
+                        popover: { 
+                            title: 'Visualize Your Spending', 
+                            description: 'This tab contains charts and AI-powered insights to help you understand your financial habits.',
+                            side: "bottom" 
+                        } 
+                    },
+                    { 
+                        element: 'button[onclick="toggleSettings()"]', 
+                        popover: { 
+                            title: 'Settings & Data', 
+                            description: 'Change the theme, set your currency, and import or export your data here.',
+                            side: "left" 
+                        } 
+                    }
+                ],
+                onDestroyed: () => {
+                    localStorage.setItem('onboardingComplete', 'true');
+                    
+                    // Animate quick-add tiles
+                    const quickAddTiles = document.querySelectorAll('.card button[onclick^="quickAddExpense"]');
+                    quickAddTiles.forEach(tile => tile.parentElement.classList.add('animate-pulse'));
+                    
+                    setTimeout(() => {
+                        quickAddTiles.forEach(tile => tile.parentElement.classList.remove('animate-pulse'));
+                    }, 4000);
+                }
+            });
+
+            driverObj.drive();
         }
 
         // --- Tab Management ---
@@ -1317,7 +1476,6 @@
         function toggleTheme(isDark) {
             localStorage.setItem('darkMode', isDark);
             applyTheme();
-            setTimeout(() => DOMElements.settingsMenu.classList.add('hidden'), 150);
         }
 
         function applyTheme() {
@@ -1865,7 +2023,7 @@
 
             // Correctly calculate and display the "Remaining" tile based on BUDGET.
             const remainingBudget = monthlyBudget - totalSpent;
-            const remainingAmountTile = DOMElements.remainingAmountTile;
+            const remainingAmountTile = DOMElements.remainingAmountDisplay.parentElement;
             const remainingAmountTitle = remainingAmountTile.querySelector('.stat-card-title');
 
             // Reset styles
@@ -1961,177 +2119,82 @@
             const fillRotation = -135 + (score / 100) * 180;
             DOMElements.healthScoreFill.style.transform = `rotate(${fillRotation}deg)`;
         }
-
+        
         function renderRecentExpenses() {
-            const sortedExpenses = [...expenses, ...generateExpensesFromRecurring()]
+            DOMElements.recentExpensesContainer.innerHTML = '';
+            const allDisplayExpenses = [...expenses, ...generateExpensesFromRecurring()];
+            const recent = allDisplayExpenses
                 .sort((a, b) => new Date(b.date) - new Date(a.date))
                 .slice(0, 5);
 
-            if (sortedExpenses.length === 0) {
-                DOMElements.recentExpensesContainer.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No recent expenses.</p>';
+            if (recent.length === 0) {
+                DOMElements.recentExpensesContainer.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400">No recent expenses.</p>';
                 return;
             }
-
-            DOMElements.recentExpensesContainer.innerHTML = sortedExpenses.map(expense => `
-                <div class="flex justify-between items-center text-sm">
+            recent.forEach(expense => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center border-b border-gray-100 dark:border-gray-700 py-2 last:border-b-0 text-xs';
+                div.innerHTML = `
                     <div>
-                        <p class="font-medium">${expense.name}</p>
-                        <p class="text-gray-500 dark:text-gray-400">${new Date(expense.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</p>
+                        <p class="font-medium text-gray-800 dark:text-gray-200">${escapeHTML(expense.name)}</p>
+                        <p class="text-gray-500 dark:text-gray-400">${expense.date} - ${escapeHTML(expense.category)}</p>
                     </div>
-                    <p class="font-semibold">${formatCurrency(expense.cost)}</p>
-                </div>
-            `).join('');
-        }
-
-        function renderRecurringTable() {
-            const type = document.getElementById('recurring-filter-type').value;
-            const category = document.getElementById('recurring-filter-category').value;
-            const frequency = document.getElementById('recurring-filter-frequency').value;
-
-            let displayItems = recurringItems.filter(item => {
-                if (type && item.type !== type) return false;
-                if (category && item.category !== category) return false;
-                if (frequency && item.frequency !== frequency) return false;
-                return true;
-            });
-
-            // Sort by start date (desc) and then by creation ID (desc)
-            displayItems.sort((a, b) => {
-                const dateA = new Date(a.startDate);
-                const dateB = new Date(b.startDate);
-                if (dateB - dateA !== 0) {
-                    return dateB - dateA;
-                }
-                return b.id - a.id; // Newest created item first
-            });
-
-            if (displayItems.length === 0) {
-                DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="9" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
-                return;
-            }
-
-            DOMElements.recurringTableBody.innerHTML = displayItems.map(item => {
-                const isSelected = selectedRecurringIds.has(item.id);
-                const isCancelled = item.status === 'cancelled';
-                const editAction = `editRecurring(${item.id})`;
-                const deleteAction = `deleteRecurring(${item.id})`;
-                const statusToggleAction = `toggleRecurringStatus(${item.id})`;
-
-                return `
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${isCancelled ? 'opacity-60' : ''}">
-                        <td class="px-4 py-3">
-                            <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="recurring-checkbox table-checkbox" ${isSelected ? 'checked' : ''}>
-                        </td>
-                        <th scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            ${item.name}
-                        </th>
-                        <td class="px-6 py-3 capitalize">${item.type}</td>
-                        <td class="px-6 py-3 font-medium ${item.type === 'income' ? 'text-green-600' : 'text-red-600'}">${formatCurrency(item.amount)}</td>
-                        <td class="px-6 py-3 hidden md:table-cell">${item.frequency}</td>
-                        <td class="px-6 py-3 hidden md:table-cell">${new Date(item.startDate + 'T00:00:00').toLocaleDateString()}</td>
-                        <td class="px-6 py-3 hidden lg:table-cell">${item.category}</td>
-                        <td class="px-6 py-3">
-                            <span class="status-badge ${isCancelled ? 'status-cancelled' : 'status-active'}" onclick="${statusToggleAction}" style="cursor: pointer;">
-                                ${isCancelled ? 'Cancelled' : 'Active'}
-                            </span>
-                        </td>
-                        <td class="px-6 py-3 text-right">
-                            <div class="flex items-center justify-end gap-1">
-                                <button onclick="${editAction}" title="Edit" class="icon-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
-                                </button>
-                                <button onclick="${deleteAction}" title="Delete" class="icon-button text-red-600/80 hover:text-red-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    <p class="font-medium text-red-600 dark:text-red-400">${formatCurrency(expense.cost)}</p>
                 `;
-            }).join('');
+                DOMElements.recentExpensesContainer.appendChild(div);
+            });
         }
 
         function renderExpensesTable() {
-            const fromDate = document.getElementById('expense-filter-date-from').value;
-            const toDate = document.getElementById('expense-filter-date-to').value;
-            const category = document.getElementById('expense-filter-category').value;
-            const type = document.getElementById('expense-filter-type').value;
+            const generated = generateExpensesFromRecurring();
+            let allExpenses = [...expenses, ...generated];
 
-            let allDisplayExpenses = [
-                ...expenses,
-                ...generateExpensesFromRecurring()
-            ].filter(e => {
-                if (fromDate && e.date < fromDate) return false;
-                if (toDate && e.date > toDate) return false;
-                if (category && e.category !== category) return false;
-                
-                // Handle the 'Recurring' type filter correctly
-                const isRecurringInstance = typeof e.id === 'string' && e.id.startsWith('recurring-');
-                if (type) {
-                    if (type === 'Recurring' && !isRecurringInstance) return false;
-                    if (type === 'Essential' && e.type !== 'Essential') return false;
-                    if (type === 'Non-Essential' && e.type !== 'Non-Essential') return false;
-                }
+            // Apply filters
+            const dateFrom = document.getElementById('expense-filter-date-from').value;
+            const dateTo = document.getElementById('expense-filter-date-to').value;
+            const categoryFilter = document.getElementById('expense-filter-category').value;
+            const typeFilter = document.getElementById('expense-filter-type').value;
 
-                return true;
-            });
+            const filteredExpenses = allExpenses.filter(e => {
+                let passes = true;
+                if (dateFrom && e.date < dateFrom) passes = false;
+                if (dateTo && e.date > dateTo) passes = false;
+                if (categoryFilter && e.category !== categoryFilter) passes = false;
+                if (typeFilter && e.type !== typeFilter) passes = false;
+                return passes;
+            }).sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by most recent date
 
-            // Sort by date (descending) and then creation time (descending)
-            allDisplayExpenses.sort((a, b) => {
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
-                if (dateB - dateA !== 0) {
-                    return dateB - dateA;
-                }
-                // If dates are same, sort by creation timestamp (ID)
-                const idA = typeof a.id === 'string' && a.id.startsWith('recurring-') ? parseInt(a.id.split('-')[1], 10) : a.id;
-                const idB = typeof b.id === 'string' && b.id.startsWith('recurring-') ? parseInt(b.id.split('-')[1], 10) : b.id;
-                return idB - idA;
-            });
-
-            DOMElements.selectAllExpensesCheckbox.checked = false;
-
-            if (allDisplayExpenses.length === 0) {
-                DOMElements.expensesTableBody.innerHTML = `<tr><td colspan="9" class="px-6 py-4 text-center">No expenses match the current filters.</td></tr>`;
+            const tableBody = DOMElements.expensesTableBody;
+            if (filteredExpenses.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-gray-500">No expenses match your filters.</td></tr>`;
                 return;
             }
 
-            DOMElements.expensesTableBody.innerHTML = allDisplayExpenses.map(expense => {
-                const isRecurringInstance = typeof expense.id === 'string' && expense.id.startsWith('recurring-');
-                const isSelected = selectedExpenseIds.has(expense.id.toString());
+            tableBody.innerHTML = filteredExpenses.map(expense => {
+                const isRecurringInstance = expense.isRecurring || false;
                 const isCancelled = expense.status === 'cancelled';
-                
-                let editAction = `editExpense(${expense.id})`;
-                let deleteAction = `deleteExpense(${expense.id})`;
-                let statusToggleAction = `toggleExpenseStatus(${expense.id})`;
-
-                if (isRecurringInstance) {
-                    const originalId = parseInt(expense.id.split('-')[1]);
-                    editAction = `editRecurring(${originalId}); showToast('Editing the recurring rule for this item.', 'info');`;
-                    deleteAction = `showToast('Cannot delete a single recurring instance from here.', 'info');`;
-                    statusToggleAction = `showToast('Cannot change status of a recurring instance from here.', 'info');`;
-                }
+                const editAction = isRecurringInstance ? `editRecurring(${expense.originalRecurringId})` : `editExpense(${expense.id})`;
+                const deleteAction = `deleteExpense('${expense.id}')`;
+                const statusToggleAction = isRecurringInstance ? `toggleRecurringStatus(${expense.originalRecurringId})` : `toggleExpenseStatus(${expense.id})`;
+                const checkboxId = `expense-${expense.id}`;
 
                 return `
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ${isCancelled ? 'opacity-60' : ''}">
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${isCancelled ? 'opacity-60' : ''}">
                         <td class="px-4 py-3">
-                             <input type="checkbox" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
-                                class="expense-checkbox table-checkbox" ${isSelected ? 'checked' : ''} ${isRecurringInstance ? 'disabled' : ''}>
+                            <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
+                            class="table-checkbox expense-checkbox" ${isRecurringInstance ? 'disabled' : ''} ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
-                        <th scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            ${expense.name}
-                        </th>
-                        <td class="px-6 py-3 font-medium text-red-600/90">${formatCurrency(expense.cost)}</td>
-                        <td class="px-6 py-3 hidden md:table-cell">${new Date(expense.date + 'T00:00:00').toLocaleDateString()}</td>
-                        <td class="px-6 py-3 hidden md:table-cell">${expense.category}</td>
-                        <td class="px-6 py-3 hidden lg:table-cell">${expense.paymentMethod || 'N/A'}</td>
-                        <td class="px-6 py-3 hidden lg:table-cell">${expense.type}</td>
+                        <td class="px-6 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">${escapeHTML(expense.name)}</td>
+                        <td class="px-6 py-3">${formatCurrency(expense.cost)}</td>
+                        <td class="px-6 py-3 hidden md:table-cell">${expense.date}</td>
+                        <td class="px-6 py-3 hidden md:table-cell">${escapeHTML(expense.category)}</td>
+                        <td class="px-6 py-3 hidden lg:table-cell">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-6 py-3 hidden lg:table-cell">${escapeHTML(expense.type)}</td>
                         <td class="px-6 py-3">
-                             <span class="status-badge ${isCancelled ? 'status-cancelled' : 'status-active'}">
-                                ${isCancelled ? 'Cancelled' : 'Active'}
-                            </span>
+                            <span class="status-badge ${isCancelled ? 'status-cancelled' : 'status-active'}">${isCancelled ? 'Cancelled' : 'Active'}</span>
                         </td>
                         <td class="px-6 py-3 text-right">
-                           <div class="flex items-center justify-end gap-1">
+                            <div class="flex items-center justify-end gap-1">
                             <button onclick="${editAction}" title="Edit" class="icon-button">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
                             </button>
@@ -2144,11 +2207,310 @@
                 `;
             }).join('');
         }
+        
+        function renderRecurringTable() {
+            DOMElements.recurringTableBody.innerHTML = '';
+            const type = document.getElementById('recurring-filter-type').value;
+            const category = document.getElementById('recurring-filter-category').value;
+            const frequency = document.getElementById('recurring-filter-frequency').value;
+            
+            let filtered = recurringItems.filter(item => {
+                if (type && item.type !== type) return false;
+                if (category && item.category !== category) return false;
+                if (frequency && item.frequency !== frequency) return false;
+                return true;
+            });
+
+            filtered.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+
+            if (filtered.length === 0) {
+                DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="9" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                const isSelected = selectedRecurringIds.has(item.id);
+                tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
+                const itemTypeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+
+                tr.innerHTML = `
+                    <td class="px-4 py-4 w-1"><input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}></td>
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${escapeHTML(item.name)}</td>
+                    <td class="px-6 py-4 capitalize">${item.type}</td>
+                    <td class="px-6 py-4 font-medium ${itemTypeClass}">${formatCurrency(item.amount)}</td>
+                    <td class="px-6 py-4 hidden md:table-cell">${item.frequency}</td>
+                    <td class="px-6 py-4 hidden md:table-cell">${item.startDate}</td>
+                    <td class="px-6 py-4 hidden lg:table-cell">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4"><span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span></td>
+                    <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap">
+                        <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg></button>
+                        <button onclick="toggleRecurringStatus(${item.id})" class="icon-button" title="${item.status === 'active' ? 'Pause' : 'Resume'}">
+                           ${item.status === 'active' ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'}
+                        </button>
+                        <button onclick="deleteRecurring(${item.id})" class="icon-button text-red-500 hover:text-red-700" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button>
+                    </td>
+                `;
+                DOMElements.recurringTableBody.appendChild(tr);
+            });
+        }
+        
+        // --- Charting and Insights ---
+        function updateChartsAndInsights() {
+            renderSpendingTrendChart();
+            renderCategorySpendingChart();
+            renderMonthlySavingsChart();
+            updateAiInsights();
+        }
+
+        const chartColors = ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316', '#06b6d4', '#d946ef', '#84cc16'];
+        function getChartColors(count) {
+            return Array.from({length: count}, (_, i) => chartColors[i % chartColors.length]);
+        }
+
+        function getChartOptions(isDarkMode) {
+            const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            const textColor = isDarkMode ? '#cbd5e1' : '#64748b';
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { grid: { color: gridColor }, ticks: { color: textColor } },
+                    y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor, callback: value => formatCurrency(value, false) } }
+                },
+                plugins: {
+                    legend: { labels: { color: textColor } },
+                    tooltip: { titleFont: { weight: 'bold' }, bodyFont: {}, backgroundColor: isDarkMode ? '#334155' : '#ffffff', titleColor: isDarkMode ? '#f1f5f9' : '#1e293b', bodyColor: isDarkMode ? '#f1f5f9' : '#1e293b', borderColor: isDarkMode ? '#475569' : '#e2e8f0', borderWidth: 1 }
+                }
+            };
+        }
+
+        function renderSpendingTrendChart() {
+            const ctx = DOMElements.spendingTrendCanvas?.getContext('2d');
+            if (!ctx) return;
+            const monthlyData = getMonthlyIncomeAndExpenses(12);
+            const labels = monthlyData.map(m => new Date(m.year, m.month).toLocaleString('default', {month: 'short', year: '2-digit'}));
+            const data = monthlyData.map(m => m.expenses);
+
+            if (spendingTrendChart) spendingTrendChart.destroy();
+            const isDarkMode = DOMElements.html.classList.contains('dark');
+            const options = getChartOptions(isDarkMode);
+            options.plugins.tooltip.callbacks = { label: (context) => ` Spending: ${formatCurrency(context.parsed.y)}` };
+            options.plugins.legend = { display: false };
+
+            spendingTrendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        borderColor: chartColors[2],
+                        backgroundColor: chartColors[2] + '33',
+                        tension: 0.2, fill: true, pointRadius: 3, pointHoverRadius: 5
+                    }]
+                },
+                options: options
+            });
+        }
+
+        function renderCategorySpendingChart() {
+            const ctx = DOMElements.categorySpendingCanvas?.getContext('2d');
+            if (!ctx) return;
+            const now = new Date();
+            const categorySpending = expenses.filter(e => new Date(e.date).getMonth() === now.getMonth() && new Date(e.date).getFullYear() === now.getFullYear() && e.status === 'active')
+                .reduce((acc, exp) => {
+                    acc[exp.category] = (acc[exp.category] || 0) + exp.cost;
+                    return acc;
+                }, {});
+            
+            const sortedCategories = Object.entries(categorySpending).sort((a,b) => b[1] - a[1]);
+            const labels = sortedCategories.map(c => c[0]);
+            const data = sortedCategories.map(c => c[1]);
+            
+            if (categorySpendingChart) categorySpendingChart.destroy();
+            const isDarkMode = DOMElements.html.classList.contains('dark');
+            const options = getChartOptions(isDarkMode);
+            options.scales = {};
+            options.plugins.legend = { position: 'bottom', labels: { color: isDarkMode ? '#cbd5e1' : '#64748b', boxWidth: 12, padding: 15 } };
+            options.plugins.tooltip.callbacks = {
+                label: function(context) {
+                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    let percentage = total > 0 ? ((context.parsed / total) * 100).toFixed(1) : 0;
+                    return `${context.label}: ${formatCurrency(context.parsed)} (${percentage}%)`;
+                }
+            };
+
+            categorySpendingChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: getChartColors(labels.length),
+                        borderColor: isDarkMode ? '#1e293b' : '#ffffff',
+                        borderWidth: 2,
+                        hoverOffset: 8
+                    }]
+                },
+                options: options
+            });
+        }
+
+        function renderMonthlySavingsChart() {
+            const ctx = DOMElements.monthlySavingsCanvas?.getContext('2d');
+            if (!ctx) return;
+            const monthlyData = getMonthlyIncomeAndExpenses(12);
+            const labels = monthlyData.map(m => new Date(m.year, m.month).toLocaleString('default', {month: 'short', year: '2-digit'}));
+            const savingsData = monthlyData.map(m => m.income - m.expenses);
+
+            if (monthlySavingsChart) monthlySavingsChart.destroy();
+            const isDarkMode = DOMElements.html.classList.contains('dark');
+            const options = getChartOptions(isDarkMode);
+            options.plugins.tooltip.callbacks = { label: (context) => ` Savings: ${formatCurrency(context.parsed.y)}` };
+            options.plugins.legend = { display: false };
+
+            monthlySavingsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: savingsData,
+                        backgroundColor: savingsData.map(s => s >= 0 ? chartColors[1] + 'AA' : chartColors[2] + 'AA'),
+                        borderColor: savingsData.map(s => s >= 0 ? chartColors[1] : chartColors[2]),
+                        borderWidth: 1
+                    }]
+                },
+                options: options
+            });
+        }
+        
+        function getMonthlyIncomeAndExpenses(numMonths) {
+            const data = [];
+            for (let i = 0; i < numMonths; i++) {
+                const date = new Date(new Date().setMonth(new Date().getMonth() - i));
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const recurring = getMonthlyRecurringTotals(year, month);
+                data.push({
+                    year: year,
+                    month: month,
+                    income: monthlyIncome + recurring.income,
+                    expenses: getMonthlyExpenseTotal(year, month) + recurring.expenses
+                });
+            }
+            return data.reverse();
+        }
+
+        function updateAiInsights() {
+            const now = Date.now();
+            if (aiSpendingCache && (now - lastAiUpdate < 10000)) {
+                renderAiInsights(aiSpendingCache, DOMElements.spendingInsightsContainer);
+                renderAiInsights(aiSavingsCache, DOMElements.aiSavingsInsightsContainer);
+                return;
+            }
+            const { spendingInsights, savingsInsights } = generateAiInsights();
+            aiSpendingCache = spendingInsights;
+            aiSavingsCache = savingsInsights;
+            lastAiUpdate = now;
+            renderAiInsights(spendingInsights, DOMElements.spendingInsightsContainer);
+            renderAiInsights(savingsInsights, DOMElements.aiSavingsInsightsContainer);
+        }
+
+        function generateAiInsights() {
+            const spendingInsights = [];
+            const savingsInsights = [];
+            const monthlyData = getMonthlyIncomeAndExpenses(3);
+            if (monthlyData.length < 1) {
+                const msg = 'Not enough data for analysis yet. Add income and expenses.';
+                return { spendingInsights: [msg], savingsInsights: [msg] };
+            }
+            const currentMonthData = monthlyData[monthlyData.length - 1];
+            const previousMonthData = monthlyData.length > 1 ? monthlyData[monthlyData.length - 2] : null;
+
+            if (currentMonthData.income > 0) {
+                const savings = currentMonthData.income - currentMonthData.expenses;
+                const savingsRate = (savings / currentMonthData.income) * 100;
+                if (savings >= 0) {
+                     savingsInsights.push(`This month, you saved <strong>${formatCurrency(savings)}</strong>, a <strong>${savingsRate.toFixed(0)}%</strong> savings rate. ${savingsRate >= 20 ? 'Great job!' : 'Good start!'}`);
+                } else {
+                     spendingInsights.push(`You overspent by <strong>${formatCurrency(Math.abs(savings))}</strong> this month. Review non-essential spending.`);
+                }
+            } else {
+                savingsInsights.push('Set your monthly income to calculate savings rate.');
+            }
+
+            if (previousMonthData) {
+                const expenseChange = currentMonthData.expenses - previousMonthData.expenses;
+                if (expenseChange > 0) {
+                    spendingInsights.push(`Spending is up by <strong>${formatCurrency(expenseChange)}</strong> from last month.`);
+                } else if (expenseChange < 0) {
+                    spendingInsights.push(`Spending is down by <strong>${formatCurrency(Math.abs(expenseChange))}</strong> from last month. Keep it up!`);
+                }
+            }
+
+            const categorySpending = expenses.filter(e => new Date(e.date).getMonth() === currentMonthData.month && new Date(e.date).getFullYear() === currentMonthData.year && e.status === 'active')
+                .reduce((acc, exp) => {
+                    acc[exp.category] = (acc[exp.category] || 0) + exp.cost;
+                    return acc;
+                }, {});
+            const topCategory = Object.entries(categorySpending).sort((a,b) => b[1] - a[1])[0];
+            if(topCategory) {
+                spendingInsights.push(`Your top spending category is <strong>${escapeHTML(topCategory[0])}</strong> at <strong>${formatCurrency(topCategory[1])}</strong>.`);
+            }
+
+            if (monthlyBudget > 0 && currentMonthData.expenses > monthlyBudget) {
+                 spendingInsights.push(`<strong class="text-red-600 dark:text-red-400">Alert:</strong> You've exceeded your budget by <strong>${formatCurrency(currentMonthData.expenses - monthlyBudget)}</strong>.`);
+            } else if (monthlyBudget > 0 && currentMonthData.expenses / monthlyBudget > 0.8) {
+                 spendingInsights.push(`You've used over 80% of your budget. Monitor spending closely.`);
+            }
+
+            return { spendingInsights, savingsInsights };
+        }
+
+        function renderAiInsights(insights, container) {
+            if (!container) return;
+            container.innerHTML = '';
+            if (!insights || insights.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">Not enough data to generate insights yet.</p>';
+                return;
+            }
+            insights.forEach(insightText => {
+                const div = document.createElement('div');
+                div.className = 'ai-insight';
+                div.innerHTML = insightText;
+                container.appendChild(div);
+            });
+        }
+        
+        // --- Utility Functions ---
+        function formatCurrency(value, useDecimals = true) {
+            const { locale } = currencyConfig[currentCurrencyCode];
+            return new Intl.NumberFormat(locale, { style: 'currency', currency: currentCurrencyCode, minimumFractionDigits: useDecimals ? 2 : 0, maximumFractionDigits: useDecimals ? 2 : 0, }).format(value);
+        }
+
+        function escapeHTML(str) {
+            if (typeof str !== 'string') return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        function showToast(message, type = 'success') {
+            DOMElements.toast.textContent = message;
+            DOMElements.toast.className = `toast show ${type === 'error' ? 'bg-red-600' : 'bg-gray-800 dark:bg-gray-200 dark:text-gray-800'}`;
+            setTimeout(() => { DOMElements.toast.className = 'toast'; }, 3000);
+        }
+
+        window.addEventListener('click', (e) => {
+            const settingsContainer = DOMElements.settingsMenu.parentElement;
+            if (settingsContainer && !DOMElements.settingsMenu.classList.contains('hidden') && !settingsContainer.contains(e.target)) {
+                DOMElements.settingsMenu.classList.add('hidden');
+            }
+        });
 
         function generateExpensesFromRecurring() {
             const generatedExpenses = [];
             const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            // To avoid timezone issues, we compare date strings
+            const todayStr = today.toISOString().split('T')[0];
 
             recurringItems.forEach(item => {
                 if (item.type !== 'expense' || item.status !== 'active') {
@@ -2172,9 +2534,12 @@
                         category: item.category,
                         date: dateStr,
                         paymentMethod: item.paymentMethod,
-                        status: 'active' // Recurring instances are always active
+                        status: 'active',
+                        isRecurring: true,
+                        originalRecurringId: item.id
                     });
-                    
+
+                    // Increment currentDate based on frequency
                     switch (item.frequency) {
                         case 'Daily':
                             currentDate.setDate(currentDate.getDate() + 1);
@@ -2195,285 +2560,81 @@
                             currentDate.setFullYear(currentDate.getFullYear() + 1);
                             break;
                         default:
-                            // Prevent infinite loops for unknown frequencies
-                            currentDate.setDate(currentDate.getDate() + 36500); 
+                            // Break the loop for unknown frequencies
+                            currentDate = new Date('9999-12-31');
                             break;
                     }
                 }
             });
+
             return generatedExpenses;
         }
 
-        // --- Chart & Insight Functions ---
-        function updateChartsAndInsights() {
-            const now = new Date();
-            // Debounce AI updates to prevent excessive calls
-            if (now.getTime() - lastAiUpdate < 5000) { 
-                initializeCharts();
-                return;
-            };
-            lastAiUpdate = now.getTime();
-            
-            initializeCharts();
-            generateAiSavingsInsights();
-            generateSpendingInsights();
-        }
+        // --- Auto-Categorization ---
+        function autoCategorizeExpense(event) {
+            const name = event.target.value.toLowerCase();
+            if (!name) return;
 
-        function initializeCharts() {
-            const darkMode = localStorage.getItem('darkMode') === 'true';
-            const gridColor = darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-            const textColor = darkMode ? '#f1f5f9' : '#1e293b';
+            let matchedCategory = 'Other';
+            let matchedEssential = 'Non-Essential';
 
-            // --- Spending Trend Chart ---
-            const trendCtx = DOMElements.spendingTrendCanvas.getContext('2d');
-            const trendData = getSpendingTrendData();
-            if (spendingTrendChart) spendingTrendChart.destroy();
-            spendingTrendChart = new Chart(trendCtx, {
-                type: 'line',
-                data: {
-                    labels: trendData.labels,
-                    datasets: [{
-                        label: 'Total Spending',
-                        data: trendData.data,
-                        borderColor: 'rgba(59, 130, 246, 0.8)',
-                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                        fill: true,
-                        tension: 0.3,
-                    }]
-                },
-                options: getChartOptions('Daily Spending Over Time', textColor, gridColor)
-            });
-
-            // --- Category Spending Chart ---
-            const categoryCtx = DOMElements.categorySpendingCanvas.getContext('2d');
-            const categoryData = getCategorySpendingData();
-            if (categorySpendingChart) categorySpendingChart.destroy();
-            categorySpendingChart = new Chart(categoryCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: categoryData.labels,
-                    datasets: [{
-                        data: categoryData.data,
-                        backgroundColor: [
-                            '#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#8b5cf6', 
-                            '#ec4899', '#f97316', '#14b8a6', '#6366f1', '#d946ef'
-                        ],
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', labels: { color: textColor } },
-                        title: { display: false }
-                    }
+            // Find category based on keywords
+            for (const category in categoryKeywords) {
+                if (categoryKeywords[category].some(keyword => name.includes(keyword))) {
+                    matchedCategory = category;
+                    break;
                 }
-            });
-
-            // --- Monthly Savings Chart ---
-            const savingsCtx = DOMElements.monthlySavingsCanvas.getContext('2d');
-            const savingsData = getMonthlySavingsData();
-            if(monthlySavingsChart) monthlySavingsChart.destroy();
-            monthlySavingsChart = new Chart(savingsCtx, {
-                type: 'bar',
-                data: {
-                    labels: savingsData.labels,
-                    datasets: [{
-                        label: 'Monthly Savings',
-                        data: savingsData.data,
-                        backgroundColor: savingsData.data.map(d => d >= 0 ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)'),
-                        borderColor: savingsData.data.map(d => d >= 0 ? 'rgba(16, 185, 129, 1)' : 'rgba(239, 68, 68, 1)'),
-                        borderWidth: 1
-                    }]
-                },
-                options: getChartOptions('Savings per Month', textColor, gridColor, true)
-            });
-        }
-
-        function getChartOptions(title, textColor, gridColor, displayX = true) {
-             return {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    title: { display: false, text: title, color: textColor }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { color: textColor },
-                        grid: { color: gridColor }
-                    },
-                    x: {
-                        display: displayX,
-                        ticks: { color: textColor },
-                        grid: { color: gridColor }
-                    }
-                }
-            };
-        }
-
-        // --- Data for Charts ---
-        function getSpendingTrendData() {
-            const last30Days = {};
-            for (let i = 29; i >= 0; i--) {
-                const d = new Date();
-                d.setDate(d.getDate() - i);
-                last30Days[d.toISOString().split('T')[0]] = 0;
             }
+
+            // Determine if essential based on keywords
+            if (essentialKeywords.some(keyword => name.includes(keyword))) {
+                matchedEssential = 'Essential';
+            }
+
+            // Update the form fields
+            const formPrefix = event.target.id.startsWith('recurring') ? 'recurring-' : 'expense-';
+            const categorySelect = document.getElementById(`${formPrefix}category`);
+            const typeSelect = document.getElementById(`${formPrefix}type`) || document.getElementById(`${formPrefix}essential-type`);
             
-            const allExpenses = [...expenses, ...generateExpensesFromRecurring()];
-            allExpenses.forEach(e => {
-                if(last30Days.hasOwnProperty(e.date)) {
-                    last30Days[e.date] += e.cost;
-                }
-            });
-            return {
-                labels: Object.keys(last30Days),
-                data: Object.values(last30Days)
-            };
+            if (categorySelect) {
+                categorySelect.value = matchedCategory;
+            }
+            if (typeSelect) {
+                typeSelect.value = matchedEssential;
+            }
         }
 
-        function getCategorySpendingData() {
-            const categoryTotals = {};
-            const allExpenses = [...expenses, ...generateExpensesFromRecurring()];
-            allExpenses.forEach(e => {
-                categoryTotals[e.category] = (categoryTotals[e.category] || 0) + e.cost;
-            });
-            const sortedCategories = Object.entries(categoryTotals).sort((a,b) => b[1] - a[1]);
-            return {
-                labels: sortedCategories.map(c => c[0]),
-                data: sortedCategories.map(c => c[1])
-            };
-        }
-
-        function getMonthlySavingsData() {
-            const savingsByMonth = {};
-            const allItems = [
-                ...expenses.map(e => ({...e, amount: -e.cost, type: 'expense'})),
-                ...recurringItems.filter(r => r.status === 'active').flatMap(r => {
-                    const instances = [];
-                    let currentDate = new Date(r.startDate);
-                    const today = new Date();
-                    const endDate = r.endDate ? new Date(r.endDate) : today;
-                    while(currentDate <= endDate && currentDate <= today) {
-                        const monthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
-                        instances.push({ month: monthKey, amount: r.type === 'income' ? r.amount : -r.amount });
-                         switch (r.frequency) {
-                            case 'Daily': currentDate.setDate(currentDate.getDate() + 1); break;
-                            case 'Weekly': currentDate.setDate(currentDate.getDate() + 7); break;
-                            case 'Bi-Weekly': currentDate.setDate(currentDate.getDate() + 14); break;
-                            case 'Monthly': currentDate.setMonth(currentDate.getMonth() + 1); break;
-                            case 'Quarterly': currentDate.setMonth(currentDate.getMonth() + 3); break;
-                            case 'Annual': currentDate.setFullYear(currentDate.getFullYear() + 1); break;
-                            default: currentDate.setDate(currentDate.getDate() + 36500); break;
-                        }
-                    }
-                    return instances;
-                })
-            ];
+        // --- Settings Modal ---
+        function openSettings(section) {
+            const settingsModal = document.getElementById('settings-modal');
             
-            allItems.forEach(item => {
-                const monthKey = item.month || `${new Date(item.date).getFullYear()}-${String(new Date(item.date).getMonth() + 1).padStart(2, '0')}`;
-                savingsByMonth[monthKey] = (savingsByMonth[monthKey] || 0) + item.amount;
-            });
-
-            // Add base monthly income to each month's total
-            Object.keys(savingsByMonth).forEach(monthKey => {
-                savingsByMonth[monthKey] += monthlyIncome;
-            });
-
-            const sortedMonths = Object.entries(savingsByMonth).sort((a,b) => a[0].localeCompare(b[0]));
-            return {
-                labels: sortedMonths.map(m => m[0]),
-                data: sortedMonths.map(m => m[1])
-            };
-        }
-
-        // --- "AI" Insight Generation ---
-        function generateAiSavingsInsights() {
-            const container = DOMElements.aiSavingsInsightsContainer;
-            if (aiSavingsCache) {
-                container.innerHTML = aiSavingsCache;
-                return;
-            }
-
-            const savingsData = getMonthlySavingsData();
-            if (savingsData.data.length < 2) {
-                container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">Not enough data for savings analysis yet.</p>';
-                return;
-            }
-
-            let insights = '';
-            const lastMonthSavings = savingsData.data[savingsData.data.length - 1];
-            const prevMonthSavings = savingsData.data[savingsData.data.length - 2];
+            // Populate inputs with current values
+            document.getElementById('settings-budget-input').value = monthlyBudget > 0 ? monthlyBudget : '';
+            document.getElementById('settings-income-input').value = monthlyIncome > 0 ? monthlyIncome : '';
             
-            if (lastMonthSavings > prevMonthSavings) {
-                const increase = ((lastMonthSavings - prevMonthSavings) / Math.abs(prevMonthSavings)) * 100;
-                insights += `<div class="ai-insight"><strong>Good job!</strong> Your savings increased by ${increase.toFixed(0)}% from the previous month.</div>`;
-            } else {
-                 const decrease = ((prevMonthSavings - lastMonthSavings) / Math.abs(prevMonthSavings)) * 100;
-                insights += `<div class="ai-insight"><strong>Heads up!</strong> Your savings decreased by ${decrease.toFixed(0)}% from the previous month.</div>`;
+            settingsModal.classList.remove('hidden');
+
+            if (section === 'budget') {
+                setTimeout(() => {
+                    document.getElementById('settings-budget-input').focus();
+                }, 100);
             }
-
-            const biggestSubscription = recurringItems
-                .filter(i => i.type === 'expense' && i.category === 'Subscriptions' && i.status === 'active')
-                .sort((a, b) => b.amount - a.amount)[0];
-
-            if (biggestSubscription) {
-                insights += `<div class="ai-insight">Your biggest subscription is <strong>${biggestSubscription.name}</strong> at ${formatCurrency(biggestSubscription.amount)}/month. Could you find a cheaper alternative?</div>`;
-            }
-
-            aiSavingsCache = insights;
-            container.innerHTML = insights || '<p class="text-gray-500 dark:text-gray-400">No specific savings insights right now.</p>';
         }
 
-        function generateSpendingInsights() {
-            const container = DOMElements.spendingInsightsContainer;
-            if (aiSpendingCache) {
-                container.innerHTML = aiSpendingCache;
-                return;
-            }
-            
-            let insights = '';
-            const categoryData = getCategorySpendingData();
-            if(categoryData.labels.length > 0) {
-                const topCategory = categoryData.labels[0];
-                const topAmount = categoryData.data[0];
-                insights += `<div class="ai-insight">Your top spending category is <strong>${topCategory}</strong>, with a total of ${formatCurrency(topAmount)}.</div>`;
-            }
-
-            const nonEssentialExpenses = [...expenses, ...generateExpensesFromRecurring()].filter(e => e.type === 'Non-Essential');
-            if(nonEssentialExpenses.length > 5) {
-                const totalNonEssential = nonEssentialExpenses.reduce((sum, e) => sum + e.cost, 0);
-                 insights += `<div class="ai-insight">You've spent <strong>${formatCurrency(totalNonEssential)}</strong> on non-essential items. Review these to see where you can save.</div>`;
-            }
-
-            aiSpendingCache = insights;
-            container.innerHTML = insights || '<p class="text-gray-500 dark:text-gray-400">No spending insights available yet. Add more expenses!</p>';
+        function closeSettings() {
+            document.getElementById('settings-modal').classList.add('hidden');
         }
 
-        // --- Utility Functions ---
-        function formatCurrency(amount) {
-            const { symbol, locale } = currencyConfig[currentCurrencyCode];
-            return new Intl.NumberFormat(locale, { style: 'currency', currency: currentCurrencyCode }).format(amount);
-        }
+        function saveSettings() {
+            const budgetValue = document.getElementById('settings-budget-input').value;
+            const incomeValue = document.getElementById('settings-income-input').value;
 
-        function showToast(message, type = 'success') {
-            const toast = DOMElements.toast;
-            toast.textContent = message;
-            toast.className = 'toast show'; // Reset and show
-            if (type === 'error') {
-                toast.style.backgroundColor = '#c53030'; // Red
-            } else {
-                toast.style.backgroundColor = '#2d3748'; // Default dark gray
-            }
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
+            updateBudget(budgetValue);
+            updateIncome(incomeValue);
 
+            closeSettings();
+            showToast('Settings saved successfully!');
+        }
     </script>
 </body>
 </html>
