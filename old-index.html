@@ -482,7 +482,7 @@
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div class="flex items-center gap-3">
                             <span class="text-3xl">💡</span> <!-- Changed Icon -->
-                            <h1 class="text-2xl md:text-3xl font-bold">Expense Tracker</h1>
+                            <h1 class="text-2xl md:text-3xl font-bold">AI Expense Tracker</h1>
                         </div>
                         <div class="flex items-center gap-3">
                             <!-- Settings Button and Menu -->
@@ -531,7 +531,8 @@
                         <button onclick="showTab('overview')" id="tab-overview" class="tab-button active">Overview</button>
                         <button onclick="showTab('expenses')" id="tab-expenses" class="tab-button">Expenses</button>
                         <button onclick="showTab('recurring')" id="tab-recurring" class="tab-button">Recurring</button>
-                        <button onclick="showTab('insights')" id="tab-insights" class="tab-button">Insights</button>
+                        <button onclick="showTab('trends')" id="tab-trends" class="tab-button">Trends</button>
+                        <button onclick="showTab('savings')" id="tab-savings" class="tab-button">Savings AI</button> <!-- New Tab -->
                         <button onclick="showTab('help')" id="tab-help" class="tab-button">Help</button>
                     </nav>
                 </div>
@@ -784,84 +785,80 @@
 
              <!-- Recurring Tab -->
             <div id="recurring-tab" class="tab-content hidden fade-in">
-                <div class="card p-4 md:p-6">
-                    <!-- Header: Title and main action buttons -->
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 gap-4">
-                        <div>
-                            <h2 class="text-xl font-bold">Recurring Items</h2>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Regular income and expenses like salaries or subscriptions.</p>
-                        </div>
-                        <div class="flex-shrink-0 flex items-center space-x-2">
-                            <button onclick="toggleFilterVisibility('recurring-filters')" class="modern-button modern-button-secondary">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
-                                Filter
+                <div class="card">
+                    <div class="p-4 md:p-6 border-b border-gray-200 dark:border-gray-700 flex flex-wrap justify-between items-center gap-4">
+                        <h2 class="text-xl font-semibold">Recurring Income & Expenses</h2>
+                        <div class="flex gap-3">
+                            <button onclick="toggleFilterPanel('recurring-filter-controls')" class="modern-button modern-button-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                                </svg>
+                                Filters
                             </button>
                             <button onclick="showRecurringForm()" class="modern-button modern-button-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-                                Add Recurring
-                            </button>
-                            <button id="delete-selected-recurring-btn" onclick="deleteSelectedRecurring()" class="modern-button modern-button-danger hidden">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                <span>Delete Selected</span>
+                                <span>➕</span> Add Recurring Item
                             </button>
                         </div>
                     </div>
-
-                    <!-- Collapsible Filter Section -->
-                    <div id="recurring-filters" class="hidden bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg mb-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    
+                    <!-- Filter Panel -->
+                    <div id="recurring-filter-controls" class="p-4 border-b border-gray-200 dark:border-gray-700 hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <!-- Type -->
                             <div>
-                                <label for="recurring-filter-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Type</label>
-                                <select id="recurring-filter-type" class="modern-select mt-1">
+                                <label class="text-sm font-medium mb-1 block">Type</label>
+                                <select id="recurring-filter-type" class="modern-select">
                                     <option value="">All Types</option>
                                     <option value="income">Income</option>
                                     <option value="expense">Expense</option>
                                 </select>
                             </div>
+                            <!-- Category -->
                             <div>
-                                <label for="recurring-filter-category" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
-                                <select id="recurring-filter-category" class="modern-select mt-1">
+                                <label class="text-sm font-medium mb-1 block">Category</label>
+                                <select id="recurring-filter-category" class="modern-select">
                                     <option value="">All Categories</option>
-                                    <!-- Options populated by JS -->
+                                    <!-- Populated dynamically -->
                                 </select>
                             </div>
+                            <!-- Frequency -->
                             <div>
-                                <label for="recurring-filter-frequency" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Frequency</label>
-                                <select id="recurring-filter-frequency" class="modern-select mt-1">
+                                <label class="text-sm font-medium mb-1 block">Frequency</label>
+                                <select id="recurring-filter-frequency" class="modern-select">
                                     <option value="">All Frequencies</option>
+                                    <option value="Monthly">Monthly</option>
                                     <option value="Weekly">Weekly</option>
                                     <option value="Bi-Weekly">Bi-Weekly</option>
-                                    <option value="Monthly">Monthly</option>
                                     <option value="Quarterly">Quarterly</option>
                                     <option value="Annual">Annual</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="flex justify-end space-x-2 mt-4">
-                            <button onclick="applyRecurringFilters()" class="modern-button modern-button-primary">Apply Filters</button>
-                            <button onclick="clearRecurringFilters()" class="modern-button modern-button-secondary">Clear</button>
+                            <!-- Clear Filters -->
+                            <div class="md:col-span-3 flex justify-end">
+                                <button onclick="applyRecurringFilters()" class="modern-button modern-button-primary mr-2">Apply Filters</button>
+                                <button onclick="clearRecurringFilters()" class="modern-button modern-button-secondary">Clear Filters</button>
+                            </div>
                         </div>
                     </div>
-
+                    
                     <div class="overflow-x-auto">
-                        <table class="min-w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" class="px-4 py-3 w-1">
-                                        <input type="checkbox" id="select-all-recurring-checkbox" onchange="toggleSelectAllRecurring(this.checked)" class="table-checkbox">
-                                    </th>
                                     <th scope="col" class="px-6 py-3">Name</th>
-                                    <th scope="col" class="px-6 py-3">Type</th>
                                     <th scope="col" class="px-6 py-3">Amount</th>
-                                    <th scope="col" class="px-6 py-3 hidden md:table-cell">Frequency</th>
+                                    <th scope="col" class="px-6 py-3">Frequency</th>
+                                    <th scope="col" class="px-6 py-3 hidden md:table-cell">Category</th>
+                                    <th scope="col" class="px-6 py-3 hidden lg:table-cell">Payment Method</th>
                                     <th scope="col" class="px-6 py-3 hidden md:table-cell">Start Date</th>
-                                    <th scope="col" class="px-6 py-3 hidden lg:table-cell">Category</th>
-                                    <th scope="col" class="px-6 py-3">Status</th>
+                                    <th scope="col" class="px-6 py-3">Type</th>
                                     <th scope="col" class="px-6 py-3 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="recurring-table">
-                                <!-- Rows will be populated by JavaScript -->
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td colspan="8" class="px-6 py-4 text-center">No recurring items recorded yet.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -870,6 +867,26 @@
 
             <!-- Trends Tab -->
             <div id="trends-tab" class="tab-content hidden fade-in">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="card p-6">
+                        <h2 class="text-xl font-semibold mb-4">Monthly Spending Trend</h2>
+                        <div class="chart-container">
+                            <canvas id="spending-trend-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <h2 class="text-xl font-semibold mb-4">Spending by Category (Month)</h2>
+                        <div class="chart-container">
+                             <canvas id="category-spending-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card p-6">
+                     <h2 class="text-xl font-semibold mb-4">Spending Patterns & Insights</h2>
+                     <div id="spending-insights" class="space-y-4">
+                         <!-- This will be replaced by renderAiInsights function -->
+                     </div>
+                 </div>
             </div>
 
             <!-- Savings AI Tab -->
@@ -1052,23 +1069,6 @@
                 </div>
             </div>
 
-            <!-- Insights Tab -->
-            <div id="insights-tab" class="tab-content hidden fade-in">
-                <!-- ... this is the end of the div that contains the charts ... -->
-                </div>
-
-                <!-- PASTE THE AI INSIGHTS CARD HERE -->
-                <div class="card p-4 md:p-6"> 
-                     <div class="flex items-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.375 3.375 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                        <h2 class="text-xl font-bold">AI-Powered Insights</h2>
-                    </div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Your intelligent assistant providing tips to improve your financial health based on your data.</p>
-                    <div id="spending-insights" class="space-y-3">
-                         <!-- AI Insights will be loaded here -->
-                    </div>
-                </div>
-            </div> <!-- This is the closing div for the insights-tab -->
         </div>
     </div>
 
@@ -1219,11 +1219,7 @@
         // --- State Variables ---
         let expenses = [];
         let recurringItems = [];
-        let selectedExpenseIds = new Set();
-        let selectedRecurringIds = new Set();
-        let editingExpense = null;
-        let editingRecurring = null;
-        let monthlyBudget = 2000.00;
+        let monthlyBudget = 0;
         let monthlyIncome = 0;
         let annualSavingsGoal = 0;
         let currentSavings = 0;
@@ -1234,10 +1230,13 @@
             'USD': { symbol: '$', locale: 'en-US' }
         };
         let currentCurrencyCode = 'GBP';
+        let editingExpense = null;
+        let editingRecurring = null;
         let activeTab = 'overview';
         let spendingTrendChart = null;
         let categorySpendingChart = null;
         let monthlySavingsChart = null;
+        let selectedExpenseIds = new Set();
         let aiInsightsCache = null; // Cache for AI insights
         let lastAiUpdate = 0;
 
@@ -1297,8 +1296,6 @@
             spendingInsightsContainer: document.getElementById('spending-insights'),
             selectAllExpensesCheckbox: document.getElementById('select-all-expenses'),
             deleteSelectedBtn: document.getElementById('delete-selected-btn'),
-            selectAllRecurringCheckbox: document.getElementById('select-all-recurring-checkbox'),
-            deleteSelectedRecurringBtn: document.getElementById('delete-selected-recurring-btn'),
             savingsGoalInput: document.getElementById('savings-goal-input'),
             currentSavingsInput: document.getElementById('current-savings-input'),
             savingsGoalBar: document.getElementById('savings-goal-bar'),
@@ -1333,7 +1330,7 @@
             });
 
             renderExpensesTable(filteredExpenses);
-            showToast('Filters applied');
+            // Do not show toast on programmatic call from updateDisplay
         }
 
         function clearExpenseFilters() {
@@ -1360,7 +1357,7 @@
             });
             
             renderRecurringTable(filteredItems);
-            showToast('Filters applied');
+             // Do not show toast on programmatic call from updateDisplay
         }
 
         function clearRecurringFilters() {
@@ -1425,27 +1422,27 @@
 
         // --- Tab Management ---
         function showTab(tabName) {
-            // Deactivate previous tab and hide its content
-            if (document.getElementById(`tab-${activeTab}`)) {
-                 document.getElementById(`tab-${activeTab}`).classList.remove('active');
-            }
-             // Use the new insights tab ID for hiding if old tabs were active
-            const oldTabContentId = (activeTab === 'trends' || activeTab === 'savings') ? 'insights-tab' : `${activeTab}-tab`;
-            if (document.getElementById(oldTabContentId)) {
-                document.getElementById(oldTabContentId).classList.add('hidden');
-            }
-            
             activeTab = tabName;
-
-            // Activate new tab and show its content
-            document.getElementById(`tab-${activeTab}`).classList.add('active');
-            document.getElementById(`${activeTab}-tab`).classList.remove('hidden');
-
-            // Special actions when a tab is shown
-            // This is more efficient than running it on every single data update.
-            if (activeTab === 'insights') {
-                updateCharts();
-                updateAiInsights();
+            localStorage.setItem('activeTab', activeTab);
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            const activeTabContent = document.getElementById(`${tabName}-tab`);
+            if (activeTabContent) {
+                 activeTabContent.classList.remove('hidden');
+                 activeTabContent.classList.add('fade-in');
+            } else {
+                console.error(`Tab content not found for: ${tabName}`);
+            }
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.id === `tab-${tabName}`) {
+                    btn.classList.add('active');
+                }
+            });
+            if (tabName === 'trends' || tabName === 'savings') {
+                updateCharts(); // Update charts for relevant tabs
+            }
+            if (tabName === 'savings') {
+                updateAiInsights(); // Update AI insights when tab is shown
             }
         }
 
@@ -1471,9 +1468,6 @@
             }
             if (activeTab === 'trends' || activeTab === 'savings') {
                 updateCharts(); 
-            }
-            if (tabName === 'savings') {
-                updateAiInsights(); // Update AI insights when tab is shown
             }
         }
 
@@ -1717,25 +1711,21 @@
             const checkboxes = DOMElements.expensesTableBody.querySelectorAll('.expense-checkbox');
             selectedExpenseIds.clear();
             checkboxes.forEach(cb => {
-                if (!cb.disabled) {
-                    cb.checked = checked;
-                    if (checked) {
-                        // dataset.id will be a string, which is what we want
-                        selectedExpenseIds.add(cb.dataset.id);
-                    }
+                cb.checked = checked;
+                if (checked) {
+                    selectedExpenseIds.add(parseInt(cb.dataset.id));
                 }
             });
             updateDeleteSelectedButton();
         }
 
         function toggleExpenseSelection(checkbox, id) {
-             // id is already a string, e.g., '123' or 'recurring-123'
             if (checkbox.checked) {
                 selectedExpenseIds.add(id);
             } else {
                 selectedExpenseIds.delete(id);
             }
-            const allCheckboxes = Array.from(DOMElements.expensesTableBody.querySelectorAll('.expense-checkbox:not(:disabled)'));
+            const allCheckboxes = DOMElements.expensesTableBody.querySelectorAll('.expense-checkbox');
             DOMElements.selectAllExpensesCheckbox.checked = selectedExpenseIds.size === allCheckboxes.length && allCheckboxes.length > 0;
             updateDeleteSelectedButton();
         }
@@ -1751,18 +1741,11 @@
 
         function deleteSelectedExpenses() {
             if (selectedExpenseIds.size === 0) return;
-            if (confirm(`Are you sure you want to delete ${selectedExpenseIds.size} selected expense(s)? This will only delete one-time expenses.`)) {
+            if (confirm(`Are you sure you want to delete ${selectedExpenseIds.size} selected expense(s)?`)) {
                 const initialCount = expenses.length;
-                // We can only delete non-recurring expenses from this view
-                expenses = expenses.filter(e => !selectedExpenseIds.has(e.id.toString()));
+                expenses = expenses.filter(e => !selectedExpenseIds.has(e.id));
                 const deletedCount = initialCount - expenses.length;
-                
-                selectedExpenseIds.forEach(id => {
-                    if (typeof id === 'number' || !id.startsWith('recurring-')) {
-                         selectedExpenseIds.delete(id);
-                    }
-                });
-
+                selectedExpenseIds.clear();
                 DOMElements.selectAllExpensesCheckbox.checked = false;
                 saveData();
                 updateDisplay();
@@ -2008,7 +1991,6 @@
                 updateAiInsights();
             }
             updateDeleteSelectedButton();
-            updateDeleteSelectedRecurringButton();
         }
 
         function updateBudgetHealthScore(totalSpent, budget, year, month) {
@@ -2128,15 +2110,7 @@
 
         function renderRecentExpenses() {
             DOMElements.recentExpensesContainer.innerHTML = '';
-            
-            const recurringAsExpenses = recurringItems
-                .filter(item => item.type === 'expense' && item.status === 'active')
-                .map(item => ({ ...item, id: `recurring-${item.id}`, cost: item.amount, date: item.startDate, isRecurring: true }));
-
-            const combined = [...expenses, ...recurringAsExpenses].sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            const recent = combined.slice(0, 5);
-
+            const recent = expenses.slice(0, 5);
             if (recent.length === 0) {
                 DOMElements.recentExpensesContainer.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400">No recent expenses.</p>';
                 return;
@@ -2155,59 +2129,21 @@
             });
         }
 
-        function renderExpensesTable(expensesToRender) {
+        function renderExpensesTable(expensesToRender = expenses) {
             DOMElements.expensesTableBody.innerHTML = '';
-
-            let allItems;
-            
-            // The filter function now returns a combined list, so we don't need to check for `expensesToRender` truthiness in the same way.
-            // If it's undefined, it means no filter is active, so we build the combined list.
-            // If it's an array (even an empty one), it means a filter was applied, so we use it.
-            if (expensesToRender === undefined) {
-                 // No active filter, combine one-time and recurring expenses.
-                const recurringAsExpenses = recurringItems
-                    .filter(item => item.type === 'expense' && item.status === 'active')
-                    .map(item => ({
-                        id: `recurring-${item.id}`,
-                        name: item.name,
-                        cost: item.amount,
-                        type: 'Essential', // Recurring are usually essential
-                        frequency: item.frequency,
-                        category: item.category,
-                        date: item.startDate,
-                        paymentMethod: item.paymentMethod || '',
-                        status: 'active',
-                        isRecurring: true,
-                        recurringId: item.id
-                    }));
-                allItems = [...expenses, ...recurringAsExpenses];
-            } else {
-                // A filtered list was provided by applyExpenseFilters.
-                allItems = expensesToRender;
-            }
-
-            allItems.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            if (allItems.length === 0) {
+            if (expensesToRender.length === 0) {
                  DOMElements.expensesTableBody.innerHTML = `<tr class="bg-white dark:bg-gray-800"><td colspan="9" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">No expenses found.</td></tr>`;
                 return;
             }
-            allItems.forEach(expense => {
+            expensesToRender.forEach(expense => {
                 const tr = document.createElement('tr');
-                const isRecurring = expense.isRecurring === true;
-                // Ensure ID is a string for consistent checking in the Set
-                const expenseIdStr = expense.id.toString();
-                const isSelected = selectedExpenseIds.has(expenseIdStr);
-                
-                tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${expense.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'} ${isRecurring ? 'bg-purple-50 dark:bg-purple-900/10' : ''}`;
+                const isSelected = selectedExpenseIds.has(expense.id);
+                tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${expense.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
                 tr.innerHTML = `
                     <td class="px-4 py-4 w-1">
-                        <input type="checkbox" data-id="${expenseIdStr}" onchange="toggleExpenseSelection(this, '${expenseIdStr}')" class="table-checkbox expense-checkbox" ${isSelected ? 'checked' : ''} ${isRecurring ? 'disabled' : ''}>
+                        <input type="checkbox" data-id="${expense.id}" onchange="toggleExpenseSelection(this, ${expense.id})" class="table-checkbox expense-checkbox" ${isSelected ? 'checked' : ''}>
                     </td>
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        ${escapeHTML(expense.name)}
-                        ${isRecurring ? `<span class="ml-2 text-xs text-purple-600 dark:text-purple-400">🔁 ${escapeHTML(expense.frequency)}</span>` : ''}
-                    </td>
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${escapeHTML(expense.name)}</td>
                     <td class="px-6 py-4">${formatCurrency(expense.cost)}</td>
                     <td class="px-6 py-4 hidden md:table-cell">${expense.date}</td>
                     <td class="px-6 py-4 hidden md:table-cell">${escapeHTML(expense.category)}</td>
@@ -2217,19 +2153,13 @@
                         <span class="status-badge ${expense.status === 'active' ? 'status-active' : 'status-cancelled'}">${expense.status}</span>
                     </td>
                     <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap">
-                        ${isRecurring ? 
-                        `<button onclick="showTab('recurring'); editRecurring(${expense.recurringId})" class="icon-button" title="Edit in Recurring Tab">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
-                        </button>` 
-                        :
-                        `<button onclick="editExpense(${expense.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg></button>
+                        <button onclick="editExpense(${expense.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg></button>
                         <button onclick="toggleExpenseStatus(${expense.id})" class="icon-button" title="${expense.status === 'active' ? 'Cancel' : 'Reactivate'}">
                             ${expense.status === 'active' ? 
                                 '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.25 0V9M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : 
                                 '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" /></svg>'}
                         </button>
-                        <button onclick="deleteExpense(${expense.id})" class="icon-button text-red-500 hover:text-red-700" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button>`
-                        }
+                        <button onclick="deleteExpense(${expense.id})" class="icon-button text-red-500 hover:text-red-700" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button>
                     </td>
                 `;
                 DOMElements.expensesTableBody.appendChild(tr);
@@ -2238,38 +2168,24 @@
         
         function renderRecurringTable(itemsToRender = recurringItems) {
             DOMElements.recurringTableBody.innerHTML = '';
-            // Sort by most recent start date
-            itemsToRender.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
-
             if (itemsToRender.length === 0) {
-                // Adjust colspan to 9 to account for the new checkbox column
-                DOMElements.recurringTableBody.innerHTML = `<tr class="bg-white dark:bg-gray-800"><td colspan="9" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">No recurring items found.</td></tr>`;
+                DOMElements.recurringTableBody.innerHTML = `<tr class="bg-white dark:bg-gray-800"><td colspan="8" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">No recurring items found.</td></tr>`;
                 return;
             }
-
             itemsToRender.forEach(item => {
                 const tr = document.createElement('tr');
-                const isSelected = selectedRecurringIds.has(item.id);
-                // Apply a different background if the row is selected
-                tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
-
-                const itemTypeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
-
+                tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${item.status === 'cancelled' ? 'opacity-60' : ''} bg-white dark:bg-gray-800`;
                 tr.innerHTML = `
-                    <td class="px-4 py-4 w-1">
-                        <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}>
-                    </td>
                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${escapeHTML(item.name)}</td>
-                    <td class="px-6 py-4 capitalize">${item.type}</td>
-                    <td class="px-6 py-4 font-medium ${itemTypeClass}">${formatCurrency(item.amount)}</td>
-                    <td class="px-6 py-4 hidden md:table-cell">${item.frequency}</td>
+                    <td class="px-6 py-4 ${item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">${formatCurrency(item.amount)}</td>
+                    <td class="px-6 py-4">${escapeHTML(item.frequency)}</td>
+                    <td class="px-6 py-4 hidden md:table-cell">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4 hidden lg:table-cell">${escapeHTML(item.paymentMethod || '-')}</td>
                     <td class="px-6 py-4 hidden md:table-cell">${item.startDate}</td>
-                    <td class="px-6 py-4 hidden lg:table-cell">${escapeHTML(item.category)}</td>
-                    <td class="px-6 py-4">
-                         <span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span>
-                    </td>
+                    <td class="px-6 py-4"><span class="capitalize status-badge ${item.type === 'income' ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'}">${item.type}</span></td>
                     <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap">
                         <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg></button>
+                         <button onclick="/* toggleRecurringStatus(${item.id}) */ alert('Toggle recurring status not implemented yet')" class="icon-button" title="Toggle Status (Not Implemented)"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.25 0V9M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></button>
                         <button onclick="deleteRecurring(${item.id})" class="icon-button text-red-500 hover:text-red-700" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button>
                     </td>
                 `;
@@ -2584,73 +2500,6 @@
             setTimeout(() => {
                 DOMElements.toast.className = 'toast';
             }, 3000);
-        }
-
-        // --- Bulk Recurring Actions ---
-        function toggleSelectAllRecurring(checked) {
-            const checkboxes = DOMElements.recurringTableBody.querySelectorAll('.recurring-checkbox');
-            selectedRecurringIds.clear();
-            checkboxes.forEach(cb => {
-                cb.checked = checked;
-                if (checked) {
-                    // IDs are numbers, so we parse them
-                    selectedRecurringIds.add(parseInt(cb.dataset.id));
-                }
-            });
-            updateDeleteSelectedRecurringButton();
-        }
-
-        function toggleRecurringSelection(checkbox, id) {
-            const numId = parseInt(id);
-            if (checkbox.checked) {
-                selectedRecurringIds.add(numId);
-            } else {
-                selectedRecurringIds.delete(numId);
-            }
-            const allCheckboxes = DOMElements.recurringTableBody.querySelectorAll('.recurring-checkbox');
-            // Ensure the main checkbox is updated correctly
-            DOMElements.selectAllRecurringCheckbox.checked = selectedRecurringIds.size === allCheckboxes.length && allCheckboxes.length > 0;
-            updateDeleteSelectedRecurringButton();
-        }
-
-        function updateDeleteSelectedRecurringButton() {
-            if (!DOMElements.deleteSelectedRecurringBtn) return; // Guard against element not found
-            if (selectedRecurringIds.size > 0) {
-                DOMElements.deleteSelectedRecurringBtn.classList.remove('hidden');
-                DOMElements.deleteSelectedRecurringBtn.querySelector('span').textContent = `Delete Selected (${selectedRecurringIds.size})`;
-            } else {
-                DOMElements.deleteSelectedRecurringBtn.classList.add('hidden');
-            }
-        }
-
-        function deleteSelectedRecurring() {
-            if (selectedRecurringIds.size === 0) return;
-            if (confirm(`Are you sure you want to delete ${selectedRecurringIds.size} selected recurring item(s)?`)) {
-                const initialCount = recurringItems.length;
-                recurringItems = recurringItems.filter(r => !selectedRecurringIds.has(r.id));
-                const deletedCount = initialCount - recurringItems.length;
-                selectedRecurringIds.clear();
-                DOMElements.selectAllRecurringCheckbox.checked = false;
-                saveData();
-                updateDisplay();
-                showToast(`${deletedCount} recurring item(s) deleted.`);
-            }
-        }
-
-        // Close settings dropdown when clicking outside of it
-        window.addEventListener('click', (e) => {
-            const settingsContainer = DOMElements.settingsMenu.parentElement;
-            // Check if the settings menu is open and if the click was outside of it
-            if (settingsContainer && !DOMElements.settingsMenu.classList.contains('hidden') && !settingsContainer.contains(e.target)) {
-                DOMElements.settingsMenu.classList.add('hidden');
-            }
-        });
-
-        function toggleFilterVisibility(elementId) {
-            const filterElement = document.getElementById(elementId);
-            if (filterElement) {
-                filterElement.classList.toggle('hidden');
-            }
         }
 
     </script>
