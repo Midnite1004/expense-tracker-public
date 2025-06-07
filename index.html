@@ -1146,8 +1146,30 @@
         let aiSpendingCache = null;
         let lastAiUpdate = 0;
 
-        const expenseCategories = ["Housing", "Utilities", "Transport", "Food", "Entertainment", "Shopping", "Health", "Personal Care", "Education", "Debt", "Subscriptions", "Other"];
+        const expenseCategories = ["Housing", "Utilities", "Transport", "Food/Drink", "Entertainment", "Shopping", "Health", "Personal Care", "Education", "Debt", "Subscriptions", "Other"];
         const incomeCategories = ["Salary", "Bonus", "Investment", "Gift", "Other Income"];
+
+        // Keyword mapping for auto-categorization and essential status
+        const categoryKeywords = {
+            'Housing': ['rent', 'mortgage', 'property tax', 'home insurance'],
+            'Utilities': ['gas', 'electricity', 'water', 'internet', 'phone', 'council tax'],
+            'Transport': ['fuel', 'petrol', 'diesel', 'train', 'bus', 'tube', 'taxi', 'uber'],
+            'Food/Drink': ['coffee', 'lunch', 'groceries', 'supermarket', 'restaurant', 'takeaway'],
+            'Entertainment': ['cinema', 'concert', 'theatre', 'streaming', 'netflix', 'spotify', 'disney+'],
+            'Shopping': ['clothes', 'electronics', 'gifts', 'amazon'],
+            'Health': ['pharmacy', 'doctor', 'dentist', 'gym'],
+            'Personal Care': ['haircut', 'toiletries'],
+            'Education': ['books', 'course', 'tuition'],
+            'Debt': ['loan', 'credit card'],
+            'Subscriptions': ['subscription']
+        };
+
+        const essentialKeywords = [
+            'rent', 'mortgage', 'property tax', 'home insurance', 'gas', 'electricity', 
+            'water', 'internet', 'phone', 'council tax', 'fuel', 'petrol', 'diesel', 'train', 
+            'bus', 'tube', 'groceries', 'supermarket', 'pharmacy', 'doctor', 'dentist', 
+            'loan', 'credit card', 'tuition'
+        ];
 
         // --- DOM Elements Cache ---
         const DOMElements = {
@@ -1223,6 +1245,10 @@
             DOMElements.incomeInput.value = monthlyIncome > 0 ? monthlyIncome : '';
             DOMElements.expenseDate.value = new Date().toISOString().split('T')[0];
             DOMElements.recurringStartDate.value = new Date().toISOString().split('T')[0];
+
+            // Add event listener for auto-categorization
+            DOMElements.expenseName.addEventListener('input', autoCategorizeExpense);
+            DOMElements.recurringName.addEventListener('input', autoCategorizeExpense);
         });
 
         // --- Tab Management ---
@@ -2348,6 +2374,40 @@
             });
 
             return generatedExpenses;
+        }
+
+        // --- Auto-Categorization ---
+        function autoCategorizeExpense(event) {
+            const name = event.target.value.toLowerCase();
+            if (!name) return;
+
+            let matchedCategory = 'Other';
+            let matchedEssential = 'Non-Essential';
+
+            // Find category based on keywords
+            for (const category in categoryKeywords) {
+                if (categoryKeywords[category].some(keyword => name.includes(keyword))) {
+                    matchedCategory = category;
+                    break;
+                }
+            }
+
+            // Determine if essential based on keywords
+            if (essentialKeywords.some(keyword => name.includes(keyword))) {
+                matchedEssential = 'Essential';
+            }
+
+            // Update the form fields
+            const formPrefix = event.target.id.startsWith('recurring') ? 'recurring-' : 'expense-';
+            const categorySelect = document.getElementById(`${formPrefix}category`);
+            const typeSelect = document.getElementById(`${formPrefix}type`) || document.getElementById(`${formPrefix}essential-type`);
+            
+            if (categorySelect) {
+                categorySelect.value = matchedCategory;
+            }
+            if (typeSelect) {
+                typeSelect.value = matchedEssential;
+            }
         }
     </script>
 </body>
