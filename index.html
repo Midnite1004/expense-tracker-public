@@ -996,8 +996,8 @@
     </div>
 
     <!-- Settings Modal -->
-    <div id="settings-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
-        <div class="card max-w-md w-full max-h-[90vh] overflow-y-auto p-4">
+    <div id="settings-modal" onclick="closeSettings()" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
+        <div onclick="event.stopPropagation()" class="card max-w-md w-full max-h-[90vh] overflow-y-auto p-4">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-semibold">Settings</h3>
                 <button onclick="closeSettings()" class="icon-button text-2xl leading-none">&times;</button>
@@ -1081,8 +1081,8 @@
     </div>
 
     <!-- Add/Edit Expense Modal -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
-        <div class="card max-w-md w-full max-h-[90vh] overflow-y-auto p-6">
+    <div id="modal" onclick="closeModal()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
+        <div onclick="event.stopPropagation()" class="card max-w-md w-full max-h-[90vh] overflow-y-auto p-6">
             <h3 class="text-xl font-semibold mb-6" id="modal-title">Add New Expense</h3>
             <div class="space-y-4">
                 <div>
@@ -1135,8 +1135,8 @@
     </div>
 
     <!-- Add/Edit Recurring Item Modal -->
-    <div id="recurring-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
-        <div class="card max-w-md w-full max-h-[90vh] overflow-y-auto p-6">
+    <div id="recurring-modal" onclick="closeRecurringModal()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
+        <div onclick="event.stopPropagation()" class="card max-w-md w-full max-h-[90vh] overflow-y-auto p-6">
             <h3 class="text-xl font-semibold mb-4" id="recurring-modal-title">Add Recurring Item</h3>
             <div class="space-y-4">
                  <div>
