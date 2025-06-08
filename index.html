@@ -646,41 +646,41 @@
                             
                             <div class="card p-6">
                                 <h3 class="text-lg font-semibold mb-4">Quick Add Common Expenses</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="flex flex-col gap-2 w-full">
                                     <div id="quick-add-coffee">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4 flex items-center w-full">
-                                            <div class="flex-grow flex items-center">
+                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                            <div class="flex items-center">
                                                 <span class="mr-2">☕</span>
                                                 <span class="text-white">Coffee</span>
                                             </div>
-                                            <span class="text-white font-medium ml-4"></span>
+                                            <span class="text-white font-medium flex-shrink-0 overflow-hidden"></span>
                                         </button>
                                     </div>
                                     <div id="quick-add-transport">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4 flex items-center w-full">
-                                            <div class="flex-grow flex items-center">
+                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                            <div class="flex items-center">
                                                 <span class="mr-2">🚌</span>
                                                 <span class="text-white">Transport</span>
                                             </div>
-                                            <span class="text-white font-medium ml-4"></span>
+                                            <span class="text-white font-medium flex-shrink-0 overflow-hidden"></span>
                                         </button>
                                     </div>
                                     <div id="quick-add-lunch">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4 flex items-center w-full">
-                                            <div class="flex-grow flex items-center">
+                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                            <div class="flex items-center">
                                                 <span class="mr-2">🥪</span>
                                                 <span class="text-white">Lunch</span>
                                             </div>
-                                            <span class="text-white font-medium ml-4"></span>
+                                            <span class="text-white font-medium flex-shrink-0 overflow-hidden"></span>
                                         </button>
                                     </div>
                                     <div id="quick-add-groceries">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4 flex items-center w-full">
-                                            <div class="flex-grow flex items-center">
+                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                            <div class="flex items-center">
                                                 <span class="mr-2">🛒</span>
                                                 <span class="text-white">Groceries</span>
                                             </div>
-                                            <span class="text-white font-medium ml-4"></span>
+                                            <span class="text-white font-medium flex-shrink-0 overflow-hidden"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -1327,6 +1327,7 @@
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', function() {
             loadData();
+            processRecurringExpenses(); // New function call
             populateCategoryDropdowns();
             applyTheme();
             updateCurrencyUI();
@@ -1342,9 +1343,105 @@
             startOnboardingProcess();
         });
 
+        // --- Recurring Expense Processing ---
+        function getTodaysDateString() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function processRecurringExpenses() {
+            const lastCheck = localStorage.getItem('lastRecurringCheck');
+            const todayStr = getTodaysDateString();
+
+            if (lastCheck === todayStr) {
+                console.log("Recurring expenses already processed today.");
+                return;
+            }
+
+            const startDate = lastCheck ? new Date(lastCheck) : new Date(todayStr);
+            const endDate = new Date(todayStr);
+            
+            let newExpensesGenerated = false;
+            
+            // Iterate from the day after the last check up to today
+            for (let d = new Date(startDate.getTime() + 86400000); d <= endDate; d.setDate(d.getDate() + 1)) {
+                const currentDateStr = d.toISOString().split('T')[0];
+                
+                recurringItems.forEach(item => {
+                    if (item.status !== 'active') return;
+
+                    const itemStartDate = new Date(item.startDate);
+                    const itemEndDate = item.endDate ? new Date(item.endDate) : null;
+
+                    if (d < itemStartDate || (itemEndDate && d > itemEndDate)) {
+                        return; // Skip if outside the item's active range
+                    }
+                    
+                    let shouldAdd = false;
+                    switch (item.frequency) {
+                        case 'Daily':
+                            shouldAdd = true;
+                            break;
+                        case 'Weekly':
+                            if (d.getDay() === itemStartDate.getDay()) shouldAdd = true;
+                            break;
+                        case 'Bi-Weekly':
+                            const weeksSinceStart = Math.floor((d - itemStartDate) / (1000 * 60 * 60 * 24 * 7));
+                            if (d.getDay() === itemStartDate.getDay() && weeksSinceStart % 2 === 0) shouldAdd = true;
+                            break;
+                        case 'Monthly':
+                            if (d.getDate() === itemStartDate.getDate()) shouldAdd = true;
+                            break;
+                        case 'Quarterly':
+                            const monthDiff = (d.getFullYear() - itemStartDate.getFullYear()) * 12 + d.getMonth() - itemStartDate.getMonth();
+                            if (d.getDate() === itemStartDate.getDate() && monthDiff > 0 && monthDiff % 3 === 0) shouldAdd = true;
+                            break;
+        
+                        case 'Annual':
+                            if (d.getMonth() === itemStartDate.getMonth() && d.getDate() === itemStartDate.getDate()) shouldAdd = true;
+                    break;
+                }
+
+                    if (shouldAdd) {
+                        const newExpense = {
+                            id: `auto-${item.id}-${currentDateStr}`,
+                            name: item.name,
+                            cost: item.amount,
+                            type: item.type === 'expense' ? item.essentialType : 'Income',
+                            category: item.category,
+                            date: currentDateStr,
+                            paymentMethod: item.paymentMethod,
+                            status: 'active',
+                            recurringSourceId: item.id
+                        };
+
+                        // Avoid adding duplicates
+                        if (!expenses.some(e => e.id === newExpense.id)) {
+                             if (item.type === 'expense') {
+                                expenses.unshift(newExpense);
+                                newExpensesGenerated = true;
+                            }
+                        }
+                    }
+                });
+            }
+
+            localStorage.setItem('lastRecurringCheck', todayStr);
+            
+            if (newExpensesGenerated) {
+                showToast('New recurring expenses have been automatically added.', 'info');
+                saveData();
+                updateDisplay();
+            }
+            }
+
         // --- Onboarding ---
         function startOnboardingProcess() {
-            if (localStorage.getItem('onboardingComplete') !== 'true') {
+            const firstVisit = localStorage.getItem('onboardingComplete') !== 'true';
+            if (firstVisit) {
                 document.getElementById('setup-modal').classList.remove('hidden');
             }
         }
@@ -1679,17 +1776,6 @@
         }
 
         function deleteExpense(id) {
-            // Handle deleting recurring instances from the expenses tab
-            if (typeof id === 'string' && id.startsWith('recurring-')) {
-                if (confirm('This is a recurring expense. Deleting it from this view will not stop future occurrences. To manage the series, please go to the Recurring tab. Do you want to proceed?')) {
-                    // This is a virtual deletion for the current view only.
-                    // We can't permanently delete a single instance without complex logic,
-                    // so for now we just refresh the view.
-                    showToast('Action acknowledged. Manage recurring items in their tab.', 'info');
-                }
-                return;
-            }
-
             if (confirm('Are you sure you want to permanently delete this expense?')) {
                 expenses = expenses.filter(e => e.id !== id);
                 selectedExpenseIds.delete(id.toString());
@@ -1700,16 +1786,12 @@
         }
 
         function toggleExpenseStatus(id) {
-            // Find in regular expenses
             const expense = expenses.find(e => e.id === id);
             if (expense) {
                 expense.status = expense.status === 'active' ? 'cancelled' : 'active';
                 saveData();
                 updateDisplay();
                 showToast(`Expense status updated to ${expense.status}.`);
-            } else {
-                // Handle recurring items if not found in regular expenses
-                showToast('Cannot change status of a recurring item instance from here.', 'info');
             }
         }
         
@@ -1816,12 +1898,13 @@
         }
 
         function deleteRecurring(id) {
-            if (confirm('Are you sure you want to delete this recurring item?')) {
+            if (confirm('Are you sure you want to delete this recurring item and all its automatically generated future expenses?')) {
                 recurringItems = recurringItems.filter(r => r.id !== id);
+                expenses = expenses.filter(e => e.recurringSourceId !== id); // Also remove generated expenses
                 selectedRecurringIds.delete(id);
                 saveData();
                 updateDisplay();
-                showToast('Recurring item deleted successfully!');
+                showToast('Recurring item and its generated entries deleted!');
             }
         }
         
@@ -2210,10 +2293,10 @@
             }
 
             tableBody.innerHTML = filteredExpenses.map(expense => {
-                const isRecurringInstance = expense.isRecurring || false;
+                const isRecurringInstance = typeof expense.id === 'string' && expense.id.startsWith('recurring-');
                 const isCancelled = expense.status === 'cancelled';
                 const editAction = isRecurringInstance ? `editRecurring(${expense.originalRecurringId})` : `editExpense(${expense.id})`;
-                const deleteAction = `deleteExpense('${expense.id}')`;
+                const deleteAction = isRecurringInstance ? 'return false;' : `deleteExpense(${expense.id})`;
                 const statusToggleAction = isRecurringInstance ? `toggleRecurringStatus(${expense.originalRecurringId})` : `toggleExpenseStatus(${expense.id})`;
                 const checkboxId = `expense-${expense.id}`;
 
@@ -2234,10 +2317,10 @@
                         </td>
                         <td class="px-6 py-3 text-right">
                             <div class="flex items-center justify-end gap-1">
-                                <button onclick="${editAction}" title="Edit" class="icon-button">
+                                <button onclick="${editAction}" title="Edit" class="icon-button" ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
                                 </button>
-                            <button onclick="${deleteAction}" title="Delete" class="icon-button text-red-600/80 hover:text-red-500" ${isRecurringInstance ? 'disabled' : ''}>
+                                <button onclick="${deleteAction}" title="Delete" class="icon-button text-red-600/80 hover:text-red-500" ${isRecurringInstance ? 'disabled' : ''} ${isRecurringInstance ? 'opacity-50 cursor-not-allowed' : ''}>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
                                 </button>
                             </div>
@@ -2252,7 +2335,7 @@
             const type = document.getElementById('recurring-filter-type').value;
             const category = document.getElementById('recurring-filter-category').value;
             const frequency = document.getElementById('recurring-filter-frequency').value;
-            
+
             let filtered = recurringItems.filter(item => {
                 if (type && item.type !== type) return false;
                 if (category && item.category !== category) return false;
@@ -2283,7 +2366,7 @@
                     <td class="px-6 py-4 hidden lg:table-cell">${escapeHTML(item.category)}</td>
                     <td class="px-6 py-4"><span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span></td>
                     <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap">
-                        <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg></button>
+                        <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
                         <button onclick="toggleRecurringStatus(${item.id})" class="icon-button" title="${item.status === 'active' ? 'Pause' : 'Resume'}">
                            ${item.status === 'active' ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'}
                         </button>
@@ -2542,7 +2625,7 @@
             const settingsContainer = DOMElements.settingsMenu.parentElement;
             if (settingsContainer && !DOMElements.settingsMenu.classList.contains('hidden') && !settingsContainer.contains(e.target)) {
                 DOMElements.settingsMenu.classList.add('hidden');
-            }
+        }
         });
 
         function generateExpensesFromRecurring() {
@@ -2640,8 +2723,8 @@
             }
             if (typeSelect) {
                 typeSelect.value = matchedEssential;
-            }
-        }
+                    }
+                }
 
         // --- Settings Modal ---
         function openSettings(section) {
@@ -2685,6 +2768,141 @@
                 maximumFractionDigits: (currentCurrencyCode === 'JPY' || isInteger) ? 0 : 2,
             };
             return new Intl.NumberFormat(config.locale, options).format(amount || 0);
+        }
+
+        // --- Data Getters ---
+        function getExpenses() {
+            // New, simplified logic: Return all stored expenses.
+            // The old logic for dynamically generating recurring instances is no longer needed.
+            return [...expenses];
+        }
+
+        function getRecurringItems() {
+            // Simplified for clarity, just returns the array
+            return [...recurringItems];
+        }
+
+
+        // --- Update & Render ---
+        function updateDisplay() {
+            console.time('updateDisplay');
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+
+            // Centralized calculations for all expenses this month
+            const monthlyRecurring = getMonthlyRecurringTotals(currentYear, currentMonth);
+            const totalMonthlyIncome = monthlyIncome + monthlyRecurring.income;
+
+            const allMonthlyExpenses = [
+                ...expenses.filter(e => {
+                    const expenseDate = new Date(e.date);
+                    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+                }),
+                ...generateExpensesFromRecurring().filter(e => {
+                    const expenseDate = new Date(e.date);
+                    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+                })
+            ];
+            const activeMonthlyExpenses = allMonthlyExpenses.filter(e => e.status === 'active');
+            const totalSpent = activeMonthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
+
+            // --- Update UI Tiles ---
+            const budgetStr = formatCurrency(monthlyBudget);
+            const spentStr = formatCurrency(totalSpent);
+            const incomeStr = formatCurrency(totalMonthlyIncome);
+            const remaining = monthlyBudget - totalSpent;
+            const remainingStr = formatCurrency(remaining);
+
+            // Find the longest string to determine a consistent font size
+            const maxLength = Math.max(budgetStr.length, spentStr.length, incomeStr.length, remainingStr.length);
+            const responsiveSize = getResponsiveFontSize(" ".repeat(maxLength));
+
+            DOMElements.monthlyBudgetDisplay.textContent = budgetStr;
+            DOMElements.monthlyBudgetDisplay.style.fontSize = responsiveSize;
+
+            DOMElements.totalExpensesDisplay.textContent = spentStr;
+            DOMElements.totalExpensesDisplay.style.fontSize = responsiveSize;
+            
+            DOMElements.totalIncomeDisplay.textContent = incomeStr;
+            DOMElements.totalIncomeDisplay.style.fontSize = responsiveSize;
+
+            DOMElements.remainingAmountDisplay.textContent = remainingStr;
+            DOMElements.remainingAmountDisplay.style.fontSize = responsiveSize;
+
+            if (remaining < 0) {
+                DOMElements.remainingAmountDisplay.classList.remove('text-green-600', 'dark:text-green-400');
+                DOMElements.remainingAmountDisplay.classList.add('text-red-600', 'dark:text-red-400');
+            } else {
+                DOMElements.remainingAmountDisplay.classList.remove('text-red-600', 'dark:text-red-400');
+                DOMElements.remainingAmountDisplay.classList.add('text-green-600', 'dark:text-green-400');
+            }
+
+            updateQuickAddButtons();
+
+            // Budget Health & Progress Bar
+            const budgetProgress = (monthlyBudget > 0) ? (totalSpent / monthlyBudget) * 100 : 0;
+            DOMElements.budgetBar.style.width = `${Math.min(budgetProgress, 100)}%`;
+            DOMElements.budgetBar.classList.remove('bg-blue-600', 'bg-red-600');
+            DOMElements.budgetBar.classList.add(budgetProgress > 100 ? 'bg-red-600' : 'bg-blue-600');
+            DOMElements.budgetPercentage.textContent = `${budgetProgress.toFixed(0)}% Used`;
+            
+            updateBudgetHealthScore(totalSpent, monthlyBudget, activeMonthlyExpenses);
+            
+            // Spending Breakdown
+            const essentialSpending = activeMonthlyExpenses.filter(e => e.type === 'Essential').reduce((sum, e) => sum + e.cost, 0);
+            const nonEssentialSpending = activeMonthlyExpenses.filter(e => e.type === 'Non-Essential').reduce((sum, e) => sum + e.cost, 0);
+            DOMElements.essentialSpendingDisplay.textContent = formatCurrency(essentialSpending);
+            DOMElements.nonEssentialSpendingDisplay.textContent = formatCurrency(nonEssentialSpending);
+            const totalBreakdown = essentialSpending + nonEssentialSpending;
+            const essentialPercent = totalBreakdown > 0 ? (essentialSpending / totalBreakdown) * 100 : 0;
+            DOMElements.essentialBar.style.width = `${essentialPercent}%`;
+            DOMElements.nonEssentialBar.style.width = `${100 - essentialPercent}%`;
+
+            renderRecentExpenses();
+            renderExpensesTable();
+            renderRecurringTable();
+            
+            if (activeTab === 'insights') {
+                updateChartsAndInsights();
+            }
+            updateDeleteSelectedButton();
+            updateDeleteSelectedRecurringButton();
+            console.timeEnd('updateDisplay');
+        }
+
+        function deleteExpense(id) {
+            if (confirm('Are you sure you want to permanently delete this expense?')) {
+                expenses = expenses.filter(e => e.id !== id);
+                selectedExpenseIds.delete(id.toString());
+                saveData();
+                updateDisplay();
+                showToast('Expense deleted successfully!');
+            }
+        }
+
+        function toggleExpenseStatus(id) {
+            const expense = expenses.find(e => e.id === id);
+            if (expense) {
+                expense.status = expense.status === 'active' ? 'cancelled' : 'active';
+                saveData();
+                updateDisplay();
+                showToast(`Expense status updated to ${expense.status}.`);
+        }
+        }
+
+        function toggleRecurringStatusInExpenseView(recurringId) {
+            const item = recurringItems.find(r => r.id === recurringId);
+            if (item) {
+                item.status = item.status === 'active' ? 'cancelled' : 'active';
+                saveData();
+                updateDisplay();
+                showToast(`Status of recurring series '${item.name}' has been updated.`);
+            }
+        }
+        
+        function toggleFilterPanel(panelId) {
+            document.getElementById(panelId).classList.toggle('hidden');
         }
     </script>
 </body>
