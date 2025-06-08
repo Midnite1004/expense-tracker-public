@@ -528,8 +528,8 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>
                                     <span class="hidden sm:inline">Settings</span>
                                 </button>
-                            </div>
-                        </div>
+                                        </div>
+                                        </div>
                     </div>
                 </div>
                 <!-- Navigation Tabs -->
@@ -584,7 +584,7 @@
                                     Edit budget & income
                                 </button>
                             </div>
-
+                
                             <!-- Budget Health & Progress -->
                             <div class="card p-6">
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
@@ -647,44 +647,40 @@
                             <div class="card p-6">
                                 <h3 class="text-lg font-semibold mb-4">Quick Add Common Expenses</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4">
-                                        <button onclick="quickAddExpense('Coffee', 'Food', 'Non-Essential', 5)" 
-                                            class="flex items-center justify-between w-full">
-                                            <div class="flex items-center">
+                                    <div id="quick-add-coffee">
+                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4 flex items-center w-full">
+                                            <div class="flex-grow flex items-center">
                                                 <span class="mr-2">☕</span>
                                                 <span class="text-white">Coffee</span>
                                             </div>
-                                            <span class="text-white font-medium">£5</span>
+                                            <span class="text-white font-medium ml-4"></span>
                                         </button>
                                     </div>
-                                    <div class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4">
-                                        <button onclick="quickAddExpense('Transport', 'Transport', 'Essential', 10)" 
-                                            class="flex items-center justify-between w-full">
-                                            <div class="flex items-center">
+                                    <div id="quick-add-transport">
+                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4 flex items-center w-full">
+                                            <div class="flex-grow flex items-center">
                                                 <span class="mr-2">🚌</span>
                                                 <span class="text-white">Transport</span>
                                             </div>
-                                            <span class="text-white font-medium">£10</span>
+                                            <span class="text-white font-medium ml-4"></span>
                                         </button>
                                     </div>
-                                    <div class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4">
-                                        <button onclick="quickAddExpense('Lunch', 'Food', 'Non-Essential', 15)" 
-                                            class="flex items-center justify-between w-full">
-                                            <div class="flex items-center">
+                                    <div id="quick-add-lunch">
+                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4 flex items-center w-full">
+                                            <div class="flex-grow flex items-center">
                                                 <span class="mr-2">🥪</span>
                                                 <span class="text-white">Lunch</span>
                                             </div>
-                                            <span class="text-white font-medium">£15</span>
+                                            <span class="text-white font-medium ml-4"></span>
                                         </button>
                                     </div>
-                                    <div class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4">
-                                        <button onclick="quickAddExpense('Groceries', 'Food', 'Essential', 50)" 
-                                            class="flex items-center justify-between w-full">
-                                            <div class="flex items-center">
+                                    <div id="quick-add-groceries">
+                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4 flex items-center w-full">
+                                            <div class="flex-grow flex items-center">
                                                 <span class="mr-2">🛒</span>
                                                 <span class="text-white">Groceries</span>
                                             </div>
-                                            <span class="text-white font-medium">£50</span>
+                                            <span class="text-white font-medium ml-4"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -755,11 +751,11 @@
                                         <option value="Non-Essential">Non-Essential</option>
                                         <option value="Recurring">Recurring</option>
                                     </select>
-                                </div>
-                                <!-- Clear Filters -->
+                            </div>
+                            <!-- Clear Filters -->
                                 <div class="md:col-span-3 flex justify-end gap-2">
-                                    <button onclick="applyExpenseFilters()" class="modern-button modern-button-primary">Apply Filters</button>
-                                    <button onclick="clearExpenseFilters()" class="modern-button modern-button-secondary">Clear Filters</button>
+                                <button onclick="applyExpenseFilters()" class="modern-button modern-button-primary">Apply Filters</button>
+                                <button onclick="clearExpenseFilters()" class="modern-button modern-button-secondary">Clear Filters</button>
                                 </div>
                             </div>
                         </div>
@@ -1192,7 +1188,7 @@
                         <input type="date" id="recurring-end-date" class="modern-input mt-1">
                     </div>
                 </div>
-                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                      <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method</label>
                         <select id="recurring-payment-method" class="modern-select mt-1">
@@ -1336,8 +1332,6 @@
             updateCurrencyUI();
             updateDisplay();
             showTab(activeTab);
-            DOMElements.budgetInput.value = monthlyBudget > 0 ? monthlyBudget : '';
-            DOMElements.incomeInput.value = monthlyIncome > 0 ? monthlyIncome : '';
             DOMElements.expenseDate.value = new Date().toISOString().split('T')[0];
             DOMElements.recurringStartDate.value = new Date().toISOString().split('T')[0];
 
@@ -1550,8 +1544,6 @@
                         currentCurrencyCode = importedData.currentCurrencyCode || 'GBP';
                         activeTab = importedData.activeTab || 'overview';
                         
-                        DOMElements.budgetInput.value = monthlyBudget > 0 ? monthlyBudget : '';
-                        DOMElements.incomeInput.value = monthlyIncome > 0 ? monthlyIncome : '';
                         DOMElements.currencySelect.value = currentCurrencyCode;
 
                         saveData();
@@ -1994,7 +1986,7 @@
         }
 
         // --- UI Update Functions ---
-        function setResponsiveFontSize(element, text) {
+        function getResponsiveFontSize(text) {
             const baseSize = 1.875; // Corresponds to text-3xl
             const minSize = 1.25; // Corresponds to text-xl
             const maxLength = 8; // Start shrinking after 8 characters
@@ -2003,7 +1995,37 @@
             if (text.length > maxLength) {
                 newSize = Math.max(minSize, baseSize - (text.length - maxLength) * 0.15);
             }
-            element.style.fontSize = `${newSize}rem`;
+            return `${newSize}rem`;
+        }
+
+        function updateQuickAddButtons() {
+            const quickAddData = {
+                'JPY': [
+                    { id: 'quick-add-coffee', name: 'Coffee', category: 'Food/Drink', type: 'Non-Essential', cost: 500 },
+                    { id: 'quick-add-transport', name: 'Transport', category: 'Transport', type: 'Essential', cost: 700 },
+                    { id: 'quick-add-lunch', name: 'Lunch', category: 'Food/Drink', type: 'Non-Essential', cost: 1000 },
+                    { id: 'quick-add-groceries', name: 'Groceries', category: 'Food/Drink', type: 'Essential', cost: 20000 }
+                ],
+                'default': [
+                    { id: 'quick-add-coffee', name: 'Coffee', category: 'Food/Drink', type: 'Non-Essential', cost: 5 },
+                    { id: 'quick-add-transport', name: 'Transport', category: 'Transport', type: 'Essential', cost: 10 },
+                    { id: 'quick-add-lunch', name: 'Lunch', category: 'Food/Drink', type: 'Non-Essential', cost: 15 },
+                    { id: 'quick-add-groceries', name: 'Groceries', category: 'Food/Drink', type: 'Essential', cost: 50 }
+                ]
+            };
+
+            const currencyData = quickAddData[currentCurrencyCode] || quickAddData['default'];
+            
+            currencyData.forEach(item => {
+                const container = document.getElementById(item.id);
+                if (container) {
+                    const button = container.querySelector('button');
+                    const costSpan = button.querySelector('span.font-medium');
+
+                    costSpan.textContent = formatCurrency(item.cost);
+                    button.onclick = () => quickAddExpense(item.name, item.category, item.type, item.cost);
+                }
+            });
         }
 
         function updateDisplay() {
@@ -2030,22 +2052,26 @@
 
             // --- Update UI Tiles ---
             const budgetStr = formatCurrency(monthlyBudget);
-            DOMElements.monthlyBudgetDisplay.textContent = budgetStr;
-            setResponsiveFontSize(DOMElements.monthlyBudgetDisplay, budgetStr);
-
             const spentStr = formatCurrency(totalSpent);
-            DOMElements.totalExpensesDisplay.textContent = spentStr;
-            setResponsiveFontSize(DOMElements.totalExpensesDisplay, spentStr);
-            
             const incomeStr = formatCurrency(totalMonthlyIncome);
-            DOMElements.totalIncomeDisplay.textContent = incomeStr;
-            setResponsiveFontSize(DOMElements.totalIncomeDisplay, incomeStr);
-
-            // Correctly calculate and display the "Remaining" tile based on BUDGET.
             const remaining = monthlyBudget - totalSpent;
             const remainingStr = formatCurrency(remaining);
+
+            // Find the longest string to determine a consistent font size
+            const maxLength = Math.max(budgetStr.length, spentStr.length, incomeStr.length, remainingStr.length);
+            const responsiveSize = getResponsiveFontSize(" ".repeat(maxLength));
+
+            DOMElements.monthlyBudgetDisplay.textContent = budgetStr;
+            DOMElements.monthlyBudgetDisplay.style.fontSize = responsiveSize;
+
+            DOMElements.totalExpensesDisplay.textContent = spentStr;
+            DOMElements.totalExpensesDisplay.style.fontSize = responsiveSize;
+            
+            DOMElements.totalIncomeDisplay.textContent = incomeStr;
+            DOMElements.totalIncomeDisplay.style.fontSize = responsiveSize;
+
             DOMElements.remainingAmountDisplay.textContent = remainingStr;
-            setResponsiveFontSize(DOMElements.remainingAmountDisplay, remainingStr);
+            DOMElements.remainingAmountDisplay.style.fontSize = responsiveSize;
 
             if (remaining < 0) {
                 DOMElements.remainingAmountDisplay.classList.remove('text-green-600', 'dark:text-green-400');
@@ -2055,12 +2081,14 @@
                 DOMElements.remainingAmountDisplay.classList.add('text-green-600', 'dark:text-green-400');
             }
 
-            // Budget Progress Bar
-            const budgetUsedPercentage = monthlyBudget > 0 ? (totalSpent / monthlyBudget) * 100 : 0;
-            DOMElements.budgetBar.style.width = `${Math.min(100, budgetUsedPercentage)}%`;
+            updateQuickAddButtons();
+
+            // Budget Health & Progress Bar
+            const budgetProgress = (monthlyBudget > 0) ? (totalSpent / monthlyBudget) * 100 : 0;
+            DOMElements.budgetBar.style.width = `${Math.min(budgetProgress, 100)}%`;
             DOMElements.budgetBar.classList.remove('bg-blue-600', 'bg-red-600');
-            DOMElements.budgetBar.classList.add(budgetUsedPercentage > 100 ? 'bg-red-600' : 'bg-blue-600');
-            DOMElements.budgetPercentage.textContent = `${budgetUsedPercentage.toFixed(0)}% Used`;
+            DOMElements.budgetBar.classList.add(budgetProgress > 100 ? 'bg-red-600' : 'bg-blue-600');
+            DOMElements.budgetPercentage.textContent = `${budgetProgress.toFixed(0)}% Used`;
             
             updateBudgetHealthScore(totalSpent, monthlyBudget, activeMonthlyExpenses);
             
@@ -2130,7 +2158,7 @@
             const fillRotation = -135 + (score / 100) * 180;
             DOMElements.healthScoreFill.style.transform = `rotate(${fillRotation}deg)`;
         }
-        
+
         function renderRecentExpenses() {
             DOMElements.recentExpensesContainer.innerHTML = '';
             const allDisplayExpenses = [...expenses, ...generateExpensesFromRecurring()];
@@ -2206,19 +2234,19 @@
                         </td>
                         <td class="px-6 py-3 text-right">
                             <div class="flex items-center justify-end gap-1">
-                            <button onclick="${editAction}" title="Edit" class="icon-button">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
-                            </button>
+                                <button onclick="${editAction}" title="Edit" class="icon-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                                </button>
                             <button onclick="${deleteAction}" title="Delete" class="icon-button text-red-600/80 hover:text-red-500" ${isRecurringInstance ? 'disabled' : ''}>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
-                            </button>
-                           </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;
             }).join('');
         }
-        
+
         function renderRecurringTable() {
             DOMElements.recurringTableBody.innerHTML = '';
             const type = document.getElementById('recurring-filter-type').value;
@@ -2549,7 +2577,7 @@
                         isRecurring: true,
                         originalRecurringId: item.id
                     });
-
+                    
                     // Increment currentDate based on frequency
                     switch (item.frequency) {
                         case 'Daily':
@@ -2645,6 +2673,18 @@
 
             closeSettings();
             showToast('Settings saved successfully!');
+        }
+
+        function formatCurrency(amount) {
+            const config = currencyConfig[currentCurrencyCode];
+            const isInteger = amount % 1 === 0;
+            const options = {
+                style: 'currency',
+                currency: currentCurrencyCode,
+                minimumFractionDigits: (currentCurrencyCode === 'JPY' || isInteger) ? 0 : 2,
+                maximumFractionDigits: (currentCurrencyCode === 'JPY' || isInteger) ? 0 : 2,
+            };
+            return new Intl.NumberFormat(config.locale, options).format(amount || 0);
         }
     </script>
 </body>
