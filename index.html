@@ -1994,6 +1994,18 @@
         }
 
         // --- UI Update Functions ---
+        function setResponsiveFontSize(element, text) {
+            const baseSize = 1.875; // Corresponds to text-3xl
+            const minSize = 1.25; // Corresponds to text-xl
+            const maxLength = 8; // Start shrinking after 8 characters
+            
+            let newSize = baseSize;
+            if (text.length > maxLength) {
+                newSize = Math.max(minSize, baseSize - (text.length - maxLength) * 0.15);
+            }
+            element.style.fontSize = `${newSize}rem`;
+        }
+
         function updateDisplay() {
             const now = new Date();
             const currentMonth = now.getMonth();
@@ -2017,30 +2029,29 @@
             const totalSpent = activeMonthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
 
             // --- Update UI Tiles ---
-            DOMElements.monthlyBudgetDisplay.textContent = formatCurrency(monthlyBudget);
-            DOMElements.totalExpensesDisplay.textContent = formatCurrency(totalSpent);
-            DOMElements.totalIncomeDisplay.textContent = formatCurrency(totalMonthlyIncome);
+            const budgetStr = formatCurrency(monthlyBudget);
+            DOMElements.monthlyBudgetDisplay.textContent = budgetStr;
+            setResponsiveFontSize(DOMElements.monthlyBudgetDisplay, budgetStr);
+
+            const spentStr = formatCurrency(totalSpent);
+            DOMElements.totalExpensesDisplay.textContent = spentStr;
+            setResponsiveFontSize(DOMElements.totalExpensesDisplay, spentStr);
+            
+            const incomeStr = formatCurrency(totalMonthlyIncome);
+            DOMElements.totalIncomeDisplay.textContent = incomeStr;
+            setResponsiveFontSize(DOMElements.totalIncomeDisplay, incomeStr);
 
             // Correctly calculate and display the "Remaining" tile based on BUDGET.
-            const remainingBudget = monthlyBudget - totalSpent;
-            const remainingAmountTile = DOMElements.remainingAmountDisplay.parentElement;
-            const remainingAmountTitle = remainingAmountTile.querySelector('.stat-card-title');
+            const remaining = monthlyBudget - totalSpent;
+            const remainingStr = formatCurrency(remaining);
+            DOMElements.remainingAmountDisplay.textContent = remainingStr;
+            setResponsiveFontSize(DOMElements.remainingAmountDisplay, remainingStr);
 
-            // Reset styles
-            remainingAmountTile.className = 'stat-card'; // Reset to base class
-            DOMElements.remainingAmountDisplay.classList.remove('text-red-600', 'text-green-600', 'dark:text-red-400', 'dark:text-green-400');
-
-            if (remainingBudget < 0) {
-                // Over budget state
-                remainingAmountTitle.textContent = 'Remaining';
-                DOMElements.remainingAmountDisplay.textContent = formatCurrency(0); // Show 0 as requested
-                remainingAmountTile.classList.add('bg-red-50', 'dark:bg-red-900/30', 'border-red-200', 'dark:border-red-800');
+            if (remaining < 0) {
+                DOMElements.remainingAmountDisplay.classList.remove('text-green-600', 'dark:text-green-400');
                 DOMElements.remainingAmountDisplay.classList.add('text-red-600', 'dark:text-red-400');
             } else {
-                // Within budget state
-                remainingAmountTitle.textContent = 'Remaining';
-                DOMElements.remainingAmountDisplay.textContent = formatCurrency(remainingBudget);
-                remainingAmountTile.classList.add('bg-green-50', 'dark:bg-green-900/30', 'border-green-200', 'dark:border-green-800');
+                DOMElements.remainingAmountDisplay.classList.remove('text-red-600', 'dark:text-red-400');
                 DOMElements.remainingAmountDisplay.classList.add('text-green-600', 'dark:text-green-400');
             }
 
