@@ -473,9 +473,12 @@
             background-color: var(--bg-primary);
             color: var(--text-primary);
             border: 1px solid var(--border-color);
+            border-radius: 0.75rem; /* Match card radius */
         }
         .driver-popover-title {
             color: var(--text-primary);
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600;
         }
         .driver-popover-description {
             color: var(--text-secondary);
@@ -500,6 +503,32 @@
         }
         .driver-popover-arrow-side-bottom.driver-popover-arrow {
             border-bottom-color: var(--border-color);
+        }
+        .driver-popover-footer {
+            gap: 0.5rem;
+        }
+        .driver-popover-next-btn, .driver-popover-prev-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s, transform 0.1s;
+            border: none;
+            cursor: pointer;
+            text-shadow: none;
+        }
+        .driver-popover-next-btn {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+        .driver-popover-next-btn:hover {
+            background-color: #2563eb; /* Darker blue */
+        }
+        .driver-popover-prev-btn {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        .driver-popover-prev-btn:hover {
+            background-color: var(--border-color);
         }
 
         /* Settings Modal Text Color Fix */
@@ -1355,8 +1384,8 @@
                     </section>
                 </div>
             </div>
-            <div class="flex gap-3 mt-auto p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <button onclick="closeHelpModal()" class="modern-button modern-button-primary w-full">Close</button>
+            <div class="flex justify-center p-4">
+                <button onclick="closeHelpModal()" class="modern-button modern-button-primary w-56">Close</button>
             </div>
         </div>
     </div>
@@ -1633,7 +1662,7 @@
                 popoverClass: 'driver-popover',
                 steps: [
                     { 
-                        element: '.sm\\:items-center .gap-3 h1', 
+                        element: 'h1.text-2xl', 
                         popover: { 
                             title: 'Welcome to Your Expense Tracker!', 
                             description: "Let's take a quick tour to get you started.",
@@ -1641,11 +1670,11 @@
                         } 
                     },
                     { 
-                        element: '#budget-input', 
+                        element: 'button[onclick="openSettings(\'budget\')"]',
                         popover: { 
-                            title: 'Set Your Monthly Budget', 
-                            description: 'Start by entering your total monthly budget. This is the baseline for tracking your spending.',
-                            side: "bottom"
+                            title: 'Set Your Budget & Income', 
+                            description: 'Use the settings to enter your monthly budget and income. This is the baseline for all tracking.',
+                            side: "top"
                         } 
                     },
                     { 
@@ -1673,7 +1702,7 @@
                         } 
                     },
                     { 
-                        element: 'button[onclick="toggleSettings()"]', 
+                        element: 'button[onclick="openSettings()"]', 
                         popover: { 
                             title: 'Settings & Data', 
                             description: 'Change the theme, set your currency, and import or export your data here.',
@@ -1685,12 +1714,12 @@
                     localStorage.setItem('onboardingComplete', 'true');
                     
                     // Animate quick-add tiles
-                    const quickAddTiles = document.querySelectorAll('.card button[onclick^="quickAddExpense"]');
-                    quickAddTiles.forEach(tile => tile.parentElement.classList.add('animate-pulse'));
+                    const quickAddContainers = document.querySelectorAll('[id^="quick-add-"]');
+                    quickAddContainers.forEach(container => container.classList.add('animate-pulse'));
                     
                     setTimeout(() => {
-                        quickAddTiles.forEach(tile => tile.parentElement.classList.remove('animate-pulse'));
-                    }, 4000);
+                        quickAddContainers.forEach(container => container.classList.remove('animate-pulse'));
+                    }, 3000);
                 }
             });
 
@@ -2834,7 +2863,7 @@
             const monthlyData = getMonthlyIncomeAndExpenses(12);
             const labels = monthlyData.map(m => new Date(m.year, m.month).toLocaleString('default', {month: 'short', year: '2-digit'}));
             const data = monthlyData.map(m => m.expenses);
-
+            
             if (categorySpendingChart) categorySpendingChart.destroy();
             const isDarkMode = DOMElements.html.classList.contains('dark');
             const options = getChartOptions(isDarkMode);
@@ -2963,7 +2992,7 @@
                 <div class="flex items-center justify-between text-sm p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800/50">
                     <div>
                         <div class="font-medium text-gray-800 dark:text-gray-200">${escapeHTML(item.name)}</div>
-                        <div class="text-xs text-gray-600 dark:text-gray-400">${item.dueDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">${item.dueDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</div>
                     </div>
                     <div class="font-semibold text-red-500 dark:text-red-400">${formatCurrency(item.amount)}</div>
                 </div>
@@ -3003,7 +3032,7 @@
                         <p class="text-3xl font-bold ${projectedSavings >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
                             ${formatCurrency(projectedSavings, false)}
                         </p>
-                        <p class="text-xs text-gray-600 dark:text-gray-400">Based on monthly income</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-500">Based on monthly income</p>
                     </div>
                 </div>
             `;
@@ -3052,7 +3081,7 @@
                     <div class="text-xl pt-1">${rec.icon}</div>
                     <div>
                         <h4 class="font-semibold text-gray-800 dark:text-gray-200">${rec.title}</h4>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">${rec.description}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">${rec.description}</p>
                     </div>
                 </div>
             `).join('');
@@ -3068,7 +3097,7 @@
             if (totalSpent === 0) {
                  storyContainer.innerHTML = `<div class="text-center text-sm text-gray-500 dark:text-gray-400 p-4">Start adding expenses to see your monthly story unfold.</div>`;
                  metricsContainer.classList.add('hidden');
-                 return;
+                return;
             }
 
             const savingsRate = totalIncome > 0 ? ((totalIncome - totalSpent) / totalIncome) * 100 : 0;
@@ -3098,25 +3127,25 @@
                 story += `Your busiest spending day was the <strong>${busiestDay[0]}th</strong>, and your top category was <strong>${topCategory[0]}</strong>.`;
             }
 
-            storyContainer.innerHTML = `<p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">${story}</p>`;
+            storyContainer.innerHTML = `<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${story}</p>`;
             
             metricsContainer.innerHTML = `
                 <div class="metric-card">
-                    <p class="text-xs font-medium text-slate-600 dark:text-slate-400">Savings Rate</p>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Savings Rate</p>
                     <p class="text-lg font-bold ${savingsRate >=0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">${savingsRate.toFixed(0)}%</p>
                 </div>
                 <div class="metric-card">
-                    <p class="text-xs font-medium text-slate-600 dark:text-slate-400">Top Category</p>
-                    <p class="text-lg font-bold text-slate-800 dark:text-slate-200 truncate">${topCategory ? topCategory[0] : '-'}</p>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Top Category</p>
+                    <p class="text-lg font-bold text-gray-800 dark:text-gray-200 truncate">${topCategory ? topCategory[0] : '-'}</p>
                 </div>
                 <div class="metric-card">
-                    <p class="text-xs font-medium text-slate-600 dark:text-slate-400">Busiest Day</p>
-                    <p class="text-lg font-bold text-slate-800 dark:text-slate-200">${busiestDay ? busiestDay[0] + 'th' : '-'}</p>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Busiest Day</p>
+                    <p class="text-lg font-bold text-gray-800 dark:text-gray-200">${busiestDay ? busiestDay[0] + 'th' : '-'}</p>
                 </div>
             `;
             metricsContainer.classList.remove('hidden');
         }
-
+        
         // --- Utility Functions ---
         function formatCurrency(amount, useDecimals = true) {
             const { locale } = currencyConfig[currentCurrencyCode];
