@@ -649,7 +649,6 @@
                         <button onclick="showTab('expenses')" id="tab-expenses" class="tab-button">Expenses</button>
                         <button onclick="showTab('recurring')" id="tab-recurring" class="tab-button">Recurring</button>
                         <button onclick="showTab('insights')" id="tab-insights" class="tab-button">Insights</button>
-                        <button onclick="showTab('help')" id="tab-help" class="tab-button">Help</button>
                     </nav>
                 </div>
             </div>
@@ -1063,79 +1062,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Help Tab -->
-                <div id="help-tab" class="tab-content hidden fade-in">
-                    <div class="card p-6 md:p-8">
-                        <h2 class="text-2xl font-bold mb-6">Help & Documentation</h2>
-                        <div class="space-y-8 text-sm leading-relaxed">
-                            
-                            <section>
-                                <h3 class="text-lg font-semibold mb-3 border-b pb-2">🚀 Getting Started</h3>
-                                <p>Welcome to your AI-powered Expense Tracker! The first time you use the app, an onboarding tour will guide you through the key features. You can start by visiting the <button onclick="openSettings('budget')" class="text-blue-600 hover:underline">Settings</button> to set your monthly budget and income.</p>
-                            </section>
-
-                            <section>
-                                <h3 class="text-lg font-semibold mb-3 border-b pb-2">The Dashboard Tabs</h3>
-                                <div class="space-y-6">
-                                    <div>
-                                        <h4 class="font-semibold text-md mb-2">🎯 Overview</h4>
-                                        <p class="mb-2">This is your main financial dashboard, giving you a live snapshot of your finances for the current month.</p>
-                                        <ul class="list-disc ml-5 space-y-1">
-                                            <li><strong>Key Stats:</strong> See your total monthly budget, how much you've spent, what's remaining, and your total income.</li>
-                                            <li><strong>Budget Progress & AI Projection:</strong> A visual bar shows how much of your budget is used. The AI projection forecasts your total spending by month-end.</li>
-                                            <li><strong>Budget Health Score:</strong> A score from 0-100 that measures how well you're managing your finances. Hover over it for a detailed breakdown of what's affecting your score.</li>
-                                            <li><strong>Spending Breakdown:</strong> See a clear split between your Essential and Non-Essential spending.</li>
-                                            <li><strong>Quick Actions:</strong> Add new expenses or recurring items with a single click.</li>
-                                        </ul>
-                                    </div>
-
-                                    <div>
-                                        <h4 class="font-semibold text-md mb-2">💸 Expenses</h4>
-                                        <p class="mb-2">Log, view, and manage all your individual, one-off expenses.</p>
-                                        <ul class="list-disc ml-5 space-y-1">
-                                            <li><strong>Add, Edit, Delete:</strong> Use the action buttons to manage each expense. When adding, the app will try to auto-categorize it based on the name.</li>
-                                            <li><strong>Filtering:</strong> Use the "Filters" button to narrow down your view by date range, category, or type (including auto-generated recurring expenses).</li>
-                                            <li><strong>Bulk Actions:</strong> Use the checkboxes to select multiple expenses and delete them at once.</li>
-                                        </ul>
-                                    </div>
-
-                                    <div>
-                                        <h4 class="font-semibold text-md mb-2">🔄 Recurring</h4>
-                                        <p class="mb-2">Manage transactions that happen on a regular schedule, like salaries, rent, or subscriptions.</p>
-                                        <ul class="list-disc ml-5 space-y-1">
-                                            <li><strong>Income or Expense:</strong> Recurring items can be set as either income (e.g., salary) or an expense (e.g., Netflix).</li>
-                                            <li><strong>Automatic Logging:</strong> The app automatically creates an expense record on the due date for each active recurring item. These are marked with "(R)" in the expenses list.</li>
-                                            <li><strong>Pause & Resume:</strong> You can pause a recurring item by setting its status to "cancelled," and resume it by setting it back to "active."</li>
-                                        </ul>
-                                    </div>
-
-                                    <div>
-                                        <h4 class="font-semibold text-md mb-2">📊 Insights</h4>
-                                        <p class="mb-2">This tab uses AI to analyze your spending and provide deeper insights into your financial habits.</p>
-                                        <ul class="list-disc ml-5 space-y-1">
-                                            <li><strong>7-Day Forecast:</strong> Shows you any recurring expenses that are due in the next week.</li>
-                                            <li><strong>Month-End Projection:</strong> Forecasts your total spending and savings by the end of the current month.</li>
-                                            <li><strong>Smart Recommendations:</strong> Provides actionable tips based on your spending patterns, like reviewing subscriptions or high non-essential spending.</li>
-                                            <li><strong>Your Monthly Story:</strong> A narrative summary of your financial activity for the month, highlighting key metrics.</li>
-                                            <li><strong>Charts:</strong> Visualize your month-over-month spending and savings trends.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </section>
-
-                            <section>
-                                <h3 class="text-lg font-semibold mb-3 border-b pb-2">⚙️ Settings & Data</h3>
-                                 <ul class="list-disc ml-5 space-y-2">
-                                    <li><strong>Currency & Theme:</strong> Change your display currency and switch between light and dark modes.</li>
-                                    <li><strong>Data Management:</strong> Use the "Export Data" button to save a JSON backup of all your information. You can restore from a backup using the "Import Data" button.</li>
-                                    <li><strong>Privacy:</strong> All your data is stored <strong>only in your browser's local storage</strong>. It is never sent to a server. This means your information is completely private, but it also means clearing your browser data will erase your expense records. Please export your data regularly as a backup.</li>
-                                </ul>
-                            </section>
-
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -1193,6 +1119,10 @@
                         <span>Import Data (JSON)</span>
                         <input type="file" accept=".json" onchange="importData(event)" class="hidden">
                     </label>
+                     <button onclick="openHelpModal()" class="modern-button modern-button-secondary w-full justify-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Help & Documentation</span>
+                    </button>
                 </div>
             </div>
 
@@ -1353,6 +1283,80 @@
             <div class="flex gap-3 mt-6">
                 <button onclick="saveRecurring()" class="modern-button modern-button-primary flex-1">Save</button>
                 <button onclick="closeRecurringModal()" class="modern-button modern-button-secondary flex-1">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" onclick="closeHelpModal()" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
+        <div onclick="event.stopPropagation()" class="card max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+             <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-xl font-semibold">Help & Documentation</h3>
+                <button onclick="closeHelpModal()" class="icon-button text-2xl leading-none">&times;</button>
+            </div>
+            <div class="p-6 md:p-8">
+                <div class="space-y-8 text-sm leading-relaxed">
+                    <section>
+                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">🚀 Getting Started</h3>
+                        <p>Welcome to your AI-powered Expense Tracker! The first time you use the app, an onboarding tour will guide you through the key features. You can start by visiting the <button onclick="openSettings('budget')" class="text-blue-600 hover:underline">Settings</button> to set your monthly budget and income.</p>
+                    </section>
+                    <section>
+                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">The Dashboard Tabs</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-semibold text-md mb-2">🎯 Overview</h4>
+                                <p class="mb-2">This is your main financial dashboard, giving you a live snapshot of your finances for the current month.</p>
+                                <ul class="list-disc ml-5 space-y-1">
+                                    <li><strong>Key Stats:</strong> See your total monthly budget, how much you've spent, what's remaining, and your total income.</li>
+                                    <li><strong>Budget Progress & AI Projection:</strong> A visual bar shows how much of your budget is used. The AI projection forecasts your total spending by month-end.</li>
+                                    <li><strong>Budget Health Score:</strong> A score from 0-100 that measures how well you're managing your finances. Hover over it for a detailed breakdown of what's affecting your score.</li>
+                                    <li><strong>Spending Breakdown:</strong> See a clear split between your Essential and Non-Essential spending.</li>
+                                    <li><strong>Quick Actions:</strong> Add new expenses or recurring items with a single click.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-md mb-2">💸 Expenses</h4>
+                                <p class="mb-2">Log, view, and manage all your individual, one-off expenses.</p>
+                                <ul class="list-disc ml-5 space-y-1">
+                                    <li><strong>Add, Edit, Delete:</strong> Use the action buttons to manage each expense. When adding, the app will try to auto-categorize it based on the name.</li>
+                                    <li><strong>Filtering:</strong> Use the "Filters" button to narrow down your view by date range, category, or type (including auto-generated recurring expenses).</li>
+                                    <li><strong>Bulk Actions:</strong> Use the checkboxes to select multiple expenses and delete them at once.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-md mb-2">🔄 Recurring</h4>
+                                <p class="mb-2">Manage transactions that happen on a regular schedule, like salaries, rent, or subscriptions.</p>
+                                <ul class="list-disc ml-5 space-y-1">
+                                    <li><strong>Income or Expense:</strong> Recurring items can be set as either income (e.g., salary) or an expense (e.g., Netflix).</li>
+                                    <li><strong>Automatic Logging:</strong> The app automatically creates an expense record on the due date for each active recurring item. These are marked with "(R)" in the expenses list.</li>
+                                    <li><strong>Pause & Resume:</strong> You can pause a recurring item by setting its status to "cancelled," and resume it by setting it back to "active."</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-md mb-2">📊 Insights</h4>
+                                <p class="mb-2">This tab uses AI to analyze your spending and provide deeper insights into your financial habits.</p>
+                                <ul class="list-disc ml-5 space-y-1">
+                                    <li><strong>7-Day Forecast:</strong> Shows you any recurring expenses that are due in the next week.</li>
+                                    <li><strong>Month-End Projection:</strong> Forecasts your total spending and savings by the end of the current month.</li>
+                                    <li><strong>Smart Recommendations:</strong> Provides actionable tips based on your spending patterns, like reviewing subscriptions or high non-essential spending.</li>
+                                    <li><strong>Your Monthly Story:</strong> A narrative summary of your financial activity for the month, highlighting key metrics.</li>
+                                    <li><strong>Charts:</strong> Visualize your month-over-month spending and savings trends.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">⚙️ Settings & Data</h3>
+                         <ul class="list-disc ml-5 space-y-2">
+                            <li><strong>Currency & Theme:</strong> Change your display currency and switch between light and dark modes.</li>
+                            <li><strong>Data Management:</strong> Use the "Export Data" button to save a JSON backup of all your information. You can restore from a backup using the "Import Data" button.</li>
+                            <li><strong>Privacy:</strong> All your data is stored <strong>only in your browser's local storage</strong>. It is never sent to a server. This means your information is completely private, but it also means clearing your browser data will erase your expense records. Please export your data regularly as a backup.</li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-auto p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <button onclick="closeHelpModal()" class="modern-button modern-button-primary w-full">Close</button>
             </div>
         </div>
     </div>
@@ -3432,6 +3436,15 @@
         
         function toggleFilterPanel(panelId) {
             document.getElementById(panelId).classList.toggle('hidden');
+        }
+
+        function openHelpModal() {
+            document.getElementById('help-modal').classList.remove('hidden');
+            closeSettings();
+        }
+
+        function closeHelpModal() {
+            document.getElementById('help-modal').classList.add('hidden');
         }
     </script>
 </body>
