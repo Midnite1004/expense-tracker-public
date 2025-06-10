@@ -1587,8 +1587,8 @@
 
             recurringItems.forEach(item => {
                 if (item.status !== 'active' || item.type !== 'expense') {
-                return;
-            }
+                    return;
+                }
 
                 const itemStartDate = new Date(item.startDate + 'T00:00:00');
                 if (itemStartDate > today) return;
@@ -1596,9 +1596,14 @@
                 let currentDate = new Date(itemStartDate);
                 const itemEndDate = item.endDate ? new Date(item.endDate + 'T00:00:00') : today;
 
-                let iterations = 0; // Safety break
+                let iterations = 0;
                 while (currentDate <= itemEndDate && currentDate <= today && iterations < 1000) {
-                    const dateStr = currentDate.toISOString().split('T')[0];
+                    // Fix: Use local date string to avoid timezone issues
+                    const year = currentDate.getFullYear();
+                    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(currentDate.getDate()).padStart(2, '0');
+                    const dateStr = `${year}-${month}-${day}`;
+                    
                     const instanceId = `auto-${item.id}-${dateStr}`;
                     
                     if (!expenses.some(e => e.id === instanceId)) {
@@ -1631,11 +1636,19 @@
             });
 
             if (newExpensesGenerated > 0) {
-                expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+                // Fix: Sort expenses by date (newest first), then by ID
+                expenses.sort((a, b) => {
+                    const dateCompare = new Date(b.date) - new Date(a.date);
+                    if (dateCompare === 0) {
+                        // If dates are same, sort by ID (newest first)
+                        return (typeof b.id === 'string' ? 0 : b.id) - (typeof a.id === 'string' ? 0 : a.id);
+                    }
+                    return dateCompare;
+                });
                 showToast(`${newExpensesGenerated} new recurring expense(s) have been added.`, 'info');
                 saveData();
             }
-            }
+        }
 
         // --- Onboarding ---
         function startOnboardingProcess() {
@@ -2080,13 +2093,15 @@
                 const index = recurringItems.findIndex(r => r.id === editingRecurring.id);
                 if (index !== -1) recurringItems[index] = recurringItem;
             } else {
-                recurringItems.push(recurringItem);
-                recurringItems.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+                recurringItems.unshift(recurringItem); // Add to beginning for chronological order
             }
 
             saveData();
+            
+            // Fix: Force immediate processing and update
             processRecurringExpenses();
             updateDisplay();
+            
             closeRecurringModal();
             showToast(`Recurring ${type} '${name}' saved successfully!`);
         }
@@ -2112,13 +2127,26 @@
         }
 
         function deleteRecurring(id) {
-            if (confirm('Are you sure you want to delete this recurring item and all its automatically generated future expenses?')) {
-                expenses = expenses.filter(e => e.recurringSourceId !== id); // Also remove generated expenses
+            if (confirm('Are you sure you want to delete this recurring item and all its automatically generated expenses?')) {
+                // Remove the recurring item
                 recurringItems = recurringItems.filter(r => r.id !== id);
+                
+                // Fix: Remove ALL associated expenses (both auto-generated and any manual ones with same source)
+                const initialExpenseCount = expenses.length;
+                expenses = expenses.filter(e => e.recurringSourceId !== id);
+                const removedExpenseCount = initialExpenseCount - expenses.length;
+                
+                // Remove from selected items
                 selectedRecurringIds.delete(id);
+                
                 saveData();
                 updateDisplay();
-                showToast('Recurring item and its generated entries deleted!');
+                
+                if (removedExpenseCount > 0) {
+                    showToast(`Recurring item and ${removedExpenseCount} associated expense(s) deleted!`);
+                } else {
+                    showToast('Recurring item deleted!');
+                }
             }
         }
         
@@ -2761,7 +2789,17 @@
                 if (categoryFilter && e.category !== categoryFilter) passes = false;
                 if (typeFilter && e.type !== typeFilter) passes = false;
                 return passes;
-            }).sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by most recent date
+            }).sort((a, b) => {
+                // Fix: Better sorting - by date first, then by ID for same dates
+                const dateCompare = new Date(b.date) - new Date(a.date);
+                if (dateCompare === 0) {
+                    // For same dates, sort by ID (newest first)
+                    const aId = typeof a.id === 'string' ? 0 : a.id;
+                    const bId = typeof b.id === 'string' ? 0 : b.id;
+                    return bId - aId;
+                }
+                return dateCompare;
+            });
 
             const tableBody = DOMElements.expensesTableBody;
             if (filteredExpenses.length === 0) {
@@ -2826,7 +2864,8 @@
                 return true;
             });
 
-            filtered.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+            // Fix: Sort by ID (newest first) since ID is timestamp-based
+            filtered.sort((a, b) => b.id - a.id);
 
             if (filtered.length === 0) {
                 DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="9" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
@@ -3405,6 +3444,18 @@
         // --- Update & Render ---
         function updateDisplay() {
             console.time('updateDisplay');
+            
+            // Fix: Ensure expenses are properly sorted before any calculations
+            expenses.sort((a, b) => {
+                const dateCompare = new Date(b.date) - new Date(a.date);
+                if (dateCompare === 0) {
+                    const aId = typeof a.id === 'string' ? 0 : a.id;
+                    const bId = typeof b.id === 'string' ? 0 : b.id;
+                    return bId - aId;
+                }
+                return dateCompare;
+            });
+            
             const now = new Date();
             const currentMonth = now.getMonth();
             const currentYear = now.getFullYear();
@@ -3464,10 +3515,23 @@
             DOMElements.aiProjectionContainer.innerHTML = `
                 <div class="flex items-center gap-2">
                     <span class="text-lg">🔮</span>
-                    <div>
-                        <span class="font-semibold">AI Projection:</span>
-                        You're on track to spend <strong>${formatCurrency(projection.projectedSpend)}</strong> this month.
-                        <span class="font-bold ${projection.statusColor}">${projection.statusText}</span>
+                    <div class="flex items-center gap-2">
+                        <div>
+                            <span class="font-semibold">AI Projection:</span>
+                            You're on track to spend <strong>${formatCurrency(projection.projectedSpend)}</strong> this month.
+                            <span class="font-bold ${projection.statusColor}">${projection.statusText}</span>
+                        </div>
+                        <div class="tooltip">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 cursor-help hover:text-gray-600 dark:hover:text-gray-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div class="tooltiptext">
+                                <strong>How this works:</strong><br>
+                                Based on your spending so far (${formatCurrency(totalSpent)}) divided by ${new Date().getDate()} days = ${formatCurrency(totalSpent / new Date().getDate())} per day average.<br><br>
+                                Projected over ${new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()} days in this month = ${formatCurrency(projection.projectedSpend)} total.<br><br>
+                                This becomes more accurate as you add more expenses throughout the month.
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
