@@ -756,8 +756,8 @@
         /* No-scroll CSS - Prevent horizontal scrolling */
         html,body{max-width:100%;overflow-x:hidden;}
         .table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;}
-        </style>
-    </head>
+    </style>
+</head>
 <body class="antialiased pb-20 md:pb-0">
     <div class="min-h-screen p-4 md:p-6">
         <div class="max-w-7xl mx-auto">
@@ -776,25 +776,25 @@
                         <div>
                             <h1 class="text-2xl md:text-3xl font-bold">Lens</h1>
                             <p class="text-sm text-gray-500 dark:text-gray-400">Clear financial insight</p>
-                        </div>
-                    </div>
+                                        </div>
+                                        </div>
 
                     <!-- Desktop Navigation & Settings -->
                     <div class="hidden md:flex items-center gap-4">
                         <nav class="flex items-center space-x-2" aria-label="Tabs">
-                            <button onclick="showTab('overview')" id="tab-overview" class="tab-button active">Overview</button>
-                            <button onclick="showTab('expenses')" id="tab-expenses" class="tab-button">Expenses</button>
-                            <button onclick="showTab('recurring')" id="tab-recurring" class="tab-button">Recurring</button>
-                            <button onclick="showTab('insights')" id="tab-insights" class="tab-button" data-tour="insights-tab">Insights</button>
-                        </nav>
+                        <button onclick="showTab('overview')" id="tab-overview" class="tab-button active">Overview</button>
+                        <button onclick="showTab('expenses')" id="tab-expenses" class="tab-button">Expenses</button>
+                        <button onclick="showTab('recurring')" id="tab-recurring" class="tab-button">Recurring</button>
+                            <button onclick="showTab('insights')" id="tab-insights" class="tab-button">Insights</button>
+                    </nav>
                         <div class="border-l border-gray-200 dark:border-gray-600 h-8"></div>
                         <div class="relative inline-block text-left">
-                            <button onclick="openSettings()" class="modern-button modern-button-secondary" data-tour="settings-button">
+                            <button onclick="openSettings()" class="modern-button modern-button-secondary">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>
                                 <span class="hidden sm:inline">Settings</span>
                             </button>
-                        </div>
-                    </div>
+                </div>
+            </div>
                 </div>
             </header>
 
@@ -1672,8 +1672,8 @@
 
             recurringItems.forEach(item => {
                 if (item.status !== 'active' || item.type !== 'expense') {
-                    return;
-                }
+                return;
+            }
 
                 const itemStartDate = new Date(item.startDate + 'T00:00:00');
                 if (itemStartDate > today) return;
@@ -1747,7 +1747,7 @@
                 
                 return getNumericId(b.id) - getNumericId(a.id);
             });
-        }
+            }
 
         // --- Onboarding ---
         function startOnboardingProcess() {
@@ -1779,68 +1779,76 @@
 
         function launchOnboardingTour() {
             const driver = window.driver.js.driver;
+            const isMobile = window.innerWidth < 768; // md breakpoint
+
+            // Common config for all popovers to ensure consistent styling
+            const commonPopoverConfig = {
+                className: 'driver-popover',
+            };
+
+            const desktopSteps = [
+                {
+                    element: '[data-tour="app-header"]',
+                    popover: { ...commonPopoverConfig, title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
+                },
+                {
+                    element: 'button[onclick="openSettings(\'budget\')"]',
+                    popover: { ...commonPopoverConfig, title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking.', side: "top", align: 'center' }
+                },
+                {
+                    element: 'button[onclick="showAddForm()"]',
+                    popover: { ...commonPopoverConfig, title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "left", align: 'start' }
+                },
+                {
+                    element: 'button[onclick="showRecurringForm()"]',
+                    popover: { ...commonPopoverConfig, title: 'Add a Recurring Item', description: 'For regular income or expenses (like rent or subscriptions), use this.', side: "left", align: 'start' }
+                },
+                {
+                    element: '#tab-insights',
+                    popover: { ...commonPopoverConfig, title: 'Visualize Your Spending', description: 'This tab contains charts and AI-powered insights to help you understand your financial habits.', side: "bottom", align: 'start' }
+                },
+                {
+                    element: '.hidden.md\\:flex button[onclick="openSettings()"]',
+                    popover: { ...commonPopoverConfig, title: 'Settings & Data', description: 'Change the theme, set your currency, and import or export your data here.', side: "left", align: 'start' }
+                }
+            ];
+
+            const mobileSteps = [
+                {
+                    element: '[data-tour="app-header"]',
+                    popover: { ...commonPopoverConfig, title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
+                },
+                {
+                    element: 'button[onclick="openSettings(\'budget\')"]',
+                    popover: { ...commonPopoverConfig, title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking.', side: "top", align: 'center' }
+                },
+                {
+                    element: 'button[onclick="showAddForm()"]',
+                    popover: { ...commonPopoverConfig, title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "bottom", align: 'center' }
+                },
+                {
+                    element: 'button[onclick="showRecurringForm()"]',
+                    popover: { ...commonPopoverConfig, title: 'Add a Recurring Item', description: 'For regular income or expenses (like rent or subscriptions), use this.', side: "bottom", align: 'center' }
+                },
+                {
+                    element: '#mobile-tab-insights',
+                    popover: { ...commonPopoverConfig, title: 'Visualize Your Spending', description: 'This tab contains charts and AI-powered insights.', side: "top", align: 'center' }
+                },
+                {
+                    element: '#mobile-bottom-nav-settings',
+                    popover: { ...commonPopoverConfig, title: 'Settings & Data', description: 'Change the theme, set currency, and manage your data here.', side: "top", align: 'center' }
+                }
+            ];
+
             const driverObj = driver({
                 showProgress: true,
-                popoverClass: 'driver-popover',
-                steps: [
-                    { 
-                        element: '[data-tour="app-header"]', 
-                        popover: { 
-                            title: 'Welcome to Lens!', 
-                            description: "Let's take a quick tour to get you started.",
-                            side: "bottom",
-                            align: 'start',
-                            offset: 0
-                        } 
-                    },
-                    { 
-                        element: 'button[onclick="openSettings(\'budget\')"]',
-                        popover: { 
-                            title: 'Set Your Budget & Income', 
-                            description: 'Use the settings to enter your monthly budget and income. This is the baseline for all tracking.',
-                            side: "top"
-                        } 
-                    },
-                    { 
-                        element: 'button[onclick="showAddForm()"]', 
-                        popover: { 
-                            title: 'Add a New Expense', 
-                            description: 'Use this button to log any one-time purchases or expenses.',
-                            side: "left" 
-                        } 
-                    },
-                    { 
-                        element: 'button[onclick="showRecurringForm()"]', 
-                        popover: { 
-                            title: 'Add a Recurring Item', 
-                            description: 'For regular income (like a salary) or expenses (like rent or subscriptions), use this.',
-                            side: "left"
-                        } 
-                    },
-                    { 
-                        element: '[data-tour="insights-tab"]', 
-                        popover: { 
-                            title: 'Visualize Your Spending', 
-                            description: 'This tab contains charts and AI-powered insights to help you understand your financial habits.',
-                            side: "bottom" 
-                        } 
-                    },
-                    { 
-                        element: '[data-tour="settings-button"]', 
-                        popover: { 
-                            title: 'Settings & Data', 
-                            description: 'Change the theme, set your currency, and import or export your data here.',
-                            side: "left" 
-                        } 
-                    }
-                ],
+                steps: isMobile ? mobileSteps : desktopSteps,
                 onDestroyed: () => {
                     localStorage.setItem('onboardingComplete', 'true');
-                    
-                    // Animate quick-add tiles
+
                     const quickAddContainers = document.querySelectorAll('[id^="quick-add-"]');
                     quickAddContainers.forEach(container => container.classList.add('animate-pulse'));
-                    
+
                     setTimeout(() => {
                         quickAddContainers.forEach(container => container.classList.remove('animate-pulse'));
                     }, 3000);
@@ -2559,10 +2567,10 @@
                 <div class="flex items-center gap-2">
                     <span class="text-lg">🔮</span>
                     <div class="flex items-center gap-2">
-                        <div>
-                            <span class="font-semibold">AI Projection:</span>
-                            You're on track to spend <strong>${formatCurrency(projection.projectedSpend)}</strong> this month.
-                            <span class="font-bold ${projection.statusColor}">${projection.statusText}</span>
+                    <div>
+                        <span class="font-semibold">AI Projection:</span>
+                        You're on track to spend <strong>${formatCurrency(projection.projectedSpend)}</strong> this month.
+                        <span class="font-bold ${projection.statusColor}">${projection.statusText}</span>
                         </div>
                         <div class="tooltip">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 cursor-help hover:text-gray-600 dark:hover:text-gray-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -3706,12 +3714,12 @@
                 </svg>
                 <span class="text-xs">Recurring</span>
             </button>
-            <button id="mobile-tab-insights" onclick="showTab('insights')" class="bottom-nav-item flex flex-col items-center justify-center w-full" data-tour="insights-tab">
+            <button id="mobile-tab-insights" onclick="showTab('insights')" class="bottom-nav-item flex flex-col items-center justify-center w-full">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>
                 <span class="text-xs">Insights</span>
             </button>
             <!-- Add Settings Button for Mobile -->
-            <button onclick="openSettings()" class="bottom-nav-item flex flex-col items-center justify-center w-full" data-tour="settings-button">
+            <button id="mobile-bottom-nav-settings" onclick="openSettings()" class="bottom-nav-item flex flex-col items-center justify-center w-full">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 <span class="text-xs">Settings</span>
             </button>
