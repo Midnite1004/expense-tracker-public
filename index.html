@@ -775,7 +775,7 @@
                         </div>
                         <div>
                             <h1 class="text-2xl md:text-3xl font-bold">Lens</h1>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Clear financial insight</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Your financial insight</p>
                                         </div>
                                         </div>
 
@@ -917,7 +917,7 @@
                                 <h3 class="text-lg font-semibold mb-4">Quick Add Common Expenses</h3>
                                 <div class="flex flex-col gap-2 w-full">
                                     <div id="quick-add-coffee">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                        <button class="bg-gray-600 dark:bg-gray-700 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <span class="mr-2">☕</span>
                                                 <span class="text-white">Coffee</span>
@@ -926,7 +926,7 @@
                                         </button>
                                     </div>
                                     <div id="quick-add-transport">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                        <button class="bg-gray-600 dark:bg-gray-700 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <span class="mr-2">🚌</span>
                                                 <span class="text-white">Transport</span>
@@ -935,7 +935,7 @@
                                         </button>
                                     </div>
                                     <div id="quick-add-lunch">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                        <button class="bg-gray-600 dark:bg-gray-700 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <span class="mr-2">🥪</span>
                                                 <span class="text-white">Lunch</span>
@@ -944,7 +944,7 @@
                                         </button>
                                     </div>
                                     <div id="quick-add-groceries">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                        <button class="bg-gray-600 dark:bg-gray-700 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <span class="mr-2">🛒</span>
                                                 <span class="text-white">Groceries</span>
@@ -958,7 +958,7 @@
                             <div class="card p-6">
                                 <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
                                 <div id="recent-expenses" class="space-y-3">
-                                    <p class="text-gray-500 dark:text-gray-400">No recent expenses.</p>
+                                    <p class="text-gray-700 dark:text-gray-800">No recent expenses.</p>
                                 </div>
                                 <div class="text-center mt-4">
                                     <button onclick="showTab('expenses')" class="text-blue-600 dark:text-blue-400 font-medium hover:underline">
@@ -2887,8 +2887,8 @@
                 div.className = 'flex justify-between items-center border-b border-gray-100 dark:border-gray-700 py-2 last:border-b-0 text-xs';
                 div.innerHTML = `
                     <div>
-                        <p class="font-medium text-gray-800 dark:text-gray-200">${escapeHTML(expense.name)}</p>
-                        <p class="text-gray-500 dark:text-gray-400">${expense.date} - ${escapeHTML(expense.category)}</p>
+                        <p class="font-medium text-gray-900 dark:text-gray-600">${escapeHTML(expense.name)}</p>
+                        <p class="text-gray-700 dark:text-gray-500">${expense.date} - ${escapeHTML(expense.category)}</p>
                     </div>
                     <p class="font-medium text-red-600 dark:text-red-400">${formatCurrency(expense.cost)}</p>
                 `;
