@@ -1779,76 +1779,70 @@
 
         function launchOnboardingTour() {
             const driver = window.driver.js.driver;
-            const isMobile = window.innerWidth < 768; // md breakpoint
-
-            // Common config for all popovers to ensure consistent styling
-            const commonPopoverConfig = {
-                className: 'driver-popover',
-            };
+            const isMobile = window.innerWidth < 768;
 
             const desktopSteps = [
                 {
                     element: '[data-tour="app-header"]',
-                    popover: { ...commonPopoverConfig, title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
+                    popover: { title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
                 },
                 {
                     element: 'button[onclick="openSettings(\'budget\')"]',
-                    popover: { ...commonPopoverConfig, title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking.', side: "top", align: 'center' }
+                    popover: { title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking.', side: "top", align: 'center' }
                 },
                 {
-                    element: 'button[onclick="showAddForm()"]',
-                    popover: { ...commonPopoverConfig, title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "left", align: 'start' }
+                    element: '.card button[onclick="showAddForm()"]',
+                    popover: { title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "left", align: 'start' }
                 },
                 {
-                    element: 'button[onclick="showRecurringForm()"]',
-                    popover: { ...commonPopoverConfig, title: 'Add a Recurring Item', description: 'For regular income or expenses (like rent or subscriptions), use this.', side: "left", align: 'start' }
+                    element: '.card button[onclick="showRecurringForm()"]',
+                    popover: { title: 'Add a Recurring Item', description: 'For regular income or expenses (like rent or subscriptions), use this.', side: "left", align: 'start' }
                 },
                 {
                     element: '#tab-insights',
-                    popover: { ...commonPopoverConfig, title: 'Visualize Your Spending', description: 'This tab contains charts and AI-powered insights to help you understand your financial habits.', side: "bottom", align: 'start' }
+                    popover: { title: 'Visualize Your Spending', description: 'This tab contains charts and AI-powered insights.', side: "bottom", align: 'start' }
                 },
                 {
                     element: '.hidden.md\\:flex button[onclick="openSettings()"]',
-                    popover: { ...commonPopoverConfig, title: 'Settings & Data', description: 'Change the theme, set your currency, and import or export your data here.', side: "left", align: 'start' }
+                    popover: { title: 'Settings & Data', description: 'Change the theme, set your currency, and import or export your data here.', side: "left", align: 'start' }
                 }
             ];
 
             const mobileSteps = [
                 {
                     element: '[data-tour="app-header"]',
-                    popover: { ...commonPopoverConfig, title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
+                    popover: { title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
                 },
                 {
                     element: 'button[onclick="openSettings(\'budget\')"]',
-                    popover: { ...commonPopoverConfig, title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking.', side: "top", align: 'center' }
+                    popover: { title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking.', side: "top", align: 'center' }
                 },
                 {
-                    element: 'button[onclick="showAddForm()"]',
-                    popover: { ...commonPopoverConfig, title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "bottom", align: 'center' }
+                    element: '.card button[onclick="showAddForm()"]',
+                    popover: { title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "bottom", align: 'center' }
                 },
                 {
-                    element: 'button[onclick="showRecurringForm()"]',
-                    popover: { ...commonPopoverConfig, title: 'Add a Recurring Item', description: 'For regular income or expenses (like rent or subscriptions), use this.', side: "bottom", align: 'center' }
+                    element: '.card button[onclick="showRecurringForm()"]',
+                    popover: { title: 'Add a Recurring Item', description: 'For regular income or expenses (like rent or subscriptions), use this.', side: "bottom", align: 'center' }
                 },
                 {
                     element: '#mobile-tab-insights',
-                    popover: { ...commonPopoverConfig, title: 'Visualize Your Spending', description: 'This tab contains charts and AI-powered insights.', side: "top", align: 'center' }
+                    popover: { title: 'Visualize Your Spending', description: 'This tab contains charts and AI-powered insights.', side: "top", align: 'center' }
                 },
                 {
                     element: '#mobile-bottom-nav-settings',
-                    popover: { ...commonPopoverConfig, title: 'Settings & Data', description: 'Change the theme, set currency, and manage your data here.', side: "top", align: 'center' }
+                    popover: { title: 'Settings & Data', description: 'Change the theme, set currency, and manage your data here.', side: "top", align: 'center' }
                 }
             ];
 
             const driverObj = driver({
                 showProgress: true,
+                popoverClass: 'driver-popover',
                 steps: isMobile ? mobileSteps : desktopSteps,
                 onDestroyed: () => {
                     localStorage.setItem('onboardingComplete', 'true');
-
                     const quickAddContainers = document.querySelectorAll('[id^="quick-add-"]');
                     quickAddContainers.forEach(container => container.classList.add('animate-pulse'));
-
                     setTimeout(() => {
                         quickAddContainers.forEach(container => container.classList.remove('animate-pulse'));
                     }, 3000);
