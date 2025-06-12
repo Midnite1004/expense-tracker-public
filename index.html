@@ -697,108 +697,120 @@
         <style>
         /* === Lens Mobile Card Layout START === */
         @media (max-width: 640px) {
-          /* Hide table headers so cards aren't doubled-up */
+          /* Hide table headers */
           table thead {
             position: absolute;
             top: -9999px;
             left: -9999px;
           }
           
-          /* Show checkbox column in mobile cards */
+          /* Checkbox styling */
           td:first-child {
             display: flex !important;
             justify-content: flex-start !important;
-            padding: 0.125rem 0 !important;
+            padding: 0 !important;
+            margin-bottom: 0.25rem;
           }
           
           td:first-child::before {
             content: '' !important;
           }
 
-          /* Turn each <tr> into a block-level "card" */
+          /* Card layout */
           table, tbody, tr {
             display: block;
             width: 100%;
           }
 
-          /* ULTRA-COMPACT CARD STYLING */
+          /* MINIMAL CARDS - Much smaller */
           tr {
-            background: var(--bg-primary, #ffffff);
-            border-radius: 0.375rem; /* Smaller radius */
-            box-shadow: 0 1px 2px rgb(0 0 0 / 6%); /* Lighter shadow */
-            margin-bottom: 0.125rem; /* Much smaller gap */
-            padding: 0.375rem; /* Much smaller padding */
-            border: 1px solid var(--border-color, #e5e7eb);
+            background: var(--bg-primary);
+            border-radius: 0.25rem;
+            box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+            margin-bottom: 0.0625rem; /* Tiny gap between cards */
+            padding: 0.25rem 0.375rem; /* Much smaller padding */
+            border: 1px solid var(--border-color);
           }
 
-          /* Each <td> becomes a row inside the card */
+          /* Minimal row spacing inside cards */
           td {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.0625rem 0; /* Minimal row padding */
+            padding: 0; /* No row padding */
             border: none !important;
-            min-height: 1rem; /* Smaller row height */
+            min-height: 0.875rem; /* Much smaller rows */
+            line-height: 1;
           }
 
-          /* Auto-insert the column label */
+          /* Tiny labels */
           td::before {
             content: attr(data-label);
             font-weight: 500;
-            font-size: 0.6875rem; /* Smaller label text */
+            font-size: 0.625rem; /* Much smaller labels */
             text-transform: capitalize;
-            opacity: 0.7;
+            opacity: 0.6;
             color: var(--text-secondary);
-            min-width: 3.5rem; /* Smaller label width */
+            min-width: 3rem; /* Smaller label area */
             flex-shrink: 0;
           }
 
-          /* Right-align the content */
+          /* Compact content */
           td > * {
             text-align: right;
-            font-size: 0.8125rem; /* Smaller content text */
-            line-height: 1.2; /* Tighter line height */
+            font-size: 0.75rem; /* Smaller text */
+            line-height: 1;
           }
 
-          /* Special styling for name field */
-          td[data-label="Name"] {
-            font-weight: 600;
-            margin-bottom: 0.0625rem; /* Tiny spacing after name */
-          }
-
+          /* Name field - slightly bigger */
           td[data-label="Name"] > span {
-            font-size: 0.875rem; /* Slightly larger for readability */
+            font-size: 0.8125rem;
+            font-weight: 600;
           }
 
-          /* Compact amount styling */
+          /* Amount - highlight but compact */
           td[data-label="Amount"] {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--accent-red);
+            font-size: 0.8125rem;
           }
 
-          /* Ultra-compact status badges */
+          /* Mini status badges */
           td[data-label="Status"] .status-badge {
-            font-size: 0.5rem; /* Much smaller badges */
-            padding: 0.0625rem 0.375rem; /* Minimal padding */
-            border-radius: 0.25rem;
-            font-weight: 600;
+            font-size: 0.5rem;
+            padding: 0.0625rem 0.25rem;
+            border-radius: 0.1875rem;
+            font-weight: 700;
             text-transform: uppercase;
+            line-height: 1;
           }
 
           /* Compact action buttons */
+          td[data-label="Actions"] {
+            align-items: center;
+          }
+
+          td[data-label="Actions"] > div {
+            gap: 0.125rem;
+            display: flex;
+            align-items: center;
+          }
+
           td[data-label="Actions"] .icon-button {
-            padding: 0.1875rem; /* Very small button padding */
+            padding: 0.125rem;
+            min-width: 1.25rem;
+            min-height: 1.25rem;
           }
 
           td[data-label="Actions"] .icon-button svg {
-            width: 0.875rem; /* Smaller icons */
-            height: 0.875rem;
+            width: 0.75rem;
+            height: 0.75rem;
           }
 
-          /* Compact checkbox */
+          /* Tiny checkbox */
           .table-checkbox {
-            width: 0.875rem; /* Smaller checkbox */
-            height: 0.875rem;
+            width: 0.75rem;
+            height: 0.75rem;
           }
 
           /* Hide empty labels */
@@ -806,40 +818,26 @@
             display: none;
           }
 
-          /* Reduce gap between action buttons */
-          td[data-label="Actions"] > div {
-            gap: 0.125rem;
-          }
-
-          /* Compact spacing for recurring indicator */
+          /* Recurring indicator */
           .text-gray-400 {
             margin-left: 0.125rem;
-            font-size: 0.625rem; /* Smaller (R) indicator */
+            font-size: 0.5rem;
           }
 
-          /* Dark mode card background */
+          /* Dark mode */
           .dark tr {
             background: var(--bg-primary);
             border-color: var(--border-color);
           }
-        }
 
-        /* === ADDITIONAL MOBILE IMPROVEMENTS === */
-        @media (max-width: 640px) {
-          /* Add padding around table container */
+          /* Remove extra spacing around tables */
           .overflow-x-auto {
-            padding: 0.25rem;
+            padding: 0.125rem;
           }
 
-          /* Ensure table takes full width */
           .card .overflow-x-auto {
-            margin: -0.25rem; /* Negative margin to use full card width */
+            margin: -0.25rem;
             padding: 0.25rem;
-          }
-
-          /* Improve mobile table container */
-          .card {
-            padding: 0.75rem 0.5rem; /* Reduce card padding on mobile */
           }
         }
         /* === Lens Mobile Card Layout END === */
