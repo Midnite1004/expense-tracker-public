@@ -1578,8 +1578,12 @@
         ];
 
         // --- DOM Elements Cache ---
-        const DOMElements = {
+        let DOMElements = {};
+
+        function cacheDOMElements() {
+            DOMElements = {
             html: document.documentElement,
+            // Modals & Forms
             modal: document.getElementById('modal'),
             modalTitle: document.getElementById('modal-title'),
             expenseName: document.getElementById('expense-name'),
@@ -1589,7 +1593,7 @@
             expenseDate: document.getElementById('expense-date'),
             expensePaymentMethod: document.getElementById('expense-payment-method'),
             modalCurrency: document.getElementById('modal-currency'),
-
+            
             recurringModal: document.getElementById('recurring-modal'),
             recurringModalTitle: document.getElementById('recurring-modal-title'),
             recurringItemType: document.getElementById('recurring-item-type'),
@@ -1643,10 +1647,12 @@
             healthScoreTrend: document.getElementById('health-score-trend'),
             healthScoreTooltip: document.getElementById('health-score-tooltip'),
             aiProjectionContainer: document.getElementById('ai-projection-container'),
-        };
+            };
+        }
         
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', function() {
+            cacheDOMElements();
             loadData();
             processRecurringExpenses();
             populateCategoryDropdowns();
@@ -2376,13 +2382,32 @@
 
         function deleteSelectedRecurring() {
             if (selectedRecurringIds.size === 0) return;
-            if (confirm(`Are you sure you want to delete ${selectedRecurringIds.size} recurring item(s)?`)) {
+            if (confirm(`Are you sure you want to delete ${selectedRecurringIds.size} recurring item(s) and their associated expenses?`)) {
+                let totalRemovedExpenses = 0;
+                
+                // For each selected recurring item, remove associated expenses
+                selectedRecurringIds.forEach(recurringId => {
+                    const initialExpenseCount = expenses.length;
+                    expenses = expenses.filter(e => e.recurringSourceId !== recurringId);
+                    totalRemovedExpenses += (initialExpenseCount - expenses.length);
+                });
+                
+                // Remove the recurring items
+                const deletedRecurringCount = selectedRecurringIds.size;
                 recurringItems = recurringItems.filter(r => !selectedRecurringIds.has(r.id));
+                
+                // Clear selections and update UI
                 selectedRecurringIds.clear();
                 DOMElements.selectAllRecurringCheckbox.checked = false;
+                
                 saveData();
                 updateDisplay();
-                showToast(`${selectedRecurringIds.size} recurring item(s) deleted.`);
+                
+                if (totalRemovedExpenses > 0) {
+                    showToast(`${deletedRecurringCount} recurring item(s) and ${totalRemovedExpenses} associated expense(s) deleted!`);
+                } else {
+                    showToast(`${deletedRecurringCount} recurring item(s) deleted!`);
+                }
             }
         }
 
@@ -2403,27 +2428,18 @@
                     if (endDate < firstDay) return;
                 }
 
+                // Check if this recurring item has a due date in this month
                 let currentDate = new Date(startDate);
+                let hasOccurrenceThisMonth = false;
                 let iterations = 0;
-                while(currentDate <= lastDay && iterations < 1000) {
-                    if (currentDate >= firstDay) { // Due date is within the month
-                        if (item.type === 'income') {
-                            totals.income += item.amount;
-                            if (!totals.incomeItems.find(i => i.id === item.id)) {
-                                totals.incomeItems.push(item);
-                            }
-                        } else {
-                            totals.expenses += item.amount;
-                             if (!totals.expenseItems.find(i => i.id === item.id)) {
-                                totals.expenseItems.push(item);
-                            }
-                        }
-                        // Important: break after finding the first occurrence in the month
-                        // to avoid double-counting daily/weekly items for the monthly total.
+                
+                while (currentDate <= lastDay && iterations < 100) {
+                    if (currentDate >= firstDay && currentDate <= lastDay) {
+                        hasOccurrenceThisMonth = true;
                         break;
                     }
 
-                    // Increment to the next due date to see if IT is in the month
+                    // Move to next occurrence
                     switch (item.frequency) {
                         case 'Daily': currentDate.setDate(currentDate.getDate() + 1); break;
                         case 'Weekly': currentDate.setDate(currentDate.getDate() + 7); break;
@@ -2431,18 +2447,37 @@
                         case 'Monthly': currentDate.setMonth(currentDate.getMonth() + 1); break;
                         case 'Quarterly': currentDate.setMonth(currentDate.getMonth() + 3); break;
                         case 'Annual': currentDate.setFullYear(currentDate.getFullYear() + 1); break;
-                        default: iterations = 1000; break;
+                        default: iterations = 100; break;
                     }
                     iterations++;
                 }
+
+                // If there's an occurrence this month, count it once
+                if (hasOccurrenceThisMonth) {
+                    if (item.type === 'income') {
+                        totals.income += item.amount;
+                        if (!totals.incomeItems.find(i => i.id === item.id)) {
+                            totals.incomeItems.push(item);
+                        }
+                    } else {
+                        // Note: Don't add recurring expenses here since they're already in the main expenses array
+                        // Only track for income calculations
+                        if (!totals.expenseItems.find(i => i.id === item.id)) {
+                            totals.expenseItems.push(item);
+                        }
+                    }
+                }
             });
+            
             return totals;
         }
 
         function getMonthlyExpenseTotal(year, month) {
-             return expenses.filter(e => {
+            return expenses.filter(e => {
                 const expenseDate = new Date(e.date);
-                return e.status === 'active' && expenseDate.getMonth() === month && expenseDate.getFullYear() === year;
+                return e.status === 'active' && 
+                       expenseDate.getMonth() === month && 
+                       expenseDate.getFullYear() === year;
             }).reduce((sum, e) => sum + e.cost, 0);
         }
 
@@ -2502,18 +2537,15 @@
             const monthlyRecurring = getMonthlyRecurringTotals(currentYear, currentMonth);
             const totalMonthlyIncome = monthlyIncome + monthlyRecurring.income;
 
-            const allMonthlyExpenses = [
-                ...expenses.filter(e => {
-                    const expenseDate = new Date(e.date);
-                    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
-                }),
-                ...generateExpensesFromRecurring().filter(e => {
-                    const expenseDate = new Date(e.date);
-                    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
-                })
-            ];
-            const activeMonthlyExpenses = allMonthlyExpenses.filter(e => e.status === 'active');
-            const totalSpent = activeMonthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
+            // ✅ FIXED: Only use the main expenses array (recurring expenses are already there)
+            const allMonthlyExpenses = expenses.filter(e => {
+                const expenseDate = new Date(e.date);
+                return e.status === 'active' && 
+                       expenseDate.getMonth() === currentMonth && 
+                       expenseDate.getFullYear() === currentYear;
+            });
+            
+            const totalSpent = allMonthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
 
             // --- Update UI Tiles ---
             const budgetStr = formatCurrency(monthlyBudget);
@@ -2581,11 +2613,12 @@
                 </div>
             `;
             
-            updateBudgetHealthScore(totalSpent, monthlyBudget, activeMonthlyExpenses, totalMonthlyIncome, now);
+            // ✅ FIXED: Use the correct variable name 'allMonthlyExpenses' instead of 'activeMonthlyExpenses'
+            updateBudgetHealthScore(totalSpent, monthlyBudget, allMonthlyExpenses, totalMonthlyIncome, now);
             
-            // Spending Breakdown
-            const essentialSpending = activeMonthlyExpenses.filter(e => e.type === 'Essential').reduce((sum, e) => sum + e.cost, 0);
-            const nonEssentialSpending = activeMonthlyExpenses.filter(e => e.type === 'Non-Essential').reduce((sum, e) => sum + e.cost, 0);
+            // Spending Breakdown - FIXED: Use correct variable name
+            const essentialSpending = allMonthlyExpenses.filter(e => e.type === 'Essential').reduce((sum, e) => sum + e.cost, 0);
+            const nonEssentialSpending = allMonthlyExpenses.filter(e => e.type === 'Non-Essential').reduce((sum, e) => sum + e.cost, 0);
             DOMElements.essentialSpendingDisplay.textContent = formatCurrency(essentialSpending);
             DOMElements.nonEssentialSpendingDisplay.textContent = formatCurrency(nonEssentialSpending);
             const totalBreakdown = essentialSpending + nonEssentialSpending;
@@ -2593,6 +2626,7 @@
             DOMElements.essentialBar.style.width = `${essentialPercent}%`;
             DOMElements.nonEssentialBar.style.width = `${100 - essentialPercent}%`;
 
+            // ✅ These functions should now work properly
             renderRecentExpenses();
             renderExpensesTable();
             renderRecurringTable();
@@ -3148,12 +3182,15 @@
                 const date = new Date(new Date().setMonth(new Date().getMonth() - i));
                 const year = date.getFullYear();
                 const month = date.getMonth();
-                const recurring = getMonthlyRecurringTotals(year, month);
+                
+                // Get recurring income only (expenses are already in main array)
+                const recurringIncome = getMonthlyRecurringTotals(year, month).income;
+                
                 data.push({
                     year: year,
                     month: month,
-                    income: monthlyIncome + recurring.income,
-                    expenses: getMonthlyExpenseTotal(year, month) + recurring.expenses
+                    income: monthlyIncome + recurringIncome,
+                    expenses: getMonthlyExpenseTotal(year, month)
                 });
             }
             return data.reverse();
@@ -3415,70 +3452,7 @@
         }
         });
 
-        function generateExpensesFromRecurring() {
-            const generatedExpenses = [];
-            const today = new Date();
-            // To avoid timezone issues, we compare date strings
-            const todayStr = today.toISOString().split('T')[0];
-
-            recurringItems.forEach(item => {
-                if (item.type !== 'expense' || item.status !== 'active') {
-                    return;
-                }
-
-                let currentDate = new Date(item.startDate + 'T00:00:00'); // Set time to avoid timezone shifts
-                const endDate = item.endDate ? new Date(item.endDate + 'T00:00:00') : today;
-
-                while (currentDate <= endDate && currentDate <= today) {
-                    const year = currentDate.getFullYear();
-                    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                    const day = String(currentDate.getDate()).padStart(2, '0');
-                    const dateStr = `${year}-${month}-${day}`;
-
-                    generatedExpenses.push({
-                        id: `recurring-${item.id}-${dateStr}`, // composite ID
-                        name: `${item.name} (r)`,
-                        cost: item.amount,
-                        type: item.essentialType || 'Non-Essential', // Assign essential type
-                        category: item.category,
-                        date: dateStr,
-                        paymentMethod: item.paymentMethod,
-                        status: 'active',
-                        isRecurring: true,
-                        originalRecurringId: item.id
-                    });
-                    
-                    // Increment currentDate based on frequency
-                    switch (item.frequency) {
-                        case 'Daily':
-                            currentDate.setDate(currentDate.getDate() + 1);
-                            break;
-                        case 'Weekly':
-                            currentDate.setDate(currentDate.getDate() + 7);
-                            break;
-                        case 'Bi-Weekly':
-                            currentDate.setDate(currentDate.getDate() + 14);
-                            break;
-                        case 'Monthly':
-                            currentDate.setMonth(currentDate.getMonth() + 1);
-                            break;
-                        case 'Quarterly':
-                            currentDate.setMonth(currentDate.getMonth() + 3);
-                            break;
-                        case 'Annual':
-                            currentDate.setFullYear(currentDate.getFullYear() + 1);
-                            break;
-                        default:
-                            // Break the loop for unknown frequencies
-                            currentDate = new Date('9999-12-31');
-                            break;
-                    }
-                }
-            });
-
-            return generatedExpenses;
-        }
-
+        
         // --- Auto-Categorization ---
         function autoCategorizeExpense(event) {
             const name = event.target.value.toLowerCase();
@@ -3662,6 +3636,38 @@
         function closeIncomeModal() {
             document.getElementById('income-modal').classList.add('hidden');
         }
+        
+        // --- Utility Functions ---
+        function debugExpenseData() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            const thisMonthExpenses = expenses.filter(e => {
+                const expenseDate = new Date(e.date);
+                return e.status === 'active' && 
+                       expenseDate.getMonth() === currentMonth && 
+                       expenseDate.getFullYear() === currentYear;
+            });
+            
+            const recurringExpenses = thisMonthExpenses.filter(e => e.recurringSourceId);
+            const oneTimeExpenses = thisMonthExpenses.filter(e => !e.recurringSourceId);
+            
+            console.log('=== EXPENSE DATA DEBUG ===');
+            console.log('Total this month:', thisMonthExpenses.length);
+            console.log('One-time expenses:', oneTimeExpenses.length);
+            console.log('Recurring expenses:', recurringExpenses.length);
+            console.log('Total amount:', thisMonthExpenses.reduce((sum, e) => sum + e.cost, 0));
+            console.log('Recurring items in system:', recurringItems.length);
+            
+            return {
+                total: thisMonthExpenses.length,
+                oneTime: oneTimeExpenses.length,
+                recurring: recurringExpenses.length,
+                amount: thisMonthExpenses.reduce((sum, e) => sum + e.cost, 0)
+            };
+        }
+
     </script>
 
     <!-- === Lens Card Labels Script START === -->
