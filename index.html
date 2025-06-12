@@ -3668,6 +3668,167 @@
             };
         }
 
+        function categorizeChanges(oldItem, newItem) {
+            const changes = {
+                safe: [],      // amount, name, category, paymentMethod
+                schedule: [],  // frequency, startDate, endDate
+                structural: [] // type, essentialType
+            };
+            
+            const safeFields = ['name', 'amount', 'category', 'paymentMethod'];
+            const scheduleFields = ['frequency', 'startDate', 'endDate'];
+            const structuralFields = ['type', 'essentialType'];
+            
+            Object.keys(newItem).forEach(key => {
+                if (oldItem[key] !== newItem[key]) {
+                    if (safeFields.includes(key)) {
+                        changes.safe.push(key);
+                    } else if (scheduleFields.includes(key)) {
+                        changes.schedule.push(key);
+                    } else if (structuralFields.includes(key)) {
+                        changes.structural.push(key);
+                    }
+                }
+            });
+            
+            return changes;
+        }
+
+        function updateExpensesFromCurrentMonth(recurringItem) {
+            const today = new Date();
+            const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            let updatedCount = 0;
+            let preservedCount = 0;
+            
+            expenses.forEach(expense => {
+                if (expense.recurringSourceId === recurringItem.id) {
+                    const expenseDate = new Date(expense.date);
+                    
+                    if (expenseDate >= currentMonthStart) {
+                        // Update current month and future expenses
+                        expense.name = recurringItem.name;
+                        expense.cost = recurringItem.amount;
+                        expense.category = recurringItem.category;
+                        expense.type = recurringItem.essentialType || 'Non-Essential';
+                        expense.paymentMethod = recurringItem.paymentMethod;
+                        updatedCount++;
+                    } else {
+                        // Count preserved past expenses
+                        preservedCount++;
+                    }
+                }
+            });
+            
+            return { updatedCount, preservedCount };
+        }
+
+        function handleScheduleChanges(oldItem, newItem) {
+            const today = new Date();
+            const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            // Count what we're about to remove
+            const removedCount = expenses.filter(e => 
+                e.recurringSourceId === oldItem.id && 
+                new Date(e.date) >= currentMonthStart
+            ).length;
+            
+            const preservedCount = expenses.filter(e => 
+                e.recurringSourceId === oldItem.id && 
+                new Date(e.date) < currentMonthStart
+            ).length;
+            
+            // Remove future expenses (keep past ones intact)
+            expenses = expenses.filter(e => {
+                if (e.recurringSourceId !== oldItem.id) {
+                    return true; // Keep non-related expenses
+                }
+                
+                const expenseDate = new Date(e.date);
+                return expenseDate < currentMonthStart; // Keep past expenses only
+            });
+            
+            return { removedCount, preservedCount };
+        }
+
+        function saveRecurring() {
+            const type = DOMElements.recurringItemType.value;
+            const name = DOMElements.recurringName.value.trim();
+            const amount = parseFloat(DOMElements.recurringAmount.value);
+            const startDate = DOMElements.recurringStartDate.value;
+            const endDate = DOMElements.recurringEndDate.value || null;
+
+            if (!name || isNaN(amount) || amount <= 0 || !startDate) {
+                 showToast('Please fill in recurring item fields correctly.', 'error');
+                return;
+            }
+
+            const recurringItem = {
+                id: editingRecurring ? editingRecurring.id : Date.now(),
+                type: type,
+                name: name,
+                amount: amount,
+                frequency: DOMElements.recurringFrequency.value,
+                category: DOMElements.recurringCategory.value,
+                essentialType: type === 'expense' ? DOMElements.recurringEssentialType.value : null,
+                paymentMethod: DOMElements.recurringPaymentMethod.value,
+                startDate: startDate,
+                endDate: endDate,
+                status: 'active'
+            };
+
+            if (editingRecurring) {
+                const oldRecurring = editingRecurring;
+                const changes = categorizeChanges(oldRecurring, recurringItem);
+                
+                // Update the recurring item first
+                const index = recurringItems.findIndex(r => r.id === editingRecurring.id);
+                if (index !== -1) {
+                    recurringItems[index] = recurringItem;
+                    
+                    // Determine how to handle the update
+                    if (changes.schedule.length > 0 || changes.structural.length > 0) {
+                        // Schedule or structural changes: regenerate from current month
+                        const result = handleScheduleChanges(oldRecurring, recurringItem);
+                        
+                        showToast(
+                            `Recurring ${type} '${name}' updated! ` +
+                            `${result.preservedCount} past expense(s) preserved, ` +
+                            `${result.removedCount} current/future expense(s) will be regenerated.`
+                        );
+                    } else if (changes.safe.length > 0) {
+                        // Safe changes: update current month + future only
+                        const result = updateExpensesFromCurrentMonth(recurringItem);
+                        
+                        let message = `Recurring ${type} '${name}' updated!`;
+                        if (result.updatedCount > 0) {
+                            message += ` ${result.updatedCount} current/future expense(s) updated.`;
+                        }
+                        if (result.preservedCount > 0) {
+                            message += ` ${result.preservedCount} past expense(s) preserved.`;
+                        }
+                        
+                        showToast(message);
+                    } else {
+                        // No relevant changes
+                        showToast(`Recurring ${type} '${name}' updated!`);
+                    }
+                }
+            } else {
+                // Adding new recurring item
+                recurringItems.unshift(recurringItem);
+                showToast(`Recurring ${type} '${name}' saved successfully!`);
+            }
+
+            saveData();
+            
+            // Fix: Force immediate processing and update
+            processRecurringExpenses();
+            updateDisplay();
+            
+            closeRecurringModal();
+        }
+
     </script>
 
     <!-- === Lens Card Labels Script START === -->
