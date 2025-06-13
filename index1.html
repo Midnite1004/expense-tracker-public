@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
     <title>Lens - Personal Finance Tracker</title>
     
     <!-- PWA Meta Tags -->
@@ -31,42 +32,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css">
     <style>
-/* === Lens No‑Scroll Mobile Fix START === */
-html, body {
-    max-width: 100%;
-    overflow-x: hidden;     /* Locks viewport width */
-}
-
-img, svg, canvas {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Contain any wide tables within their own scroll, not the page */
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-}
-
-@media (max-width: 640px) {
-    /* Turn quick‑add tiles into two‑per‑row grid */
-    .quick-add-tile {
-        flex: 1 1 calc(50% - 0.5rem);
-        max-width: calc(50% - 0.5rem);
-    }
-    /* Prevent long ¥ figures from stretching */
-    .amount-large {
-        font-size: clamp(0.875rem, 4.5vw, 1rem);
-        word-break: break-word;
-    }
-    /* Let tables scroll inside wrapper on phones */
-    table {
-        min-width: 600px;
-    }
-}
-/* === Lens No‑Scroll Mobile Fix END === */
-
         * {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
@@ -727,6 +692,401 @@ img, svg, canvas {
         
         
         
+            </style>
+
+        <!-- Mobile Card Layout for Tables -->
+        <style>
+/* === Lens Mobile Card Layout START === */
+        
+        /* Viewport and zoom fixes */
+        :root {
+            --vh: 1vh; /* Set by JavaScript */
+        }
+        
+        html {
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            touch-action: manipulation;
+        }
+        
+        body {
+            overflow-x: hidden;
+            max-width: 100vw;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Prevent iOS zoom on form focus */
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="password"],
+        input[type="search"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="date"],
+        select,
+        textarea {
+            font-size: 16px !important;
+        }
+        
+        /* Prevent zoom and selection on interactive elements */
+        button,
+        .modern-button,
+        .tab-button,
+        .icon-button {
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        @media (max-width: 640px) {
+          /* Hide table headers */
+          table thead {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+          }
+          
+          /* Date group headers - Revolut style */
+          .mobile-date-header td {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 0.75rem 1rem !important;
+            color: var(--text-secondary) !important;
+            font-size: 0.875rem !important;
+            font-weight: 600 !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            margin-bottom: 0.5rem !important;
+            background: transparent !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+          }
+
+          /* Checkbox styling */
+          td:first-child {
+            display: none !important;
+          }
+          
+          td:first-child::before {
+            content: '' !important;
+          }
+
+          /* Card layout */
+          table, tbody, tr {
+            display: block;
+            width: 100%;
+          }
+
+          /* REVOLUT-STYLE TRANSACTION CARDS */
+          tr:not(.mobile-date-header) {
+            display: flex !important;
+            align-items: center !important;
+            background: var(--bg-primary) !important;
+            border: 1px solid var(--border-color) !important;
+            border-bottom: none !important;
+            padding: 1rem !important;
+            margin-bottom: 0 !important;
+            gap: 0.75rem !important;
+            transition: all 0.2s ease !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            min-height: 64px !important;
+            cursor: pointer !important;
+          }
+
+          /* First card rounded top */
+          tr:not(.mobile-date-header):first-of-type {
+            border-radius: 0.75rem 0.75rem 0 0 !important;
+          }
+
+          /* Last card rounded bottom */
+          tr:not(.mobile-date-header):last-of-type {
+            border-radius: 0 0 0.75rem 0.75rem !important;
+            border-bottom: 1px solid var(--border-color) !important;
+          }
+
+          /* Only card gets full rounded corners */
+          tr:not(.mobile-date-header):only-of-type {
+            border-radius: 0.75rem !important;
+            border-bottom: 1px solid var(--border-color) !important;
+          }
+
+          /* Hover and active states */
+          tr:not(.mobile-date-header):hover {
+            background: var(--bg-tertiary) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+          }
+
+          tr:not(.mobile-date-header):active {
+            transform: scale(0.98);
+            background: var(--bg-tertiary) !important;
+          }
+
+          /* Transaction Icon - position as second visible element */
+          td:nth-child(2) {
+            width: 40px !important;
+            height: 40px !important;
+            min-width: 40px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            font-size: 1.25rem !important;
+            color: white !important;
+            border: none !important;
+          }
+
+          /* Category-based icon colors */
+          tr[data-category="Food/Drink"] td:nth-child(2) {
+            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+          }
+          tr[data-category="Transport"] td:nth-child(2) {
+            background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+          }
+          tr[data-category="Entertainment"] td:nth-child(2) {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7) !important;
+          }
+          tr[data-category="Housing"] td:nth-child(2) {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+          }
+          tr[data-category="Subscriptions"] td:nth-child(2) {
+            background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+          }
+          tr[data-category="Utilities"] td:nth-child(2) {
+            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+          }
+          tr[data-category="Shopping"] td:nth-child(2) {
+            background: linear-gradient(135deg, #ec4899, #db2777) !important;
+          }
+          tr[data-category="Health"] td:nth-child(2) {
+            background: linear-gradient(135deg, #06b6d4, #0891b2) !important;
+          }
+
+          /* Icon display using data attribute */
+          td:nth-child(2)::after {
+            content: attr(data-icon);
+            font-size: 1.25rem;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+          }
+
+          /* Transaction details - Name field becomes flex container */
+          td[data-label="Name"] {
+            flex: 1 !important;
+            min-width: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: flex-start !important;
+            border: none !important;
+          }
+
+          /* Transaction name styling */
+          td[data-label="Name"] > span {
+            font-weight: 600 !important;
+            color: var(--text-primary) !important;
+            font-size: 1rem !important;
+            margin-bottom: 0.125rem !important;
+            line-height: 1.2 !important;
+            display: block !important;
+            max-width: 100% !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+          }
+
+          /* Transaction meta info */
+          td[data-label="Name"]::after {
+            font-size: 0.8125rem !important;
+            color: var(--text-secondary) !important;
+            display: block !important;
+            margin-top: 0.125rem !important;
+            line-height: 1.2 !important;
+          }
+
+          /* Generate meta info based on transaction type */
+          td[data-label="Name"]:not([data-recurring="true"])::after {
+            content: attr(data-category) " • " attr(data-time);
+          }
+
+          td[data-label="Name"][data-recurring="true"]::after {
+            content: "🔁 Recurring • " attr(data-time);
+          }
+
+          /* Transaction amount */
+          td[data-label="Amount"] {
+            font-weight: 700 !important;
+            font-size: 1.125rem !important;
+            color: var(--text-primary) !important;
+            text-align: right !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-left: auto !important;
+            flex-shrink: 0 !important;
+            border: none !important;
+            display: flex !important;
+            align-items: center !important;
+            line-height: 1 !important;
+            white-space: nowrap !important;
+            max-width: 30% !important;
+          }
+
+          /* Positive amounts (income) */
+          td[data-label="Amount"][data-positive="true"] {
+            color: var(--accent-green) !important;
+          }
+
+          /* Hide other desktop fields */
+          td[data-label="Date"],
+          td[data-label="Category"],
+          td[data-label="Payment Method"],
+          td[data-label="Type"],
+          td[data-label="Actions"],
+          td[data-label="Status"]:not(.mobile-recurring-status) {
+            display: none !important;
+          }
+
+          /* Dark mode improvements */
+          html.dark tr:not(.mobile-date-header) {
+            background: var(--bg-primary) !important;
+            border-color: var(--border-color) !important;
+          }
+
+          html.dark tr:not(.mobile-date-header):hover {
+            background: var(--bg-tertiary) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+          }
+
+          html.dark .mobile-date-header td {
+            color: var(--text-secondary) !important;
+            border-color: var(--border-color) !important;
+          }
+
+          html.dark td[data-label="Name"] > span {
+            color: var(--text-primary) !important;
+          }
+
+          html.dark td[data-label="Name"]::after {
+            color: var(--text-secondary) !important;
+          }
+
+          html.dark td[data-label="Amount"] {
+            color: var(--text-primary) !important;
+          }
+
+          html.dark td[data-label="Amount"][data-positive="true"] {
+            color: var(--accent-green) !important;
+          }
+
+          /* Responsive adjustments for smaller screens */
+          @media (max-width: 375px) {
+            tr:not(.mobile-date-header) {
+              padding: 0.875rem !important;
+              gap: 0.625rem !important;
+            }
+
+            td:nth-child(2) {
+              width: 36px !important;
+              height: 36px !important;
+              min-width: 36px !important;
+              font-size: 1.125rem !important;
+            }
+            
+            td[data-label="Name"] > span {
+              font-size: 0.9375rem !important;
+            }
+            
+            td[data-label="Amount"] {
+              font-size: 1rem !important;
+            }
+          }
+
+          /* Prevent horizontal overflow */
+          .overflow-x-auto {
+            overflow-x: hidden !important;
+            width: 100%;
+          }
+
+          .card .overflow-x-auto {
+            margin: -0.25rem;
+            padding: 0.25rem;
+          }
+        }
+
+        /* Landscape mode optimizations */
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+          .app-header,
+          header.card {
+            padding: 0.75rem 1rem !important;
+          }
+          
+          .app-header h1,
+          header.card h1 {
+            font-size: 1.5rem !important;
+          }
+          
+          .bottom-nav {
+            height: 56px !important;
+          }
+          
+          .bottom-nav-item svg {
+            width: 1.125rem !important;
+            height: 1.125rem !important;
+            margin-bottom: 0.125rem !important;
+          }
+          
+          .bottom-nav-item span {
+            font-size: 0.625rem !important;
+          }
+        }
+
+        /* Safe area handling for notched devices */
+        @supports (padding: max(0px)) {
+          body {
+            padding-bottom: max(5rem, env(safe-area-inset-bottom));
+          }
+          
+          .bottom-nav {
+            padding-bottom: max(0px, env(safe-area-inset-bottom));
+          }
+        }
+
+        /* iOS Safari specific fixes */
+        @supports (-webkit-touch-callout: none) {
+          body {
+            height: 100vh;
+            height: -webkit-fill-available;
+          }
+          
+          .min-h-screen {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+          }
+        }
+
+        /* Enhanced touch interactions */
+        @media (hover: none) and (pointer: coarse) {
+          .modern-button:active {
+            transform: scale(0.95);
+            transition: transform 0.1s ease;
+          }
+        }
+        
+        /* === Lens Mobile Card Layout END === */
+
+        /* No-scroll CSS - Prevent horizontal scrolling */
+        html,body{max-width:100%;overflow-x:hidden;}
+        .table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;}
     </style>
 </head>
 <body class="antialiased pb-20 md:pb-0">
@@ -736,7 +1096,7 @@ img, svg, canvas {
             <header class="card p-2 md:p-1 mb-6">
                 <div class="flex justify-between items-center gap-4">
                     <!-- Logo & Title -->
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3" data-tour="app-header">
                         <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="12" cy="12" r="8" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" fill="none"/>
@@ -746,26 +1106,26 @@ img, svg, canvas {
                         </div>
                         <div>
                             <h1 class="text-2xl md:text-3xl font-bold">Lens</h1>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Clear financial insight</p>
-                        </div>
-                    </div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Your financial insight</p>
+                                        </div>
+                                        </div>
 
                     <!-- Desktop Navigation & Settings -->
                     <div class="hidden md:flex items-center gap-4">
                         <nav class="flex items-center space-x-2" aria-label="Tabs">
-                            <button onclick="showTab('overview')" id="tab-overview" class="tab-button active">Overview</button>
-                            <button onclick="showTab('expenses')" id="tab-expenses" class="tab-button">Expenses</button>
-                            <button onclick="showTab('recurring')" id="tab-recurring" class="tab-button">Recurring</button>
+                        <button onclick="showTab('overview')" id="tab-overview" class="tab-button active">Overview</button>
+                        <button onclick="showTab('expenses')" id="tab-expenses" class="tab-button">Expenses</button>
+                        <button onclick="showTab('recurring')" id="tab-recurring" class="tab-button">Recurring</button>
                             <button onclick="showTab('insights')" id="tab-insights" class="tab-button">Insights</button>
-                        </nav>
+                    </nav>
                         <div class="border-l border-gray-200 dark:border-gray-600 h-8"></div>
                         <div class="relative inline-block text-left">
                             <button onclick="openSettings()" class="modern-button modern-button-secondary">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>
                                 <span class="hidden sm:inline">Settings</span>
                             </button>
-                        </div>
-                    </div>
+                </div>
+            </div>
                 </div>
             </header>
 
@@ -888,7 +1248,7 @@ img, svg, canvas {
                                 <h3 class="text-lg font-semibold mb-4">Quick Add Common Expenses</h3>
                                 <div class="flex flex-col gap-2 w-full">
                                     <div id="quick-add-coffee">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                        <button class="bg-gray-600 dark:bg-gray-700 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <span class="mr-2">☕</span>
                                                 <span class="text-white">Coffee</span>
@@ -897,7 +1257,7 @@ img, svg, canvas {
                                         </button>
                                     </div>
                                     <div id="quick-add-transport">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                        <button class="bg-gray-600 dark:bg-gray-700 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <span class="mr-2">🚌</span>
                                                 <span class="text-white">Transport</span>
@@ -906,7 +1266,7 @@ img, svg, canvas {
                                         </button>
                                     </div>
                                     <div id="quick-add-lunch">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                        <button class="bg-gray-600 dark:bg-gray-700 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <span class="mr-2">🥪</span>
                                                 <span class="text-white">Lunch</span>
@@ -915,7 +1275,7 @@ img, svg, canvas {
                                         </button>
                                     </div>
                                     <div id="quick-add-groceries">
-                                        <button class="bg-gray-700 dark:bg-gray-800 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
+                                        <button class="bg-gray-600 dark:bg-gray-700 rounded-lg flex justify-between items-center w-full px-4 py-2 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <span class="mr-2">🛒</span>
                                                 <span class="text-white">Groceries</span>
@@ -929,7 +1289,7 @@ img, svg, canvas {
                             <div class="card p-6">
                                 <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
                                 <div id="recent-expenses" class="space-y-3">
-                                    <p class="text-gray-500 dark:text-gray-400">No recent expenses.</p>
+                                    <p class="text-gray-700 dark:text-gray-800">No recent expenses.</p>
                                 </div>
                                 <div class="text-center mt-4">
                                     <button onclick="showTab('expenses')" class="text-blue-600 dark:text-blue-400 font-medium hover:underline">
@@ -946,7 +1306,7 @@ img, svg, canvas {
                     <div class="card">
                         <div class="p-4 md:p-6 border-b border-gray-200 dark:border-gray-700 flex flex-wrap justify-between items-center gap-4">
                             <h2 class="text-xl font-semibold">All Expenses</h2>
-                            <div class="flex gap-3">
+                            <div class="flex flex-wrap gap-2 sm:gap-3">
                                 <button onclick="toggleFilterPanel('expense-filter-panel')" class="modern-button modern-button-secondary">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
@@ -1035,7 +1395,7 @@ img, svg, canvas {
                                 <h2 class="text-xl font-bold">Recurring Items</h2>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Regular income and expenses like salaries or subscriptions.</p>
                             </div>
-                            <div class="flex-shrink-0 flex items-center space-x-2">
+                            <div class="flex-shrink-0 flex flex-wrap items-center gap-2 sm:space-x-2 sm:gap-0">
                                 <button onclick="toggleFilterPanel('recurring-filter-panel')" class="modern-button modern-button-secondary">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" /></svg>
                                     Filter
@@ -1549,8 +1909,12 @@ img, svg, canvas {
         ];
 
         // --- DOM Elements Cache ---
-        const DOMElements = {
+        let DOMElements = {};
+
+        function cacheDOMElements() {
+            DOMElements = {
             html: document.documentElement,
+            // Modals & Forms
             modal: document.getElementById('modal'),
             modalTitle: document.getElementById('modal-title'),
             expenseName: document.getElementById('expense-name'),
@@ -1560,7 +1924,7 @@ img, svg, canvas {
             expenseDate: document.getElementById('expense-date'),
             expensePaymentMethod: document.getElementById('expense-payment-method'),
             modalCurrency: document.getElementById('modal-currency'),
-
+            
             recurringModal: document.getElementById('recurring-modal'),
             recurringModalTitle: document.getElementById('recurring-modal-title'),
             recurringItemType: document.getElementById('recurring-item-type'),
@@ -1614,10 +1978,12 @@ img, svg, canvas {
             healthScoreTrend: document.getElementById('health-score-trend'),
             healthScoreTooltip: document.getElementById('health-score-tooltip'),
             aiProjectionContainer: document.getElementById('ai-projection-container'),
-        };
+            };
+        }
         
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', function() {
+            cacheDOMElements();
             loadData();
             processRecurringExpenses();
             populateCategoryDropdowns();
@@ -1643,8 +2009,8 @@ img, svg, canvas {
 
             recurringItems.forEach(item => {
                 if (item.status !== 'active' || item.type !== 'expense') {
-                    return;
-                }
+                return;
+            }
 
                 const itemStartDate = new Date(item.startDate + 'T00:00:00');
                 if (itemStartDate > today) return;
@@ -1718,7 +2084,7 @@ img, svg, canvas {
                 
                 return getNumericId(b.id) - getNumericId(a.id);
             });
-        }
+            }
 
         // --- Onboarding ---
         function startOnboardingProcess() {
@@ -1749,67 +2115,72 @@ img, svg, canvas {
         }
 
         function launchOnboardingTour() {
+            localStorage.setItem('onboardingComplete', 'true');
             const driver = window.driver.js.driver;
+            const isMobile = window.innerWidth < 768;
+
+            const desktopSteps = [
+                {
+                    element: '[data-tour="app-header"]',
+                    popover: { title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
+                },
+                {
+                    element: 'button[onclick="openSettings(\'budget\')"]',
+                    popover: { title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking.', side: "top", align: 'center' }
+                },
+                {
+                    element: '.card button[onclick="showAddForm()"]',
+                    popover: { title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "left", align: 'start' }
+                },
+                {
+                    element: '.card button[onclick="showRecurringForm()"]',
+                    popover: { title: 'Add a Recurring Item', description: 'For regular income or expenses (like rent or subscriptions), use this.', side: "left", align: 'start' }
+                },
+                {
+                    element: '#tab-insights',
+                    popover: { title: 'Visualize Your Spending', description: 'This tab contains charts and AI-powered insights.', side: "bottom", align: 'start' }
+                },
+                {
+                    element: '.hidden.md\\:flex button[onclick="openSettings()"]',
+                    popover: { title: 'Settings & Data', description: 'Change the theme, set your currency, and import or export your data here.', side: "left", align: 'start' }
+                }
+            ];
+
+            const mobileSteps = [
+                {
+                    element: '[data-tour="app-header"]',
+                    popover: { title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
+                },
+                {
+                    element: 'button[onclick="openSettings(\'budget\')"]',
+                    popover: { title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking.', side: "top", align: 'center' }
+                },
+                {
+                    element: '.card button[onclick="showAddForm()"]',
+                    popover: { title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "bottom", align: 'center' }
+                },
+                {
+                    element: '.card button[onclick="showRecurringForm()"]',
+                    popover: { title: 'Add a Recurring Item', description: 'For regular income or expenses (like rent or subscriptions), use this.', side: "bottom", align: 'center' }
+                },
+                {
+                    element: '#mobile-tab-insights',
+                    popover: { title: 'Visualize Your Spending', description: 'This tab contains charts and AI-powered insights.', side: "top", align: 'center' }
+                },
+                {
+                    element: '#mobile-bottom-nav-settings',
+                    popover: { title: 'Settings & Data', description: 'Change the theme, set currency, and manage your data here.', side: "top", align: 'center' }
+                }
+            ];
+
             const driverObj = driver({
                 showProgress: true,
                 popoverClass: 'driver-popover',
-                steps: [
-                    { 
-                        element: 'h1.text-2xl', 
-                        popover: { 
-                            title: 'Welcome to Lens!', 
-                            description: "Let's take a quick tour to get you started.",
-                            side: "bottom" 
-                        } 
-                    },
-                    { 
-                        element: 'button[onclick="openSettings(\'budget\')"]',
-                        popover: { 
-                            title: 'Set Your Budget & Income', 
-                            description: 'Use the settings to enter your monthly budget and income. This is the baseline for all tracking.',
-                            side: "top"
-                        } 
-                    },
-                    { 
-                        element: 'button[onclick="showAddForm()"]', 
-                        popover: { 
-                            title: 'Add a New Expense', 
-                            description: 'Use this button to log any one-time purchases or expenses.',
-                            side: "left" 
-                        } 
-                    },
-                    { 
-                        element: 'button[onclick="showRecurringForm()"]', 
-                        popover: { 
-                            title: 'Add a Recurring Item', 
-                            description: 'For regular income (like a salary) or expenses (like rent or subscriptions), use this.',
-                            side: "left"
-                        } 
-                    },
-                    { 
-                        element: '#tab-insights', 
-                        popover: { 
-                            title: 'Visualize Your Spending', 
-                            description: 'This tab contains charts and AI-powered insights to help you understand your financial habits.',
-                            side: "bottom" 
-                        } 
-                    },
-                    { 
-                        element: 'button[onclick="openSettings()"]', 
-                        popover: { 
-                            title: 'Settings & Data', 
-                            description: 'Change the theme, set your currency, and import or export your data here.',
-                            side: "left" 
-                        } 
-                    }
-                ],
+                steps: isMobile ? mobileSteps : desktopSteps,
                 onDestroyed: () => {
                     localStorage.setItem('onboardingComplete', 'true');
-                    
-                    // Animate quick-add tiles
                     const quickAddContainers = document.querySelectorAll('[id^="quick-add-"]');
                     quickAddContainers.forEach(container => container.classList.add('animate-pulse'));
-                    
                     setTimeout(() => {
                         quickAddContainers.forEach(container => container.classList.remove('animate-pulse'));
                     }, 3000);
@@ -2035,7 +2406,7 @@ img, svg, canvas {
             saveData();
             updateDisplay();
             closeModal();
-            showToast(`Expense '${name}' saved successfully!`);
+            showToast(`Expense '${name}' saved successfully.`, "success");
         }
         
         function quickAddExpense(name, category, type, cost) {
@@ -2058,25 +2429,26 @@ img, svg, canvas {
 
         function editExpense(id) {
             const expense = expenses.find(e => e.id === id);
-            if (!expense) return;
-            editingExpense = expense;
-            DOMElements.modalTitle.textContent = 'Edit Expense';
-            DOMElements.expenseName.value = expense.name;
-            DOMElements.expenseCost.value = expense.cost;
-            DOMElements.expenseType.value = expense.type;
-            DOMElements.expenseCategory.value = expense.category;
-            DOMElements.expenseDate.value = expense.date;
-            DOMElements.expensePaymentMethod.value = expense.paymentMethod || '';
-            DOMElements.modal.classList.remove('hidden');
+            if (expense) {
+                editingExpense = expense;
+                DOMElements.modalTitle.textContent = 'Edit Expense';
+                DOMElements.expenseName.value = expense.name;
+                DOMElements.expenseCost.value = expense.cost;
+                DOMElements.expenseType.value = expense.type;
+                DOMElements.expenseCategory.value = expense.category;
+                DOMElements.expenseDate.value = expense.date;
+                DOMElements.expensePaymentMethod.value = expense.paymentMethod || '';
+                DOMElements.modal.classList.remove('hidden');
+            }
         }
 
         function deleteExpense(id) {
-            if (confirm('Are you sure you want to permanently delete this expense?')) {
-                expenses = expenses.filter(e => e.id !== id);
-                selectedExpenseIds.delete(id.toString());
-                saveData();
+            const index = expenses.findIndex(e => e.id === id);
+            if (index > -1) {
+                const expenseName = expenses[index].name;
+                expenses.splice(index, 1);
                 updateDisplay();
-                showToast('Expense deleted successfully!');
+                showToast(`Expense '${expenseName}' deleted.`, 'info');
             }
         }
 
@@ -2087,7 +2459,7 @@ img, svg, canvas {
                 saveData();
                 updateDisplay();
                 showToast(`Expense status updated to ${expense.status}.`);
-            }
+        }
         }
         
         function toggleFilterPanel(panelId) {
@@ -2173,7 +2545,7 @@ img, svg, canvas {
             updateDisplay();
             
             closeRecurringModal();
-            showToast(`Recurring ${type} '${name}' saved successfully!`);
+            showToast(`Recurring item '${name}' saved successfully.`, "success");
         }
 
         function editRecurring(id) {
@@ -2232,7 +2604,7 @@ img, svg, canvas {
         
         // --- Filtering Logic ---
         function applyExpenseFilters() {
-            renderExpensesTable();
+            renderExpensesTable_NEW();
             showToast('Filters applied');
         }
 
@@ -2241,12 +2613,12 @@ img, svg, canvas {
             document.getElementById('expense-filter-date-to').value = '';
             document.getElementById('expense-filter-category').value = '';
             document.getElementById('expense-filter-type').value = '';
-            renderExpensesTable();
+            renderExpensesTable_NEW();
             showToast('Filters cleared');
         }
 
         function applyRecurringFilters() {
-            renderRecurringTable();
+            renderRecurringTable_NEW();
             showToast('Filters applied');
         }
 
@@ -2254,7 +2626,7 @@ img, svg, canvas {
             document.getElementById('recurring-filter-type').value = '';
             document.getElementById('recurring-filter-category').value = '';
             document.getElementById('recurring-filter-frequency').value = '';
-            renderRecurringTable();
+            renderRecurringTable_NEW();
             showToast('Filters cleared');
         }
         
@@ -2343,13 +2715,32 @@ img, svg, canvas {
 
         function deleteSelectedRecurring() {
             if (selectedRecurringIds.size === 0) return;
-            if (confirm(`Are you sure you want to delete ${selectedRecurringIds.size} recurring item(s)?`)) {
+            if (confirm(`Are you sure you want to delete ${selectedRecurringIds.size} recurring item(s) and their associated expenses?`)) {
+                let totalRemovedExpenses = 0;
+                
+                // For each selected recurring item, remove associated expenses
+                selectedRecurringIds.forEach(recurringId => {
+                    const initialExpenseCount = expenses.length;
+                    expenses = expenses.filter(e => e.recurringSourceId !== recurringId);
+                    totalRemovedExpenses += (initialExpenseCount - expenses.length);
+                });
+                
+                // Remove the recurring items
+                const deletedRecurringCount = selectedRecurringIds.size;
                 recurringItems = recurringItems.filter(r => !selectedRecurringIds.has(r.id));
+                
+                // Clear selections and update UI
                 selectedRecurringIds.clear();
                 DOMElements.selectAllRecurringCheckbox.checked = false;
+                
                 saveData();
                 updateDisplay();
-                showToast(`${selectedRecurringIds.size} recurring item(s) deleted.`);
+                
+                if (totalRemovedExpenses > 0) {
+                    showToast(`${deletedRecurringCount} recurring item(s) and ${totalRemovedExpenses} associated expense(s) deleted!`);
+                } else {
+                    showToast(`${deletedRecurringCount} recurring item(s) deleted!`);
+                }
             }
         }
 
@@ -2370,27 +2761,18 @@ img, svg, canvas {
                     if (endDate < firstDay) return;
                 }
 
+                // Check if this recurring item has a due date in this month
                 let currentDate = new Date(startDate);
+                let hasOccurrenceThisMonth = false;
                 let iterations = 0;
-                while(currentDate <= lastDay && iterations < 1000) {
-                    if (currentDate >= firstDay) { // Due date is within the month
-                        if (item.type === 'income') {
-                            totals.income += item.amount;
-                            if (!totals.incomeItems.find(i => i.id === item.id)) {
-                                totals.incomeItems.push(item);
-                            }
-                        } else {
-                            totals.expenses += item.amount;
-                             if (!totals.expenseItems.find(i => i.id === item.id)) {
-                                totals.expenseItems.push(item);
-                            }
-                        }
-                        // Important: break after finding the first occurrence in the month
-                        // to avoid double-counting daily/weekly items for the monthly total.
+                
+                while (currentDate <= lastDay && iterations < 100) {
+                    if (currentDate >= firstDay && currentDate <= lastDay) {
+                        hasOccurrenceThisMonth = true;
                         break;
                     }
 
-                    // Increment to the next due date to see if IT is in the month
+                    // Move to next occurrence
                     switch (item.frequency) {
                         case 'Daily': currentDate.setDate(currentDate.getDate() + 1); break;
                         case 'Weekly': currentDate.setDate(currentDate.getDate() + 7); break;
@@ -2398,18 +2780,37 @@ img, svg, canvas {
                         case 'Monthly': currentDate.setMonth(currentDate.getMonth() + 1); break;
                         case 'Quarterly': currentDate.setMonth(currentDate.getMonth() + 3); break;
                         case 'Annual': currentDate.setFullYear(currentDate.getFullYear() + 1); break;
-                        default: iterations = 1000; break;
+                        default: iterations = 100; break;
                     }
                     iterations++;
                 }
+
+                // If there's an occurrence this month, count it once
+                if (hasOccurrenceThisMonth) {
+                    if (item.type === 'income') {
+                        totals.income += item.amount;
+                        if (!totals.incomeItems.find(i => i.id === item.id)) {
+                            totals.incomeItems.push(item);
+                        }
+                    } else {
+                        // Note: Don't add recurring expenses here since they're already in the main expenses array
+                        // Only track for income calculations
+                        if (!totals.expenseItems.find(i => i.id === item.id)) {
+                            totals.expenseItems.push(item);
+                        }
+                    }
+                }
             });
+            
             return totals;
         }
 
         function getMonthlyExpenseTotal(year, month) {
-             return expenses.filter(e => {
+            return expenses.filter(e => {
                 const expenseDate = new Date(e.date);
-                return e.status === 'active' && expenseDate.getMonth() === month && expenseDate.getFullYear() === year;
+                return e.status === 'active' && 
+                       expenseDate.getMonth() === month && 
+                       expenseDate.getFullYear() === year;
             }).reduce((sum, e) => sum + e.cost, 0);
         }
 
@@ -2469,18 +2870,15 @@ img, svg, canvas {
             const monthlyRecurring = getMonthlyRecurringTotals(currentYear, currentMonth);
             const totalMonthlyIncome = monthlyIncome + monthlyRecurring.income;
 
-            const allMonthlyExpenses = [
-                ...expenses.filter(e => {
-                    const expenseDate = new Date(e.date);
-                    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
-                }),
-                ...generateExpensesFromRecurring().filter(e => {
-                    const expenseDate = new Date(e.date);
-                    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
-                })
-            ];
-            const activeMonthlyExpenses = allMonthlyExpenses.filter(e => e.status === 'active');
-            const totalSpent = activeMonthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
+            // ✅ FIXED: Only use the main expenses array (recurring expenses are already there)
+            const allMonthlyExpenses = expenses.filter(e => {
+                const expenseDate = new Date(e.date);
+                return e.status === 'active' && 
+                       expenseDate.getMonth() === currentMonth && 
+                       expenseDate.getFullYear() === currentYear;
+            });
+            
+            const totalSpent = allMonthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
 
             // --- Update UI Tiles ---
             const budgetStr = formatCurrency(monthlyBudget);
@@ -2528,10 +2926,10 @@ img, svg, canvas {
                 <div class="flex items-center gap-2">
                     <span class="text-lg">🔮</span>
                     <div class="flex items-center gap-2">
-                        <div>
-                            <span class="font-semibold">AI Projection:</span>
-                            You're on track to spend <strong>${formatCurrency(projection.projectedSpend)}</strong> this month.
-                            <span class="font-bold ${projection.statusColor}">${projection.statusText}</span>
+                    <div>
+                        <span class="font-semibold">AI Projection:</span>
+                        You're on track to spend <strong>${formatCurrency(projection.projectedSpend)}</strong> this month.
+                        <span class="font-bold ${projection.statusColor}">${projection.statusText}</span>
                         </div>
                         <div class="tooltip">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 cursor-help hover:text-gray-600 dark:hover:text-gray-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2548,11 +2946,12 @@ img, svg, canvas {
                 </div>
             `;
             
-            updateBudgetHealthScore(totalSpent, monthlyBudget, activeMonthlyExpenses, totalMonthlyIncome, now);
+            // ✅ FIXED: Use the correct variable name 'allMonthlyExpenses' instead of 'activeMonthlyExpenses'
+            updateBudgetHealthScore(totalSpent, monthlyBudget, allMonthlyExpenses, totalMonthlyIncome, now);
             
-            // Spending Breakdown
-            const essentialSpending = activeMonthlyExpenses.filter(e => e.type === 'Essential').reduce((sum, e) => sum + e.cost, 0);
-            const nonEssentialSpending = activeMonthlyExpenses.filter(e => e.type === 'Non-Essential').reduce((sum, e) => sum + e.cost, 0);
+            // Spending Breakdown - FIXED: Use correct variable name
+            const essentialSpending = allMonthlyExpenses.filter(e => e.type === 'Essential').reduce((sum, e) => sum + e.cost, 0);
+            const nonEssentialSpending = allMonthlyExpenses.filter(e => e.type === 'Non-Essential').reduce((sum, e) => sum + e.cost, 0);
             DOMElements.essentialSpendingDisplay.textContent = formatCurrency(essentialSpending);
             DOMElements.nonEssentialSpendingDisplay.textContent = formatCurrency(nonEssentialSpending);
             const totalBreakdown = essentialSpending + nonEssentialSpending;
@@ -2560,15 +2959,20 @@ img, svg, canvas {
             DOMElements.essentialBar.style.width = `${essentialPercent}%`;
             DOMElements.nonEssentialBar.style.width = `${100 - essentialPercent}%`;
 
+            // ✅ These functions should now work properly
             renderRecentExpenses();
-            renderExpensesTable();
-            renderRecurringTable();
+            renderExpensesTable_NEW();
+            renderRecurringTable_NEW();
             
             if (activeTab === 'insights') {
                 updateChartsAndInsights();
             }
             updateDeleteSelectedButton();
             updateDeleteSelectedRecurringButton();
+            
+            // Update table labels for mobile cards
+            setTimeout(updateTableLabels_NEW, 10);
+            
             console.timeEnd('updateDisplay');
         }
 
@@ -2850,8 +3254,8 @@ img, svg, canvas {
                 div.className = 'flex justify-between items-center border-b border-gray-100 dark:border-gray-700 py-2 last:border-b-0 text-xs';
                 div.innerHTML = `
                     <div>
-                        <p class="font-medium text-gray-800 dark:text-gray-200">${escapeHTML(expense.name)}</p>
-                        <p class="text-gray-500 dark:text-gray-400">${expense.date} - ${escapeHTML(expense.category)}</p>
+                        <p class="font-medium text-gray-900 dark:text-gray-600">${escapeHTML(expense.name)}</p>
+                        <p class="text-gray-700 dark:text-gray-500">${expense.date} - ${escapeHTML(expense.category)}</p>
                     </div>
                     <p class="font-medium text-red-600 dark:text-red-400">${formatCurrency(expense.cost)}</p>
                 `;
@@ -2910,25 +3314,41 @@ img, svg, canvas {
                 }
                 
                 const deleteAction = isRecurringInstance ? 'return false;' : `deleteExpense(${expense.id})`;
-                
                 const checkboxId = `expense-${expense.id}`;
+
+                // Better status text for mobile
+                let statusText = 'Active';
+                if (isCancelled) {
+                    statusText = 'Cancelled';
+                } else if (isRecurringInstance) {
+                    statusText = 'Recurring';
+                }
+
+                // Format date for better display
+                const formattedDate = new Date(expense.date).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
 
                 return `
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${isCancelled ? 'opacity-60' : ''}">
-                        <td class="px-4 py-3">
+                        <td class="px-4 py-3" data-label="">
                             <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
                             class="table-checkbox expense-checkbox" ${isRecurringInstance ? 'disabled' : ''} ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
-                        <td class="px-6 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">${escapeHTML(expense.name)} ${isRecurringInstance ? '<span class="text-xs text-gray-400">(R)</span>' : ''}</td>
-                        <td class="px-6 py-3">${formatCurrency(expense.cost)}</td>
-                        <td class="px-6 py-3 hidden md:table-cell">${expense.date}</td>
-                        <td class="px-6 py-3 hidden md:table-cell">${escapeHTML(expense.category)}</td>
-                        <td class="px-6 py-3 hidden lg:table-cell">${escapeHTML(expense.paymentMethod) || '-'}</td>
-                        <td class="px-6 py-3 hidden lg:table-cell">${escapeHTML(expense.type)}</td>
-                        <td class="px-6 py-3">
-                            <span class="status-badge ${isCancelled ? 'status-cancelled' : 'status-active'}">${isCancelled ? 'Cancelled' : 'Active'}</span>
+                        <td class="px-6 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Name">
+                            <span>${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-400 ml-1">(R)</span>' : ''}
                         </td>
-                        <td class="px-6 py-3 text-right">
+                        <td class="px-6 py-3" data-label="Amount">${formatCurrency(expense.cost)}</td>
+                        <td class="px-6 py-3" data-label="Date">${formattedDate}</td>
+                        <td class="px-6 py-3 hidden md:table-cell" data-label="Category">${escapeHTML(expense.category)}</td>
+                        <td class="px-6 py-3 hidden lg:table-cell" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-6 py-3 hidden lg:table-cell" data-label="Type">${escapeHTML(expense.type)}</td>
+                        <td class="px-6 py-3" data-label="Status">
+                            <span class="status-badge ${isCancelled ? 'status-cancelled' : 'status-active'}">${statusText}</span>
+                        </td>
+                        <td class="px-6 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
@@ -2970,16 +3390,23 @@ img, svg, canvas {
                 tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
                 const itemTypeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
 
+                // Format start date for better display
+                const formattedStartDate = new Date(item.startDate).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+
                 tr.innerHTML = `
-                    <td class="px-4 py-4 w-1"><input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}></td>
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${escapeHTML(item.name)}</td>
-                    <td class="px-6 py-4 capitalize">${item.type}</td>
-                    <td class="px-6 py-4 font-medium ${itemTypeClass}">${formatCurrency(item.amount)}</td>
-                    <td class="px-6 py-4 hidden md:table-cell">${item.frequency}</td>
-                    <td class="px-6 py-4 hidden md:table-cell">${item.startDate}</td>
-                    <td class="px-6 py-4 hidden lg:table-cell">${escapeHTML(item.category)}</td>
-                    <td class="px-6 py-4"><span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span></td>
-                    <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap">
+                    <td class="px-4 py-4 w-1" data-label=""><input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}></td>
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" data-label="Name">${escapeHTML(item.name)}</td>
+                    <td class="px-6 py-4 capitalize" data-label="Type">${item.type}</td>
+                    <td class="px-6 py-4 font-medium ${itemTypeClass}" data-label="Amount">${formatCurrency(item.amount)}</td>
+                    <td class="px-6 py-4" data-label="Frequency">${item.frequency}</td>
+                    <td class="px-6 py-4" data-label="Start Date">${formattedStartDate}</td>
+                    <td class="px-6 py-4 hidden lg:table-cell" data-label="Category">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4" data-label="Status"><span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span></td>
+                    <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap" data-label="Actions">
                         <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
                         <button onclick="toggleRecurringStatus(${item.id})" class="icon-button" title="${item.status === 'active' ? 'Pause' : 'Resume'}">
                            ${item.status === 'active' ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'}
@@ -3111,12 +3538,15 @@ img, svg, canvas {
                 const date = new Date(new Date().setMonth(new Date().getMonth() - i));
                 const year = date.getFullYear();
                 const month = date.getMonth();
-                const recurring = getMonthlyRecurringTotals(year, month);
+                
+                // Get recurring income only (expenses are already in main array)
+                const recurringIncome = getMonthlyRecurringTotals(year, month).income;
+                
                 data.push({
                     year: year,
                     month: month,
-                    income: monthlyIncome + recurring.income,
-                    expenses: getMonthlyExpenseTotal(year, month) + recurring.expenses
+                    income: monthlyIncome + recurringIncome,
+                    expenses: getMonthlyExpenseTotal(year, month)
                 });
             }
             return data.reverse();
@@ -3378,70 +3808,7 @@ img, svg, canvas {
         }
         });
 
-        function generateExpensesFromRecurring() {
-            const generatedExpenses = [];
-            const today = new Date();
-            // To avoid timezone issues, we compare date strings
-            const todayStr = today.toISOString().split('T')[0];
-
-            recurringItems.forEach(item => {
-                if (item.type !== 'expense' || item.status !== 'active') {
-                    return;
-                }
-
-                let currentDate = new Date(item.startDate + 'T00:00:00'); // Set time to avoid timezone shifts
-                const endDate = item.endDate ? new Date(item.endDate + 'T00:00:00') : today;
-
-                while (currentDate <= endDate && currentDate <= today) {
-                    const year = currentDate.getFullYear();
-                    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                    const day = String(currentDate.getDate()).padStart(2, '0');
-                    const dateStr = `${year}-${month}-${day}`;
-
-                    generatedExpenses.push({
-                        id: `recurring-${item.id}-${dateStr}`, // composite ID
-                        name: `${item.name} (r)`,
-                        cost: item.amount,
-                        type: item.essentialType || 'Non-Essential', // Assign essential type
-                        category: item.category,
-                        date: dateStr,
-                        paymentMethod: item.paymentMethod,
-                        status: 'active',
-                        isRecurring: true,
-                        originalRecurringId: item.id
-                    });
-                    
-                    // Increment currentDate based on frequency
-                    switch (item.frequency) {
-                        case 'Daily':
-                            currentDate.setDate(currentDate.getDate() + 1);
-                            break;
-                        case 'Weekly':
-                            currentDate.setDate(currentDate.getDate() + 7);
-                            break;
-                        case 'Bi-Weekly':
-                            currentDate.setDate(currentDate.getDate() + 14);
-                            break;
-                        case 'Monthly':
-                            currentDate.setMonth(currentDate.getMonth() + 1);
-                            break;
-                        case 'Quarterly':
-                            currentDate.setMonth(currentDate.getMonth() + 3);
-                            break;
-                        case 'Annual':
-                            currentDate.setFullYear(currentDate.getFullYear() + 1);
-                            break;
-                        default:
-                            // Break the loop for unknown frequencies
-                            currentDate = new Date('9999-12-31');
-                            break;
-                    }
-                }
-            });
-
-            return generatedExpenses;
-        }
-
+        
         // --- Auto-Categorization ---
         function autoCategorizeExpense(event) {
             const name = event.target.value.toLowerCase();
@@ -3625,21 +3992,732 @@ img, svg, canvas {
         function closeIncomeModal() {
             document.getElementById('income-modal').classList.add('hidden');
         }
-    
-/* === Lens Responsive Table Wrapper START === */
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('table').forEach(tbl => {
-        // Skip if already wrapped
-        if (!tbl.parentElement.classList.contains('table-responsive')) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'table-responsive';
-            tbl.parentNode.insertBefore(wrapper, tbl);
-            wrapper.appendChild(tbl);
+        
+        // --- Utility Functions ---
+        function debugExpenseData() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            const thisMonthExpenses = expenses.filter(e => {
+                const expenseDate = new Date(e.date);
+                return e.status === 'active' && 
+                       expenseDate.getMonth() === currentMonth && 
+                       expenseDate.getFullYear() === currentYear;
+            });
+            
+            const recurringExpenses = thisMonthExpenses.filter(e => e.recurringSourceId);
+            const oneTimeExpenses = thisMonthExpenses.filter(e => !e.recurringSourceId);
+            
+            console.log('=== EXPENSE DATA DEBUG ===');
+            console.log('Total this month:', thisMonthExpenses.length);
+            console.log('One-time expenses:', oneTimeExpenses.length);
+            console.log('Recurring expenses:', recurringExpenses.length);
+            console.log('Total amount:', thisMonthExpenses.reduce((sum, e) => sum + e.cost, 0));
+            console.log('Recurring items in system:', recurringItems.length);
+            
+            return {
+                total: thisMonthExpenses.length,
+                oneTime: oneTimeExpenses.length,
+                recurring: recurringExpenses.length,
+                amount: thisMonthExpenses.reduce((sum, e) => sum + e.cost, 0)
+            };
         }
-    });
-});
-/* === Lens Responsive Table Wrapper END === */
-</script>
+
+        function categorizeChanges(oldItem, newItem) {
+            const changes = {
+                safe: [],      // amount, name, category, paymentMethod
+                schedule: [],  // frequency, startDate, endDate
+                structural: [] // type, essentialType
+            };
+            
+            const safeFields = ['name', 'amount', 'category', 'paymentMethod'];
+            const scheduleFields = ['frequency', 'startDate', 'endDate'];
+            const structuralFields = ['type', 'essentialType'];
+            
+            Object.keys(newItem).forEach(key => {
+                if (oldItem[key] !== newItem[key]) {
+                    if (safeFields.includes(key)) {
+                        changes.safe.push(key);
+                    } else if (scheduleFields.includes(key)) {
+                        changes.schedule.push(key);
+                    } else if (structuralFields.includes(key)) {
+                        changes.structural.push(key);
+                    }
+                }
+            });
+            
+            return changes;
+        }
+
+        function updateExpensesFromCurrentMonth(recurringItem) {
+            const today = new Date();
+            const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            let updatedCount = 0;
+            let preservedCount = 0;
+            
+            expenses.forEach(expense => {
+                if (expense.recurringSourceId === recurringItem.id) {
+                    const expenseDate = new Date(expense.date);
+                    
+                    if (expenseDate >= currentMonthStart) {
+                        // Update current month and future expenses
+                        expense.name = recurringItem.name;
+                        expense.cost = recurringItem.amount;
+                        expense.category = recurringItem.category;
+                        expense.type = recurringItem.essentialType || 'Non-Essential';
+                        expense.paymentMethod = recurringItem.paymentMethod;
+                        updatedCount++;
+                    } else {
+                        // Count preserved past expenses
+                        preservedCount++;
+                    }
+                }
+            });
+            
+            return { updatedCount, preservedCount };
+        }
+
+        function handleScheduleChanges(oldItem, newItem) {
+            const today = new Date();
+            const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            // Count what we're about to remove
+            const removedCount = expenses.filter(e => 
+                e.recurringSourceId === oldItem.id && 
+                new Date(e.date) >= currentMonthStart
+            ).length;
+            
+            const preservedCount = expenses.filter(e => 
+                e.recurringSourceId === oldItem.id && 
+                new Date(e.date) < currentMonthStart
+            ).length;
+            
+            // Remove future expenses (keep past ones intact)
+            expenses = expenses.filter(e => {
+                if (e.recurringSourceId !== oldItem.id) {
+                    return true; // Keep non-related expenses
+                }
+                
+                const expenseDate = new Date(e.date);
+                return expenseDate < currentMonthStart; // Keep past expenses only
+            });
+            
+            return { removedCount, preservedCount };
+        }
+
+        function saveRecurring() {
+            const type = DOMElements.recurringItemType.value;
+            const name = DOMElements.recurringName.value.trim();
+            const amount = parseFloat(DOMElements.recurringAmount.value);
+            const startDate = DOMElements.recurringStartDate.value;
+            const endDate = DOMElements.recurringEndDate.value || null;
+
+            if (!name || isNaN(amount) || amount <= 0 || !startDate) {
+                 showToast('Please fill in recurring item fields correctly.', 'error');
+                return;
+            }
+
+            const recurringItem = {
+                id: editingRecurring ? editingRecurring.id : Date.now(),
+                type: type,
+                name: name,
+                amount: amount,
+                frequency: DOMElements.recurringFrequency.value,
+                category: DOMElements.recurringCategory.value,
+                essentialType: type === 'expense' ? DOMElements.recurringEssentialType.value : null,
+                paymentMethod: DOMElements.recurringPaymentMethod.value,
+                startDate: startDate,
+                endDate: endDate,
+                status: 'active'
+            };
+
+            if (editingRecurring) {
+                const oldRecurring = editingRecurring;
+                const changes = categorizeChanges(oldRecurring, recurringItem);
+                
+                // Update the recurring item first
+                const index = recurringItems.findIndex(r => r.id === editingRecurring.id);
+                if (index !== -1) {
+                    recurringItems[index] = recurringItem;
+                    
+                    // Determine how to handle the update
+                    if (changes.schedule.length > 0 || changes.structural.length > 0) {
+                        // Schedule or structural changes: regenerate from current month
+                        const result = handleScheduleChanges(oldRecurring, recurringItem);
+                        
+                        showToast(
+                            `Recurring ${type} '${name}' updated! ` +
+                            `${result.preservedCount} past expense(s) preserved, ` +
+                            `${result.removedCount} current/future expense(s) will be regenerated.`
+                        );
+                    } else if (changes.safe.length > 0) {
+                        // Safe changes: update current month + future only
+                        const result = updateExpensesFromCurrentMonth(recurringItem);
+                        
+                        let message = `Recurring ${type} '${name}' updated!`;
+                        if (result.updatedCount > 0) {
+                            message += ` ${result.updatedCount} current/future expense(s) updated.`;
+                        }
+                        if (result.preservedCount > 0) {
+                            message += ` ${result.preservedCount} past expense(s) preserved.`;
+                        }
+                        
+                        showToast(message);
+                    } else {
+                        // No relevant changes
+                        showToast(`Recurring ${type} '${name}' updated!`);
+                    }
+                }
+            } else {
+                // Adding new recurring item
+                recurringItems.unshift(recurringItem);
+                showToast(`Recurring ${type} '${name}' saved successfully!`);
+            }
+
+            saveData();
+            
+            // Fix: Force immediate processing and update
+            processRecurringExpenses();
+            updateDisplay();
+            
+            closeRecurringModal();
+        }
+
+        // Enhanced Mobile Rendering Functions
+
+        // Category to icon mapping
+        const categoryIcons = {
+            'Food/Drink': '🍽️',
+            'Transport': '🚗',
+            'Entertainment': '🎬',
+            'Housing': '🏠',
+            'Utilities': '⚡',
+            'Shopping': '🛍️',
+            'Health': '🏥',
+            'Subscriptions': '📱',
+            'Personal Care': '💄',
+            'Education': '📚',
+            'Debt': '💳',
+            'Other': '💰'
+        };
+
+        // Enhanced renderExpensesTable function
+        function renderExpensesTable_NEW() {
+            let allExpenses = [...expenses];
+
+            // Apply filters (existing filter logic)
+            const dateFrom = document.getElementById('expense-filter-date-from').value;
+            const dateTo = document.getElementById('expense-filter-date-to').value;
+            const categoryFilter = document.getElementById('expense-filter-category').value;
+            const typeFilter = document.getElementById('expense-filter-type').value;
+
+            const filteredExpenses = allExpenses.filter(e => {
+                let passes = true;
+                if (dateFrom && e.date < dateFrom) passes = false;
+                if (dateTo && e.date > dateTo) passes = false;
+                if (categoryFilter && e.category !== categoryFilter) passes = false;
+                if (typeFilter && e.type !== typeFilter) passes = false;
+                return passes;
+            });
+
+            // Sort expenses by date (newest first)
+            filteredExpenses.sort((a, b) => {
+                const dateCompare = new Date(b.date) - new Date(a.date);
+                if (dateCompare !== 0) return dateCompare;
+                
+                const getNumericId = (id) => {
+                    if (typeof id === 'string') {
+                        const match = id.match(/\d+/);
+                        return match ? parseInt(match[0]) : 0;
+                    }
+                    return id;
+                };
+                
+                return getNumericId(b.id) - getNumericId(a.id);
+            });
+
+            const tableBody = DOMElements.expensesTableBody;
+            
+            if (filteredExpenses.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-gray-500">No expenses match your filters.</td></tr>`;
+                return;
+            }
+
+            // Check if we're on mobile
+            const isMobile = window.innerWidth <= 640;
+            
+            if (isMobile) {
+                renderMobileExpenseList(filteredExpenses, tableBody);
+            } else {
+                renderDesktopExpenseTable(filteredExpenses, tableBody);
+            }
+        }
+
+        function renderMobileExpenseList(expenses, container) {
+            // Group expenses by date
+            const groupedExpenses = groupExpensesByDate(expenses);
+            
+            let html = '';
+            
+            Object.entries(groupedExpenses).forEach(([dateKey, dayExpenses]) => {
+                const dateObj = new Date(dateKey);
+                const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                let dateLabel;
+                if (dateKey === today.toISOString().split('T')[0]) {
+                    dateLabel = 'Today';
+                } else if (dateKey === yesterday.toISOString().split('T')[0]) {
+                    dateLabel = 'Yesterday';
+                } else {
+                    dateLabel = dateObj.toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'long'
+                    });
+                }
+                
+                // Calculate total for the day
+                const dayTotal = dayExpenses.reduce((sum, exp) => sum + exp.cost, 0);
+                
+                // Date header
+                html += `
+                    <tr class="mobile-date-header">
+                        <td colspan="9" class="mobile-date-header">
+                            <span>${dateLabel}</span>
+                            <span>-${formatCurrency(dayTotal)}</span>
+                        </td>
+                    </tr>
+                `;
+                
+                // Expense cards for this date
+                dayExpenses.forEach(expense => {
+                    html += renderMobileExpenseCard(expense);
+                });
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function renderMobileExpenseCard(expense) {
+            const isRecurringInstance = !!expense.recurringSourceId;
+            const isCancelled = expense.status === 'cancelled';
+            const originalRecurringItem = isRecurringInstance ? 
+                recurringItems.find(r => r.id === expense.recurringSourceId) : null;
+
+            const editAction = isRecurringInstance && originalRecurringItem ? 
+                `editRecurring(${originalRecurringItem.id})` : 
+                `editExpense(${expense.id})`;
+            
+            const deleteAction = isRecurringInstance ? 
+                'return false;' : 
+                `deleteExpense(${expense.id})`;
+            
+            const checkboxId = `expense-${expense.id}`;
+            const expenseTime = new Date(expense.date + 'T12:00:00').toLocaleTimeString('en-GB', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+            
+            const categoryIcon = categoryIcons[expense.category] || categoryIcons['Other'];
+            const isPositive = false; // Expenses are always negative
+            
+            return `
+                <tr class="mobile-expense-card ${isCancelled ? 'opacity-60' : ''}" 
+                    data-category="${expense.category}"
+                    data-recurring="${isRecurringInstance}"
+                    data-expense-id="${expense.id}">
+                    
+                    <td class="mobile-transaction-checkbox" data-label="">
+                        <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" 
+                               onchange="toggleExpenseSelection(this, '${expense.id}')" 
+                               class="table-checkbox expense-checkbox" 
+                               ${isRecurringInstance ? 'disabled' : ''} 
+                               ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
+                    </td>
+                    
+                    <td class="mobile-transaction-icon" data-icon="${categoryIcon}">
+                    </td>
+                    
+                    <td class="mobile-transaction-details" data-label="Name" 
+                        data-category="${expense.category}" 
+                        data-time="${expenseTime}"
+                        data-recurring="${isRecurringInstance}">
+                        <span>${escapeHTML(expense.name)}</span>
+                    </td>
+                    
+                    <td class="mobile-transaction-amount" data-label="Amount" 
+                        data-positive="${isPositive}">
+                        -${formatCurrency(expense.cost)}
+                    </td>
+                    
+                    <!-- Hidden fields for desktop compatibility -->
+                    <td class="hidden" data-label="Date">${expense.date}</td>
+                    <td class="hidden" data-label="Category">${escapeHTML(expense.category)}</td>
+                    <td class="hidden" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                    <td class="hidden" data-label="Type">${escapeHTML(expense.type)}</td>
+                    <td class="hidden" data-label="Status">
+                        ${isCancelled ? 
+                            '<span class="status-badge status-cancelled">Cancelled</span>' : 
+                            (isRecurringInstance ? 
+                                '<span class="status-badge status-recurring">Recurring</span>' : 
+                                '<span class="status-badge status-active">Active</span>'
+                            )
+                        }
+                    </td>
+                    <td class="hidden" data-label="Actions">
+                        <div class="flex items-center justify-end gap-1">
+                            <button onclick="${editAction}" title="Edit" class="icon-button" 
+                                    ${isCancelled ? 'disabled' : ''}>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <button onclick="${deleteAction}" title="Delete" 
+                                    class="icon-button text-red-600/80 hover:text-red-500" 
+                                    ${isRecurringInstance ? 'disabled' : ''}>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function renderDesktopExpenseTable(expenses, container) {
+            // Keep existing desktop table rendering logic
+            container.innerHTML = expenses.map(expense => {
+                const isRecurringInstance = !!expense.recurringSourceId;
+                const isCancelled = expense.status === 'cancelled';
+                const originalRecurringItem = isRecurringInstance ? 
+                    recurringItems.find(r => r.id === expense.recurringSourceId) : null;
+
+                let editAction = `editExpense(${expense.id})`;
+                if (isRecurringInstance && originalRecurringItem) {
+                    editAction = `editRecurring(${originalRecurringItem.id})`;
+                }
+                
+                const deleteAction = isRecurringInstance ? 'return false;' : `deleteExpense(${expense.id})`;
+                const checkboxId = `expense-${expense.id}`;
+
+                const formattedDate = new Date(expense.date).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+
+                let statusCell = '';
+                if (isCancelled) {
+                    statusCell = `<td class="px-6 py-3" data-label="Status">
+                        <span class="status-badge status-cancelled">Cancelled</span>
+                    </td>`;
+                } else if (isRecurringInstance) {
+                    statusCell = `<td class="px-6 py-3" data-label="Status">
+                        <span class="status-badge status-recurring">Recurring</span>
+                    </td>`;
+                } else {
+                    statusCell = `<td class="px-6 py-3" data-label="Status">
+                        <span class="status-badge status-active">Active</span>
+                    </td>`;
+                }
+
+                return `
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${isCancelled ? 'opacity-60' : ''}"
+                        data-category="${expense.category}">
+                        <td class="px-4 py-3" data-label="">
+                            <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" 
+                                   onchange="toggleExpenseSelection(this, '${expense.id}')" 
+                                   class="table-checkbox expense-checkbox" 
+                                   ${isRecurringInstance ? 'disabled' : ''} 
+                                   ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
+                        </td>
+                        <td class="px-6 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Name">
+                            <span>${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-400 ml-1">(R)</span>' : ''}
+                        </td>
+                        <td class="px-6 py-3" data-label="Amount">${formatCurrency(expense.cost)}</td>
+                        <td class="px-6 py-3" data-label="Date">${formattedDate}</td>
+                        <td class="px-6 py-3 hidden md:table-cell" data-label="Category">${escapeHTML(expense.category)}</td>
+                        <td class="px-6 py-3 hidden lg:table-cell" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-6 py-3 hidden lg:table-cell" data-label="Type">${escapeHTML(expense.type)}</td>
+                        ${statusCell}
+                        <td class="px-6 py-3 text-right" data-label="Actions">
+                            <div class="flex items-center justify-end gap-1">
+                                <button onclick="${editAction}" title="Edit" class="icon-button" 
+                                        ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                                <button onclick="${deleteAction}" title="Delete" 
+                                        class="icon-button text-red-600/80 hover:text-red-500" 
+                                        ${isRecurringInstance ? 'disabled' : ''} ${isRecurringInstance ? 'opacity-50 cursor-not-allowed' : ''}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function groupExpensesByDate(expenses) {
+            return expenses.reduce((groups, expense) => {
+                const date = expense.date;
+                if (!groups[date]) {
+                    groups[date] = [];
+                }
+                groups[date].push(expense);
+                return groups;
+            }, {});
+        }
+
+        // Enhanced recurring table rendering for mobile
+        function renderRecurringTable_NEW() {
+            DOMElements.recurringTableBody.innerHTML = '';
+            const type = document.getElementById('recurring-filter-type').value;
+            const category = document.getElementById('recurring-filter-category').value;
+            const frequency = document.getElementById('recurring-filter-frequency').value;
+
+            let filtered = recurringItems.filter(item => {
+                if (type && item.type !== type) return false;
+                if (category && item.category !== category) return false;
+                if (frequency && item.frequency !== frequency) return false;
+                return true;
+            });
+
+            filtered.sort((a, b) => b.id - a.id);
+
+            if (filtered.length === 0) {
+                DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="9" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
+                return;
+            }
+
+            const isMobile = window.innerWidth <= 640;
+            
+            if (isMobile) {
+                renderMobileRecurringList(filtered, DOMElements.recurringTableBody);
+            } else {
+                renderDesktopRecurringTable(filtered, DOMElements.recurringTableBody);
+            }
+        }
+
+        function renderMobileRecurringList(items, container) {
+            let html = '';
+            
+            items.forEach(item => {
+                const isSelected = selectedRecurringIds.has(item.id);
+                const itemTypeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+                const categoryIcon = categoryIcons[item.category] || categoryIcons['Other'];
+                
+                const formattedStartDate = new Date(item.startDate).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+
+                html += `
+                    <tr class="mobile-recurring-card ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : ''}"
+                        data-category="${item.category}"
+                        data-type="${item.type}">
+                        
+                        <td class="mobile-transaction-checkbox" data-label="">
+                            <input type="checkbox" data-id="${item.id}" 
+                                   onchange="toggleRecurringSelection(this, ${item.id})" 
+                                   class="table-checkbox recurring-checkbox" 
+                                   ${isSelected ? 'checked' : ''}>
+                        </td>
+                        
+                        <td class="mobile-transaction-icon" data-icon="${categoryIcon}">
+                        </td>
+                        
+                        <td class="mobile-transaction-details" data-label="Name">
+                            <div class="mobile-recurring-name">${escapeHTML(item.name)}</div>
+                            <div class="mobile-recurring-meta">
+                                <span class="capitalize">${item.type}</span>
+                                <span>•</span>
+                                <span>${item.frequency}</span>
+                                <span>•</span>
+                                <span>Since ${formattedStartDate}</span>
+                            </div>
+                        </td>
+                        
+                        <td class="mobile-transaction-amount ${itemTypeClass}" data-label="Amount">
+                            ${item.type === 'income' ? '+' : '-'}${formatCurrency(item.amount)}
+                        </td>
+                        
+                        <td class="mobile-recurring-status" data-label="Status">
+                            <span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">
+                                ${item.status}
+                            </span>
+                        </td>
+                        
+                        <!-- Hidden desktop fields -->
+                        <td class="hidden" data-label="Type">${item.type}</td>
+                        <td class="hidden" data-label="Frequency">${item.frequency}</td>
+                        <td class="hidden" data-label="Start Date">${formattedStartDate}</td>
+                        <td class="hidden" data-label="Category">${escapeHTML(item.category)}</td>
+                        <td class="hidden" data-label="Actions">
+                            <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <button onclick="toggleRecurringStatus(${item.id})" class="icon-button" title="${item.status === 'active' ? 'Pause' : 'Resume'}">
+                                ${item.status === 'active' ? 
+                                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : 
+                                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+                                }
+                            </button>
+                            <button onclick="deleteRecurring(${item.id})" class="icon-button text-red-500 hover:text-red-700" title="Delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function renderDesktopRecurringTable(items, container) {
+            // Existing desktop recurring table logic
+            items.forEach(item => {
+                const tr = document.createElement('tr');
+                const isSelected = selectedRecurringIds.has(item.id);
+                tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
+                const itemTypeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+
+                const formattedStartDate = new Date(item.startDate).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+
+                tr.innerHTML = `
+                    <td class="px-4 py-4 w-1" data-label="">
+                        <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}>
+                    </td>
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" data-label="Name">${escapeHTML(item.name)}</td>
+                    <td class="px-6 py-4 capitalize" data-label="Type">${item.type}</td>
+                    <td class="px-6 py-4 font-medium ${itemTypeClass}" data-label="Amount">${formatCurrency(item.amount)}</td>
+                    <td class="px-6 py-4" data-label="Frequency">${item.frequency}</td>
+                    <td class="px-6 py-4" data-label="Start Date">${formattedStartDate}</td>
+                    <td class="px-6 py-4 hidden lg:table-cell" data-label="Category">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4" data-label="Status">
+                        <span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap" data-label="Actions">
+                        <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <button onclick="toggleRecurringStatus(${item.id})" class="icon-button" title="${item.status === 'active' ? 'Pause' : 'Resume'}">
+                           ${item.status === 'active' ? 
+                               '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : 
+                               '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+                           }
+                        </button>
+                        <button onclick="deleteRecurring(${item.id})" class="icon-button text-red-500 hover:text-red-700" title="Delete">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </td>
+                `;
+                container.appendChild(tr);
+            });
+        }
+
+        // Add responsive behavior
+        function handleResize() {
+            if (activeTab === 'expenses') {
+                renderExpensesTable_NEW();
+            } else if (activeTab === 'recurring') {
+                renderRecurringTable_NEW();
+            }
+        }
+
+        // Listen for window resize with debounce
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(handleResize, 250);
+        });
+
+        // Enhanced updateTableLabels function for better mobile support
+        function updateTableLabels_NEW() {
+            document.querySelectorAll('table').forEach(tbl => {
+                const headers = Array.from(tbl.querySelectorAll('thead th'))
+                             .map(th => th.textContent.trim());
+
+                tbl.querySelectorAll('tbody tr').forEach(row => {
+                    Array.from(row.children).forEach((cell, idx) => {
+                        if (!cell.hasAttribute('data-label')) {
+                            cell.setAttribute('data-label', headers[idx] || '');
+                        }
+                        
+                        // Add category data attribute for styling
+                        if (headers[idx] === 'Category' && cell.textContent.trim()) {
+                            row.setAttribute('data-category', cell.textContent.trim());
+                        }
+                        
+                        // Add recurring data attribute
+                        if (headers[idx] === 'Status' && cell.textContent.includes('Recurring')) {
+                            row.setAttribute('data-recurring', 'true');
+                        }
+                        
+                        // Add time data for mobile meta display
+                        if (headers[idx] === 'Date' && cell.textContent.trim()) {
+                            const timeAttr = '12:00'; // Default time since we don't store time
+                            row.querySelector('td[data-label="Name"]')?.setAttribute('data-time', timeAttr);
+                        }
+                        
+                        // Add icon data attribute based on category
+                        if (headers[idx] === 'Category' && cell.textContent.trim()) {
+                            const category = cell.textContent.trim();
+                            const icon = categoryIcons[category] || categoryIcons['Other'];
+                            const iconCell = row.querySelector('td:nth-child(2)');
+                            if (iconCell) {
+                                iconCell.setAttribute('data-icon', icon);
+                            }
+                        }
+                    });
+                });
+            });
+        }
+    </script>
+
+    <!-- === Lens Card Labels Script START === -->
+    <script>
+      function updateTableLabels() {
+        document.querySelectorAll('table').forEach(tbl => {
+          const headers = Array.from(tbl.querySelectorAll('thead th'))
+                               .map(th => th.textContent.trim());
+
+          tbl.querySelectorAll('tbody tr').forEach(row => {
+            Array.from(row.children).forEach((cell, idx) => {
+              if (!cell.hasAttribute('data-label')) {
+                cell.setAttribute('data-label', headers[idx] || '');
+              }
+            });
+          });
+        });
+      }
+      
+      document.addEventListener('DOMContentLoaded', updateTableLabels);
+    </script>
+    <!-- === Lens Card Labels Script END === -->
 
     <!-- Mobile Bottom Navigation -->
 <!-- Mobile Bottom Navigation -->
@@ -3669,7 +4747,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="text-xs">Insights</span>
             </button>
             <!-- Add Settings Button for Mobile -->
-            <button onclick="openSettings()" class="bottom-nav-item flex flex-col items-center justify-center w-full">
+            <button id="mobile-bottom-nav-settings" onclick="openSettings()" class="bottom-nav-item flex flex-col items-center justify-center w-full">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 <span class="text-xs">Settings</span>
             </button>
