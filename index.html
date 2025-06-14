@@ -15,7 +15,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     
     <!-- Content Security Policy for PWA -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;">
     
     <!-- PWA Icons -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='iconGradient' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233b82f6'/%3E%3Cstop offset='100%25' style='stop-color:%231d4ed8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='0' y='0' width='32' height='32' rx='6' fill='url(%23iconGradient)'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='rgba(255,255,255,0.9)' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='1'/%3E%3Ccircle cx='16' cy='16' r='3' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='1'/%3E%3C/svg%3E">
@@ -965,8 +965,7 @@
           td[data-label="Category"],
           td[data-label="Payment Method"],
           td[data-label="Type"],
-          td[data-label="Actions"],
-          td[data-label="Status"]:not(.mobile-recurring-status) {
+          td[data-label="Actions"] {
             display: none !important;
           }
 
@@ -1387,13 +1386,12 @@
                                         <th scope="col" class="px-6 py-3 hidden md:table-cell">Category</th>
                                         <th scope="col" class="px-6 py-3 hidden lg:table-cell">Payment Method</th>
                                         <th scope="col" class="px-6 py-3 hidden lg:table-cell">Type</th>
-                                        <th scope="col" class="px-6 py-3">Status</th>
                                         <th scope="col" class="px-6 py-3 text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="expenses-table">
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <td colspan="9" class="px-6 py-4 text-center">No expenses recorded yet.</td>
+                                        <td colspan="8" class="px-6 py-4 text-center">No expenses recorded yet.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1470,7 +1468,7 @@
                                         <th scope="col" class="px-6 py-3">Type</th>
                                         <th scope="col" class="px-6 py-3">Amount</th>
                                         <th scope="col" class="px-6 py-3 hidden md:table-cell">Frequency</th>
-                                        <th scope="col" class="px-6 py-3 hidden md:table-cell">Start Date</th>
+                                        <th scope="col" class="px-6 py-3 hidden md:table-cell" style="white-space: nowrap;">Date</th>
                                         <th scope="col" class="px-6 py-3 hidden lg:table-cell">Category</th>
                                         <th scope="col" class="px-6 py-3">Status</th>
                                         <th scope="col" class="px-6 py-3 text-right">Actions</th>
@@ -1896,6 +1894,10 @@
         let aiSavingsCache = null;
         let aiSpendingCache = null;
         let lastAiUpdate = 0;
+
+        function stripISO(dateStr) {
+            return (dateStr || '').split('T')[0];
+        }
 
         const expenseCategories = ["Housing", "Utilities", "Transport", "Food/Drink", "Entertainment", "Shopping", "Health", "Personal Care", "Education", "Debt", "Subscriptions", "Other"];
         const incomeCategories = ["Salary", "Bonus", "Investment", "Gift", "Other Income"];
@@ -2430,15 +2432,15 @@
         
         function quickAddExpense(name, category, type, cost) {
             const expense = {
-                id: Date.now(),
+                    id: Date.now(),
                 name: name,
                 cost: cost,
                 type: type || 'Non-Essential',
                 category: category || 'Other',
                 date: new Date().toISOString().split('T')[0],
                 paymentMethod: '',
-                status: 'active'
-            };
+                    status: 'active'
+                };
             expenses.push(expense);
             sortExpenses();
             saveData();
@@ -2450,14 +2452,14 @@
             const expense = expenses.find(e => e.id === id);
             if (expense) {
             editingExpense = expense;
-            DOMElements.modalTitle.textContent = 'Edit Expense';
-            DOMElements.expenseName.value = expense.name;
-            DOMElements.expenseCost.value = expense.cost;
-            DOMElements.expenseType.value = expense.type;
-            DOMElements.expenseCategory.value = expense.category;
-            DOMElements.expenseDate.value = expense.date;
-            DOMElements.expensePaymentMethod.value = expense.paymentMethod || '';
-            DOMElements.modal.classList.remove('hidden');
+                DOMElements.modalTitle.textContent = 'Edit Expense';
+                DOMElements.expenseName.value = expense.name;
+                DOMElements.expenseCost.value = expense.cost;
+                DOMElements.expenseType.value = expense.type;
+                DOMElements.expenseCategory.value = expense.category;
+                DOMElements.expenseDate.value = expense.date;
+                DOMElements.expensePaymentMethod.value = expense.paymentMethod || '';
+                DOMElements.modal.classList.remove('hidden');
             }
         }
 
@@ -2480,7 +2482,7 @@
                 showToast(`Expense status updated to ${expense.status}.`);
             }
         }
-        
+
         function toggleFilterPanel(panelId) {
             document.getElementById(panelId).classList.toggle('hidden');
         }
@@ -2945,11 +2947,11 @@
                 <div class="flex items-center gap-2">
                     <span class="text-lg">🔮</span>
                     <div class="flex items-center gap-2">
-                    <div>
+                            <div>
                         <span class="font-semibold">AI Projection:</span>
                         You're on track to spend <strong>${formatCurrency(projection.projectedSpend)}</strong> this month.
                         <span class="font-bold ${projection.statusColor}">${projection.statusText}</span>
-                        </div>
+                            </div>
                         <div class="tooltip">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 cursor-help hover:text-gray-600 dark:hover:text-gray-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -2959,10 +2961,10 @@
                                 Based on your spending so far (${formatCurrency(totalSpent)}) divided by ${new Date().getDate()} days = ${formatCurrency(totalSpent / new Date().getDate())} per day average.<br><br>
                                 Projected over ${new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()} days in this month = ${formatCurrency(projection.projectedSpend)} total.<br><br>
                                 This becomes more accurate as you add more expenses throughout the month.
+                        </div>
                             </div>
                         </div>
                     </div>
-                </div>
             `;
             
             // ✅ FIXED: Use the correct variable name 'allMonthlyExpenses' instead of 'activeMonthlyExpenses'
@@ -3296,7 +3298,7 @@
                 if (dateFrom && e.date < dateFrom) passes = false;
                 if (dateTo && e.date > dateTo) passes = false;
                 if (categoryFilter && e.category !== categoryFilter) passes = false;
-                if (typeFilter && e.type !== typeFilter) passes = false;
+                if (typeFilter && e.type !== typeFilter && !(typeFilter === 'Recurring' && e.recurringSourceId)) passes = false;
                 return passes;
             });
 
@@ -3318,7 +3320,7 @@
 
             const tableBody = DOMElements.expensesTableBody;
             if (filteredExpenses.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</td></tr>`;
                 return;
             }
 
@@ -3364,9 +3366,6 @@
                         <td class="px-6 py-3 hidden md:table-cell" data-label="Category">${escapeHTML(expense.category)}</td>
                         <td class="px-6 py-3 hidden lg:table-cell" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
                         <td class="px-6 py-3 hidden lg:table-cell" data-label="Type">${escapeHTML(expense.type)}</td>
-                        <td class="px-6 py-3" data-label="Status">
-                            <span class="status-badge ${isCancelled ? 'status-cancelled' : 'status-active'}">${statusText}</span>
-                        </td>
                         <td class="px-6 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
@@ -4229,7 +4228,15 @@
                 if (dateFrom && e.date < dateFrom) passes = false;
                 if (dateTo && e.date > dateTo) passes = false;
                 if (categoryFilter && e.category !== categoryFilter) passes = false;
-                if (typeFilter && e.type !== typeFilter) passes = false;
+                
+                if (typeFilter) {
+                    if (typeFilter === 'Recurring') {
+                        if (!e.recurringSourceId) passes = false;
+                    } else {
+                        if (e.type !== typeFilter) passes = false;
+                    }
+                }
+
                 return passes;
             });
 
@@ -4252,7 +4259,7 @@
             const tableBody = DOMElements.expensesTableBody;
             
             if (filteredExpenses.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</td></tr>`;
                 return;
             }
 
@@ -4267,9 +4274,14 @@
         }
 
         function renderMobileExpenseCards(expenses, container) {
-            // Group expenses by date
+            if (!expenses || expenses.length === 0) {
+                container.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses to display.</td></tr>`;
+                return;
+            }
+
             const grouped = expenses.reduce((groups, expense) => {
-                const date = expense.date;
+                const date = (expense.date || '').split('T')[0];
+                if (!date) return groups;
                 if (!groups[date]) {
                     groups[date] = [];
                 }
@@ -4278,20 +4290,18 @@
             }, {});
 
             let html = '';
-            
-            // Sort dates descending
+
             const sortedDates = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
 
             sortedDates.forEach(date => {
                 const dayExpenses = grouped[date];
                 const dayTotal = dayExpenses.reduce((sum, exp) => sum + exp.cost, 0);
-                
+
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
                 const yesterday = new Date(today);
                 yesterday.setDate(yesterday.getDate() - 1);
-                const expenseDate = new Date(new Date(date).toLocaleString("en-US", { timeZone: "UTC" }));
-                expenseDate.setHours(0,0,0,0);
+                const expenseDate = new Date(date + 'T00:00:00');
 
                 let dateLabel;
                 if (expenseDate.getTime() === today.getTime()) {
@@ -4299,13 +4309,12 @@
                 } else if (expenseDate.getTime() === yesterday.getTime()) {
                     dateLabel = 'Yesterday';
                 } else {
-                    dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+                    dateLabel = expenseDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
                 }
 
-                // Date Header
                 html += `
                     <tr class="mobile-date-header">
-                        <td colspan="9" style="padding: 16px 8px 4px 8px; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">
+                        <td colspan="8" style="padding: 16px 8px 4px 8px; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <span>${dateLabel}</span>
                                 <span>-${formatCurrency(dayTotal, false)}</span>
@@ -4313,7 +4322,6 @@
                         </td>
                     </tr>`;
 
-                // Expense Cards for the day
                 dayExpenses.forEach(expense => {
                     const categoryIcon = categoryIcons[expense.category] || categoryIcons['Other'];
                     const isRecurringInstance = !!expense.recurringSourceId;
@@ -4322,7 +4330,7 @@
 
                     html += `
                     <tr>
-                        <td colspan="9" style="padding: 0 8px 8px 8px;">
+                        <td colspan="8" style="padding: 0 8px 8px 8px;">
                             <div onclick="${editAction}" style="display: flex; align-items: center; padding: 12px; background-color: var(--bg-primary); border-radius: 12px; box-shadow: var(--shadow-sm); cursor: pointer;">
                                 <div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--bg-tertiary); margin-right: 12px; font-size: 1.25rem;">
                                     ${categoryIcon}
@@ -4366,23 +4374,8 @@
                     year: 'numeric'
                 });
 
-                let statusCell = '';
-                if (isCancelled) {
-                    statusCell = `<td class="px-6 py-3" data-label="Status">
-                        <span class="status-badge status-cancelled">Cancelled</span>
-                    </td>`;
-                } else if (isRecurringInstance) {
-                    statusCell = `<td class="px-6 py-3" data-label="Status">
-                        <span class="status-badge status-recurring">Recurring</span>
-                    </td>`;
-                } else {
-                    statusCell = `<td class="px-6 py-3" data-label="Status">
-                        <span class="status-badge status-active">Active</span>
-                    </td>`;
-                }
-
                 return `
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${isCancelled ? 'opacity-60' : ''}"
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${isCancelled ? 'opacity-60' : ''}"
                         data-category="${expense.category}">
                         <td class="px-4 py-3" data-label="">
                             <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" 
@@ -4399,7 +4392,6 @@
                         <td class="px-6 py-3 hidden md:table-cell" data-label="Category">${escapeHTML(expense.category)}</td>
                         <td class="px-6 py-3 hidden lg:table-cell" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
                         <td class="px-6 py-3 hidden lg:table-cell" data-label="Type">${escapeHTML(expense.type)}</td>
-                        ${statusCell}
                         <td class="px-6 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" 
@@ -4450,7 +4442,7 @@
             filtered.sort((a, b) => b.id - a.id);
 
             if (filtered.length === 0) {
-                DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="9" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
+                DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="8" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
                 return;
             }
 
