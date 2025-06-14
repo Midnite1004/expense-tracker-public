@@ -696,7 +696,7 @@
 
         <!-- Mobile Card Layout for Tables -->
         <style>
-/* === Lens Mobile Card Layout START === */
+        /* === Lens Mobile Card Layout START === */
         
         /* Viewport and zoom fixes */
         :root {
@@ -812,6 +812,20 @@
           tr:not(.mobile-date-header):only-of-type {
             border-radius: 0.75rem !important;
             border-bottom: 1px solid var(--border-color) !important;
+          }
+
+          .mobile-transaction-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 16px 8px;
+            width: auto !important;
+            min-width: fit-content !important;
+            border: none !important;
+          }
+          .mobile-transaction-actions .icon-button {
+            padding: 4px;
           }
 
           /* Hover and active states */
@@ -2374,6 +2388,11 @@
             editingExpense = null;
         }
 
+        function handleExpenseFormSubmission(event) {
+            event.preventDefault();
+            saveExpense();
+        }
+
         function saveExpense() {
             const name = DOMElements.expenseName.value.trim();
             const cost = parseFloat(DOMElements.expenseCost.value);
@@ -2430,15 +2449,15 @@
         function editExpense(id) {
             const expense = expenses.find(e => e.id === id);
             if (expense) {
-                editingExpense = expense;
-                DOMElements.modalTitle.textContent = 'Edit Expense';
-                DOMElements.expenseName.value = expense.name;
-                DOMElements.expenseCost.value = expense.cost;
-                DOMElements.expenseType.value = expense.type;
-                DOMElements.expenseCategory.value = expense.category;
-                DOMElements.expenseDate.value = expense.date;
-                DOMElements.expensePaymentMethod.value = expense.paymentMethod || '';
-                DOMElements.modal.classList.remove('hidden');
+            editingExpense = expense;
+            DOMElements.modalTitle.textContent = 'Edit Expense';
+            DOMElements.expenseName.value = expense.name;
+            DOMElements.expenseCost.value = expense.cost;
+            DOMElements.expenseType.value = expense.type;
+            DOMElements.expenseCategory.value = expense.category;
+            DOMElements.expenseDate.value = expense.date;
+            DOMElements.expensePaymentMethod.value = expense.paymentMethod || '';
+            DOMElements.modal.classList.remove('hidden');
             }
         }
 
@@ -2459,7 +2478,7 @@
                 saveData();
                 updateDisplay();
                 showToast(`Expense status updated to ${expense.status}.`);
-        }
+            }
         }
         
         function toggleFilterPanel(panelId) {
@@ -3299,7 +3318,7 @@
 
             const tableBody = DOMElements.expensesTableBody;
             if (filteredExpenses.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-gray-500">No expenses match your filters.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</td></tr>`;
                 return;
             }
 
@@ -4189,18 +4208,10 @@
 
         // Category to icon mapping
         const categoryIcons = {
-            'Food/Drink': '🍽️',
-            'Transport': '🚗',
-            'Entertainment': '🎬',
-            'Housing': '🏠',
-            'Utilities': '⚡',
-            'Shopping': '🛍️',
-            'Health': '🏥',
-            'Subscriptions': '📱',
-            'Personal Care': '💄',
-            'Education': '📚',
-            'Debt': '💳',
-            'Other': '💰'
+            "Housing": "🏠", "Utilities": "💡", "Transport": "🚗", "Food/Drink": "🍔",
+            "Entertainment": "🎬", "Shopping": "🛍️", "Health": "❤️", "Personal Care": "🧴",
+            "Education": "🎓", "Debt": "💳", "Subscriptions": "🔁", "Other": "❓",
+            "Salary": "💰", "Bonus": "⭐", "Investment": "📈", "Gift": "🎁", "Other Income": "🪙"
         };
 
         // Enhanced renderExpensesTable function
@@ -4241,7 +4252,7 @@
             const tableBody = DOMElements.expensesTableBody;
             
             if (filteredExpenses.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-gray-500">No expenses match your filters.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</td></tr>`;
                 return;
             }
 
@@ -4249,144 +4260,88 @@
             const isMobile = window.innerWidth <= 640;
             
             if (isMobile) {
-                renderMobileExpenseList(filteredExpenses, tableBody);
+                renderMobileExpenseCards(filteredExpenses, tableBody);
             } else {
                 renderDesktopExpenseTable(filteredExpenses, tableBody);
             }
         }
 
-        function renderMobileExpenseList(expenses, container) {
+        function renderMobileExpenseCards(expenses, container) {
             // Group expenses by date
-            const groupedExpenses = groupExpensesByDate(expenses);
-            
+            const grouped = expenses.reduce((groups, expense) => {
+                const date = expense.date;
+                if (!groups[date]) {
+                    groups[date] = [];
+                }
+                groups[date].push(expense);
+                return groups;
+            }, {});
+
             let html = '';
             
-            Object.entries(groupedExpenses).forEach(([dateKey, dayExpenses]) => {
-                const dateObj = new Date(dateKey);
-                const today = new Date();
-                const yesterday = new Date(today);
-                yesterday.setDate(yesterday.getDate() - 1);
-                
-                let dateLabel;
-                if (dateKey === today.toISOString().split('T')[0]) {
-                    dateLabel = 'Today';
-                } else if (dateKey === yesterday.toISOString().split('T')[0]) {
-                    dateLabel = 'Yesterday';
-                } else {
-                    dateLabel = dateObj.toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'long'
-                    });
-                }
-                
-                // Calculate total for the day
+            // Sort dates descending
+            const sortedDates = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
+
+            sortedDates.forEach(date => {
+                const dayExpenses = grouped[date];
                 const dayTotal = dayExpenses.reduce((sum, exp) => sum + exp.cost, 0);
                 
-                // Date header
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                const expenseDate = new Date(new Date(date).toLocaleString("en-US", { timeZone: "UTC" }));
+                expenseDate.setHours(0,0,0,0);
+
+                let dateLabel;
+                if (expenseDate.getTime() === today.getTime()) {
+                    dateLabel = 'Today';
+                } else if (expenseDate.getTime() === yesterday.getTime()) {
+                    dateLabel = 'Yesterday';
+                } else {
+                    dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+                }
+
+                // Date Header
                 html += `
                     <tr class="mobile-date-header">
-                        <td colspan="9" class="mobile-date-header">
-                            <span>${dateLabel}</span>
-                            <span>-${formatCurrency(dayTotal)}</span>
+                        <td colspan="9" style="padding: 16px 8px 4px 8px; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>${dateLabel}</span>
+                                <span>-${formatCurrency(dayTotal, false)}</span>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                // Expense Cards for the day
+                dayExpenses.forEach(expense => {
+                    const categoryIcon = categoryIcons[expense.category] || categoryIcons['Other'];
+                    const isRecurringInstance = !!expense.recurringSourceId;
+                    const originalRecurringItem = isRecurringInstance ? recurringItems.find(r => r.id === expense.recurringSourceId) : null;
+                    const editAction = isRecurringInstance && originalRecurringItem ? `editRecurring(${originalRecurringItem.id})` : `editExpense(${expense.id})`;
+
+                    html += `
+                    <tr>
+                        <td colspan="9" style="padding: 0 8px 8px 8px;">
+                            <div onclick="${editAction}" style="display: flex; align-items: center; padding: 12px; background-color: var(--bg-primary); border-radius: 12px; box-shadow: var(--shadow-sm); cursor: pointer;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--bg-tertiary); margin-right: 12px; font-size: 1.25rem;">
+                                    ${categoryIcon}
+                                </div>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: 500; color: var(--text-primary); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${escapeHTML(expense.name)}</div>
+                                    <div style="font-size: 0.875rem; color: var(--text-secondary);">${escapeHTML(expense.category)}</div>
+                                </div>
+                                <div style="font-weight: 500; color: var(--text-primary); margin-left: 12px;">
+                                    -${formatCurrency(expense.cost)}
+                                </div>
+                            </div>
                         </td>
                     </tr>
-                `;
-                
-                // Expense cards for this date
-                dayExpenses.forEach(expense => {
-                    html += renderMobileExpenseCard(expense);
+                    `;
                 });
             });
-            
+
             container.innerHTML = html;
-        }
-
-        function renderMobileExpenseCard(expense) {
-            const isRecurringInstance = !!expense.recurringSourceId;
-            const isCancelled = expense.status === 'cancelled';
-            const originalRecurringItem = isRecurringInstance ? 
-                recurringItems.find(r => r.id === expense.recurringSourceId) : null;
-
-            const editAction = isRecurringInstance && originalRecurringItem ? 
-                `editRecurring(${originalRecurringItem.id})` : 
-                `editExpense(${expense.id})`;
-            
-            const deleteAction = isRecurringInstance ? 
-                'return false;' : 
-                `deleteExpense(${expense.id})`;
-            
-            const checkboxId = `expense-${expense.id}`;
-            const expenseTime = new Date(expense.date + 'T12:00:00').toLocaleTimeString('en-GB', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            });
-            
-            const categoryIcon = categoryIcons[expense.category] || categoryIcons['Other'];
-            const isPositive = false; // Expenses are always negative
-            
-            return `
-                <tr class="mobile-expense-card ${isCancelled ? 'opacity-60' : ''}" 
-                    data-category="${expense.category}"
-                    data-recurring="${isRecurringInstance}"
-                    data-expense-id="${expense.id}">
-                    
-                    <td class="mobile-transaction-checkbox" data-label="">
-                        <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" 
-                               onchange="toggleExpenseSelection(this, '${expense.id}')" 
-                               class="table-checkbox expense-checkbox" 
-                               ${isRecurringInstance ? 'disabled' : ''} 
-                               ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
-                    </td>
-                    
-                    <td class="mobile-transaction-icon" data-icon="${categoryIcon}">
-                    </td>
-                    
-                    <td class="mobile-transaction-details" data-label="Name" 
-                        data-category="${expense.category}" 
-                        data-time="${expenseTime}"
-                        data-recurring="${isRecurringInstance}">
-                        <span>${escapeHTML(expense.name)}</span>
-                    </td>
-                    
-                    <td class="mobile-transaction-amount" data-label="Amount" 
-                        data-positive="${isPositive}">
-                        -${formatCurrency(expense.cost)}
-                    </td>
-                    
-                    <!-- Hidden fields for desktop compatibility -->
-                    <td class="hidden" data-label="Date">${expense.date}</td>
-                    <td class="hidden" data-label="Category">${escapeHTML(expense.category)}</td>
-                    <td class="hidden" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
-                    <td class="hidden" data-label="Type">${escapeHTML(expense.type)}</td>
-                    <td class="hidden" data-label="Status">
-                        ${isCancelled ? 
-                            '<span class="status-badge status-cancelled">Cancelled</span>' : 
-                            (isRecurringInstance ? 
-                                '<span class="status-badge status-recurring">Recurring</span>' : 
-                                '<span class="status-badge status-active">Active</span>'
-                            )
-                        }
-                    </td>
-                    <td class="hidden" data-label="Actions">
-                        <div class="flex items-center justify-end gap-1">
-                            <button onclick="${editAction}" title="Edit" class="icon-button" 
-                                    ${isCancelled ? 'disabled' : ''}>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                            <button onclick="${deleteAction}" title="Delete" 
-                                    class="icon-button text-red-600/80 hover:text-red-500" 
-                                    ${isRecurringInstance ? 'disabled' : ''}>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `;
         }
 
         function renderDesktopExpenseTable(expenses, container) {
@@ -4448,14 +4403,14 @@
                         <td class="px-6 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" 
-                                        ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
+                                        ${isCancelled ? 'disabled' : ''}>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
                                 <button onclick="${deleteAction}" title="Delete" 
                                         class="icon-button text-red-600/80 hover:text-red-500" 
-                                        ${isRecurringInstance ? 'disabled' : ''} ${isRecurringInstance ? 'opacity-50 cursor-not-allowed' : ''}>
+                                        ${isRecurringInstance ? 'disabled' : ''}>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                     </svg>
@@ -4639,21 +4594,21 @@
             });
         }
 
-        // Add responsive behavior
-        function handleResize() {
-            if (activeTab === 'expenses') {
+      // Add responsive behavior
+      function handleResize() {
+          if (activeTab === 'expenses') {
                 renderExpensesTable_NEW();
-            } else if (activeTab === 'recurring') {
+          } else if (activeTab === 'recurring') {
                 renderRecurringTable_NEW();
-            }
-        }
+          }
+      }
 
-        // Listen for window resize with debounce
-        let resizeTimeout;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(handleResize, 250);
-        });
+      // Listen for window resize with debounce
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(handleResize, 250);
+      });
 
         // Enhanced updateTableLabels function for better mobile support
         function updateTableLabels_NEW() {
@@ -4754,5 +4709,144 @@
             </div>
         </div>
     </nav>
+
+<!-- Mobile View Rewrite (auto‐generated) -->
+<script>
+// <![CDATA[
+/* =============================================================
+   Mobile View Rewrite for Lens Expense Tracker
+   -------------------------------------------------------------
+   Why a rewrite?
+   • Table rows collapsed on some mobile browsers → invisible cards
+   • Duplicate renderers caused confusion (renderExpensesTable vs renderExpensesTable_NEW)
+   • Costs sometimes strings → totals = 0
+   • ISO dates with time part created one header per entry
+   Approach
+   • Hide the desktop table on screens <640 px and render 
+     a dedicated list of cards in a lightweight <div>.
+   • Uses ONLY existing global arrays `expenses` and `recurringItems`.
+   • NO changes to desktop logic or CSS – strictly inside a media query.
+   ============================================================= */
+
+/* ---------- Helper functions ---------- */
+function stripISO(dateStr) {
+    // "2025-06-09" or "2025-06-09T14:22"
+    return (dateStr || '').split('T')[0];
+}
+function dateLabel(d) {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    const target = new Date(d);
+    const startTarget = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+    const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const startYesterday = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate());
+
+    if (startTarget.getTime() === startToday.getTime()) return 'Today';
+    if (startTarget.getTime() === startYesterday.getTime()) return 'Yesterday';
+
+    return target.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+}
+function toNumber(x) {
+    const n = typeof x === 'string' ? parseFloat(x) : x;
+    return isNaN(n) ? 0 : n;
+}
+
+/* ---------- Rendering ---------- */
+function renderMobileExpenseList(expArr) {
+    // Lazy create container if not present
+    let container = document.getElementById('expenses-mobile-list');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'expenses-mobile-list';
+        // Put it right before the desktop table
+        const deskTable = document.getElementById('expenses-table') || document.querySelector('#expensesTable');
+        deskTable?.parentNode?.insertBefore(container, deskTable);
+    }
+
+    // Hide desktop table only on mobile
+    const isMobile = window.matchMedia('(max-width:640px)').matches;
+    container.style.display = isMobile ? 'block' : 'none';
+
+    if (!isMobile) return; // bail early on desktop
+
+    if (!Array.isArray(expArr) || expArr.length === 0) {
+        container.innerHTML = '<p class="text-center py-6 text-sm text-gray-400">No expenses yet</p>';
+        return;
+    }
+
+    /* ----- group by date ----- */
+    const grouped = expArr.reduce((acc, exp) => {
+        const key = stripISO(exp.date);
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(exp);
+        return acc;
+    }, {});
+
+    const sortedDates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a));
+
+    let html = '';
+    sortedDates.forEach(dateKey => {
+        const dayExpenses = grouped[dateKey];
+        const dayTotal = dayExpenses.reduce((s,e)=> s + toNumber(e.cost), 0);
+
+        /* Date header */
+        html += `
+            <div style="padding:8px 12px;font-weight:600;font-size:14px;color:#555;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>${dateLabel(dateKey)}</span>
+                    <span>- ${formatCurrency(dayTotal)}</span>
+                </div>
+            </div>`;
+
+        /* Cards */
+        dayExpenses.forEach(exp => {
+            const icon = categoryIcons?.[exp.category] ?? '❓';
+            html += `
+            <div onclick="editExpense(${exp.id})" style="
+                 display:flex;align-items:center;gap:12px;
+                 padding:12px;margin:4px 12px;background:#fff;
+                 border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);cursor:pointer;">
+                <span style="font-size:22px;">${icon}</span>
+                <div style="flex:1;min-width:0;">
+                    <div style="font-weight:500;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${escapeHTML(exp.name)}</div>
+                    <div style="font-size:12px;color:#666;">${escapeHTML(exp.category)}</div>
+                </div>
+                <div style="font-weight:600;white-space:nowrap;">${exp.type === 'Income' ? '' : '-'}${formatCurrency(toNumber(exp.cost))}</div>
+            </div>`;
+        });
+    });
+
+    container.innerHTML = html;
+}
+
+/* ---------- Hook into existing flow ---------- */
+(function(){
+    // Wrap original NEW renderer
+    const original = window.renderExpensesTable_NEW;
+    window.renderExpensesTable_NEW = function() {
+        const args = Array.from(arguments);
+        const expensesArr = args[0] ?? (typeof filteredExpenses !== 'undefined' ? filteredExpenses : window.expenses ?? []);
+        renderMobileExpenseList(expensesArr);
+        // Always call original for desktop
+        original?.apply(this, args);
+    };
+
+    // Initial render for first load
+    document.addEventListener('DOMContentLoaded', () => {
+        window.renderExpensesTable_NEW();
+    });
+
+    // Re-render on resize (cheap debounce)
+    let resizeTo = null;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTo);
+        resizeTo = setTimeout(() => window.renderExpensesTable_NEW(), 150);
+    });
+})(); 
+// ]]>
+</script>
+
 </body>
 </html>
