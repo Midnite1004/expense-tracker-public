@@ -23,7 +23,7 @@
     <link rel="mask-icon" href="icons/icon-192x192.png" color="#3b82f6">
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="./manifest.json">
     
     <!-- Your existing scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -177,6 +177,60 @@
             background-color: var(--accent-blue);
             border-radius: 1px;
         }
+
+/* Clean Onboarding Styles */
+.onboarding-modal {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-md);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--bg-tertiary);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--accent-blue);
+    transition: width 0.5s ease;
+}
+
+.clean-goal-option:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.clean-goal-option.selected {
+    border-color: var(--accent-blue);
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.clean-debt-item {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.clean-summary-card {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.highlight-number {
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
         .modern-input, .modern-select {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -206,6 +260,8 @@
             padding: 0.75rem 1.5rem;
             border-radius: 0.5rem;
             font-weight: 500;
+            font-size: 0.875rem;
+            min-height: 44px;
             transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
             border: none;
             cursor: pointer;
@@ -690,55 +746,64 @@
             color: var(--accent-blue);
         }
         
-        
-        
-            </style>
-
-        <!-- Mobile Card Layout for Tables -->
-        <style>
-        /* === Lens Mobile Card Layout START === */
-        
-        /* Viewport and zoom fixes */
-        :root {
-            --vh: 1vh; /* Set by JavaScript */
+        /* New Mobile Card Styling */
+        .mobile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin: 0 8px 8px 8px;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+        }
+        html.dark .mobile-card {
+            background-color: var(--bg-tertiary);
+        }
+        .mobile-card-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-tertiary);
+            font-size: 1.25rem;
+        }
+         html.dark .mobile-card-icon {
+            background-color: var(--bg-secondary);
+        }
+        .mobile-card-main {
+            flex: 1;
+            min-width: 0;
+        }
+        .mobile-card-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .mobile-card-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .mobile-card-amount {
+            font-weight: 600;
+            color: var(--text-primary);
         }
         
-        html {
-            overflow-x: hidden;
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-            touch-action: manipulation;
-        }
         
-        body {
-            overflow-x: hidden;
-            max-width: 100vw;
-            -webkit-overflow-scrolling: touch;
-        }
         
-        /* Prevent iOS zoom on form focus */
-        input[type="text"],
-        input[type="number"],
-        input[type="email"],
-        input[type="password"],
-        input[type="search"],
-        input[type="tel"],
-        input[type="url"],
-        input[type="date"],
-        select,
-        textarea {
-            font-size: 16px !important;
-        }
-        
-        /* Prevent zoom and selection on interactive elements */
-        button,
-        .modern-button,
-        .tab-button,
-        .icon-button {
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
+        /* Modal z-index fixes */
+        #goals-modal {
+            z-index: 55 !important;
         }
 
         @media (max-width: 640px) {
@@ -1101,6 +1166,13 @@
         html,body{max-width:100%;overflow-x:hidden;}
         .table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;}
     </style>
+
+<style>
+#health-score-tooltip{
+  bottom:auto !important;
+  top:110% !important;
+}
+</style>
 </head>
 <body class="antialiased pb-20 md:pb-0">
     <div class="min-h-screen p-4 md:p-6">
@@ -1163,16 +1235,16 @@
                                     <div class="stat-card-title">Remaining</div>
                                     <div class="stat-card-value text-green-600" id="remaining-amount">£0.00</div>
                                 </div>
-                                 <div class="stat-card bg-purple-50 dark:bg-purple-900/30 border-purple-200 dark:border-purple-800 cursor-pointer hover:border-purple-400 dark:hover:border-purple-600" onclick="openIncomeModal()">
+                                 <div class="stat-card bg-purple-50 dark:bg-purple-900/30 border-purple-200 dark:border-purple-800 cursor-pointer hover:border-purple-400 dark:hover:border-purple-600" onclick="openGoalsModal()">
                                     <div class="stat-card-title">
-                                        Income (Month)
-                                        <span class="info-icon ml-1" data-tooltip="Total monthly income = Base income + Recurring income. Click for breakdown.">
+                                        Goal Progress
+                                        <span class="info-icon ml-1" data-tooltip="Shows your progress on active financial goals. Click for details.">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                                             </svg>
                                         </span>
                                     </div>
-                                    <div class="stat-card-value text-purple-600 dark:text-purple-400" id="total-income">£0.00</div>
+                                    <div class="stat-card-value text-purple-600 dark:text-purple-400" id="goal-progress-display">--</div>
                                 </div>
                             </div>
                 
@@ -1482,77 +1554,170 @@
                     </div>
                 </div>
 
-                <!-- Insights Tab -->
-                <div id="insights-tab" class="tab-content hidden fade-in">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Left Column: Forecast & Projection -->
-                        <div class="space-y-6">
-                            <div class="card p-6">
-                                <h2 class="ai-section-title">
-                                    <span class="text-xl">📅</span>
-                                    <span>7-Day Forecast</span>
-                                </h2>
-                                <div id="seven-day-forecast" class="space-y-4">
-                                    <!-- JS-rendered content -->
-                                </div>
-                            </div>
-                            <div class="card p-6">
-                                <h2 class="ai-section-title">
-                                    <span class="text-xl">🎯</span>
-                                    <span>Month-End Projection</span>
-                                </h2>
-                                <div id="month-end-projection">
-                                    <!-- JS-rendered content -->
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Right Column: Recommendations & Story -->
-                        <div class="space-y-6">
-                            <div class="card p-6">
-                                <h2 class="ai-section-title">
-                                    <span class="text-xl">💡</span>
-                                    <span>Smart Recommendations</span>
-                                    <span id="action-count" class="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full hidden"></span>
-                                </h2>
-                                <div id="smart-recommendations" class="space-y-3">
-                                    <!-- JS-rendered content -->
-                                </div>
-                            </div>
-                             <div class="card p-6">
-                                <h2 class="ai-section-title">
-                                    <span class="text-xl">📖</span>
-                                    <span>Your Monthly Story</span>
-                                </h2>
-                                <div id="monthly-story">
-                                    <!-- JS-rendered content -->
-                                </div>
-                                <div id="story-metrics" class="hidden grid-cols-3 gap-2 mt-4 text-center">
-                                    <!-- JS-rendered content -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Existing Charts -->
-                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
-                        <div class="card p-4 md:p-6">
-                             <h2 class="text-xl font-bold mb-4">Spending Trend</h2>
-                             <div class="chart-container h-64 md:h-80">
-                                <canvas id="spending-trend-chart"></canvas>
-                            </div>
-                        </div>
-                        <div class="card p-4 md:p-6">
-                            <h2 class="text-xl font-semibold mb-4">Monthly Savings Trend</h2>
-                            <div class="chart-container" style="height: 320px;">
-                                <canvas id="monthly-savings-chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
+                
+                <!-- Replace your insights tab HTML with this better layout -->
+<div id="insights-tab" class="tab-content hidden fade-in">
+    <!-- Priority Content First -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+        <!-- Smart Recommendations (Most Important) -->
+        <div class="xl:col-span-2">
+            <div class="card p-6">
+                <h2 class="ai-section-title">
+                    <span class="text-xl">💡</span>
+                    <span>Smart Recommendations</span>
+                    <span id="action-count" class="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full hidden"></span>
+                </h2>
+                <div id="smart-recommendations" class="space-y-3">
+                    <!-- JS-rendered content -->
                 </div>
             </div>
         </div>
+        
+        <!-- Month-End Projection (Quick Overview) -->
+        <div class="card p-6">
+            <h2 class="ai-section-title">
+                <span class="text-xl">🎯</span>
+                <span>Your Goals</span>
+            </h2>
+            <div id="goals-dashboard">
+                <!-- JS-rendered content -->
+            </div>
+        </div>
     </div>
+
+    <!-- Secondary Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Your Monthly Story (Combined with metrics) -->
+        <div class="card p-6">
+            <h2 class="ai-section-title">
+                <span class="text-xl">📖</span>
+                <span>Your Monthly Story</span>
+            </h2>
+            <div id="monthly-story">
+                <!-- JS-rendered content with embedded metrics -->
+            </div>
+            <!-- This container is now hidden as metrics are embedded above -->
+            <div id="story-metrics" class="hidden"></div>
+        </div>
+        
+        <!-- 7-Day Forecast (Moved to secondary position) -->
+        <div class="card p-6">
+            <h2 class="ai-section-title">
+                <span class="text-xl">📅</span>
+                <span>7-Day Forecast</span>
+            </h2>
+            <div id="seven-day-forecast" class="space-y-4">
+                <!-- JS-rendered content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts (Least important, moved to bottom) -->
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div class="card p-6">
+             <h2 class="text-xl font-bold mb-4">Spending Trend</h2>
+             <div class="chart-container h-64 md:h-80">
+                <canvas id="spending-trend-chart"></canvas>
+            </div>
+        </div>
+        <div class="card p-6">
+            <h2 class="text-xl font-semibold mb-4">Monthly Savings Trend</h2>
+            <div class="chart-container" style="height: 320px;">
+                <canvas id="monthly-savings-chart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Enhanced dark mode styling */
+:root {
+    --insights-bg-primary: #ffffff;
+    --insights-bg-secondary: #f8fafc;
+    --insights-text-primary: #1e293b;
+    --insights-text-secondary: #64748b;
+}
+
+.dark {
+    --insights-bg-primary: #0f172a;
+    --insights-bg-secondary: #1e293b;
+    --insights-text-primary: #f1f5f9;
+    --insights-text-secondary: #cbd5e1;
+}
+
+/* Better contrast for insights */
+#insights-tab {
+    background-color: var(--insights-bg-secondary);
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+#insights-tab .card {
+    background-color: var(--insights-bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dark #insights-tab .card {
+    background-color: var(--insights-bg-primary);
+    border-color: #334155;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Recommendation cards with better dark mode */
+#smart-recommendations .border-l-4 {
+    background-color: var(--insights-bg-primary);
+    border-right: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.dark #smart-recommendations .border-l-4 {
+    background-color: #1e293b;
+    border-right-color: #334155;
+    border-top-color: #334155;
+    border-bottom-color: #334155;
+}
+
+/* Fix text contrast in dark mode */
+.dark #insights-tab h2,
+.dark #insights-tab h3,
+.dark #insights-tab h4 {
+    color: var(--insights-text-primary);
+}
+
+.dark #insights-tab p,
+.dark #insights-tab span:not(.bg-red-500):not(.bg-blue-600):not(.text-green-600):not(.text-red-600) {
+    color: var(--insights-text-secondary);
+}
+
+/* Better visibility for action buttons */
+.dark #smart-recommendations .bg-blue-600 {
+    background-color: #2563eb !important;
+    color: white !important;
+}
+
+/* Ensure chart visibility in dark mode */
+.dark .chart-container {
+    background-color: var(--insights-bg-primary);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+/* Make metrics cards more visible */
+.dark .metric-card,
+.dark .bg-gray-50 {
+    background-color: #334155 !important;
+    color: var(--insights-text-primary) !important;
+}
+
+/* Toast improvements for dark mode */
+.dark .toast {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    color: var(--insights-text-primary) !important;
+}
+</style>
 
     <!-- Settings Modal -->
     <div id="settings-modal" onclick="closeSettings()" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
@@ -1588,8 +1753,10 @@
                     <div class="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/30">
                         <label for="currency-select" class="text-sm font-medium">Currency</label>
                         <select id="currency-select" onchange="changeCurrency(this.value)" class="modern-select text-sm w-40">
-                            <option value="GBP">GBP (£)</option>
+                            <option value="AUD">AUD (A$)</option>
+                            <option value="CAD">CAD (C$)</option>
                             <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
                             <option value="JPY">JPY (¥)</option>
                             <option value="USD">USD ($)</option>
                         </select>
@@ -1621,27 +1788,9 @@
         </div>
     </div>
     
-    <!-- First-Time Setup Modal -->
-    <div id="setup-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
-        <div class="card max-w-md w-full p-6">
-            <h3 class="text-xl font-semibold mb-2">Welcome to Lens! Let's get you set up.</h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Provide some initial details to personalize your financial lens. You can change these anytime in the settings.</p>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Monthly Budget</label>
-                    <input type="number" id="setup-budget-input" placeholder="e.g., 2000" class="modern-input mt-1">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Monthly Income (Optional)</label>
-                    <input type="number" id="setup-income-input" placeholder="e.g., 3500" class="modern-input mt-1">
-                </div>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-3 mt-6">
-                <button onclick="saveSetupAndStartTour()" class="modern-button modern-button-primary w-full sm:w-auto flex-1">Save and Continue</button>
-                <button onclick="skipSetupAndStartTour()" class="modern-button modern-button-secondary w-full sm:w-auto flex-1">Skip for Now</button>
-            </div>
-        </div>
-    </div>
+
+
+
 
     <!-- Add/Edit Expense Modal -->
     <div id="modal" onclick="closeModal()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden fade-in">
@@ -1865,6 +2014,209 @@
         </div>
     </div>
 
+    <!-- Goals Modal -->
+<div id="goals-modal" onclick="closeGoalsModal()" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
+    <div onclick="event.stopPropagation()" class="card max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-semibold">Your Goals</h3>
+            <button onclick="closeGoalsModal()" class="icon-button text-2xl leading-none">&times;</button>
+        </div>
+        <div id="goals-content" class="p-6">
+            <!-- Goals will be populated here -->
+        </div>
+        <div class="flex justify-center p-4">
+            <button onclick="editGoals()" class="modern-button modern-button-secondary mr-3">Edit Goals</button>
+            <button onclick="closeGoalsModal()" class="modern-button modern-button-primary">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Goal Editing Modal -->
+<div id="goal-editing-modal" onclick="closeGoalEditingModal()" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
+    <div onclick="event.stopPropagation()" class="card max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+        <!-- Confirmation Overlay (within goal editing modal) -->
+        <div id="goal-confirmation-overlay" class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-10 hidden">
+            <div class="card max-w-md w-full">
+                <div class="p-6 text-center">
+                    <div class="text-4xl mb-4" id="confirmation-icon">⚠️</div>
+                    <h3 class="text-lg font-semibold mb-2" id="confirmation-title">Confirm Action</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6" id="confirmation-message">Are you sure you want to proceed?</p>
+                    <div class="flex gap-3 justify-center">
+                        <button onclick="cancelConfirmation()" class="modern-button modern-button-secondary px-6">Cancel</button>
+                        <button id="confirmation-button" onclick="confirmAction()" class="modern-button px-6">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-semibold">Edit Your Goals</h3>
+            <button onclick="closeGoalEditingModal()" class="icon-button text-2xl leading-none">&times;</button>
+        </div>
+        <div id="goal-editing-content" class="p-6">
+            <!-- Goal editing interface will be populated here -->
+        </div>
+        <div class="flex justify-between p-4 border-t border-gray-200 dark:border-gray-700">
+            <button onclick="addNewGoal()" class="modern-button modern-button-secondary">Add New Goal</button>
+            <div class="space-x-3">
+                <button onclick="closeGoalEditingModal()" class="modern-button modern-button-secondary">Cancel</button>
+                <button onclick="saveGoalEdits()" class="modern-button modern-button-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Clean Modern Onboarding Modal -->
+<div id="clean-onboarding-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
+    <div class="onboarding-modal w-full max-w-lg">
+        <!-- Progress Bar -->
+        <div class="p-4 border-b border-gray-200 dark:border-gray-600">
+            <div class="progress-bar mb-2">
+                <div id="clean-progress-fill" class="progress-fill" style="width: 16.67%"></div>
+            </div>
+            <div class="text-center text-sm text-gray-600 dark:text-gray-400">
+                <span id="clean-step-indicator">Step 1 of 6</span>
+            </div>
+        </div>
+
+        <!-- Step 1: Income & Budget -->
+        <div id="clean-step-1" class="clean-onboarding-step p-6">
+            <h2 class="text-xl font-semibold mb-2 text-center">Welcome to Lens</h2>
+            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Let's start with your monthly finances</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Monthly Take-Home Income</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="clean-income-input" placeholder="3,500" class="modern-input pl-8 text-center font-semibold">
+                    </div>
+                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">Your actual monthly income after tax and deductions</div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Monthly Spending Budget</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="clean-budget-input" placeholder="2,800" class="modern-input pl-8 text-center font-semibold">
+                    </div>
+                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">How much you want to spend each month (the rest goes to savings/goals)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Goal Selection -->
+        <div id="clean-step-2" class="clean-onboarding-step p-6 hidden">
+            <h2 class="text-xl font-semibold mb-2 text-center">What's Your Main Goal?</h2>
+            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Choose your primary financial focus</p>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <div class="clean-goal-option p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="house">
+                    <div class="flex items-center gap-2">
+                        <div class="text-2xl">🏠</div>
+                        <h3 class="font-medium text-sm">House Deposit</h3>
+                    </div>
+                </div>
+                
+                <div class="clean-goal-option p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="emergency">
+                    <div class="flex items-center gap-2">
+                        <div class="text-2xl">💰</div>
+                        <h3 class="font-medium text-sm">Emergency Fund</h3>
+                    </div>
+                </div>
+                
+                <div class="clean-goal-option p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="debt">
+                    <div class="flex items-center gap-2">
+                        <div class="text-2xl">💳</div>
+                        <h3 class="font-medium text-sm">Pay Off Debt</h3>
+                    </div>
+                </div>
+                
+                <div class="clean-goal-option p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="vacation">
+                    <div class="flex items-center gap-2">
+                        <div class="text-2xl">✈️</div>
+                        <h3 class="font-medium text-sm">Vacation</h3>
+                    </div>
+                </div>
+                
+                <div class="clean-goal-option p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="investment">
+                    <div class="flex items-center gap-2">
+                        <div class="text-2xl">📈</div>
+                        <h3 class="font-medium text-sm">Investing</h3>
+                    </div>
+                </div>
+                
+                <div class="clean-goal-option p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="custom">
+                    <div class="flex items-center gap-2">
+                        <div class="text-2xl">🎯</div>
+                        <h3 class="font-medium text-sm">Custom Goal</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Goal Details -->
+        <div id="clean-step-3" class="clean-onboarding-step p-6 hidden">
+            <div id="clean-goal-details-content">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+
+        <!-- Step 4: Debts -->
+        <div id="clean-step-4" class="clean-onboarding-step p-6 hidden">
+            <h2 class="text-xl font-semibold mb-2 text-center">Current Debts</h2>
+            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Help us factor debts into your plan</p>
+            
+            <div id="clean-debt-list" class="space-y-3 mb-4"></div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="addCleanDebt()" class="modern-button modern-button-secondary w-full">+ Add Debt</button>
+                <button onclick="skipCleanDebts()" class="modern-button modern-button-secondary w-full">No Debts</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Current Position -->
+        <div id="clean-step-5" class="clean-onboarding-step p-6 hidden">
+            <h2 class="text-xl font-semibold mb-2 text-center">Your Starting Point</h2>
+            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Tell us your current financial position</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Total Current Savings</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="clean-total-savings-input" placeholder="2,500" class="modern-input pl-8 text-center font-semibold">
+                    </div>
+                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">All your savings across all accounts (emergency fund, house savings, general savings, etc.)</div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Monthly Expenses (Estimate)</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="clean-expenses-input" placeholder="2,200" class="modern-input pl-8 text-center font-semibold">
+                    </div>
+                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">Your best guess of typical monthly spending on everything</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6: Summary -->
+        <div id="clean-step-6" class="clean-onboarding-step p-6 hidden">
+            <h2 class="text-xl font-semibold mb-2 text-center">Your Plan Summary</h2>
+            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Here's what we calculated</p>
+            
+            <div id="clean-summary-content" class="space-y-3"></div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex justify-between items-center p-6 border-t border-gray-200 dark:border-gray-600">
+            <button id="clean-back-btn" onclick="goCleanBack()" class="modern-button modern-button-secondary min-w-[120px]">← Back</button>
+            <button id="clean-next-btn" onclick="goCleanNext()" class="modern-button modern-button-primary min-w-[120px]">Next →</button>
+        </div>
+    </div>
+</div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
 
@@ -1879,10 +2231,13 @@
         let editingRecurring = null;
         let monthlyBudget = 2000.00;
         let monthlyIncome = 0;
+        let monthlyExpenses = 0;
         let healthScoreHistory = {};
         let currencyConfig = {
-            'GBP': { symbol: '£', locale: 'en-GB' },
+            'AUD': { symbol: 'A$', locale: 'en-AU' },
+            'CAD': { symbol: 'C$', locale: 'en-CA' },
             'EUR': { symbol: '€', locale: 'de-DE' },
+            'GBP': { symbol: '£', locale: 'en-GB' },
             'JPY': { symbol: '¥', locale: 'ja-JP' },
             'USD': { symbol: '$', locale: 'en-US' }
         };
@@ -1894,6 +2249,50 @@
         let aiSavingsCache = null;
         let aiSpendingCache = null;
         let lastAiUpdate = 0;
+        // === GOAL SYSTEM ===
+let userGoals = [];
+let goalTemplates = {
+    'savings_builder': {
+        name: 'Savings Builder',
+        icon: '💰',
+        description: 'Focus on building your savings and emergency fund',
+        goals: [
+            { type: 'savings_rate', name: 'Save 20% of income', target: 20, unit: 'percent' },
+            { type: 'emergency_fund', name: 'Build £1000 emergency fund', target: 1000, unit: 'currency' },
+            { type: 'no_spend_days', name: '6 no-spend days per month', target: 6, unit: 'days' }
+        ]
+    },
+    'spending_controller': {
+        name: 'Spending Controller', 
+        icon: '📉',
+        description: 'Take control of your spending habits',
+        goals: [
+            { type: 'category_limit', name: 'Dining out limit', target: 80, unit: 'currency', category: 'Food/Drink' },
+            { type: 'impulse_limit', name: 'No purchases over £40', target: 40, unit: 'currency' },
+            { type: 'subscription_review', name: 'Review subscriptions monthly', target: 1, unit: 'boolean' }
+        ]
+    },
+    'mindful_spender': {
+        name: 'Mindful Spender',
+        icon: '🎯', 
+        description: 'Develop healthy spending habits',
+        goals: [
+            { type: 'coffee_budget', name: 'Coffee budget £25/month', target: 25, unit: 'currency', category: 'Food/Drink', keywords: ['coffee'] },
+            { type: 'cook_home', name: 'Cook at home 20 days/month', target: 20, unit: 'days' },
+            { type: 'no_spend_days', name: '8 no-spend days per month', target: 8, unit: 'days' }
+        ]
+    },
+    'debt_fighter': {
+        name: 'Debt Fighter',
+        icon: '⚔️',
+        description: 'Aggressive debt reduction and spending cuts',
+        goals: [
+            { type: 'total_spending_limit', name: 'Total spending under budget by 15%', target: 15, unit: 'percent' },
+            { type: 'entertainment_limit', name: 'Entertainment under £50', target: 50, unit: 'currency', category: 'Entertainment' },
+            { type: 'no_spend_days', name: '10 no-spend days per month', target: 10, unit: 'days' }
+        ]
+    }
+};
 
         function stripISO(dateStr) {
             return (dateStr || '').split('T')[0];
@@ -2106,33 +2505,767 @@
         function startOnboardingProcess() {
             const firstVisit = localStorage.getItem('onboardingComplete') !== 'true';
             if (firstVisit) {
-                document.getElementById('setup-modal').classList.remove('hidden');
+                document.getElementById('clean-onboarding-modal').classList.remove('hidden');
+                updateCleanOnboardingStep();
             }
         }
 
-        function saveSetupAndStartTour() {
-            const budget = document.getElementById('setup-budget-input').value;
-            const income = document.getElementById('setup-income-input').value;
+        // === NEW CLEAN ONBOARDING SYSTEM ===
+let cleanOnboardingData = {
+    currentStep: 1,
+    totalSteps: 6,
+    data: {
+        monthlyIncome: 0,
+        monthlyBudget: 0,
+        primaryGoal: null,
+        goalDetails: {},
+        debts: [],
+        totalSavings: 0,
+        monthlyExpenses: 0
+    }
+};
 
-            if (budget) {
-                updateBudget(budget);
+function goCleanNext() {
+    // Save current step data before validation
+    saveCurrentStepData();
+    
+    // Validate this step; stop if errors
+    if (!validateCleanStep()) return;
+
+    // Skip debt step unless primary goal is 'debt'
+    if (cleanOnboardingData.currentStep === 3 && cleanOnboardingData.data.primaryGoal !== 'debt') {
+        cleanOnboardingData.currentStep = 5;
+    } else {
+        cleanOnboardingData.currentStep++;
+    }
+
+    // If we've gone past the last step, complete onboarding
+    if (cleanOnboardingData.currentStep > cleanOnboardingData.totalSteps) {
+        finishCleanOnboarding();
+    } else {
+        updateCleanOnboardingStep();
+    }
+}
+
+function goCleanBack() {
+    if (cleanOnboardingData.currentStep > 1) {
+        // Save current step data before going back
+        saveCurrentStepData();
+        
+        if (cleanOnboardingData.currentStep === 5 && cleanOnboardingData.data.primaryGoal !== 'debt') {
+            cleanOnboardingData.currentStep = 3;
+        } else {
+            cleanOnboardingData.currentStep--;
+        }
+        updateCleanOnboardingStep();
+    }
+}
+
+function updateCleanOnboardingStep() {
+    // Hide all steps
+    document.querySelectorAll('.clean-onboarding-step').forEach(step => {
+        step.classList.add('hidden');
+    });
+    
+    // Show current step
+    document.getElementById(`clean-step-${cleanOnboardingData.currentStep}`).classList.remove('hidden');
+    
+    // Update progress
+    const progress = (cleanOnboardingData.currentStep / cleanOnboardingData.totalSteps) * 100;
+    document.getElementById('clean-progress-fill').style.width = `${progress}%`;
+    document.getElementById('clean-step-indicator').textContent = `Step ${cleanOnboardingData.currentStep} of ${cleanOnboardingData.totalSteps}`;
+    
+    // Update navigation
+    document.getElementById('clean-back-btn').style.visibility = cleanOnboardingData.currentStep === 1 ? 'hidden' : 'visible';
+    document.getElementById('clean-next-btn').textContent = cleanOnboardingData.currentStep === cleanOnboardingData.totalSteps ? 'Complete Setup' : 'Next →';
+    
+    // Prepare step-specific content
+    if (cleanOnboardingData.currentStep === 3) {
+        prepareCleanGoalDetails();
+    } else if (cleanOnboardingData.currentStep === 6) {
+        generateCleanSummary();
+    }
+    
+    // Restore form data for current step
+    restoreCurrentStepData();
+}
+
+function validateCleanStep() {
+    const data = cleanOnboardingData.data;
+    
+    switch(cleanOnboardingData.currentStep) {
+        case 1:
+            const income = parseFloat(document.getElementById('clean-income-input').value);
+            const budget = parseFloat(document.getElementById('clean-budget-input').value);
+            if (!income || !budget || income <= 0 || budget <= 0) {
+                showToast('Please enter valid income and budget amounts', 'error');
+                return false;
             }
-            if (income) {
-                updateIncome(income);
+            if (budget >= income) {
+                showToast('Your budget should be less than your income to allow for savings', 'error');
+                return false;
+            }
+            data.monthlyIncome = income;
+            data.monthlyBudget = budget;
+            return true;
+            
+        case 2:
+            if (!data.primaryGoal) {
+                showToast('Please select a primary goal', 'error');
+                return false;
+            }
+            return true;
+            
+        case 3:
+            const goal = cleanOnboardingData.data.primaryGoal;
+            
+            if (!goal) return false;
+            
+            if (goal === 'house') {
+                const target = document.getElementById('house-target')?.value;
+                const timeline = document.getElementById('house-timeline')?.value;
+                if (!target || !timeline) {
+                    showToast('Please fill in all house goal details', 'error');
+                    return false;
+                }
+                cleanOnboardingData.data.goalDetails['house-target'] = parseFloat(target);
+                cleanOnboardingData.data.goalDetails['house-timeline'] = timeline;
+                cleanOnboardingData.data.goalDetails['house-current'] = parseFloat(document.getElementById('house-current')?.value || 0);
             }
             
-            document.getElementById('setup-modal').classList.add('hidden');
-            launchOnboardingTour();
-        }
+            return true;
+            
+        case 4:
+            cleanOnboardingData.data.debts = [];
+            return true;
+            
+        case 5:
+            const savings = parseFloat(document.getElementById('clean-total-savings-input').value) || 0;
+            const expenses = parseFloat(document.getElementById('clean-expenses-input').value);
+            if (!expenses || expenses <= 0) {
+                showToast('Please enter your estimated monthly expenses', 'error');
+                return false;
+            }
+            data.totalSavings = savings;
+            data.monthlyExpenses = expenses;
+            return true;
+            
+        default:
+            return true;
+    }
+}
 
-        function skipSetupAndStartTour() {
-            document.getElementById('setup-modal').classList.add('hidden');
+function finishCleanOnboarding() {
+    const data = cleanOnboardingData.data;
+    
+    // Update main app variables
+    monthlyIncome = data.monthlyIncome;
+    monthlyBudget = data.monthlyBudget;
+    monthlyExpenses = data.monthlyExpenses;
+    
+    // Create real goals
+    userGoals = [];
+    
+    if (data.primaryGoal === 'house') {
+        userGoals.push({
+            id: Date.now(),
+            type: 'house_deposit',
+            name: 'House Deposit',
+            target: data.goalDetails['house-target'] || 0,
+            currentProgress: data.goalDetails['house-current'] || 0,
+            unit: 'currency',
+            timeline: data.goalDetails['house-timeline'],
+            status: 'active',
+            priority: 'primary',
+            createdAt: new Date().toISOString()
+        });
+    }
+    
+    if (data.primaryGoal === 'emergency') {
+        const months = parseInt(data.goalDetails['emergency-months']?.charAt(0)) || 6;
+        userGoals.push({
+            id: Date.now() + 1,
+            type: 'emergency_fund',
+            name: `${months}-Month Emergency Fund`,
+            target: data.monthlyExpenses * months,
+            currentProgress: data.goalDetails['emergency-current'] || 0,
+            unit: 'currency',
+            months: months,
+            status: 'active',
+            priority: 'primary',
+            createdAt: new Date().toISOString()
+        });
+    }
+    
+    // Add debts as recurring items
+    data.debts.forEach(debt => {
+        recurringItems.push({
+            id: Date.now() + Math.random(),
+            type: 'expense',
+            name: `${debt.name} Payment`,
+            amount: Math.max(debt.balance * 0.02, 25),
+            frequency: 'Monthly',
+            category: 'Debt',
+            essentialType: 'Essential',
+            startDate: new Date().toISOString().split('T')[0],
+            status: 'active',
+            debtBalance: debt.balance,
+            debtInterest: debt.interest
+        });
+    });
+    
+    // Save everything
+    saveData();
+    localStorage.setItem('onboardingComplete', 'true');
+    localStorage.setItem('cleanOnboardingData', JSON.stringify(data));
+    
+    // Close modal and update display
+    document.getElementById('clean-onboarding-modal').classList.add('hidden');
+    updateDisplay();
+    
+    showToast('Welcome to Lens! Your personalized financial tracker is ready.', 'success');
+    
+    // Start tour
+    setTimeout(() => {
+        if (localStorage.getItem('tourComplete') !== 'true') {
             launchOnboardingTour();
         }
+    }, 1000);
+}
+
+// === FIXES FOR THE 4 ERRORS ===
+
+// 1. ADD missing prepareCleanGoalDetails function
+function prepareCleanGoalDetails() {
+    const container = document.getElementById('clean-goal-details-content');
+    const goal = cleanOnboardingData.data.primaryGoal;
+    
+    const configs = {
+        house: {
+            title: '🏠 House Deposit Goal',
+            subtitle: 'Tell us about your house purchase plan',
+            fields: [
+                { id: 'house-target', label: 'Target Deposit Amount', placeholder: '50,000', type: 'currency' },
+                { id: 'house-timeline', label: 'Purchase Timeline', type: 'select', options: ['1 year', '2 years', '3 years', '4 years', '5+ years'] },
+                { id: 'house-current', label: 'Current House Deposit Savings', placeholder: '5,000', type: 'currency', help: 'Money you\'ve already saved specifically for the house deposit (part of your total savings)' }
+            ]
+        },
+        emergency: {
+            title: '💰 Emergency Fund Goal',
+            subtitle: 'Build your financial safety net',
+            fields: [
+                { id: 'emergency-months', label: 'Target Coverage', type: 'select', options: ['3 months expenses', '4 months expenses', '5 months expenses', '6 months expenses', '12 months expenses'] },
+                { id: 'emergency-current', label: 'Current Emergency Fund', placeholder: '1,000', type: 'currency', help: 'Money already set aside for emergencies (part of your total savings)' }
+            ]
+        },
+        debt: {
+            title: '💳 Debt Payoff Strategy',
+            subtitle: 'Choose your debt elimination approach',
+            fields: [
+                { id: 'debt-strategy', label: 'Payoff Strategy', type: 'select', options: ['Avalanche (highest interest first)', 'Snowball (smallest balance first)', 'Equal payments'] }
+            ]
+        },
+        vacation: {
+            title: '✈️ Vacation Goal',
+            subtitle: 'Plan your dream trip',
+            fields: [
+                { id: 'vacation-cost', label: 'Total Trip Cost', placeholder: '3,000', type: 'currency' },
+                { id: 'vacation-when', label: 'When do you want to go?', type: 'select', options: ['6 months', '1 year', '18 months', '2 years'] },
+                { id: 'vacation-current', label: 'Current Vacation Savings', placeholder: '500', type: 'currency', help: 'Money already saved for vacation (part of your total savings)' }
+            ]
+        },
+        investment: {
+            title: '📈 Investment Goal',
+            subtitle: 'Build your investment portfolio',
+            fields: [
+                { id: 'investment-target', label: 'Investment Target', placeholder: '10,000', type: 'currency' },
+                { id: 'investment-timeline', label: 'Timeline', type: 'select', options: ['1 year', '3 years', '5 years', '10+ years'] },
+                { id: 'investment-current', label: 'Current Investment Savings', placeholder: '1,000', type: 'currency', help: 'Money already set aside for investing (part of your total savings)' }
+            ]
+        },
+        custom: {
+            title: '🎯 Custom Goal',
+            subtitle: 'Set your own financial target',
+            fields: [
+                { id: 'custom-name', label: 'Goal Name', placeholder: 'My Financial Goal', type: 'text' },
+                { id: 'custom-target', label: 'Target Amount', placeholder: '5,000', type: 'currency' },
+                { id: 'custom-timeline', label: 'Timeline', type: 'select', options: ['6 months', '1 year', '2 years', '3 years', '5+ years'] },
+                { id: 'custom-current', label: 'Current Progress', placeholder: '0', type: 'currency', help: 'Money already saved toward this goal' }
+            ]
+        }
+    };
+    
+    const config = configs[goal];
+    if (!config) return;
+    
+    container.innerHTML = `
+        <h2 class="text-xl font-semibold mb-2 text-center">${config.title}</h2>
+        <p class="text-gray-600 dark:text-gray-400 text-center mb-6">${config.subtitle}</p>
+        
+        <div class="space-y-4">
+            ${config.fields.map(field => {
+                if (field.type === 'select') {
+                    return `
+                        <div>
+                            <label class="block text-sm font-medium mb-2">${field.label}</label>
+                            <select id="${field.id}" class="modern-select font-medium">
+                                <option value="">Select...</option>
+                                ${field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                            </select>
+                            ${field.help ? `<div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">${field.help}</div>` : ''}
+                        </div>
+                    `;
+                } else if (field.type === 'currency') {
+                    return `
+                        <div>
+                            <label class="block text-sm font-medium mb-2">${field.label}</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                                <input type="number" id="${field.id}" placeholder="${field.placeholder}" class="modern-input pl-8 text-center font-semibold">
+                            </div>
+                            ${field.help ? `<div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">${field.help}</div>` : ''}
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div>
+                            <label class="block text-sm font-medium mb-2">${field.label}</label>
+                            <input type="${field.type}" id="${field.id}" placeholder="${field.placeholder}" class="modern-input text-center font-medium">
+                            ${field.help ? `<div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">${field.help}</div>` : ''}
+                        </div>
+                    `;
+                }
+            }).join('')}
+        </div>
+    `;
+}
+
+// 2. ADD missing validateCleanGoalDetails function
+function validateCleanGoalDetails() {
+    const inputs = document.querySelectorAll('#clean-goal-details-content input, #clean-goal-details-content select');
+    let valid = true;
+    
+    inputs.forEach(input => {
+        if (input.type === 'number') {
+            const value = parseFloat(input.value);
+            if (isNaN(value) || value < 0) {
+                valid = false;
+            } else {
+                cleanOnboardingData.data.goalDetails[input.id] = value;
+            }
+        } else {
+            if (!input.value.trim()) {
+                valid = false;
+            } else {
+                cleanOnboardingData.data.goalDetails[input.id] = input.value;
+            }
+        }
+    });
+    
+    if (!valid) {
+        showToast('Please fill in all goal details', 'error');
+        return false;
+    }
+    return true;
+}
+
+// 3. ADD missing debt management functions
+function addCleanDebt() {
+    const debtList = document.getElementById('clean-debt-list');
+    const debtItem = document.createElement('div');
+    debtItem.className = 'clean-debt-item';
+    debtItem.innerHTML = `
+        <div class="space-y-3">
+            <input type="text" placeholder="Debt name (e.g., Credit Card)" class="modern-input debt-name text-sm font-medium text-center">
+            <div class="grid grid-cols-2 gap-2">
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium text-sm">£</span>
+                    <input type="number" placeholder="5,000" class="modern-input pl-8 debt-balance text-sm font-semibold text-center">
+                </div>
+                <input type="number" placeholder="18.9%" step="0.1" class="modern-input debt-interest text-sm font-semibold text-center">
+            </div>
+            <button onclick="removeCleanDebt(this)" class="text-red-600 hover:text-red-800 text-xs">Remove</button>
+        </div>
+    `;
+    debtList.appendChild(debtItem);
+}
+
+function removeCleanDebt(button) {
+    button.closest('.clean-debt-item').remove();
+}
+
+function skipCleanDebts() {
+    cleanOnboardingData.data.debts = [];
+    goCleanNext();
+}
+
+function collectCleanDebts() {
+    cleanOnboardingData.data.debts = [];
+    document.querySelectorAll('.clean-debt-item').forEach(item => {
+        const name = item.querySelector('.debt-name').value;
+        const balance = parseFloat(item.querySelector('.debt-balance').value);
+        const interest = parseFloat(item.querySelector('.debt-interest').value);
+        
+        if (name && !isNaN(balance) && balance > 0) {
+            cleanOnboardingData.data.debts.push({
+                name: name,
+                balance: balance,
+                interest: interest || 0
+            });
+        }
+    });
+}
+
+// Data persistence functions
+function saveCurrentStepData() {
+    const step = cleanOnboardingData.currentStep;
+    
+    try {
+        switch (step) {
+            case 1:
+                // Save income and budget
+                const incomeInput = document.getElementById('clean-income-input');
+                const budgetInput = document.getElementById('clean-budget-input');
+                if (incomeInput) cleanOnboardingData.data.monthlyIncome = parseFloat(incomeInput.value) || 0;
+                if (budgetInput) cleanOnboardingData.data.monthlyBudget = parseFloat(budgetInput.value) || 0;
+                break;
+                
+            case 2:
+                // Save selected goal - handled by click event
+                break;
+                
+            case 3:
+                // Save goal details - collect all inputs in the dynamic content
+                const goalInputs = document.querySelectorAll('#clean-goal-details-content input, #clean-goal-details-content select');
+                goalInputs.forEach(input => {
+                    if (input.value) {
+                        cleanOnboardingData.data.goalDetails[input.id] = input.value;
+                    }
+                });
+                break;
+                
+            case 4:
+                // Save debts - handled by collectCleanDebts function
+                collectCleanDebts();
+                break;
+                
+            case 5:
+                // Save current position
+                const savingsInput = document.getElementById('clean-total-savings-input');
+                const expensesInput = document.getElementById('clean-expenses-input');
+                if (savingsInput) cleanOnboardingData.data.totalSavings = parseFloat(savingsInput.value) || 0;
+                if (expensesInput) cleanOnboardingData.data.monthlyExpenses = parseFloat(expensesInput.value) || 0;
+                break;
+        }
+    } catch (error) {
+        console.log('Error saving step data:', error);
+    }
+}
+
+function restoreCurrentStepData() {
+    const step = cleanOnboardingData.currentStep;
+    const data = cleanOnboardingData.data;
+    
+    try {
+        switch (step) {
+            case 1:
+                // Restore income and budget
+                const incomeInput = document.getElementById('clean-income-input');
+                const budgetInput = document.getElementById('clean-budget-input');
+                if (incomeInput && data.monthlyIncome) incomeInput.value = data.monthlyIncome;
+                if (budgetInput && data.monthlyBudget) budgetInput.value = data.monthlyBudget;
+                break;
+                
+            case 2:
+                // Restore selected goal
+                if (data.primaryGoal) {
+                    const selectedOption = document.querySelector(`[data-goal="${data.primaryGoal}"]`);
+                    if (selectedOption) {
+                        document.querySelectorAll('.clean-goal-option').forEach(opt => opt.classList.remove('selected'));
+                        selectedOption.classList.add('selected');
+                    }
+                }
+                break;
+                
+            case 3:
+                // Restore goal details - wait for dynamic content to load
+                setTimeout(() => {
+                    Object.keys(data.goalDetails).forEach(fieldId => {
+                        const input = document.getElementById(fieldId);
+                        if (input && data.goalDetails[fieldId]) {
+                            input.value = data.goalDetails[fieldId];
+                        }
+                    });
+                }, 100);
+                break;
+                
+            case 4:
+                // Restore debts
+                restoreDebts();
+                break;
+                
+            case 5:
+                // Restore current position
+                const savingsInput = document.getElementById('clean-total-savings-input');
+                const expensesInput = document.getElementById('clean-expenses-input');
+                if (savingsInput && data.totalSavings) savingsInput.value = data.totalSavings;
+                if (expensesInput && data.monthlyExpenses) expensesInput.value = data.monthlyExpenses;
+                break;
+        }
+    } catch (error) {
+        console.log('Error restoring step data:', error);
+    }
+}
+
+function restoreDebts() {
+    const debtList = document.getElementById('clean-debt-list');
+    if (!debtList) return;
+    
+    // Clear existing debt items
+    debtList.innerHTML = '';
+    
+    // Restore saved debts
+    cleanOnboardingData.data.debts.forEach(debt => {
+        addCleanDebt();
+        const lastDebtItem = debtList.lastElementChild;
+        if (lastDebtItem) {
+            const nameInput = lastDebtItem.querySelector('.debt-name');
+            const balanceInput = lastDebtItem.querySelector('.debt-balance');
+            const interestInput = lastDebtItem.querySelector('.debt-interest');
+            
+            if (nameInput) nameInput.value = debt.name || '';
+            if (balanceInput) balanceInput.value = debt.balance || '';
+            if (interestInput) interestInput.value = debt.interest || '';
+        }
+    });
+}
+
+// 4. ADD missing generateCleanSummary function
+function generateCleanSummary() {
+    const container = document.getElementById('clean-summary-content');
+    const data = cleanOnboardingData.data;
+    
+    const monthlySurplus = data.monthlyIncome - data.monthlyExpenses;
+    const totalDebt = data.debts.reduce((sum, debt) => sum + debt.balance, 0);
+    
+    let goalSummary = '';
+    if (data.primaryGoal === 'house') {
+        const target = data.goalDetails['house-target'] || 0;
+        const current = data.goalDetails['house-current'] || 0;
+        const needed = target - current;
+        const months = Math.ceil(needed / Math.max(monthlySurplus, 100));
+        goalSummary = `
+            <div class="clean-summary-card">
+                <div class="flex gap-2">
+                    <div class="text-lg flex-shrink-0">🏠</div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold mb-2">House Deposit Plan</h3>
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Target:</span>
+                                <span class="highlight-number font-mono">£${target.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Still needed:</span>
+                                <span class="highlight-number font-mono">£${needed.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Timeline:</span>
+                                <span class="highlight-number font-mono">${months} months</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (data.primaryGoal === 'emergency') {
+        const months = parseInt(data.goalDetails['emergency-months']?.charAt(0)) || 6;
+        const target = data.monthlyExpenses * months;
+        const current = data.goalDetails['emergency-current'] || 0;
+        const needed = target - current;
+        goalSummary = `
+            <div class="clean-summary-card">
+                <div class="flex gap-2">
+                    <div class="text-lg flex-shrink-0">💰</div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold mb-2">Emergency Fund Plan</h3>
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Target:</span>
+                                <span class="highlight-number font-mono">£${target.toLocaleString()} (${months} months)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Still needed:</span>
+                                <span class="highlight-number font-mono">£${needed.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Current coverage:</span>
+                                <span class="highlight-number font-mono">${data.monthlyExpenses > 0 ? (current/data.monthlyExpenses).toFixed(1) : '0.0'} months</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (data.primaryGoal === 'vacation') {
+        const target = data.goalDetails['vacation-cost'] || 0;
+        const current = data.goalDetails['vacation-current'] || 0;
+        const needed = target - current;
+        const months = Math.ceil(needed / Math.max(monthlySurplus, 100));
+        goalSummary = `
+            <div class="clean-summary-card">
+                <div class="flex gap-2">
+                    <div class="text-lg flex-shrink-0">✈️</div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold mb-2">Vacation Plan</h3>
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Target:</span>
+                                <span class="highlight-number font-mono">£${target.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Still needed:</span>
+                                <span class="highlight-number font-mono">£${needed.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Timeline:</span>
+                                <span class="highlight-number font-mono">${months} months</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (data.primaryGoal === 'investment') {
+        const monthlyTarget = data.goalDetails['investment-monthly'] || 0;
+        const annualTarget = monthlyTarget * 12;
+        goalSummary = `
+            <div class="clean-summary-card">
+                <div class="flex gap-2">
+                    <div class="text-lg flex-shrink-0">📈</div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold mb-2">Investment Plan</h3>
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Monthly Target:</span>
+                                <span class="highlight-number font-mono">£${monthlyTarget.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Annual Target:</span>
+                                <span class="highlight-number font-mono">£${annualTarget.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Type:</span>
+                                <span class="highlight-number font-mono">${data.goalDetails['investment-type'] || 'General Investment'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (data.primaryGoal === 'custom') {
+        const target = data.goalDetails['custom-amount'] || 0;
+        const current = data.goalDetails['custom-current'] || 0;
+        const needed = target - current;
+        const months = Math.ceil(needed / Math.max(monthlySurplus, 100));
+        goalSummary = `
+            <div class="clean-summary-card">
+                <div class="flex gap-2">
+                    <div class="text-lg flex-shrink-0">🎯</div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold mb-2">${data.goalDetails['custom-name'] || 'Custom Goal'}</h3>
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Target:</span>
+                                <span class="highlight-number font-mono">£${target.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Still needed:</span>
+                                <span class="highlight-number font-mono">£${needed.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Timeline:</span>
+                                <span class="highlight-number font-mono">${months} months</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    container.innerHTML = `
+        <div class="clean-summary-card">
+            <div class="flex gap-2">
+                <div class="text-lg flex-shrink-0">💡</div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold mb-2">Financial Overview</h3>
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center text-sm gap-2">
+                            <span>Monthly Income:</span>
+                            <span class="highlight-number font-mono">£${data.monthlyIncome.toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm gap-2">
+                            <span>Monthly Surplus:</span>
+                            <span class="highlight-number font-mono">£${monthlySurplus.toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm gap-2">
+                            <span>Total Savings:</span>
+                            <span class="highlight-number font-mono">£${data.totalSavings.toLocaleString()}</span>
+                        </div>
+                        ${totalDebt > 0 ? `<div class="flex justify-between items-center text-sm gap-2">
+                            <span>Total Debt:</span>
+                            <span class="highlight-number text-red-600 font-mono">£${totalDebt.toLocaleString()}</span>
+                        </div>` : ''}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        ${goalSummary}
+        
+        <div class="clean-summary-card">
+            <div class="flex gap-2">
+                <div class="text-lg flex-shrink-0">🎯</div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold mb-2">What's Next</h3>
+                    <ul class="text-sm space-y-1 list-disc list-inside text-gray-600 dark:text-gray-400">
+                        <li>Track expenses with real-time goal impact</li>
+                        <li>Get personalized spending recommendations</li>
+                        <li>Monitor progress toward your ${data.primaryGoal} goal</li>
+                        <li>Receive smart financial insights</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Goal selection handler
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.clean-goal-option')) {
+        const option = e.target.closest('.clean-goal-option');
+        const goalType = option.getAttribute('data-goal');
+        
+        // Clear previous selections
+        document.querySelectorAll('.clean-goal-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        // Select this option
+        option.classList.add('selected');
+        cleanOnboardingData.data.primaryGoal = goalType;
+    }
+});
 
         function launchOnboardingTour() {
-            localStorage.setItem('onboardingComplete', 'true');
-            const driver = window.driver.js.driver;
+            localStorage.setItem('tourComplete', 'true');
+            const driver = window.driver?.js?.driver;
+            if (!driver) {
+                console.log('Driver.js not available, skipping tour');
+                return;
+            }
+            
             const isMobile = window.innerWidth < 768;
 
             const desktopSteps = [
@@ -2147,18 +3280,6 @@
                 {
                     element: '.card button[onclick="showAddForm()"]',
                     popover: { title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "left", align: 'start' }
-                },
-                {
-                    element: '.card button[onclick="showRecurringForm()"]',
-                    popover: { title: 'Add a Recurring Item', description: 'For regular income or expenses (like rent or subscriptions), use this.', side: "left", align: 'start' }
-                },
-                {
-                    element: '#tab-insights',
-                    popover: { title: 'Visualize Your Spending', description: 'This tab contains charts and AI-powered insights.', side: "bottom", align: 'start' }
-                },
-                {
-                    element: '.hidden.md\\:flex button[onclick="openSettings()"]',
-                    popover: { title: 'Settings & Data', description: 'Change the theme, set your currency, and import or export your data here.', side: "left", align: 'start' }
                 }
             ];
 
@@ -2166,26 +3287,6 @@
                 {
                     element: '[data-tour="app-header"]',
                     popover: { title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
-                },
-                {
-                    element: 'button[onclick="openSettings(\'budget\')"]',
-                    popover: { title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking.', side: "top", align: 'center' }
-                },
-                {
-                    element: '.card button[onclick="showAddForm()"]',
-                    popover: { title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "bottom", align: 'center' }
-                },
-                {
-                    element: '.card button[onclick="showRecurringForm()"]',
-                    popover: { title: 'Add a Recurring Item', description: 'For regular income or expenses (like rent or subscriptions), use this.', side: "bottom", align: 'center' }
-                },
-                {
-                    element: '#mobile-tab-insights',
-                    popover: { title: 'Visualize Your Spending', description: 'This tab contains charts and AI-powered insights.', side: "top", align: 'center' }
-                },
-                {
-                    element: '#mobile-bottom-nav-settings',
-                    popover: { title: 'Settings & Data', description: 'Change the theme, set currency, and manage your data here.', side: "top", align: 'center' }
                 }
             ];
 
@@ -2194,17 +3295,614 @@
                 popoverClass: 'driver-popover',
                 steps: isMobile ? mobileSteps : desktopSteps,
                 onDestroyed: () => {
-                    localStorage.setItem('onboardingComplete', 'true');
-                    const quickAddContainers = document.querySelectorAll('[id^="quick-add-"]');
-                    quickAddContainers.forEach(container => container.classList.add('animate-pulse'));
-                    setTimeout(() => {
-                        quickAddContainers.forEach(container => container.classList.remove('animate-pulse'));
-                    }, 3000);
+                    localStorage.setItem('tourComplete', 'true');
                 }
             });
 
             driverObj.drive();
         }
+
+        // === GOAL SYSTEM FUNCTIONS ===
+
+function renderGoalTemplates() {
+    const container = document.getElementById('goal-templates-container');
+    container.innerHTML = Object.entries(goalTemplates).map(([key, template]) => `
+        <div onclick="selectGoalTemplate('${key}')" class="p-6 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all">
+            <div class="text-center">
+                <div class="text-4xl mb-3">${template.icon}</div>
+                <h4 class="text-lg font-semibold mb-2">${template.name}</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">${template.description}</p>
+                <div class="text-xs text-left space-y-1">
+                    ${template.goals.map(goal => `
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                            <span>${goal.name}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+
+function removeGoal(index) {
+    const goalElement = document.querySelector(`#goals-list > div:nth-child(${index + 1})`);
+    if (goalElement) {
+        goalElement.remove();
+    }
+}
+
+
+// === GOAL PROGRESS TRACKING ===
+
+function calculateGoalProgress() {
+    if (!userGoals || userGoals.length === 0) return;
+    
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    
+    userGoals.forEach(goal => {
+        // Skip automatic calculation for manually edited goals
+        if (goal.manuallyEdited) return;
+        
+        switch(goal.type) {
+            case 'savings_rate':
+                goal.currentProgress = calculateSavingsRateProgress(currentMonth, currentYear);
+                break;
+            case 'category_limit':
+            case 'coffee_budget':
+                goal.currentProgress = calculateCategorySpendingProgress(goal, currentMonth, currentYear);
+                break;
+            case 'no_spend_days':
+                goal.currentProgress = calculateNoSpendDaysProgress(currentMonth, currentYear);
+                break;
+            case 'cook_home':
+                goal.currentProgress = calculateCookHomeProgress(currentMonth, currentYear);
+                break;
+            case 'total_spending_limit':
+                goal.currentProgress = calculateTotalSpendingProgress(goal, currentMonth, currentYear);
+                break;
+            case 'impulse_limit':
+                goal.currentProgress = calculateImpulseLimitProgress(goal, currentMonth, currentYear);
+                break;
+            case 'emergency_fund':
+                // Don't auto-calculate for house_deposit and emergency_fund 
+                // These are manual savings goals
+                if (!goal.manuallyEdited) {
+                    goal.currentProgress = calculateEmergencyFundProgress(goal);
+                }
+                break;
+        }
+    });
+    
+    saveData();
+}
+
+function calculateSavingsRateProgress(month, year) {
+    const monthlyRecurring = getMonthlyRecurringTotals(year, month);
+    const totalMonthlyIncome = monthlyIncome + monthlyRecurring.income;
+    const totalSpent = getMonthlyExpenseTotal(year, month);
+    
+    if (totalMonthlyIncome === 0) return 0;
+    
+    const actualSavingsRate = ((totalMonthlyIncome - totalSpent) / totalMonthlyIncome) * 100;
+    return Math.max(0, actualSavingsRate);
+}
+
+function calculateCategorySpendingProgress(goal, month, year) {
+    let categorySpending = 0;
+    
+    const monthlyExpenses = expenses.filter(e => {
+        const expenseDate = new Date(e.date);
+        return e.status === 'active' && 
+               expenseDate.getMonth() === month && 
+               expenseDate.getFullYear() === year &&
+               e.category === goal.category;
+    });
+    
+    if (goal.keywords && goal.keywords.length > 0) {
+        // Filter by keywords (e.g., coffee)
+        categorySpending = monthlyExpenses
+            .filter(e => goal.keywords.some(keyword => 
+                e.name.toLowerCase().includes(keyword.toLowerCase())
+            ))
+            .reduce((sum, e) => sum + e.cost, 0);
+    } else {
+        categorySpending = monthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
+    }
+    
+    // Return percentage of goal used (inverted - lower spending = higher progress)
+    const percentageUsed = (categorySpending / goal.target) * 100;
+    return Math.max(0, 100 - percentageUsed);
+}
+
+function calculateNoSpendDaysProgress(month, year) {
+    const monthlyExpenses = expenses.filter(e => {
+        const expenseDate = new Date(e.date);
+        return e.status === 'active' && 
+               expenseDate.getMonth() === month && 
+               expenseDate.getFullYear() === year;
+    });
+    
+    const spendingDays = new Set(monthlyExpenses.map(e => e.date)).size;
+    const currentDay = new Date().getDate();
+    const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    // Calculate no-spend days so far
+    const noSpendDays = Math.max(0, currentDay - spendingDays);
+    return noSpendDays;
+}
+
+// Fix the missing calculation functions
+function calculateCookHomeProgress(month, year) {
+    // This is a placeholder - you'd need to track cooking vs dining out
+    // For now, estimate based on food expenses
+    const foodExpenses = expenses.filter(e => {
+        const expenseDate = new Date(e.date);
+        return e.status === 'active' && 
+               expenseDate.getMonth() === month && 
+               expenseDate.getFullYear() === year &&
+               e.category === 'Food/Drink';
+    });
+    
+    const diningOutExpenses = foodExpenses.filter(e => 
+        e.name.toLowerCase().includes('restaurant') ||
+        e.name.toLowerCase().includes('takeaway') ||
+        e.name.toLowerCase().includes('delivery')
+    );
+    
+    const currentDay = new Date().getDate();
+    const estimatedCookDays = Math.max(0, currentDay - diningOutExpenses.length);
+    return estimatedCookDays;
+}
+
+function calculateTotalSpendingProgress(goal, month, year) {
+    const totalSpent = getMonthlyExpenseTotal(year, month);
+    const targetSpending = monthlyBudget * (1 - goal.target / 100);
+    
+    if (totalSpent <= targetSpending) {
+        return 100; // Goal achieved
+    } else {
+        const overspend = totalSpent - targetSpending;
+        return Math.max(0, 100 - (overspend / targetSpending) * 100);
+    }
+}
+
+function calculateImpulseLimitProgress(goal, month, year) {
+    const impulseExpenses = expenses.filter(e => {
+        const expenseDate = new Date(e.date);
+        return e.status === 'active' && 
+               expenseDate.getMonth() === month && 
+               expenseDate.getFullYear() === year &&
+               e.type === 'Non-Essential' &&
+               e.cost > goal.target;
+    });
+    
+    return impulseExpenses.length === 0 ? 100 : Math.max(0, 100 - impulseExpenses.length * 20);
+}
+
+function calculateEmergencyFundProgress(goal) {
+    // Emergency fund progress should not be auto-calculated
+    // It should only use the amount the user has specifically saved for emergencies
+    // If no manual amount is set, return 0
+    return goal.currentProgress || 0;
+}
+
+function updateGoalProgressDisplay() {
+    calculateGoalProgress();
+    
+    if (!userGoals || userGoals.length === 0) {
+        document.getElementById('goal-progress-display').textContent = 'No Goals';
+        return;
+    }
+    
+    const completedGoals = userGoals.filter(g => {
+        if (g.unit === 'percent' || g.unit === 'currency') {
+            return g.currentProgress >= g.target;
+        } else if (g.unit === 'days') {
+            return g.currentProgress >= g.target;
+        }
+                return false;
+    }).length;
+    
+    document.getElementById('goal-progress-display').textContent = `${completedGoals}/${userGoals.length}`;
+}
+
+function openGoalsModal() {
+    renderGoalsModal();
+    document.getElementById('goals-modal').classList.remove('hidden');
+}
+
+function closeGoalsModal() {
+    document.getElementById('goals-modal').classList.add('hidden');
+}
+
+function editGoals() {
+    // Close the current goals modal
+    closeGoalsModal();
+    
+    // Show the proper goal editing interface
+    showGoalEditingInterface();
+}
+
+function showGoalEditingInterface() {
+    document.getElementById('goal-editing-modal').classList.remove('hidden');
+    renderGoalEditingInterface();
+}
+
+function closeGoalEditingModal() {
+    document.getElementById('goal-editing-modal').classList.add('hidden');
+}
+
+function renderGoalEditingInterface() {
+    const container = document.getElementById('goal-editing-content');
+    
+    if (!userGoals || userGoals.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <div class="text-4xl mb-4">🎯</div>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">No goals set yet.</p>
+                <button onclick="addNewGoal()" class="modern-button modern-button-primary">Add Your First Goal</button>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = `
+        <div class="space-y-6">
+            ${userGoals.map((goal, index) => renderGoalEditForm(goal, index)).join('')}
+        </div>
+    `;
+}
+
+function renderGoalEditForm(goal, index) {
+    const goalTypeConfig = getGoalTypeConfig(goal.type);
+    
+    return `
+        <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h4 class="text-lg font-semibold">${goalTypeConfig.icon} ${goal.name}</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">${goalTypeConfig.description}</p>
+                </div>
+                <button onclick="removeGoal(${index})" class="text-red-500 hover:text-red-700 font-medium text-sm">Remove</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Target Amount</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="goal-${index}-target" value="${goal.target}" class="modern-input pl-8 text-center font-semibold" onchange="updateGoalProgress(${index})" oninput="updateGoalProgress(${index})">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Current Progress</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="goal-${index}-current" value="${goal.currentProgress}" class="modern-input pl-8 text-center font-semibold" onchange="updateGoalProgress(${index})" oninput="updateGoalProgress(${index})">
+                    </div>
+                </div>
+                
+                ${goal.timeline ? `
+                <div>
+                    <label class="block text-sm font-medium mb-2">Timeline</label>
+                    <select id="goal-${index}-timeline" class="modern-select font-medium">
+                        <option value="">Select...</option>
+                        ${getTimelineOptions().map(opt => `
+                            <option value="${opt}" ${goal.timeline === opt ? 'selected' : ''}>${opt}</option>
+                        `).join('')}
+                    </select>
+                </div>
+                ` : ''}
+                
+                ${goal.months ? `
+                <div>
+                    <label class="block text-sm font-medium mb-2">Coverage Period</label>
+                    <select id="goal-${index}-months" class="modern-select font-medium">
+                        <option value="">Select...</option>
+                        ${getMonthOptions().map(opt => `
+                            <option value="${opt}" ${goal.months === parseInt(opt.charAt(0)) ? 'selected' : ''}>${opt}</option>
+                        `).join('')}
+                    </select>
+                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                        This updates the goal name only. Your target amount stays as you set it.
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+            
+            <div class="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded">
+                <div class="flex justify-between text-sm">
+                    <span>Progress: <span id="goal-${index}-progress-text" class="font-medium">${Math.round((goal.currentProgress / goal.target) * 100)}%</span></span>
+                    <span>Remaining: <span id="goal-${index}-remaining-text" class="font-medium">£${(goal.target - goal.currentProgress).toLocaleString()}</span></span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                    <div id="goal-${index}-progress-bar" class="bg-purple-600 h-2 rounded-full transition-all duration-500" style="width: ${Math.min((goal.currentProgress / goal.target) * 100, 100)}%"></div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function getGoalTypeConfig(type) {
+    const configs = {
+        'house_deposit': { icon: '🏠', description: 'House purchase deposit fund' },
+        'emergency_fund': { icon: '💰', description: 'Emergency fund for unexpected expenses' },
+        'vacation': { icon: '✈️', description: 'Dream vacation fund' },
+        'investment': { icon: '📈', description: 'Investment portfolio building' },
+        'custom': { icon: '🎯', description: 'Custom financial goal' }
+    };
+    return configs[type] || { icon: '🎯', description: 'Financial goal' };
+}
+
+function getTimelineOptions() {
+    return ['6 months', '1 year', '18 months', '2 years', '3 years', '4 years', '5+ years'];
+}
+
+function getMonthOptions() {
+    return ['3 months expenses', '4 months expenses', '5 months expenses', '6 months expenses', '12 months expenses'];
+}
+
+function updateGoalProgress(index) {
+    const targetInput = document.getElementById(`goal-${index}-target`);
+    const currentInput = document.getElementById(`goal-${index}-current`);
+    const progressText = document.getElementById(`goal-${index}-progress-text`);
+    const remainingText = document.getElementById(`goal-${index}-remaining-text`);
+    const progressBar = document.getElementById(`goal-${index}-progress-bar`);
+    
+    if (targetInput && currentInput && progressText && remainingText && progressBar) {
+        const target = parseFloat(targetInput.value) || 0;
+        const current = parseFloat(currentInput.value) || 0;
+        
+        const progressPercent = target > 0 ? Math.round((current / target) * 100) : 0;
+        const remaining = Math.max(target - current, 0);
+        
+        progressText.textContent = `${progressPercent}%`;
+        remainingText.textContent = `£${remaining.toLocaleString()}`;
+        progressBar.style.width = `${Math.min(progressPercent, 100)}%`;
+    }
+}
+
+function addNewGoal() {
+    const goalTypes = [
+        { type: 'house_deposit', name: '🏠 House Deposit', description: 'Save for a house deposit' },
+        { type: 'emergency_fund', name: '💰 Emergency Fund', description: 'Build an emergency fund' },
+        { type: 'vacation', name: '✈️ Vacation', description: 'Save for a dream vacation' },
+        { type: 'investment', name: '📈 Investment', description: 'Build investment portfolio' },
+        { type: 'custom', name: '🎯 Custom Goal', description: 'Create a custom goal' }
+    ];
+    
+    const container = document.getElementById('goal-editing-content');
+    container.innerHTML = `
+        <div class="text-center mb-6">
+            <h4 class="text-lg font-semibold mb-2">Add New Goal</h4>
+            <p class="text-gray-600 dark:text-gray-400">Choose the type of goal you want to add</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            ${goalTypes.map(type => `
+                <div onclick="selectNewGoalType('${type.type}')" class="p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all">
+                    <div class="text-center">
+                        <div class="text-2xl mb-2">${type.name.split(' ')[0]}</div>
+                        <h5 class="font-semibold mb-1">${type.name.substring(2)}</h5>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">${type.description}</p>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+        
+        <div class="text-center">
+            <button onclick="renderGoalEditingInterface()" class="modern-button modern-button-secondary">Back to Goals</button>
+        </div>
+    `;
+}
+
+function selectNewGoalType(goalType) {
+    const newGoal = {
+        id: Date.now(),
+        type: goalType,
+        name: getDefaultGoalName(goalType),
+        target: 0,
+        currentProgress: 0,
+        unit: 'currency',
+        status: 'active',
+        priority: 'secondary',
+        createdAt: new Date().toISOString()
+    };
+    
+    // Only set months for emergency fund, but let user set their own target
+    if (goalType === 'emergency_fund') {
+        newGoal.months = 6;
+        // Don't auto-calculate target - let user decide
+    }
+    
+    userGoals.push(newGoal);
+    renderGoalEditingInterface();
+}
+
+function getDefaultGoalName(type) {
+    const names = {
+        'house_deposit': 'House Deposit',
+        'emergency_fund': '6-Month Emergency Fund',
+        'vacation': 'Dream Vacation',
+        'investment': 'Investment Portfolio',
+        'custom': 'Custom Goal'
+    };
+    return names[type] || 'New Goal';
+}
+
+function removeGoal(index) {
+    const goal = userGoals[index];
+    showConfirmation({
+        icon: '🗑️',
+        title: 'Remove Goal',
+        message: `Are you sure you want to remove "${goal.name}"? This action cannot be undone.`,
+        confirmText: 'Remove',
+        confirmClass: 'modern-button-danger',
+        onConfirm: () => {
+            userGoals.splice(index, 1);
+            renderGoalEditingInterface();
+            showToast('Goal removed successfully', 'info');
+        }
+    });
+}
+
+function showConfirmation(options) {
+    const overlay = document.getElementById('goal-confirmation-overlay');
+    const icon = document.getElementById('confirmation-icon');
+    const title = document.getElementById('confirmation-title');
+    const message = document.getElementById('confirmation-message');
+    const button = document.getElementById('confirmation-button');
+    
+    // Set content
+    icon.textContent = options.icon || '⚠️';
+    title.textContent = options.title || 'Confirm Action';
+    message.textContent = options.message || 'Are you sure you want to proceed?';
+    button.textContent = options.confirmText || 'Confirm';
+    
+    // Set button style
+    button.className = `modern-button px-6 ${options.confirmClass || 'modern-button-primary'}`;
+    
+    // Store callback
+    window.currentConfirmationCallback = options.onConfirm;
+    
+    // Show overlay within the goal editing modal
+    overlay.classList.remove('hidden');
+}
+
+function cancelConfirmation() {
+    document.getElementById('goal-confirmation-overlay').classList.add('hidden');
+    window.currentConfirmationCallback = null;
+}
+
+function confirmAction() {
+    if (window.currentConfirmationCallback) {
+        window.currentConfirmationCallback();
+        window.currentConfirmationCallback = null;
+    }
+    document.getElementById('goal-confirmation-overlay').classList.add('hidden');
+}
+
+function saveGoalEdits() {
+    // Update goals with new values from the forms
+    userGoals.forEach((goal, index) => {
+        const targetInput = document.getElementById(`goal-${index}-target`);
+        const currentInput = document.getElementById(`goal-${index}-current`);
+        const timelineInput = document.getElementById(`goal-${index}-timeline`);
+        const monthsInput = document.getElementById(`goal-${index}-months`);
+        
+        // Always preserve user input values and mark as manually edited
+        if (targetInput) {
+            goal.target = parseFloat(targetInput.value) || 0;
+            goal.manuallyEdited = true; // Prevent automatic calculation
+        }
+        if (currentInput) {
+            goal.currentProgress = parseFloat(currentInput.value) || 0;
+            goal.manuallyEdited = true; // Prevent automatic calculation
+        }
+        if (timelineInput) goal.timeline = timelineInput.value;
+        
+        // Only update months info if it exists, but DON'T override target
+        if (monthsInput && goal.type === 'emergency_fund') {
+            const months = parseInt(monthsInput.value.charAt(0));
+            if (months) {
+                goal.months = months;
+                goal.name = `${months}-Month Emergency Fund`;
+                // Don't override target - let user control it
+            }
+        }
+    });
+    
+    // Save to localStorage
+    saveData();
+    
+    // Update display
+    updateDisplay();
+    
+    // Close modal and show success
+    closeGoalEditingModal();
+    showToast('Goals updated successfully!', 'success');
+    
+    // Refresh goals modal if it was open
+    renderGoalsModal();
+}
+
+function renderGoalsModal() {
+    const container = document.getElementById('goals-content');
+    
+    if (!userGoals || userGoals.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <div class="text-4xl mb-4">🎯</div>
+                <p class="text-gray-600 dark:text-gray-400">No goals set yet.</p>
+                <button onclick="showGoalSelection()" class="modern-button modern-button-primary mt-4">Set Goals</button>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = userGoals.map(goal => {
+        const progressPercent = calculateGoalProgressPercent(goal);
+        const isCompleted = progressPercent >= 100;
+        
+        return `
+            <div class="p-4 border border-gray-200 dark:border-gray-600 rounded-lg mb-4 ${isCompleted ? 'bg-green-50 dark:bg-green-900/20 border-green-500' : ''}">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-medium">${goal.name}</h4>
+                    ${isCompleted ? '<span class="text-green-600 text-xl">✅</span>' : ''}
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                    <div class="bg-purple-600 h-2 rounded-full transition-all duration-500" style="width: ${Math.min(progressPercent, 100)}%"></div>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600 dark:text-gray-400">${formatGoalProgress(goal)}</span>
+                    <span class="font-medium">${Math.round(progressPercent)}%</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function calculateGoalProgressPercent(goal) {
+    if (goal.unit === 'percent') {
+        return (goal.currentProgress / goal.target) * 100;
+    } else if (goal.unit === 'currency') {
+        if (goal.type === 'category_limit' || goal.type === 'coffee_budget') {
+            return goal.currentProgress; // Already calculated as percentage
+        }
+        return (goal.currentProgress / goal.target) * 100;
+    } else if (goal.unit === 'days') {
+        return (goal.currentProgress / goal.target) * 100;
+    }
+    return 0;
+}
+
+function formatGoalProgress(goal) {
+    if (goal.unit === 'currency') {
+        if (goal.type === 'category_limit' || goal.type === 'coffee_budget') {
+            const spent = goal.target * (1 - goal.currentProgress / 100);
+            return `${formatCurrency(spent)} / ${formatCurrency(goal.target)}`;
+        } else if (goal.type === 'emergency_fund' && goal.months && monthlyExpenses > 0) {
+            // Show coverage for emergency fund goals
+            const coverageMonths = (goal.currentProgress / monthlyExpenses).toFixed(1);
+            return `${formatCurrency(goal.currentProgress)} / ${formatCurrency(goal.target)} (${coverageMonths} months coverage)`;
+        }
+        return `${formatCurrency(goal.currentProgress)} / ${formatCurrency(goal.target)}`;
+    } else if (goal.unit === 'percent') {
+        return `${goal.currentProgress.toFixed(1)}% / ${goal.target}%`;
+    } else if (goal.unit === 'days') {
+        return `${goal.currentProgress} / ${goal.target} days`;
+    }
+    return `${goal.currentProgress} / ${goal.target}`;
+}
+
+function closeGoalSelection() {
+    document.getElementById('goal-selection-modal').classList.add('hidden');
+}
 
         // --- Tab Management ---
         function showTab(tabName) {
@@ -2265,9 +3963,11 @@
                 recurringItems = parsedData.recurringItems || [];
                 monthlyBudget = parsedData.monthlyBudget || 0;
                 monthlyIncome = parsedData.monthlyIncome || 0;
+                monthlyExpenses = parsedData.monthlyExpenses || 0;
                 healthScoreHistory = parsedData.healthScoreHistory || {};
                 currentCurrencyCode = parsedData.currentCurrencyCode || 'GBP';
                 activeTab = parsedData.activeTab || 'overview';
+                userGoals = parsedData.userGoals || [];
             }
             const savedDarkMode = localStorage.getItem('darkMode');
             if (savedDarkMode !== null) {
@@ -2281,9 +3981,11 @@
                 recurringItems,
                 monthlyBudget,
                 monthlyIncome,
+                monthlyExpenses,
                 healthScoreHistory,
                 currentCurrencyCode,
-                activeTab
+                activeTab,
+                userGoals
             };
             localStorage.setItem('lensAppData', JSON.stringify(dataToSave));
         }
@@ -2320,14 +4022,18 @@
                         healthScoreHistory = importedData.healthScoreHistory || {};
                         currentCurrencyCode = importedData.currentCurrencyCode || 'GBP';
                         activeTab = importedData.activeTab || 'overview';
+                        userGoals = importedData.userGoals || [];
                         
-                        DOMElements.currencySelect.value = currentCurrencyCode;
+                        if (DOMElements.currencySelect) {
+                            DOMElements.currencySelect.value = currentCurrencyCode;
+                        }
 
                         saveData();
                         updateCurrencyUI();
                         updateDisplay();
                         showTab(activeTab);
                         showToast('Data imported successfully!');
+                        closeSettings();
                     } else {
                         throw new Error('Invalid data format');
                     }
@@ -2338,7 +4044,6 @@
             };
             reader.readAsText(file);
             event.target.value = null;
-            DOMElements.settingsMenu.classList.add('hidden');
         }
 
         // --- Budget & Income ---
@@ -2790,8 +4495,8 @@
                 while (currentDate <= lastDay && iterations < 100) {
                     if (currentDate >= firstDay && currentDate <= lastDay) {
                         hasOccurrenceThisMonth = true;
-                        break;
-                    }
+            break;
+    }
 
                     // Move to next occurrence
                     switch (item.frequency) {
@@ -2870,10 +4575,13 @@
                 const container = document.getElementById(item.id);
                 if (container) {
                     const button = container.querySelector('button');
-                    const costSpan = button.querySelector('span.font-medium');
-
-                    costSpan.textContent = formatCurrency(item.cost);
-                    button.onclick = () => quickAddExpense(item.name, item.category, item.type, item.cost);
+                    if (button) {
+                        const costSpan = button.querySelector('span.font-medium');
+                        if (costSpan) {
+                            costSpan.textContent = formatCurrency(item.cost);
+                        }
+                        button.onclick = () => quickAddExpense(item.name, item.category, item.type, item.cost);
+                    }
                 }
             });
         }
@@ -2918,8 +4626,12 @@
             DOMElements.totalExpensesDisplay.textContent = spentStr;
             DOMElements.totalExpensesDisplay.style.fontSize = responsiveSize;
             
-            DOMElements.totalIncomeDisplay.textContent = incomeStr;
-            DOMElements.totalIncomeDisplay.style.fontSize = responsiveSize;
+            if (DOMElements.totalIncomeDisplay) {
+    if (DOMElements.totalIncomeDisplay) {
+    DOMElements.totalIncomeDisplay.textContent = incomeStr;
+    DOMElements.totalIncomeDisplay.style.fontSize = responsiveSize;
+}
+}
 
             DOMElements.remainingAmountDisplay.textContent = remainingStr;
             DOMElements.remainingAmountDisplay.style.fontSize = responsiveSize;
@@ -2944,14 +4656,14 @@
             // AI Projection
             const projection = predictMonthEndSpending(totalSpent, now);
             DOMElements.aiProjectionContainer.innerHTML = `
-                <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-2">
                     <span class="text-lg">🔮</span>
                     <div class="flex items-center gap-2">
                             <div>
                         <span class="font-semibold">AI Projection:</span>
                         You're on track to spend <strong>${formatCurrency(projection.projectedSpend)}</strong> this month.
                         <span class="font-bold ${projection.statusColor}">${projection.statusText}</span>
-                            </div>
+                                </div>
                         <div class="tooltip">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 cursor-help hover:text-gray-600 dark:hover:text-gray-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -2962,8 +4674,8 @@
                                 Projected over ${new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()} days in this month = ${formatCurrency(projection.projectedSpend)} total.<br><br>
                                 This becomes more accurate as you add more expenses throughout the month.
                         </div>
-                            </div>
-                        </div>
+                    </div>
+                </div>
                     </div>
             `;
             
@@ -2994,6 +4706,8 @@
             // Update table labels for mobile cards
             setTimeout(updateTableLabels_NEW, 10);
             
+            updateGoalProgressDisplay(); // ADD THIS LINE
+
             console.timeEnd('updateDisplay');
         }
 
@@ -3090,17 +4804,17 @@
                     case 'budgetUsage':
                         insights.improvements.push("Spending is outpacing your budget for this point in the month.");
                         insights.tip = "Try having a 'no-spend' day to get back on track.";
-                        break;
+            break;
                     case 'spendingHabits':
                         insights.improvements.push("A high portion of spending is on non-essentials.");
                         insights.tip = "Review subscriptions or dining out for potential savings.";
-                        break;
+            break;
                     case 'savingsRate':
                         insights.improvements.push("Currently not saving or saving less than last month.");
                         insights.tip = "Set a small, achievable savings goal for this month.";
-                        break;
-                }
-            }
+            break;
+    }
+}
             if (insights.improvements.length === 0) insights.improvements.push("You're on the right track in all areas.");
 
             return insights;
@@ -3131,7 +4845,7 @@
                 <div class="absolute inset-0 flex flex-col items-center justify-center">
                     <span class="text-3xl font-bold" style="color: ${scoreColor};">${totalScore}</span>
                     <span class="text-xs font-medium text-gray-500 dark:text-gray-400">${scoreLabel}</span>
-                </div>
+                    </div>
             `;
             
             // --- Render Trend ---
@@ -3167,42 +4881,42 @@
             DOMElements.healthScoreTooltip.innerHTML = `
                 <div class="font-bold text-base mb-2 text-center">Your Score: ${totalScore}/100</div>
                 <div class="space-y-3">
-                    <div>
+                <div>
                         <div class="flex justify-between items-baseline mb-1">
                             <span class="font-semibold">Budget Usage</span>
                             <span class="text-xs font-medium">${breakdown.budgetUsage.score}/${breakdown.budgetUsage.max} pts</span>
-                        </div>
-                        ${renderProgressBar(breakdown.budgetUsage.score, breakdown.budgetUsage.max)}
                     </div>
-                    <div>
+                        ${renderProgressBar(breakdown.budgetUsage.score, breakdown.budgetUsage.max)}
+                </div>
+                <div>
                         <div class="flex justify-between items-baseline mb-1">
                             <span class="font-semibold">Spending Habits</span>
                             <span class="text-xs font-medium">${breakdown.spendingHabits.score}/${breakdown.spendingHabits.max} pts</span>
-                        </div>
+                </div>
                         ${renderProgressBar(breakdown.spendingHabits.score, breakdown.spendingHabits.max)}
                     </div>
-                    <div>
+                            <div>
                         <div class="flex justify-between items-baseline mb-1">
                             <span class="font-semibold">Savings Rate</span>
                             <span class="text-xs font-medium">${breakdown.savingsRate.score}/${breakdown.savingsRate.max} pts</span>
-                        </div>
+                            </div>
                         ${renderProgressBar(breakdown.savingsRate.score, breakdown.savingsRate.max)}
                     </div>
                 </div>
                 <div class="border-t border-gray-200 dark:border-gray-600 my-3"></div>
-                <div>
+                        <div>
                     <h4 class="font-semibold text-green-600 dark:text-green-400">Strengths</h4>
                     <ul class="list-disc list-inside text-xs">${insights.strengths.map(s => `<li>${s}</li>`).join('')}</ul>
-                </div>
+                        </div>
                 <div class="mt-2">
                     <h4 class="font-semibold text-yellow-600 dark:text-yellow-400">Areas to Improve</h4>
                     <ul class="list-disc list-inside text-xs">${insights.improvements.map(i => `<li>${i}</li>`).join('')}</ul>
-                </div>
+                    </div>
                 <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 text-center">
                     <span class="font-semibold">💡 Tip:</span>
                     <span class="text-xs italic">${insights.tip}</span>
-                </div>
-            `;
+            </div>
+        `;
         }
 
         function updateBudgetHealthScore(totalSpent, budget, monthlyExpenses, totalMonthlyIncome, now) {
@@ -3374,7 +5088,7 @@
                                 <button onclick="${deleteAction}" title="Delete" class="icon-button text-red-600/80 hover:text-red-500" ${isRecurringInstance ? 'disabled' : ''} ${isRecurringInstance ? 'opacity-50 cursor-not-allowed' : ''}>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
                                 </button>
-                            </div>
+        </div>
                         </td>
                     </tr>
                 `;
@@ -3427,7 +5141,8 @@
                     <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap" data-label="Actions">
                         <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
                         <button onclick="toggleRecurringStatus(${item.id})" class="icon-button" title="${item.status === 'active' ? 'Pause' : 'Resume'}">
-                           ${item.status === 'active' ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'}
+                           ${item.status === 'active' ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+                           }
                         </button>
                         <button onclick="deleteRecurring(${item.id})" class="icon-button text-red-500 hover:text-red-700" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button>
                     </td>
@@ -3441,7 +5156,7 @@
             renderSpendingTrendChart();
             renderCategorySpendingChart();
             renderMonthlySavingsChart();
-            updateAiInsights();
+            updateAiInsightsWithSmartAnalytics(); // NEW
         }
 
         const chartColors = ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316', '#06b6d4', '#d946ef', '#84cc16'];
@@ -3570,76 +5285,6 @@
             return data.reverse();
         }
 
-        function updateAiInsights() {
-            const forecastContainer = document.getElementById('seven-day-forecast');
-            const projectionContainer = document.getElementById('month-end-projection');
-            const recommendationsContainer = document.getElementById('smart-recommendations');
-            const storyContainer = document.getElementById('monthly-story');
-            const storyMetricsContainer = document.getElementById('story-metrics');
-            const actionCount = document.getElementById('action-count');
-
-            const showLoading = (container) => {
-                if(container) container.innerHTML = `<div class="flex justify-center items-center p-4"><div class="ai-loading"></div></div>`;
-            };
-            
-            showLoading(forecastContainer);
-            showLoading(projectionContainer);
-            showLoading(recommendationsContainer);
-            showLoading(storyContainer);
-            if(storyMetricsContainer) storyMetricsContainer.classList.add('hidden');
-
-            setTimeout(() => {
-                const now = new Date();
-                const currentMonth = now.getMonth();
-                const currentYear = now.getFullYear();
-                const monthlyExpenses = expenses.filter(e => {
-                    const expenseDate = new Date(e.date);
-                    return e.status === 'active' && expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
-                });
-                const totalSpent = monthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
-
-                render7DayForecast(forecastContainer);
-                renderMonthEndProjection(projectionContainer, totalSpent, now);
-                const recommendations = renderSmartRecommendations(recommendationsContainer, monthlyExpenses, recurringItems);
-                
-                // Fixed badge logic
-                if (recommendations && recommendations.length > 0) {
-                    actionCount.textContent = recommendations.length;
-                    actionCount.classList.remove('hidden');
-                } else {
-                    actionCount.classList.add('hidden');
-                }
-                
-                renderMonthlyStory(storyContainer, storyMetricsContainer, monthlyExpenses, totalSpent);
-            }, 500);
-        }
-
-        function render7DayForecast(container) {
-            if (!container) return;
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            const sevenDaysLater = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-            
-            const upcomingItems = recurringItems
-                .map(item => ({ ...item, dueDate: getNextDueDate(item, today) }))
-                .filter(item => item.dueDate && item.dueDate <= sevenDaysLater && item.status === 'active' && item.type === 'expense')
-                .sort((a,b) => a.dueDate - b.dueDate);
-
-            if (upcomingItems.length === 0) {
-                container.innerHTML = `<div class="text-center text-sm text-gray-500 dark:text-gray-400 p-4">No upcoming recurring expenses in the next 7 days.</div>`;
-                return;
-            }
-
-            container.innerHTML = upcomingItems.map(item => `
-                <div class="flex items-center justify-between text-sm p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800/50">
-                    <div>
-                        <div class="font-medium text-gray-800 dark:text-gray-200">${escapeHTML(item.name)}</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400">${item.dueDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</div>
-                    </div>
-                    <div class="font-semibold text-red-500 dark:text-red-400">${formatCurrency(item.amount)}</div>
-                </div>
-            `).join('');
-        }
 
         function getNextDueDate(item, fromDate) {
             let nextDueDate = new Date(item.startDate + 'T00:00:00');
@@ -3664,136 +5309,6 @@
             return nextDueDate;
         }
 
-        function renderMonthEndProjection(container, totalSpent, now) {
-            if (!container) return;
-            const projection = predictMonthEndSpending(totalSpent, now);
-            const projectedSavings = monthlyIncome - projection.projectedSpend;
-
-            container.innerHTML = `
-                <div class="space-y-4">
-                    <div class="text-center">
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Projected Spending</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-gray-600">${formatCurrency(projection.projectedSpend, false)}</p>
-                        <p class="text-xs font-medium ${projection.statusColor}">${projection.statusText} vs Budget</p>
-                    </div>
-                     <div class="text-center">
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Projected Savings</p>
-                        <p class="text-3xl font-bold ${projectedSavings >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
-                            ${formatCurrency(projectedSavings, false)}
-                        </p>
-                        <p class="text-xs text-gray-500 dark:text-gray-500">Based on monthly income</p>
-                    </div>
-                </div>
-            `;
-        }
-        
-        function renderSmartRecommendations(container, monthlyExpenses, allRecurringItems) {
-            if (!container) return [];
-            let recommendations = [];
-    
-            const subscriptions = allRecurringItems.filter(i => i.status === 'active' && i.type === 'expense' && i.category === 'Subscriptions');
-            if (subscriptions.length > 2) {
-                const totalSubCost = subscriptions.reduce((sum, s) => sum + s.amount, 0);
-                recommendations.push({
-                    icon: '✂️',
-                    title: 'Review Subscriptions',
-                    description: `You have ${subscriptions.length} active subscriptions costing ${formatCurrency(totalSubCost)}/month. Consider cancelling any you don't use.`
-                });
-            }
-
-            const nonEssentialSpending = monthlyExpenses.filter(e => e.type === 'Non-Essential').reduce((sum, e) => sum + e.cost, 0);
-            const totalSpent = monthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
-            if (totalSpent > 0 && (nonEssentialSpending / totalSpent) > 0.4) {
-                 recommendations.push({
-                    icon: '🤔',
-                    title: 'Check Non-Essential Spending',
-                    description: `Over 40% of your spending this month is on non-essentials. Small cutbacks here could lead to big savings.`
-                });
-            }
-
-            const diningOut = monthlyExpenses.filter(e => e.category === 'Food/Drink' && (e.name.toLowerCase().includes('restaurant') || e.name.toLowerCase().includes('takeaway') || e.name.toLowerCase().includes('coffee'))).reduce((sum, e) => sum + e.cost, 0);
-            if (diningOut > (monthlyBudget * 0.1)) {
-                 recommendations.push({
-                    icon: '🍳',
-                    title: 'Dining Out Costs',
-                    description: `You've spent ${formatCurrency(diningOut)} on food & drinks out. Cooking at home is a great way to save.`
-                 });
-            }
-
-            if (recommendations.length === 0) {
-                container.innerHTML = `<div class="text-center text-sm text-gray-500 dark:text-gray-400 p-4">Looking good! No specific recommendations right now.</div>`;
-                return []; // Return empty array, not undefined
-            }
-    
-            container.innerHTML = recommendations.map(rec => `
-                <div class="flex items-start gap-3 p-3 rounded-lg action-item">
-                    <div class="text-xl pt-1">${rec.icon}</div>
-                    <div>
-                        <h4 class="font-semibold insights-light-text">${rec.title}</h4>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">${rec.description}</p>
-                    </div>
-                </div>
-            `).join('');
-
-            return recommendations; // Always return the array
-        }
-
-        function renderMonthlyStory(storyContainer, metricsContainer, monthlyExpenses, totalSpent) {
-            if (!storyContainer || !metricsContainer) return;
-            
-            const totalIncome = monthlyIncome + getMonthlyRecurringTotals(new Date().getFullYear(), new Date().getMonth()).income;
-            
-            if (totalSpent === 0) {
-                 storyContainer.innerHTML = `<div class="text-center text-sm text-gray-500 dark:text-gray-400 p-4">Start adding expenses to see your monthly story unfold.</div>`;
-                 metricsContainer.classList.add('hidden');
-                return;
-            }
-
-            const savingsRate = totalIncome > 0 ? ((totalIncome - totalSpent) / totalIncome) * 100 : 0;
-            
-            const spendingByDay = monthlyExpenses.reduce((acc, e) => {
-                const day = new Date(e.date).getDate();
-                acc[day] = (acc[day] || 0) + e.cost;
-                return acc;
-            }, {});
-            const busiestDay = Object.entries(spendingByDay).sort((a,b) => b[1] - a[1])[0];
-
-            const spendingByCategory = monthlyExpenses.reduce((acc, e) => {
-                acc[e.category] = (acc[e.category] || 0) + e.cost;
-                return acc;
-            }, {});
-            const topCategory = Object.entries(spendingByCategory).sort((a,b) => b[1] - a[1])[0];
-
-            let story = `This month, you've spent <strong>${formatCurrency(totalSpent)}</strong>. `;
-            if (savingsRate > 20) {
-                story += `Your saving discipline is impressive, with a savings rate of <strong>${savingsRate.toFixed(0)}%</strong>. `;
-            } else if (savingsRate > 0) {
-                 story += `You're on the right track, saving <strong>${savingsRate.toFixed(0)}%</strong> of your income. `;
-            } else {
-                story += `It seems spending exceeded income this month. Let's aim for a positive savings rate next month. `;
-            }
-            if(busiestDay && topCategory) {
-                story += `Your busiest spending day was the <strong>${busiestDay[0]}th</strong>, and your top category was <strong>${topCategory[0]}</strong>.`;
-            }
-
-            storyContainer.innerHTML = `<p class="text-sm insights-light-text leading-relaxed">${story}</p>`;
-            
-            metricsContainer.innerHTML = `
-                <div class="metric-card">
-                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Savings Rate</p>
-                    <p class="text-lg font-bold ${savingsRate >=0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">${savingsRate.toFixed(0)}%</p>
-                </div>
-                <div class="metric-card">
-                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Top Category</p>
-                    <p class="text-lg font-bold insights-light-text truncate">${topCategory ? topCategory[0] : '-'}</p>
-                </div>
-                <div class="metric-card">
-                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Busiest Day</p>
-                    <p class="text-lg font-bold insights-light-text">${busiestDay ? busiestDay[0] + 'th' : '-'}</p>
-                </div>
-            `;
-            metricsContainer.classList.remove('hidden');
-        }
         
         // --- Utility Functions ---
         function formatCurrency(amount, useDecimals = true) {
@@ -3858,8 +5373,8 @@
             }
             if (typeSelect) {
                 typeSelect.value = matchedEssential;
-                    }
-                }
+            }
+        }
 
         // --- Settings Modal ---
         function openSettings(section) {
@@ -3905,112 +5420,858 @@
             return new Intl.NumberFormat(config.locale, options).format(amount || 0);
         }
 
-        // --- Data Getters ---
-        function getExpenses() {
-            // New, simplified logic: Return all stored expenses.
-            // The old logic for dynamically generating recurring instances is no longer needed.
-            return [...expenses];
-        }
+// SMART ANALYTICS CORE ENGINE
 
-        function getRecurringItems() {
-            // Simplified for clarity, just returns the array
-            return [...recurringItems];
-        }
+class LensSmartInsights {
+    constructor(expenses, recurringItems, monthlyBudget, monthlyIncome) {
+        this.expenses = expenses || [];
+        this.recurringItems = recurringItems || [];
+        this.monthlyBudget = monthlyBudget || 0;
+        this.monthlyIncome = monthlyIncome || 0;
+        this.now = new Date();
+        
+        // Process data once for all analyses
+        this.processedExpenses = this.enrichExpenseData();
+        this.monthlyData = this.getMonthlyBreakdown();
+    }
 
-        function deleteExpense(id) {
-            if (confirm('Are you sure you want to permanently delete this expense?')) {
-                expenses = expenses.filter(e => e.id !== id);
-                selectedExpenseIds.delete(id.toString());
-                saveData();
-                updateDisplay();
-                showToast('Expense deleted successfully!');
+    enrichExpenseData() {
+        return this.expenses
+            .filter(e => e.status === 'active')
+            .map(expense => ({
+                ...expense,
+                cost: parseFloat(expense.cost) || 0,
+                date: new Date(expense.date),
+                dayOfWeek: new Date(expense.date).getDay(),
+                isWeekend: [0, 6].includes(new Date(expense.date).getDay()),
+                isRecurring: !!expense.recurringSourceId,
+                merchantName: this.extractMerchant(expense.name),
+                month: new Date(expense.date).getMonth(),
+                year: new Date(expense.date).getFullYear()
+            }))
+            .sort((a, b) => b.date - a.date);
+    }
+
+    extractMerchant(name) {
+        return name.toLowerCase()
+            .replace(/\d+/g, '')
+            .replace(/[^\w\s]/g, '')
+            .trim()
+            .split(' ')[0];
+    }
+
+    getMonthlyBreakdown() {
+        const currentMonth = this.now.getMonth();
+        const currentYear = this.now.getFullYear();
+        
+        return {
+            thisMonth: this.processedExpenses.filter(e => 
+                e.month === currentMonth && e.year === currentYear
+            ),
+            lastMonth: this.processedExpenses.filter(e => {
+                const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+                const lastYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+                return e.month === lastMonth && e.year === lastYear;
+            }),
+            last3Months: this.processedExpenses.filter(e => {
+                const threeMonthsAgo = new Date();
+                threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+                return e.date >= threeMonthsAgo;
+            })
+        };
+    }
+
+    // ===================================================================
+    // BEHAVIORAL ANALYSIS
+    // ===================================================================
+
+    analyzeWeekendSpending() {
+        const { thisMonth } = this.monthlyData;
+        
+        const weekdayExpenses = thisMonth.filter(e => !e.isWeekend && e.type === 'Non-Essential');
+        const weekendExpenses = thisMonth.filter(e => e.isWeekend && e.type === 'Non-Essential');
+        
+        const weekdayTotal = weekdayExpenses.reduce((sum, e) => sum + e.cost, 0);
+        const weekendTotal = weekendExpenses.reduce((sum, e) => sum + e.cost, 0);
+        
+        // Fix: Prevent division by zero
+        const weekdayDays = Math.max(1, new Set(weekdayExpenses.map(e => e.date.getDate())).size);
+        const weekendDays = Math.max(1, new Set(weekendExpenses.map(e => e.date.getDate())).size);
+        
+        const weekdayAvg = weekdayTotal / weekdayDays;
+        const weekendAvg = weekendTotal / weekendDays;
+        
+        // Fix: Handle zero weekday spending
+        const weekendPremium = weekdayAvg > 0 ? (weekendAvg - weekdayAvg) / weekdayAvg : 0;
+        
+        // Fix: Cap at reasonable values
+        const cappedPremium = Math.min(5, Math.max(0, weekendPremium)); // Cap at 500% increase
+        
+        return {
+            weekendPremium: cappedPremium,
+            nonEssentialWeekendSpending: weekendTotal,
+            nonEssentialWeekdaySpending: weekdayTotal,
+            potentialSaving: Math.min(1000, cappedPremium * weekendTotal * 0.3) // Cap savings at £1000
+        };
+    }
+
+    analyzeImpulseSpending() {
+        const { thisMonth } = this.monthlyData;
+        
+        // Impulse indicators: Non-essential, small amounts, quick succession
+        const impulseExpenses = thisMonth.filter(expense => {
+            const isNonEssential = expense.type === 'Non-Essential';
+            const isSmallAmount = expense.cost < 30;
+            const isQuickSuccession = this.isInQuickSuccession(expense, thisMonth);
+            
+            return isNonEssential && (isSmallAmount || isQuickSuccession);
+        });
+
+        return {
+            count: impulseExpenses.length,
+            total: impulseExpenses.reduce((sum, e) => sum + e.cost, 0),
+            avgAmount: impulseExpenses.length > 0 ? 
+                impulseExpenses.reduce((sum, e) => sum + e.cost, 0) / impulseExpenses.length : 0,
+            score: impulseExpenses.length / Math.max(thisMonth.length, 1)
+        };
+    }
+
+    isInQuickSuccession(expense, allExpenses) {
+        const sameDay = allExpenses.filter(e => 
+            e.date.toDateString() === expense.date.toDateString() && 
+            e.id !== expense.id
+        );
+        return sameDay.length > 2; // More than 2 other purchases same day
+    }
+
+    analyzeMerchantLoyalty() {
+        const { last3Months } = this.monthlyData;
+        
+        // Group by category and merchant
+        const categoryMerchants = {};
+        last3Months.forEach(expense => {
+            if (!categoryMerchants[expense.category]) {
+                categoryMerchants[expense.category] = {};
             }
-        }
+            if (!categoryMerchants[expense.category][expense.merchantName]) {
+                categoryMerchants[expense.category][expense.merchantName] = [];
+            }
+            categoryMerchants[expense.category][expense.merchantName].push(expense.cost);
+        });
 
-        function toggleExpenseStatus(id) {
-            const expense = expenses.find(e => e.id === id);
-            if (expense) {
-                expense.status = expense.status === 'active' ? 'cancelled' : 'active';
-                saveData();
-                updateDisplay();
-                showToast(`Expense status updated to ${expense.status}.`);
-        }
-        }
+        const opportunities = [];
+        Object.entries(categoryMerchants).forEach(([category, merchants]) => {
+            const merchantAvgs = Object.entries(merchants).map(([merchant, costs]) => ({
+                merchant,
+                avg: costs.reduce((a, b) => a + b, 0) / costs.length,
+                count: costs.length,
+                total: costs.reduce((a, b) => a + b, 0)
+            })).filter(m => m.count >= 2); // Only merchants used multiple times
 
-        function toggleRecurringStatusInExpenseView(recurringId) {
-            const item = recurringItems.find(r => r.id === recurringId);
-            if (item) {
-                item.status = item.status === 'active' ? 'cancelled' : 'active';
-                saveData();
-                updateDisplay();
-                showToast(`Status of recurring series '${item.name}' has been updated.`);
+            if (merchantAvgs.length > 1) {
+                merchantAvgs.sort((a, b) => a.avg - b.avg);
+                const cheapest = merchantAvgs[0];
+                const mostUsed = merchantAvgs.reduce((max, curr) => 
+                    curr.count > max.count ? curr : max
+                );
+
+                if (mostUsed.merchant !== cheapest.merchant && mostUsed.avg > cheapest.avg * 1.2) {
+                    const monthlySaving = (mostUsed.avg - cheapest.avg) * (mostUsed.count / 3); // Monthly estimate
+                    opportunities.push({
+                        category,
+                        currentMerchant: mostUsed.merchant,
+                        betterMerchant: cheapest.merchant,
+                        potentialSaving: monthlySaving
+                    });
+                }
+            }
+        });
+
+        return opportunities;
+    }
+
+    detectHiddenSubscriptions() {
+        const { last3Months } = this.monthlyData;
+        
+        // Group by merchant and look for regular patterns
+        const merchantPatterns = {};
+        last3Months.forEach(expense => {
+            if (!merchantPatterns[expense.merchantName]) {
+                merchantPatterns[expense.merchantName] = [];
+            }
+            merchantPatterns[expense.merchantName].push({
+                cost: expense.cost,
+                date: expense.date
+            });
+        });
+
+        const suspectedSubscriptions = [];
+        Object.entries(merchantPatterns).forEach(([merchant, transactions]) => {
+            if (transactions.length < 2) return;
+
+            // Check for regular amounts
+            const amounts = transactions.map(t => t.cost);
+            const mostCommonAmount = this.getMostCommon(amounts);
+            const regularAmountCount = amounts.filter(a => Math.abs(a - mostCommonAmount) < 0.01).length;
+            
+            // Check for regular intervals (approximately monthly)
+            const dates = transactions.map(t => t.date).sort();
+            const intervals = [];
+            for (let i = 1; i < dates.length; i++) {
+                const days = (dates[i] - dates[i-1]) / (1000 * 60 * 60 * 24);
+                intervals.push(days);
+            }
+            
+            const avgInterval = intervals.length > 0 ? intervals.reduce((a, b) => a + b, 0) / intervals.length : 0;
+            const isMonthlyish = avgInterval > 25 && avgInterval < 35;
+            const hasRegularInterval = intervals.every(interval => Math.abs(interval - avgInterval) < 7);
+
+            // Check if already tracked
+            const isTracked = this.recurringItems.some(item => 
+                item.name.toLowerCase().includes(merchant.toLowerCase())
+            );
+
+            if (regularAmountCount >= 2 && (isMonthlyish || hasRegularInterval) && !isTracked) {
+                suspectedSubscriptions.push({
+                    merchant,
+                    amount: mostCommonAmount,
+                    confidence: (regularAmountCount / transactions.length) * 
+                               (hasRegularInterval ? 1 : 0.7),
+                    estimatedFrequency: Math.round(avgInterval)
+                });
+            }
+        });
+
+        return suspectedSubscriptions.filter(s => s.confidence > 0.6);
+    }
+
+    getMostCommon(arr) {
+        const counts = {};
+        arr.forEach(val => counts[val] = (counts[val] || 0) + 1);
+        return Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+    }
+
+    // ===================================================================
+    // PREDICTIVE ANALYSIS
+    // ===================================================================
+
+    predictBudgetRisk() {
+        const { thisMonth } = this.monthlyData;
+        const currentDay = this.now.getDate();
+        const daysInMonth = new Date(this.now.getFullYear(), this.now.getMonth() + 1, 0).getDate();
+        
+        const spentSoFar = thisMonth.reduce((sum, e) => sum + e.cost, 0);
+        const dailyAverage = spentSoFar / currentDay;
+        const projectedTotal = dailyAverage * daysInMonth;
+        
+        // Add upcoming recurring expenses
+        const upcomingRecurring = this.getUpcomingRecurringThisMonth();
+        const totalProjected = projectedTotal + upcomingRecurring;
+        
+        const overrunAmount = Math.max(0, totalProjected - this.monthlyBudget);
+        const riskScore = this.monthlyBudget > 0 ? Math.min(1, overrunAmount / (this.monthlyBudget * 0.1)) : 0;
+        
+        return {
+            riskScore,
+            projectedSpend: totalProjected,
+            projectedOverrun: overrunAmount,
+            dailyBudgetRemaining: this.monthlyBudget > 0 ? 
+                (this.monthlyBudget - spentSoFar) / (daysInMonth - currentDay) : 0
+        };
+    }
+
+    getUpcomingRecurringThisMonth() {
+        const startOfMonth = new Date(this.now.getFullYear(), this.now.getMonth(), 1);
+        const endOfMonth = new Date(this.now.getFullYear(), this.now.getMonth() + 1, 0);
+        
+        return this.recurringItems
+            .filter(item => item.status === 'active' && item.type === 'expense')
+            .reduce((total, item) => {
+                const nextDue = this.getNextDueDate(item, this.now);
+                if (nextDue && nextDue <= endOfMonth && nextDue > this.now) {
+                    return total + item.amount;
+                }
+                return total;
+            }, 0);
+    }
+
+    getNextDueDate(recurringItem, fromDate) {
+        let nextDate = new Date(recurringItem.startDate);
+        
+        while (nextDate <= fromDate) {
+            switch (recurringItem.frequency) {
+                case 'Daily': nextDate.setDate(nextDate.getDate() + 1); break;
+                case 'Weekly': nextDate.setDate(nextDate.getDate() + 7); break;
+                case 'Bi-Weekly': nextDate.setDate(nextDate.getDate() + 14); break;
+                case 'Monthly': nextDate.setMonth(nextDate.getMonth() + 1); break;
+                case 'Quarterly': nextDate.setMonth(nextDate.getMonth() + 3); break;
+                case 'Annual': nextDate.setFullYear(nextDate.getFullYear() + 1); break;
             }
         }
         
-        function toggleFilterPanel(panelId) {
-            document.getElementById(panelId).classList.toggle('hidden');
+        return nextDate;
+    }
+
+    analyzeCategoryTrends() {
+        const { thisMonth, lastMonth } = this.monthlyData;
+        
+        const thisMonthByCategory = this.groupByCategory(thisMonth);
+        const lastMonthByCategory = this.groupByCategory(lastMonth);
+        
+        const trends = [];
+        Object.keys(thisMonthByCategory).forEach(category => {
+            const thisTotal = thisMonthByCategory[category] || 0;
+            const lastTotal = lastMonthByCategory[category] || 0;
+            
+            if (lastTotal > 0) {
+                const change = (thisTotal - lastTotal) / lastTotal;
+                if (Math.abs(change) > 0.2) { // 20% change threshold
+                    trends.push({
+                        category,
+                        change,
+                        thisMonth: thisTotal,
+                        lastMonth: lastTotal,
+                        direction: change > 0 ? 'increasing' : 'decreasing'
+                    });
+                }
+            }
+        });
+        
+        return trends.sort((a, b) => Math.abs(b.change) - Math.abs(a.change));
+    }
+
+    groupByCategory(expenses) {
+        return expenses.reduce((acc, expense) => {
+            acc[expense.category] = (acc[expense.category] || 0) + expense.cost;
+            return acc;
+        }, {});
+    }
+
+    // ===================================================================
+    // RECOMMENDATION ENGINE
+    // ===================================================================
+
+    generateSmartRecommendations() {
+        const recommendations = [];
+        const { thisMonth } = this.monthlyData;
+        
+        // Coffee habit detection
+        const coffeeExpenses = thisMonth.filter(e => e.name.toLowerCase().includes('coffee'));
+        if (coffeeExpenses.length >= 3) {
+            const coffeeTotal = coffeeExpenses.reduce((sum, e) => sum + e.cost, 0);
+            recommendations.push({
+                type: 'behavioral',
+                priority: 'medium',
+                title: 'Coffee Spending Pattern',
+                description: `${coffeeExpenses.length} coffee purchases this month totaling £${coffeeTotal}. That's £${(coffeeTotal * 12).toFixed(0)} annually! Consider a coffee subscription or home brewing.`,
+                icon: '☕',
+                potentialSaving: coffeeTotal * 0.6,
+                actionable: true,
+                category: 'coffee_habit',
+                action: 'Review coffee spending'
+            });
         }
-
-        function openHelpModal() {
-            document.getElementById('help-modal').classList.remove('hidden');
-            closeSettings();
+        
+        // Same-day multiple purchases
+        const expensesByDate = {};
+        thisMonth.forEach(e => {
+            if (!expensesByDate[e.date]) expensesByDate[e.date] = [];
+            expensesByDate[e.date].push(e);
+        });
+        
+        Object.entries(expensesByDate).forEach(([date, dayExpenses]) => {
+            const sameCategoryMultiple = {};
+            dayExpenses.forEach(e => {
+                if (!sameCategoryMultiple[e.category]) sameCategoryMultiple[e.category] = [];
+                sameCategoryMultiple[e.category].push(e);
+            });
+            
+            Object.entries(sameCategoryMultiple).forEach(([category, expenses]) => {
+                if (expenses.length > 1) {
+                    const total = expenses.reduce((sum, e) => sum + e.cost, 0);
+                    recommendations.push({
+                        type: 'behavioral',
+                        priority: 'high',
+                        title: 'Multiple Same-Day Purchases',
+                        description: `${expenses.length} ${category} purchases on ${date} totaling £${total}. Consider planning ahead to avoid duplicate spending.`,
+                        icon: '🚨',
+                        potentialSaving: total * 0.5,
+                        actionable: true,
+                        category: 'same_day_duplicates',
+                        action: 'Plan purchases better'
+                    });
+                }
+            });
+        });
+        
+        // Large discretionary spending
+        const largeDiscretionary = thisMonth.filter(e => 
+            e.type === 'Non-Essential' && e.cost > 100
+        );
+        
+        if (largeDiscretionary.length > 0) {
+            const total = largeDiscretionary.reduce((sum, e) => sum + e.cost, 0);
+            recommendations.push({
+                type: 'behavioral',
+                priority: 'high',
+                title: 'Large Discretionary Purchases',
+                description: `${largeDiscretionary.length} large non-essential purchases: ${largeDiscretionary.map(e => e.name).join(', ')} totaling £${total}. Consider a 48-hour cooling-off period for purchases over £100.`,
+                icon: '💸',
+                potentialSaving: total * 0.3,
+                actionable: true,
+                category: 'large_spending',
+                action: 'Set spending limits'
+            });
         }
-
-        function closeHelpModal() {
-            document.getElementById('help-modal').classList.add('hidden');
+        
+        // Transport pattern analysis
+        const transportExpenses = thisMonth.filter(e => e.category === 'Transport');
+        if (transportExpenses.length >= 3) {
+            const transportTotal = transportExpenses.reduce((sum, e) => sum + e.cost, 0);
+            const avgPerTrip = transportTotal / transportExpenses.length;
+            recommendations.push({
+                type: 'efficiency',
+                priority: 'medium',
+                title: 'Regular Transport Costs',
+                description: `${transportExpenses.length} transport expenses averaging £${avgPerTrip.toFixed(0)} per trip. Consider a monthly travel card or cycling for potential savings.`,
+                icon: '🚌',
+                potentialSaving: transportTotal * 0.2,
+                actionable: true,
+                category: 'transport_optimization',
+                action: 'Consider travel alternatives'
+            });
         }
+        
+        return recommendations.slice(0, 5); // Return top 5
+    }
 
-        function openIncomeModal() {
-            const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
+    prioritizeRecommendations(recommendations) {
+        return recommendations
+            .map(rec => ({
+                ...rec,
+                score: this.calculatePriorityScore(rec)
+            }))
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 6);
+    }
 
-            const contentEl = document.getElementById('income-breakdown-content');
-            const modalEl = document.getElementById('income-modal');
-            if (!contentEl || !modalEl) return;
+    calculatePriorityScore(rec) {
+        const priorityWeight = {
+            'urgent': 100,
+            'high': 75,
+            'medium': 50,
+            'low': 25
+        }[rec.priority] || 25;
+        
+        const savingsScore = Math.min(50, (rec.potentialSaving || 0) / 2);
+        const typeBonus = {
+            'urgent': 25,
+            'behavioral': 15,
+            'efficiency': 20,
+            'organization': 10,
+            'trend': 15
+        }[rec.type] || 0;
+        
+        return priorityWeight + savingsScore + typeBonus;
+    }
 
-            const { incomeItems } = getMonthlyRecurringTotals(currentYear, currentMonth);
+    generate7DayForecast() {
+        try {
+            const forecast = [];
+            const today = new Date();
+            
+            for (let i = 1; i <= 7; i++) {
+                const targetDate = new Date(today);
+                targetDate.setDate(today.getDate() + i);
+                
+                const dayName = targetDate.toLocaleDateString('en-GB', { weekday: 'short' });
+                const dayOfWeek = targetDate.getDay();
+                
+                const prediction = this.predictDaySpending(dayOfWeek, targetDate);
+                
+                forecast.push({
+                    date: `${dayName} ${targetDate.getDate()}`,
+                    predicted: prediction.amount,
+                    confidence: prediction.confidence,
+                    reasoning: prediction.reasoning,
+                    hasRecurring: prediction.hasRecurring
+                });
+            }
+            
+            return forecast;
+        } catch (error) {
+            console.error('7-day forecast error:', error);
+            return [];
+        }
+    }
 
-            let total = monthlyIncome;
-            let breakdownHtml = `
-                <div class="flex justify-between items-center pb-2 border-b border-dashed dark:border-gray-600">
-                    <span class="font-medium text-gray-800 dark:text-gray-200">Base Income</span>
-                    <span>${formatCurrency(monthlyIncome)}</span>
+    predictDaySpending(dayOfWeek, date) {
+        try {
+            const { last3Months } = this.monthlyData;
+            
+            const sameDaySpending = last3Months
+                .filter(e => e.dayOfWeek === dayOfWeek)
+                .map(e => e.cost);
+                
+            const avgSpending = sameDaySpending.length > 0 ? 
+                sameDaySpending.reduce((a, b) => a + b, 0) / sameDaySpending.length : 0;
+            
+            const confidence = Math.min(95, Math.max(40, sameDaySpending.length * 10));
+            const reasoning = `Based on ${sameDaySpending.length} similar days`;
+            
+            return {
+                amount: avgSpending,
+                confidence,
+                reasoning,
+                hasRecurring: false
+            };
+        } catch (error) {
+            return { amount: 0, confidence: 0, reasoning: 'Unable to predict', hasRecurring: false };
+        }
+    }
+
+    generateMonthlyStory() {
+        try {
+            const { thisMonth } = this.monthlyData;
+            const totalSpent = thisMonth.reduce((sum, e) => sum + e.cost, 0);
+            
+            if (totalSpent === 0) {
+                return {
+                    story: "Add some expenses to see your personalized financial insights.",
+                    metrics: null
+                };
+            }
+            
+            const totalIncome = this.monthlyIncome + this.getMonthlyRecurringIncome();
+            const savingsRate = totalIncome > 0 ? ((totalIncome - totalSpent) / totalIncome) * 100 : 0;
+            
+            const spendingDays = new Set(thisMonth.map(e => e.date.getDate())).size;
+            
+            let story = `This month you've spent <strong>${formatCurrency(totalSpent)}</strong> across ${spendingDays} days. `;
+            
+            if (savingsRate > 15) {
+                story += `Excellent <strong>${savingsRate.toFixed(0)}% savings rate</strong>! `;
+            } else if (savingsRate > 0) {
+                story += `Good <strong>${savingsRate.toFixed(0)}% savings rate</strong>. `;
+            }
+            
+            const metrics = {
+                savingsRate: savingsRate.toFixed(0),
+                topCategory: 'Various',
+                spendingDays: spendingDays
+            };
+            
+            return { story, metrics };
+        } catch (error) {
+            return { story: "Unable to generate story", metrics: null };
+        }
+    }
+
+    getMonthlyRecurringIncome() {
+        try {
+            return this.recurringItems
+                .filter(item => item.status === 'active' && item.type === 'income')
+                .reduce((total, item) => total + item.amount, 0);
+        } catch (error) {
+            return 0;
+        }
+    }
+}
+
+// ===================================================================
+// INTEGRATION FUNCTIONS - Drop-in replacements
+// ===================================================================
+
+function updateAiInsightsWithSmartAnalytics() {
+    console.log('Starting smart analytics update...');
+    
+    showInsightsLoading();
+    
+    setTimeout(() => {
+        try {
+            console.log('Data check:', {
+                expensesCount: expenses?.length || 0,
+                recurringCount: recurringItems?.length || 0,
+                budget: monthlyBudget,
+                income: monthlyIncome
+            });
+            
+            const insights = new LensSmartInsights(
+                expenses || [], 
+                recurringItems || [], 
+                monthlyBudget || 0, 
+                monthlyIncome || 0
+            );
+            
+            const forecast = insights.generate7DayForecast();
+            const recommendations = insights.generateSmartRecommendations();
+            const monthlyStory = insights.generateMonthlyStory();
+            const budgetRisk = insights.predictBudgetRisk();
+            
+            renderSmart7DayForecast(forecast);
+            renderSmartRecommendations(recommendations);
+            renderSmartMonthlyStory(monthlyStory);
+            renderMonthEndProjectionSmart(budgetRisk);
+            updateRecommendationBadge(recommendations.length);
+            
+        } catch (error) {
+            console.error('Smart analytics error:', error);
+            showInsightsError();
+        }
+    }, 500);
+}
+
+// UI Rendering Functions
+function showInsightsLoading() {
+    const containers = [
+        'seven-day-forecast',
+        'smart-recommendations', 
+        'monthly-story',
+        'month-end-projection'
+    ];
+    
+    containers.forEach(id => {
+        const container = document.getElementById(id);
+        if (container) {
+            container.innerHTML = `
+                <div class="flex justify-center items-center p-6">
+                    <div class="ai-loading"></div>
+                    <span class="ml-3 text-sm text-gray-500">Analyzing your spending patterns...</span>
+            </div>
+            `;
+        }
+    });
+}
+
+function renderSmart7DayForecast(forecast) {
+    const container = document.getElementById('seven-day-forecast');
+    if (!container) return;
+    
+    if (forecast.length === 0) {
+        container.innerHTML = `
+            <div class="text-center p-4">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Add more expenses to generate spending predictions
+                </p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = `
+        <div class="space-y-3">
+            <div class="text-xs text-gray-500 mb-3 italic">
+                📊 Predictions based on your spending patterns
+            </div>
+            ${forecast.map(day => `
+                <div class="flex justify-between items-center p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <div>
+                        <div class="font-medium text-gray-800 dark:text-gray-200">${day.date}</div>
+                        <div class="text-xs text-gray-500 mt-1">${day.reasoning}</div>
+            </div>
+                    <div class="text-right">
+                        <div class="font-semibold ${day.predicted > 0 ? 'text-red-500' : 'text-gray-400'} dark:text-red-400">
+                            ${day.predicted > 0 ? formatCurrency(day.predicted) : 'No spending predicted'}
+                        </div>
+                        <div class="text-xs text-gray-400">${day.confidence}% confidence</div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function renderSmartRecommendations(recommendations) {
+    const container = document.getElementById('smart-recommendations');
+    if (!container) return;
+    
+    if (recommendations.length === 0) {
+        container.innerHTML = `
+            <div class="text-center p-6">
+                <div class="text-4xl mb-3">🎉</div>
+                <div class="font-medium text-gray-800 dark:text-gray-200 mb-2">All looking good!</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                    No urgent recommendations right now. Keep up the great work!
+                </div>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = recommendations.map(rec => {
+        const priorityColors = {
+            'urgent': 'border-red-500 bg-red-50 dark:bg-red-900/20',
+            'high': 'border-orange-500 bg-orange-50 dark:bg-orange-900/20',
+            'medium': 'border-blue-500 bg-blue-50 dark:bg-blue-900/20',
+            'low': 'border-gray-500 bg-gray-50 dark:bg-gray-900/20'
+        };
+        
+        const priorityBadgeColors = {
+            'urgent': 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+            'high': 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+            'medium': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+            'low': 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+        };
+        
+        return `
+            <div class="p-4 rounded-lg border-l-4 ${priorityColors[rec.priority]} hover:shadow-md transition-shadow cursor-pointer" 
+                 onclick="handleRecommendationClick('${rec.category}', ${JSON.stringify(rec).replace(/"/g, '&quot;')})">
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg">${rec.icon}</span>
+                        <h4 class="font-semibold text-gray-800 dark:text-gray-200">${rec.title}</h4>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded-full ${priorityBadgeColors[rec.priority]}">
+                        ${rec.priority}
+                    </span>
+                </div>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3 leading-relaxed">${rec.description}</p>
+             <div class="flex justify-between items-center">
+                    <div class="text-xs text-gray-500">
+                        ${rec.potentialSaving > 0 ? `💰 Potential saving: <strong>${formatCurrency(rec.potentialSaving)}</strong>` : '📊 Organization improvement'}
+            </div>
+                    <div class="text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded border hover:bg-gray-50 dark:hover:bg-gray-700">
+                        Take Action →
+                    </div>
+                </div>
+        </div>
+    `;
+    }).join('');
+}
+
+function renderSmartMonthlyStory(storyData) {
+    const container = document.getElementById('monthly-story');
+    const metricsContainer = document.getElementById('story-metrics');
+    
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+            ${storyData.story}
+        </div>
+    `;
+    
+    if (metricsContainer && storyData.metrics) {
+        metricsContainer.innerHTML = `
+            <div class="metric-card">
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Savings Rate</p>
+                <p class="text-lg font-bold ${parseFloat(storyData.metrics.savingsRate) >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
+                    ${storyData.metrics.savingsRate}%
+                </p>
+            </div>
+            <div class="metric-card">
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Top Category</p>
+                <p class="text-lg font-bold text-gray-800 dark:text-gray-200 truncate">${storyData.metrics.topCategory}</p>
+            </div>
+            <div class="metric-card">
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Active Days</p>
+                <p class="text-lg font-bold text-gray-800 dark:text-gray-200">${storyData.metrics.spendingDays}</p>
+            </div>
+        `;
+        metricsContainer.classList.remove('hidden');
+        metricsContainer.classList.add('grid', 'grid-cols-3', 'gap-2', 'mt-4', 'text-center');
+    }
+}
+
+function renderMonthEndProjectionSmart(budgetRisk) {
+    const container = document.getElementById('month-end-projection');
+    if (!container) return;
+    
+    const riskLevel = budgetRisk.riskScore > 0.8 ? 'high' : budgetRisk.riskScore > 0.5 ? 'medium' : 'low';
+    const riskColors = {
+        'high': 'text-red-600 dark:text-red-400',
+        'medium': 'text-yellow-600 dark:text-yellow-400', 
+        'low': 'text-green-600 dark:text-green-400'
+    };
+    
+    const totalIncome = monthlyIncome + (recurringItems?.filter(r => r.type === 'income' && r.status === 'active').reduce((sum, r) => sum + r.amount, 0) || 0);
+    const projectedSavings = totalIncome - budgetRisk.projectedSpend;
+    
+    container.innerHTML = `
+        <div class="space-y-4">
+            <div class="text-center p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Projected Monthly Spending</p>
+                <p class="text-2xl font-bold text-gray-800 dark:text-gray-200">${formatCurrency(budgetRisk.projectedSpend)}</p>
+                <p class="text-xs font-medium mt-1 ${riskColors[riskLevel]}">
+                    ${riskLevel === 'high' ? '⚠️ Budget Risk' : riskLevel === 'medium' ? '⚡ Watch Closely' : '✅ On Track'}
+                </p>
+            </div>
+            
+            ${budgetRisk.riskScore > 0.6 ? `
+                <div class="p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500">
+                    <p class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Daily Budget Alert</p>
+                    <p class="text-xs text-yellow-700 dark:text-yellow-300 mt-1">
+                        Limit spending to ${formatCurrency(budgetRisk.dailyBudgetRemaining)}/day to stay on budget
+                    </p>
+                </div>
+            ` : ''}
+            
+            <div class="text-center">
+                <p class="text-sm text-gray-600 dark:text-gray-400">Projected Savings</p>
+                <p class="text-xl font-bold ${projectedSavings >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
+                    ${formatCurrency(projectedSavings)}
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                    Based on current spending velocity
+                </p>
+            </div>
+        </div>
+    `;
+}
+
+function updateRecommendationBadge(count) {
+    const badge = document.getElementById('action-count');
+    if (badge) {
+        if (count > 0) {
+            badge.textContent = count;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+    }
+}
+
+function handleRecommendationClick(category, recommendation) {
+    // Handle different recommendation actions
+    switch(category) {
+        case 'weekend_control':
+            // Could open a weekend budget setting modal
+            showToast('Set a weekend spending limit in Settings', 'info');
+            break;
+        case 'impulse_control':
+            // Could show impulse spending tips
+            showToast('Try waiting 24 hours before non-essential purchases', 'info');
+            break;
+        case 'merchant_optimization':
+            // Could show merchant comparison
+            showToast('Research alternative merchants for better prices', 'info');
+            break;
+        case 'subscription_tracking':
+            // Could open add recurring item modal
+            showRecurringForm();
+            break;
+        case 'budget_risk':
+            // Could open budget adjustment modal
+            openSettings('budget');
+            break;
+        default:
+            showToast('Recommendation noted! Check insights regularly for updates.', 'info');
+    }
+}
+
+function showInsightsError() {
+    const containers = ['seven-day-forecast', 'smart-recommendations', 'monthly-story', 'month-end-projection'];
+    containers.forEach(id => {
+        const container = document.getElementById(id);
+        if (container) {
+            container.innerHTML = `
+                <div class="text-center p-4">
+                    <p class="text-sm text-red-500">Unable to generate insights. Please try again.</p>
                 </div>
             `;
-
-            incomeItems.forEach(item => {
-                breakdownHtml += `
-                    <div class="flex justify-between items-center pt-2">
-                        <span>${escapeHTML(item.name)} (Recurring)</span>
-                        <span class="text-green-600 dark:text-green-400">+ ${formatCurrency(item.amount)}</span>
-                    </div>
-                `;
-                total += item.amount;
-            });
-
-            if (incomeItems.length === 0 && monthlyIncome === 0) {
-                breakdownHtml = `<p class="text-center text-gray-500 py-4">No income sources set. Add a base income or recurring income items in Settings.</p>`;
-            } else if (incomeItems.length > 0) {
-                 breakdownHtml += `
-                    <div class="flex justify-between items-center pt-3 mt-3 border-t border-gray-200 dark:border-gray-700">
-                        <span class="font-bold text-lg text-gray-900 dark:text-white">Total</span>
-                        <span class="font-bold text-lg text-gray-900 dark:text-white">${formatCurrency(total)}</span>
-                    </div>
-                `;
-            } else if (incomeItems.length === 0 && monthlyIncome > 0) {
-                 breakdownHtml += `<p class="text-xs text-center text-gray-500 pt-3">No recurring income items due this month.</p>`;
-            }
-
-
-            contentEl.innerHTML = breakdownHtml;
-            modalEl.classList.remove('hidden');
         }
-
-        function closeIncomeModal() {
-            document.getElementById('income-modal').classList.add('hidden');
-        }
-        
+    });
+}
         // --- Utility Functions ---
         function debugExpenseData() {
             const now = new Date();
@@ -4033,8 +6294,8 @@
             console.log('Recurring expenses:', recurringExpenses.length);
             console.log('Total amount:', thisMonthExpenses.reduce((sum, e) => sum + e.cost, 0));
             console.log('Recurring items in system:', recurringItems.length);
-            
-            return {
+
+        return {
                 total: thisMonthExpenses.length,
                 oneTime: oneTimeExpenses.length,
                 recurring: recurringExpenses.length,
@@ -4193,12 +6454,12 @@
                 recurringItems.unshift(recurringItem);
                 showToast(`Recurring ${type} '${name}' saved successfully!`);
             }
-
-            saveData();
+            
+    saveData();
             
             // Fix: Force immediate processing and update
             processRecurringExpenses();
-            updateDisplay();
+    updateDisplay();
             
             closeRecurringModal();
         }
@@ -4330,24 +6591,20 @@
 
                     html += `
                     <tr>
-                        <td colspan="8" style="padding: 0 8px 8px 8px;">
-                            <div onclick="${editAction}" style="display: flex; align-items: center; padding: 12px; background-color: var(--bg-primary); border-radius: 12px; box-shadow: var(--shadow-sm); cursor: pointer;">
-                                <div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--bg-tertiary); margin-right: 12px; font-size: 1.25rem;">
-                                    ${categoryIcon}
+                        <td colspan="8" style="padding:0;">
+                            <div onclick="${editAction}" class="mobile-card">
+                                <div class="mobile-card-icon">${categoryIcon}</div>
+                                <div class="mobile-card-main">
+                                    <div class="mobile-card-title">${escapeHTML(expense.name)}</div>
+                                    <div class="mobile-card-subtitle">${escapeHTML(expense.category)}</div>
                                 </div>
-                                <div style="flex: 1; min-width: 0;">
-                                    <div style="font-weight: 500; color: var(--text-primary); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${escapeHTML(expense.name)}</div>
-                                    <div style="font-size: 0.875rem; color: var(--text-secondary);">${escapeHTML(expense.category)}</div>
-                                </div>
-                                <div style="font-weight: 500; color: var(--text-primary); margin-left: 12px;">
-                                    -${formatCurrency(expense.cost)}
-                                </div>
+                                <div class="mobile-card-amount">-${formatCurrency(expense.cost)}</div>
                             </div>
                         </td>
                     </tr>
                     `;
+                    });
                 });
-            });
 
             container.innerHTML = html;
         }
@@ -4404,8 +6661,7 @@
                                         class="icon-button text-red-600/80 hover:text-red-500" 
                                         ${isRecurringInstance ? 'disabled' : ''}>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
+                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
                                 </button>
                             </div>
                         </td>
@@ -4456,84 +6712,33 @@
         }
 
         function renderMobileRecurringList(items, container) {
+            if (items.length === 0) {
+                container.innerHTML = `<tr><td colspan="8" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
+                return;
+            }
             let html = '';
-            
             items.forEach(item => {
-                const isSelected = selectedRecurringIds.has(item.id);
-                const itemTypeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
-                const categoryIcon = categoryIcons[item.category] || categoryIcons['Other'];
-                
-                const formattedStartDate = new Date(item.startDate).toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
-                });
-
-                html += `
-                    <tr class="mobile-recurring-card ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : ''}"
-                        data-category="${item.category}"
-                        data-type="${item.type}">
-                        
-                        <td class="mobile-transaction-checkbox" data-label="">
-                            <input type="checkbox" data-id="${item.id}" 
-                                   onchange="toggleRecurringSelection(this, ${item.id})" 
-                                   class="table-checkbox recurring-checkbox" 
-                                   ${isSelected ? 'checked' : ''}>
-                        </td>
-                        
-                        <td class="mobile-transaction-icon" data-icon="${categoryIcon}">
-                        </td>
-                        
-                        <td class="mobile-transaction-details" data-label="Name">
-                            <div class="mobile-recurring-name">${escapeHTML(item.name)}</div>
-                            <div class="mobile-recurring-meta">
-                                <span class="capitalize">${item.type}</span>
-                                <span>•</span>
+                const isCancelled = item.status === 'cancelled';
+                const typeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+                 html += `
+                    <div onclick="editRecurring(${item.id})" class="mobile-card ${isCancelled ? 'opacity-60' : ''}">
+                         <div class="mobile-card-icon">${categoryIcons[item.category] || categoryIcons['Other']}</div>
+                         <div class="mobile-card-main">
+                            <p class="mobile-card-title">${escapeHTML(item.name)}</p>
+                            <div class="mobile-card-subtitle">
+                                <span>${item.type === 'income' ? 'Income' : 'Expense'}</span>
+                                &middot;
                                 <span>${item.frequency}</span>
-                                <span>•</span>
-                                <span>Since ${formattedStartDate}</span>
                             </div>
-                        </td>
-                        
-                        <td class="mobile-transaction-amount ${itemTypeClass}" data-label="Amount">
-                            ${item.type === 'income' ? '+' : '-'}${formatCurrency(item.amount)}
-                        </td>
-                        
-                        <td class="mobile-recurring-status" data-label="Status">
-                            <span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">
-                                ${item.status}
-                            </span>
-                        </td>
-                        
-                        <!-- Hidden desktop fields -->
-                        <td class="hidden" data-label="Type">${item.type}</td>
-                        <td class="hidden" data-label="Frequency">${item.frequency}</td>
-                        <td class="hidden" data-label="Start Date">${formattedStartDate}</td>
-                        <td class="hidden" data-label="Category">${escapeHTML(item.category)}</td>
-                        <td class="hidden" data-label="Actions">
-                            <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                            <button onclick="toggleRecurringStatus(${item.id})" class="icon-button" title="${item.status === 'active' ? 'Pause' : 'Resume'}">
-                                ${item.status === 'active' ? 
-                                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : 
-                                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
-                                }
-                            </button>
-                            <button onclick="deleteRecurring(${item.id})" class="icon-button text-red-500 hover:text-red-700" title="Delete">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                         </div>
+                         <div class="text-right">
+                            <p class="mobile-card-amount ${typeClass}">${formatCurrency(item.amount)}</p>
+                            <p class="text-xs text-gray-400">${item.status === 'active' ? 'Active' : 'Cancelled'}</p>
+                         </div>
+                    </div>
                 `;
             });
-            
-            container.innerHTML = html;
+            container.innerHTML = `<td colspan="8" style="padding: 0;">${html}</td>`;
         }
 
         function renderDesktopRecurringTable(items, container) {
@@ -4702,7 +6907,7 @@
         </div>
     </nav>
 
-<!-- Mobile View Rewrite (auto‐generated) -->
+<!-- Mobile View Rewrite (auto-generated) -->
 <script>
 // <![CDATA[
 /* =============================================================
@@ -4714,7 +6919,7 @@
    • Costs sometimes strings → totals = 0
    • ISO dates with time part created one header per entry
    Approach
-   • Hide the desktop table on screens <640 px and render 
+   • Hide the desktop table on screens <640 px and render 
      a dedicated list of cards in a lightweight <div>.
    • Uses ONLY existing global arrays `expenses` and `recurringItems`.
    • NO changes to desktop logic or CSS – strictly inside a media query.
@@ -4837,8 +7042,10 @@ function renderMobileExpenseList(expArr) {
         resizeTo = setTimeout(() => window.renderExpensesTable_NEW(), 150);
     });
 })(); 
+
+
+
 // ]]>
 </script>
-
 </body>
 </html>
