@@ -1205,7 +1205,7 @@
                     </nav>
                         <div class="border-l border-gray-200 dark:border-gray-600 h-8"></div>
                         <div class="relative inline-block text-left">
-                            <button onclick="openSettings()" class="modern-button modern-button-secondary">
+                            <button onclick="openSettings()" class="modern-button modern-button-secondary" data-tour="budget-button">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>
                                 <span class="hidden sm:inline">Settings</span>
                             </button>
@@ -1235,7 +1235,7 @@
                                     <div class="stat-card-title">Remaining</div>
                                     <div class="stat-card-value text-green-600" id="remaining-amount">£0.00</div>
                                 </div>
-                                 <div class="stat-card bg-purple-50 dark:bg-purple-900/30 border-purple-200 dark:border-purple-800 cursor-pointer hover:border-purple-400 dark:hover:border-purple-600" onclick="openGoalsModal()">
+                                 <div class="stat-card bg-purple-50 dark:bg-purple-900/30 border-purple-200 dark:border-purple-800 cursor-pointer hover:border-purple-400 dark:hover:border-purple-600" onclick="openGoalsModal()" data-tour="goals-section">
                                     <div class="stat-card-title">
                                         Goal Progress
                                         <span class="info-icon ml-1" data-tooltip="Shows your progress on active financial goals. Click for details.">
@@ -1320,7 +1320,7 @@
                             <div class="card p-6">
                                 <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
                                 <div class="space-y-3">
-                                    <button onclick="showAddForm()" class="modern-button modern-button-primary w-full">
+                                    <button onclick="showAddForm()" class="modern-button modern-button-primary w-full" data-tour="add-expense">
                                         <span>➕</span> Add New Expense
                                     </button>
                                     <button onclick="showRecurringForm()" class="modern-button modern-button-secondary w-full">
@@ -1778,6 +1778,10 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         <span>Help & Documentation</span>
                     </button>
+                    <button onclick="restartTour()" class="modern-button modern-button-secondary w-full justify-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>Restart Tour</span>
+                    </button>
                 </div>
             </div>
 
@@ -2165,7 +2169,7 @@
         <!-- Step 4: Debts -->
         <div id="clean-step-4" class="clean-onboarding-step p-6 hidden">
             <h2 class="text-xl font-semibold mb-2 text-center">Current Debts</h2>
-            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Help us factor debts into your plan</p>
+            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Help us factor debts into your plan (optional step)</p>
             
             <div id="clean-debt-list" class="space-y-3 mb-4"></div>
             
@@ -2532,12 +2536,8 @@ function goCleanNext() {
     // Validate this step; stop if errors
     if (!validateCleanStep()) return;
 
-    // Skip debt step unless primary goal is 'debt'
-    if (cleanOnboardingData.currentStep === 3 && cleanOnboardingData.data.primaryGoal !== 'debt') {
-        cleanOnboardingData.currentStep = 5;
-    } else {
-        cleanOnboardingData.currentStep++;
-    }
+    // Move to next step
+    cleanOnboardingData.currentStep++;
 
     // If we've gone past the last step, complete onboarding
     if (cleanOnboardingData.currentStep > cleanOnboardingData.totalSteps) {
@@ -2552,42 +2552,62 @@ function goCleanBack() {
         // Save current step data before going back
         saveCurrentStepData();
         
-        if (cleanOnboardingData.currentStep === 5 && cleanOnboardingData.data.primaryGoal !== 'debt') {
-            cleanOnboardingData.currentStep = 3;
-        } else {
-            cleanOnboardingData.currentStep--;
-        }
+        // Move to previous step
+        cleanOnboardingData.currentStep--;
         updateCleanOnboardingStep();
     }
 }
 
 function updateCleanOnboardingStep() {
-    // Hide all steps
-    document.querySelectorAll('.clean-onboarding-step').forEach(step => {
-        step.classList.add('hidden');
-    });
-    
-    // Show current step
-    document.getElementById(`clean-step-${cleanOnboardingData.currentStep}`).classList.remove('hidden');
-    
-    // Update progress
-    const progress = (cleanOnboardingData.currentStep / cleanOnboardingData.totalSteps) * 100;
-    document.getElementById('clean-progress-fill').style.width = `${progress}%`;
-    document.getElementById('clean-step-indicator').textContent = `Step ${cleanOnboardingData.currentStep} of ${cleanOnboardingData.totalSteps}`;
-    
-    // Update navigation
-    document.getElementById('clean-back-btn').style.visibility = cleanOnboardingData.currentStep === 1 ? 'hidden' : 'visible';
-    document.getElementById('clean-next-btn').textContent = cleanOnboardingData.currentStep === cleanOnboardingData.totalSteps ? 'Complete Setup' : 'Next →';
-    
-    // Prepare step-specific content
-    if (cleanOnboardingData.currentStep === 3) {
-        prepareCleanGoalDetails();
-    } else if (cleanOnboardingData.currentStep === 6) {
-        generateCleanSummary();
+    try {
+        // Validate current step is within bounds
+        if (cleanOnboardingData.currentStep < 1 || cleanOnboardingData.currentStep > cleanOnboardingData.totalSteps) {
+            console.error('Invalid step:', cleanOnboardingData.currentStep);
+            cleanOnboardingData.currentStep = Math.max(1, Math.min(cleanOnboardingData.currentStep, cleanOnboardingData.totalSteps));
+        }
+        
+        // Hide all steps
+        document.querySelectorAll('.clean-onboarding-step').forEach(step => {
+            step.classList.add('hidden');
+        });
+        
+        // Show current step
+        const currentStepElement = document.getElementById(`clean-step-${cleanOnboardingData.currentStep}`);
+        if (currentStepElement) {
+            currentStepElement.classList.remove('hidden');
+        } else {
+            console.error('Step element not found:', `clean-step-${cleanOnboardingData.currentStep}`);
+            return;
+        }
+        
+        // Update progress
+        const progress = (cleanOnboardingData.currentStep / cleanOnboardingData.totalSteps) * 100;
+        const progressBar = document.getElementById('clean-progress-fill');
+        const stepIndicator = document.getElementById('clean-step-indicator');
+        
+        if (progressBar) progressBar.style.width = `${progress}%`;
+        if (stepIndicator) stepIndicator.textContent = `Step ${cleanOnboardingData.currentStep} of ${cleanOnboardingData.totalSteps}`;
+        
+        // Update navigation
+        const backBtn = document.getElementById('clean-back-btn');
+        const nextBtn = document.getElementById('clean-next-btn');
+        
+        if (backBtn) backBtn.style.visibility = cleanOnboardingData.currentStep === 1 ? 'hidden' : 'visible';
+        if (nextBtn) nextBtn.textContent = cleanOnboardingData.currentStep === cleanOnboardingData.totalSteps ? 'Complete Setup' : 'Next →';
+        
+        // Prepare step-specific content
+        if (cleanOnboardingData.currentStep === 3) {
+            prepareCleanGoalDetails();
+        } else if (cleanOnboardingData.currentStep === 6) {
+            generateCleanSummary();
+        }
+        
+        // Restore form data for current step
+        restoreCurrentStepData();
+    } catch (error) {
+        console.error('Error updating onboarding step:', error);
+        showToast('Error updating onboarding step. Please refresh and try again.', 'error');
     }
-    
-    // Restore form data for current step
-    restoreCurrentStepData();
 }
 
 function validateCleanStep() {
@@ -2631,6 +2651,54 @@ function validateCleanStep() {
                 cleanOnboardingData.data.goalDetails['house-target'] = parseFloat(target);
                 cleanOnboardingData.data.goalDetails['house-timeline'] = timeline;
                 cleanOnboardingData.data.goalDetails['house-current'] = parseFloat(document.getElementById('house-current')?.value || 0);
+            } else if (goal === 'emergency') {
+                const months = document.getElementById('emergency-months')?.value;
+                if (!months) {
+                    showToast('Please select your emergency fund target', 'error');
+                    return false;
+                }
+                cleanOnboardingData.data.goalDetails['emergency-months'] = months;
+                cleanOnboardingData.data.goalDetails['emergency-current'] = parseFloat(document.getElementById('emergency-current')?.value || 0);
+            } else if (goal === 'vacation') {
+                const cost = document.getElementById('vacation-cost')?.value;
+                const timeline = document.getElementById('vacation-when')?.value;
+                if (!cost || !timeline) {
+                    showToast('Please fill in all vacation goal details', 'error');
+                    return false;
+                }
+                cleanOnboardingData.data.goalDetails['vacation-cost'] = parseFloat(cost);
+                cleanOnboardingData.data.goalDetails['vacation-when'] = timeline;
+                cleanOnboardingData.data.goalDetails['vacation-current'] = parseFloat(document.getElementById('vacation-current')?.value || 0);
+            } else if (goal === 'investment') {
+                const target = document.getElementById('investment-target')?.value;
+                const timeline = document.getElementById('investment-timeline')?.value;
+                if (!target || !timeline) {
+                    showToast('Please fill in all investment goal details', 'error');
+                    return false;
+                }
+                cleanOnboardingData.data.goalDetails['investment-target'] = parseFloat(target);
+                cleanOnboardingData.data.goalDetails['investment-timeline'] = timeline;
+                cleanOnboardingData.data.goalDetails['investment-current'] = parseFloat(document.getElementById('investment-current')?.value || 0);
+            } else if (goal === 'custom') {
+                const name = document.getElementById('custom-name')?.value;
+                const target = document.getElementById('custom-target')?.value;
+                const timeline = document.getElementById('custom-timeline')?.value;
+                if (!name || !target || !timeline) {
+                    showToast('Please fill in all custom goal details', 'error');
+                    return false;
+                }
+                cleanOnboardingData.data.goalDetails['custom-name'] = name;
+                cleanOnboardingData.data.goalDetails['custom-target'] = parseFloat(target);
+                cleanOnboardingData.data.goalDetails['custom-timeline'] = timeline;
+                cleanOnboardingData.data.goalDetails['custom-current'] = parseFloat(document.getElementById('custom-current')?.value || 0);
+            } else if (goal === 'debt') {
+                // Debt goal validation - ensure strategy is selected
+                const strategy = document.querySelector('input[name="debt-strategy"]:checked')?.value;
+                if (!strategy) {
+                    showToast('Please select a debt payoff strategy', 'error');
+                    return false;
+                }
+                cleanOnboardingData.data.goalDetails['debt-strategy'] = strategy;
             }
             
             return true;
@@ -2988,15 +3056,27 @@ function restoreCurrentStepData() {
                 break;
                 
             case 3:
-                // Restore goal details - wait for dynamic content to load
-                setTimeout(() => {
+                // Restore goal details - use a more reliable approach
+                const restoreGoalDetails = () => {
+                    let fieldsRestored = 0;
+                    const totalFields = Object.keys(data.goalDetails).length;
+                    
                     Object.keys(data.goalDetails).forEach(fieldId => {
                         const input = document.getElementById(fieldId);
                         if (input && data.goalDetails[fieldId]) {
                             input.value = data.goalDetails[fieldId];
+                            fieldsRestored++;
                         }
                     });
-                }, 100);
+                    
+                    // If not all fields were found, try again after a short delay
+                    if (fieldsRestored < totalFields && fieldsRestored === 0) {
+                        setTimeout(restoreGoalDetails, 50);
+                    }
+                };
+                
+                // Try immediately first, then with delay if needed
+                restoreGoalDetails();
                 break;
                 
             case 4:
@@ -3259,7 +3339,6 @@ document.addEventListener('click', function(e) {
 });
 
         function launchOnboardingTour() {
-            localStorage.setItem('tourComplete', 'true');
             const driver = window.driver?.js?.driver;
             if (!driver) {
                 console.log('Driver.js not available, skipping tour');
@@ -3274,12 +3353,16 @@ document.addEventListener('click', function(e) {
                     popover: { title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
                 },
                 {
-                    element: 'button[onclick="openSettings(\'budget\')"]',
-                    popover: { title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking.', side: "top", align: 'center' }
+                    element: '[data-tour="budget-button"]',
+                    popover: { title: 'Set Your Budget & Income', description: 'This is the baseline for all tracking. Click here to set your monthly budget and income.', side: "top", align: 'center' }
                 },
                 {
-                    element: '.card button[onclick="showAddForm()"]',
-                    popover: { title: 'Add a New Expense', description: 'Use this button to log any one-time purchases or expenses.', side: "left", align: 'start' }
+                    element: '[data-tour="add-expense"]',
+                    popover: { title: 'Add New Expenses', description: 'Use this button to log any one-time purchases or expenses. Track everything to stay on budget!', side: "left", align: 'start' }
+                },
+                {
+                    element: '[data-tour="goals-section"]',
+                    popover: { title: 'Track Your Goals', description: 'Monitor your financial goals and see your progress. Set savings targets and track your achievements.', side: "top", align: 'center' }
                 }
             ];
 
@@ -3287,6 +3370,14 @@ document.addEventListener('click', function(e) {
                 {
                     element: '[data-tour="app-header"]',
                     popover: { title: 'Welcome to Lens!', description: "Let's take a quick tour to get you started.", side: "bottom", align: 'start' }
+                },
+                {
+                    element: '[data-tour="add-expense"]',
+                    popover: { title: 'Add New Expenses', description: 'Tap here to log your expenses and track your spending.', side: "top", align: 'center' }
+                },
+                {
+                    element: '[data-tour="goals-section"]',
+                    popover: { title: 'Your Financial Goals', description: 'Check your progress toward financial goals and savings targets.', side: "top", align: 'center' }
                 }
             ];
 
@@ -3296,10 +3387,22 @@ document.addEventListener('click', function(e) {
                 steps: isMobile ? mobileSteps : desktopSteps,
                 onDestroyed: () => {
                     localStorage.setItem('tourComplete', 'true');
+                },
+                onDeselected: (element, step, options) => {
+                    // Only mark complete if user reaches the last step
+                    const totalSteps = isMobile ? mobileSteps.length : desktopSteps.length;
+                    if (step.index === totalSteps - 1) {
+                        localStorage.setItem('tourComplete', 'true');
+                    }
                 }
             });
 
             driverObj.drive();
+        }
+
+        function restartTour() {
+            localStorage.removeItem('tourComplete');
+            launchOnboardingTour();
         }
 
         // === GOAL SYSTEM FUNCTIONS ===
