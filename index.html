@@ -184,6 +184,9 @@
     border: 1px solid var(--border-color);
     border-radius: 0.75rem;
     box-shadow: var(--shadow-md);
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
 }
 
 .progress-bar {
@@ -616,6 +619,49 @@
         #settings-modal .card h4,
         #settings-modal .card label {
             color: var(--text-primary);
+        }
+
+        /* Interactive Range Slider Styles */
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: var(--border-color);
+            outline: none;
+            border-radius: 5px;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-blue);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: #2563eb;
+            transform: scale(1.1);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-blue);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider::-moz-range-track {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 5px;
         }
 
         /* New Tooltip CSS */
@@ -1173,6 +1219,21 @@
   top:110% !important;
 }
 </style>
+
+<!-- Added by ChatGPT 2025-06-22 -->
+<style>
+#commitment-buttons .modern-button {
+    white-space: normal;
+    line-height: 1.25rem;
+    padding-block: .75rem;
+    text-align: left;
+    min-height: 64px;
+}
+#goal-confirmation-overlay {
+    position: fixed !important;
+}
+</style>
+
 </head>
 <body class="antialiased pb-20 md:pb-0">
     <div class="min-h-screen p-4 md:p-6">
@@ -2072,14 +2133,14 @@
 
     <!-- Clean Modern Onboarding Modal -->
 <div id="clean-onboarding-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
-    <div class="onboarding-modal w-full max-w-lg">
+    <div class="onboarding-modal w-full">
         <!-- Progress Bar -->
         <div class="p-4 border-b border-gray-200 dark:border-gray-600">
             <div class="progress-bar mb-2">
-                <div id="clean-progress-fill" class="progress-fill" style="width: 16.67%"></div>
+                <div id="clean-progress-fill" class="progress-fill" style="width: 20%"></div>
             </div>
             <div class="text-center text-sm text-gray-600 dark:text-gray-400">
-                <span id="clean-step-indicator">Step 1 of 6</span>
+                <span id="clean-step-indicator">Step 1 of 5</span>
             </div>
         </div>
 
@@ -2090,21 +2151,21 @@
             
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium mb-2">Monthly Take-Home Income</label>
+                    <label class="block text-sm font-medium mb-2">Monthly Income</label>
                     <div class="relative">
                         <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
                         <input type="number" id="clean-income-input" placeholder="3,500" class="modern-input pl-8 text-center font-semibold">
                     </div>
-                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">Your actual monthly income after tax and deductions</div>
+                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">Your monthly income after tax</div>
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium mb-2">Monthly Spending Budget</label>
+                    <label class="block text-sm font-medium mb-2">Monthly Spending</label>
                     <div class="relative">
                         <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
                         <input type="number" id="clean-budget-input" placeholder="2,800" class="modern-input pl-8 text-center font-semibold">
                     </div>
-                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">How much you want to spend each month (the rest goes to savings/goals)</div>
+                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">How much you spend each month on bills, food, etc.</div>
                 </div>
             </div>
         </div>
@@ -2159,58 +2220,25 @@
             </div>
         </div>
 
-        <!-- Step 3: Goal Details -->
+        <!-- Step 3: Complete Goal Planning (MERGED 3A+3B+3C) -->
         <div id="clean-step-3" class="clean-onboarding-step p-6 hidden">
-            <div id="clean-goal-details-content">
-                <!-- Dynamic content -->
+            <div id="clean-complete-goal-content">
+                <!-- Will be populated by prepareCompleteGoalPlanning() -->
             </div>
         </div>
 
-        <!-- Step 4: Debts -->
+        <!-- Step 4: Financial Position & Debt (MERGED debt + savings) -->
         <div id="clean-step-4" class="clean-onboarding-step p-6 hidden">
-            <h2 class="text-xl font-semibold mb-2 text-center">Current Debts</h2>
-            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Help us factor debts into your plan (optional step)</p>
-            
-            <div id="clean-debt-list" class="space-y-3 mb-4"></div>
-            
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="addCleanDebt()" class="modern-button modern-button-secondary w-full">+ Add Debt</button>
-                <button onclick="skipCleanDebts()" class="modern-button modern-button-secondary w-full">No Debts</button>
+            <div id="clean-financial-position-content">
+                <!-- Will be populated by prepareFinancialPosition() -->
             </div>
         </div>
 
-        <!-- Step 5: Current Position -->
+        <!-- Step 5: Plan Activation (ENHANCED) -->
         <div id="clean-step-5" class="clean-onboarding-step p-6 hidden">
-            <h2 class="text-xl font-semibold mb-2 text-center">Your Starting Point</h2>
-            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Tell us your current financial position</p>
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-2">Total Current Savings</label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
-                        <input type="number" id="clean-total-savings-input" placeholder="2,500" class="modern-input pl-8 text-center font-semibold">
-                    </div>
-                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">All your savings across all accounts (emergency fund, house savings, general savings, etc.)</div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-2">Monthly Expenses (Estimate)</label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
-                        <input type="number" id="clean-expenses-input" placeholder="2,200" class="modern-input pl-8 text-center font-semibold">
-                    </div>
-                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">Your best guess of typical monthly spending on everything</div>
-                </div>
+            <div id="clean-plan-activation-content">
+                <!-- Will be populated by preparePlanActivation() -->
             </div>
-        </div>
-
-        <!-- Step 6: Summary -->
-        <div id="clean-step-6" class="clean-onboarding-step p-6 hidden">
-            <h2 class="text-xl font-semibold mb-2 text-center">Your Plan Summary</h2>
-            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Here's what we calculated</p>
-            
-            <div id="clean-summary-content" class="space-y-3"></div>
         </div>
 
         <!-- Navigation -->
@@ -2517,7 +2545,7 @@ let goalTemplates = {
         // === NEW CLEAN ONBOARDING SYSTEM ===
 let cleanOnboardingData = {
     currentStep: 1,
-    totalSteps: 6,
+    totalSteps: 5, // Consolidated to 5 logical steps
     data: {
         monthlyIncome: 0,
         monthlyBudget: 0,
@@ -2586,24 +2614,40 @@ function updateCleanOnboardingStep() {
         const stepIndicator = document.getElementById('clean-step-indicator');
         
         if (progressBar) progressBar.style.width = `${progress}%`;
-        if (stepIndicator) stepIndicator.textContent = `Step ${cleanOnboardingData.currentStep} of ${cleanOnboardingData.totalSteps}`;
+        
+        // Create user-friendly step labels
+        const stepLabels = {
+            1: 'Income & Budget',
+            2: 'Choose Goal',
+            3: 'Goal Planning',
+            4: 'Financial Position',
+            5: 'Plan Activation'
+        };
+        
+        const stepLabel = stepLabels[cleanOnboardingData.currentStep] || `Step ${cleanOnboardingData.currentStep}`;
+        if (stepIndicator) stepIndicator.textContent = `Step ${cleanOnboardingData.currentStep} of ${cleanOnboardingData.totalSteps}: ${stepLabel}`;
         
         // Update navigation
         const backBtn = document.getElementById('clean-back-btn');
         const nextBtn = document.getElementById('clean-next-btn');
         
         if (backBtn) backBtn.style.visibility = cleanOnboardingData.currentStep === 1 ? 'hidden' : 'visible';
-        if (nextBtn) nextBtn.textContent = cleanOnboardingData.currentStep === cleanOnboardingData.totalSteps ? 'Complete Setup' : 'Next →';
+        if (nextBtn) nextBtn.textContent = cleanOnboardingData.currentStep === cleanOnboardingData.totalSteps ? 'Activate My Plan' : 'Next →';
         
         // Prepare step-specific content
         if (cleanOnboardingData.currentStep === 3) {
-            prepareCleanGoalDetails();
-        } else if (cleanOnboardingData.currentStep === 6) {
-            generateCleanSummary();
+            prepareCompleteGoalPlanning(); // Step 3: Complete Goal Planning (merged)
+            setTimeout(() => restoreCurrentStepData(), 150);
+        } else if (cleanOnboardingData.currentStep === 4) {
+            prepareFinancialPosition(); // Step 4: Financial Position & Debt
+            setTimeout(() => restoreCurrentStepData(), 150);
+        } else if (cleanOnboardingData.currentStep === 5) {
+            preparePlanActivation(); // Step 5: Plan Activation
+            restoreCurrentStepData();
+        } else {
+            // Restore form data for current step
+            restoreCurrentStepData();
         }
-        
-        // Restore form data for current step
-        restoreCurrentStepData();
     } catch (error) {
         console.error('Error updating onboarding step:', error);
         showToast('Error updating onboarding step. Please refresh and try again.', 'error');
@@ -2637,85 +2681,42 @@ function validateCleanStep() {
             return true;
             
         case 3:
-            const goal = cleanOnboardingData.data.primaryGoal;
+            // Step 3: Complete Goal Planning validation
+            const targetInput = document.getElementById('goal-target');
+            const slider = document.getElementById('monthly-commitment-slider');
             
-            if (!goal) return false;
+            if (!targetInput) {
+                showToast('Please enter your goal target amount', 'error');
+                return false;
+            }
             
-            if (goal === 'house') {
-                const target = document.getElementById('house-target')?.value;
-                const timeline = document.getElementById('house-timeline')?.value;
-                if (!target || !timeline) {
-                    showToast('Please fill in all house goal details', 'error');
-                    return false;
-                }
-                cleanOnboardingData.data.goalDetails['house-target'] = parseFloat(target);
-                cleanOnboardingData.data.goalDetails['house-timeline'] = timeline;
-                cleanOnboardingData.data.goalDetails['house-current'] = parseFloat(document.getElementById('house-current')?.value || 0);
-            } else if (goal === 'emergency') {
-                const months = document.getElementById('emergency-months')?.value;
-                if (!months) {
-                    showToast('Please select your emergency fund target', 'error');
-                    return false;
-                }
-                cleanOnboardingData.data.goalDetails['emergency-months'] = months;
-                cleanOnboardingData.data.goalDetails['emergency-current'] = parseFloat(document.getElementById('emergency-current')?.value || 0);
-            } else if (goal === 'vacation') {
-                const cost = document.getElementById('vacation-cost')?.value;
-                const timeline = document.getElementById('vacation-when')?.value;
-                if (!cost || !timeline) {
-                    showToast('Please fill in all vacation goal details', 'error');
-                    return false;
-                }
-                cleanOnboardingData.data.goalDetails['vacation-cost'] = parseFloat(cost);
-                cleanOnboardingData.data.goalDetails['vacation-when'] = timeline;
-                cleanOnboardingData.data.goalDetails['vacation-current'] = parseFloat(document.getElementById('vacation-current')?.value || 0);
-            } else if (goal === 'investment') {
-                const target = document.getElementById('investment-target')?.value;
-                const timeline = document.getElementById('investment-timeline')?.value;
-                if (!target || !timeline) {
-                    showToast('Please fill in all investment goal details', 'error');
-                    return false;
-                }
-                cleanOnboardingData.data.goalDetails['investment-target'] = parseFloat(target);
-                cleanOnboardingData.data.goalDetails['investment-timeline'] = timeline;
-                cleanOnboardingData.data.goalDetails['investment-current'] = parseFloat(document.getElementById('investment-current')?.value || 0);
-            } else if (goal === 'custom') {
-                const name = document.getElementById('custom-name')?.value;
-                const target = document.getElementById('custom-target')?.value;
-                const timeline = document.getElementById('custom-timeline')?.value;
-                if (!name || !target || !timeline) {
-                    showToast('Please fill in all custom goal details', 'error');
-                    return false;
-                }
-                cleanOnboardingData.data.goalDetails['custom-name'] = name;
-                cleanOnboardingData.data.goalDetails['custom-target'] = parseFloat(target);
-                cleanOnboardingData.data.goalDetails['custom-timeline'] = timeline;
-                cleanOnboardingData.data.goalDetails['custom-current'] = parseFloat(document.getElementById('custom-current')?.value || 0);
-            } else if (goal === 'debt') {
-                // Debt goal validation - ensure strategy is selected
-                const strategy = document.querySelector('input[name="debt-strategy"]:checked')?.value;
-                if (!strategy) {
-                    showToast('Please select a debt payoff strategy', 'error');
-                    return false;
-                }
-                cleanOnboardingData.data.goalDetails['debt-strategy'] = strategy;
+            const target = parseFloat(targetInput.value) || 0;
+            
+            if (target <= 0) {
+                showToast('Please enter a target amount for your goal', 'error');
+                return false;
+            }
+            
+            if (!slider) {
+                showToast('Please set a monthly commitment amount', 'error');
+                return false;
+            }
+            
+            const monthlyCommitment = parseFloat(slider.value) || 0;
+            
+            if (monthlyCommitment <= 0) {
+                showToast('Please set a monthly commitment amount using the slider', 'error');
+                return false;
             }
             
             return true;
             
         case 4:
-            cleanOnboardingData.data.debts = [];
-            return true;
-            
-        case 5:
-            const savings = parseFloat(document.getElementById('clean-total-savings-input').value) || 0;
-            const expenses = parseFloat(document.getElementById('clean-expenses-input').value);
-            if (!expenses || expenses <= 0) {
-                showToast('Please enter your estimated monthly expenses', 'error');
-                return false;
-            }
+            // Step 4: Financial Position & Debt validation
+            const savings = parseFloat(document.getElementById('clean-total-savings-input')?.value) || 0;
             data.totalSavings = savings;
-            data.monthlyExpenses = expenses;
+            // Use monthly budget as monthly expenses since we simplified the questions
+            data.monthlyExpenses = data.monthlyBudget;
             return true;
             
         default:
@@ -2908,6 +2909,913 @@ function prepareCleanGoalDetails() {
     `;
 }
 
+function prepareGoalCommitment() {
+    const container = document.getElementById('clean-goal-commitment-content');
+    const goal = cleanOnboardingData.data.primaryGoal;
+    const data = cleanOnboardingData.data;
+    
+    // Calculate available surplus
+    const surplus = data.monthlyIncome - data.monthlyBudget;
+    
+    if (surplus <= 0) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <div class="text-4xl mb-4">⚠️</div>
+                <h2 class="text-xl font-semibold mb-4 text-red-600">Budget Alert</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Your budget exceeds your income. You'll need to adjust your budget before setting financial goals.</p>
+                <button onclick="goCleanBack()" class="modern-button modern-button-primary">Go Back & Adjust Budget</button>
+            </div>
+        `;
+        return;
+    }
+    
+    const goalConfigs = {
+        house: { 
+            icon: '🏠', 
+            title: 'House Deposit Plan',
+            subtitle: 'Let\'s create your monthly savings plan',
+            targetPlaceholder: '50,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '5,000',
+            currentLabel: 'How much do you have?'
+        },
+        emergency: { 
+            icon: '💰', 
+            title: 'Emergency Fund Plan',
+            subtitle: 'Build your financial safety net',
+            targetPlaceholder: '10,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '1,000',
+            currentLabel: 'How much do you have?'
+        },
+        vacation: { 
+            icon: '✈️', 
+            title: 'Vacation Savings Plan',
+            subtitle: 'Plan your dream trip',
+            targetPlaceholder: '3,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '500',
+            currentLabel: 'How much do you have?'
+        },
+        investment: { 
+            icon: '📈', 
+            title: 'Investment Plan',
+            subtitle: 'Build your investment portfolio',
+            targetPlaceholder: '10,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '1,000',
+            currentLabel: 'How much do you have?'
+        },
+        custom: { 
+            icon: '🎯', 
+            title: 'Custom Goal Plan',
+            subtitle: 'Achieve your financial target',
+            targetPlaceholder: '5,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '500',
+            currentLabel: 'How much do you have?'
+        },
+        debt: { 
+            icon: '💳', 
+            title: 'Debt Payoff Plan',
+            subtitle: 'Eliminate your debt strategically',
+            targetPlaceholder: '15,000',
+            targetLabel: 'Total Debt Amount',
+            currentPlaceholder: '0',
+            currentLabel: 'Already Paid Off'
+        }
+    };
+    
+    const config = goalConfigs[goal] || goalConfigs.custom;
+    
+    // Special handling for debt payoff goals
+    if (goal === 'debt') {
+        container.innerHTML = `
+            <div class="text-center mb-6">
+                <div class="text-4xl mb-3">${config.icon}</div>
+                <h2 class="text-xl font-semibold mb-2">${config.title}</h2>
+                <p class="text-gray-600 dark:text-gray-400">${config.subtitle}</p>
+            </div>
+            
+            <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 mb-6">
+                <div class="text-center">
+                    <div class="text-sm text-red-600 dark:text-red-400 font-medium">Total Debt to Pay Off</div>
+                    <div class="text-2xl font-bold text-red-700 dark:text-red-300">£${totalDebt.toLocaleString()}</div>
+                    <div class="text-xs text-red-500 dark:text-red-400">From ${data.debts.length} debt(s) you entered</div>
+                </div>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-3">Payoff Strategy</label>
+                    <select id="debt-strategy" class="modern-input" onchange="updateDebtCalculations()">
+                        <option value="Avalanche (highest interest first)">Avalanche - Pay highest interest first</option>
+                        <option value="Snowball (smallest balance first)">Snowball - Pay smallest balance first</option>
+                        <option value="Equal payments">Equal Payments - Split evenly</option>
+                    </select>
+                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">Choose the strategy that motivates you most</div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-3">Extra Monthly Payment</label>
+                    <div class="space-y-3">
+                        <input type="range" id="debt-extra-payment-slider" 
+                               min="0" max="${surplus}" step="25" value="0"
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                               onchange="updateDebtCalculations()" oninput="updateDebtCalculations()">
+                        
+                        <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                            <span>£0/month extra</span>
+                            <span>£${surplus.toLocaleString()}/month extra</span>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="text-lg font-semibold">Extra Payment: <span id="debt-extra-amount">£0</span>/month</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="debt-timeline-display" class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 hidden">
+                    <h4 class="font-medium mb-3">Payoff Timeline</h4>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span>Minimum Payments:</span>
+                            <span id="debt-min-payments" class="font-mono">£0</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>Total Monthly Payment:</span>
+                            <span id="debt-total-payment" class="font-mono">£0</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>Debt-Free Timeline:</span>
+                            <span id="debt-timeline-months" class="font-mono">0 months</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Initialize debt calculations
+        updateDebtCalculations();
+        return;
+    }
+    
+    container.innerHTML = `
+        <div class="text-center mb-6">
+            <div class="text-4xl mb-3">${config.icon}</div>
+            <h2 class="text-xl font-semibold mb-2">${config.title}</h2>
+            <p class="text-gray-600 dark:text-gray-400">${config.subtitle}</p>
+        </div>
+        
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
+            <div class="text-center">
+                <div class="text-sm text-blue-600 dark:text-blue-400 font-medium">Monthly Surplus Available</div>
+                <div class="text-2xl font-bold text-blue-700 dark:text-blue-300">£${surplus.toLocaleString()}</div>
+                <div class="text-xs text-blue-500 dark:text-blue-400">Income - Budget = Available for goals</div>
+            </div>
+        </div>
+        
+        <div class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">${config.targetLabel}</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="goal-target" placeholder="${config.targetPlaceholder}" 
+                               class="modern-input pl-8 text-center font-semibold" 
+                               onchange="updateCommitmentCalculations()" oninput="updateCommitmentCalculations()">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">${config.currentLabel}</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="goal-current" placeholder="${config.currentPlaceholder}" 
+                               class="modern-input pl-8 text-center font-semibold" 
+                               onchange="updateCommitmentCalculations()" oninput="updateCommitmentCalculations()">
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium mb-3">Monthly Commitment</label>
+                <div class="space-y-3">
+                    <input type="range" id="monthly-commitment-slider" 
+                           min="0" max="${surplus}" step="50" value="0"
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                           onchange="updateCommitmentCalculations()" oninput="updateCommitmentCalculations()">
+                    
+                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                        <span>£0/month</span>
+                        <span>£${surplus.toLocaleString()}/month</span>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-lg font-bold" id="commitment-amount">£0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">per month toward your goal</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="timeline-display" class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 hidden">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-medium">Your Plan Timeline</span>
+                    <span id="timeline-months" class="text-lg font-bold text-purple-600"></span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-2">
+                    <div id="timeline-progress" class="bg-purple-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                    <span id="timeline-current">£0 (current)</span>
+                    <span id="timeline-target">£0 (target)</span>
+                </div>
+            </div>
+            
+            <div id="commitment-options" class="space-y-3 hidden">
+                <h4 class="font-medium">Quick Commitment Options:</h4>
+                <div class="grid grid-cols-2 gap-3" id="commitment-buttons">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+            
+            <div id="commitment-warning" class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-4 hidden">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-yellow-700 dark:text-yellow-300" id="warning-text"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Initialize calculations
+    setTimeout(() => {
+        updateCommitmentCalculations();
+        generateCommitmentOptions();
+    }, 100);
+}
+
+// Step 3: Complete Goal Planning (MERGED 3A+3B+3C)
+function prepareCompleteGoalPlanning() {
+    const container = document.getElementById('clean-complete-goal-content');
+    const goal = cleanOnboardingData.data.primaryGoal;
+    const data = cleanOnboardingData.data;
+    
+    // Calculate available surplus
+    const surplus = data.monthlyIncome - data.monthlyBudget;
+    
+    if (surplus <= 0) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <div class="text-4xl mb-4">⚠️</div>
+                <h2 class="text-xl font-semibold mb-4 text-red-600">Budget Alert</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Your budget exceeds your income. You'll need to adjust your budget before setting financial goals.</p>
+                <button onclick="goCleanBack()" class="modern-button modern-button-primary">Go Back & Adjust Budget</button>
+            </div>
+        `;
+        return;
+    }
+    
+    // Special handling for debt payoff goals
+    if (goal === 'debt') {
+        const totalDebt = data.debts.reduce((sum, debt) => sum + debt.balance, 0);
+        container.innerHTML = `
+            <div class="text-center mb-6">
+                <div class="text-4xl mb-3">💳</div>
+                <h2 class="text-xl font-semibold mb-2">Debt Payoff Plan</h2>
+                <p class="text-gray-600 dark:text-gray-400">Eliminate your debt strategically</p>
+            </div>
+            
+            <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 mb-6">
+                <div class="text-center">
+                    <div class="text-sm text-red-600 dark:text-red-400 font-medium">Total Debt to Pay Off</div>
+                    <div class="text-2xl font-bold text-red-700 dark:text-red-300">£${totalDebt.toLocaleString()}</div>
+                    <div class="text-xs text-red-500 dark:text-red-400">From ${data.debts.length} debt(s) you entered</div>
+                </div>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-3">Payoff Strategy</label>
+                    <select id="debt-strategy" class="modern-input" onchange="updateDebtCalculations()">
+                        <option value="Avalanche (highest interest first)">Avalanche - Pay highest interest first</option>
+                        <option value="Snowball (smallest balance first)">Snowball - Pay smallest balance first</option>
+                        <option value="Equal payments">Equal Payments - Split evenly</option>
+                    </select>
+                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">Choose the strategy that motivates you most</div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-3">Extra Monthly Payment</label>
+                    <div class="space-y-3">
+                        <input type="range" id="debt-extra-payment-slider" 
+                               min="0" max="${surplus}" step="25" value="0"
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                               onchange="updateDebtCalculations()" oninput="updateDebtCalculations()">
+                        
+                        <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                            <span>£0/month extra</span>
+                            <span>£${surplus.toLocaleString()}/month extra</span>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="text-lg font-semibold">Extra Payment: <span id="debt-extra-amount">£0</span>/month</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="debt-timeline-display" class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 hidden">
+                    <h4 class="font-medium mb-3">Payoff Timeline</h4>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span>Minimum Payments:</span>
+                            <span id="debt-min-payments" class="font-mono">£0</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>Total Monthly Payment:</span>
+                            <span id="debt-total-payment" class="font-mono">£0</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>Debt-Free Timeline:</span>
+                            <span id="debt-timeline-months" class="font-mono">0 months</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Initialize debt calculations
+        updateDebtCalculations();
+        return;
+    }
+    
+    const goalConfigs = {
+        house: { 
+            icon: '🏠', 
+            title: 'House Deposit Plan',
+            subtitle: 'Complete your house deposit planning',
+            targetPlaceholder: '50,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '5,000',
+            currentLabel: 'How much do you have?'
+        },
+        emergency: { 
+            icon: '💰', 
+            title: 'Emergency Fund Plan',
+            subtitle: 'Build your financial safety net',
+            targetPlaceholder: '10,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '1,000',
+            currentLabel: 'How much do you have?'
+        },
+        vacation: { 
+            icon: '✈️', 
+            title: 'Vacation Savings Plan',
+            subtitle: 'Plan your dream trip',
+            targetPlaceholder: '3,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '500',
+            currentLabel: 'How much do you have?'
+        },
+        investment: { 
+            icon: '📈', 
+            title: 'Investment Plan',
+            subtitle: 'Build your investment portfolio',
+            targetPlaceholder: '10,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '1,000',
+            currentLabel: 'How much do you have?'
+        },
+        custom: { 
+            icon: '🎯', 
+            title: 'Custom Goal Plan',
+            subtitle: 'Achieve your financial target',
+            targetPlaceholder: '5,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '500',
+            currentLabel: 'How much do you have?'
+        }
+    };
+    
+    const config = goalConfigs[goal] || goalConfigs.custom;
+    
+    container.innerHTML = `
+        <div class="text-center mb-6">
+            <div class="text-4xl mb-3">${config.icon}</div>
+            <h2 class="text-xl font-semibold mb-2">${config.title}</h2>
+            <p class="text-gray-600 dark:text-gray-400">${config.subtitle}</p>
+        </div>
+        
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
+            <div class="text-center">
+                <div class="text-sm text-blue-600 dark:text-blue-400 font-medium">Monthly Surplus Available</div>
+                <div class="text-2xl font-bold text-blue-700 dark:text-blue-300">£${surplus.toLocaleString()}</div>
+                <div class="text-xs text-blue-500 dark:text-blue-400">Income - Budget = Available for goals</div>
+            </div>
+        </div>
+        
+        <div class="space-y-6">
+            <!-- Goal Details Section -->
+            <div class="card p-4">
+                <h3 class="font-medium mb-4">Goal Details</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">${config.targetLabel}</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                            <input type="number" id="goal-target" placeholder="${config.targetPlaceholder}" 
+                                   class="modern-input pl-8 text-center font-semibold" 
+                                   onchange="updateCommitmentCalculations()" oninput="updateCommitmentCalculations()">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">${config.currentLabel}</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                            <input type="number" id="goal-current" placeholder="${config.currentPlaceholder}" 
+                                   class="modern-input pl-8 text-center font-semibold" 
+                                   onchange="updateCommitmentCalculations()" oninput="updateCommitmentCalculations()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Monthly Commitment Section -->
+            <div class="card p-4">
+                <h3 class="font-medium mb-4">Monthly Commitment</h3>
+                <div class="space-y-3">
+                    <input type="range" id="monthly-commitment-slider" 
+                           min="0" max="${surplus}" step="50" value="0"
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                           onchange="updateCommitmentCalculations()" oninput="updateCommitmentCalculations()">
+                    
+                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                        <span>£0/month</span>
+                        <span>£${surplus.toLocaleString()}/month</span>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-lg font-semibold">Monthly commitment: <span id="commitment-amount">£0</span></div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">per month toward your goal</div>
+                    </div>
+                </div>
+                
+                <div id="commitment-options" class="space-y-3 hidden mt-4">
+                    <h4 class="font-medium">Quick Commitment Options:</h4>
+                    <div class="grid grid-cols-2 gap-3" id="commitment-buttons"></div>
+                </div>
+            </div>
+            
+            <!-- Timeline Section -->
+            <div id="timeline-display" class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 hidden">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-medium">Your Plan Timeline</span>
+                    <span id="timeline-months" class="text-lg font-bold text-purple-600"></span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-2">
+                    <div id="timeline-progress" class="bg-purple-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                    <span id="timeline-current">£0 (current)</span>
+                    <span id="timeline-target">£0 (target)</span>
+                </div>
+            </div>
+            
+            <div id="commitment-warning" class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 hidden">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-yellow-700 dark:text-yellow-300" id="warning-text"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Initialize calculations
+    setTimeout(() => {
+        updateCommitmentCalculations();
+        generateCommitmentOptions();
+    }, 100);
+}
+
+// Legacy function kept for compatibility
+function prepareGoalDetails() {
+    const container = document.getElementById('clean-goal-details-content');
+    const goal = cleanOnboardingData.data.primaryGoal;
+    const data = cleanOnboardingData.data;
+    
+    // Calculate available surplus
+    const surplus = data.monthlyIncome - data.monthlyBudget;
+    
+    if (surplus <= 0) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <div class="text-4xl mb-4">⚠️</div>
+                <h2 class="text-xl font-semibold mb-4 text-red-600">Budget Alert</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Your budget exceeds your income. You'll need to adjust your budget before setting financial goals.</p>
+                <button onclick="goCleanBack()" class="modern-button modern-button-primary">Go Back & Adjust Budget</button>
+            </div>
+        `;
+        return;
+    }
+    
+    const goalConfigs = {
+        house: { 
+            icon: '🏠', 
+            title: 'House Deposit Plan',
+            subtitle: 'Tell us about your house deposit goal',
+            targetPlaceholder: '50,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '5,000',
+            currentLabel: 'How much do you have?'
+        },
+        emergency: { 
+            icon: '💰', 
+            title: 'Emergency Fund Plan',
+            subtitle: 'Set up your financial safety net',
+            targetPlaceholder: '10,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '1,000',
+            currentLabel: 'How much do you have?'
+        },
+        vacation: { 
+            icon: '✈️', 
+            title: 'Vacation Savings Plan',
+            subtitle: 'Plan your dream trip',
+            targetPlaceholder: '3,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '500',
+            currentLabel: 'How much do you have?'
+        },
+        investment: { 
+            icon: '📈', 
+            title: 'Investment Plan',
+            subtitle: 'Build your investment portfolio',
+            targetPlaceholder: '10,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '1,000',
+            currentLabel: 'How much do you have?'
+        },
+        custom: { 
+            icon: '🎯', 
+            title: 'Custom Goal Plan',
+            subtitle: 'Achieve your financial target',
+            targetPlaceholder: '5,000',
+            targetLabel: 'How much do you need?',
+            currentPlaceholder: '500',
+            currentLabel: 'How much do you have?'
+        }
+    };
+    
+    const config = goalConfigs[goal] || goalConfigs.custom;
+    
+    container.innerHTML = `
+        <div class="text-center mb-6">
+            <div class="text-4xl mb-3">${config.icon}</div>
+            <h2 class="text-xl font-semibold mb-2">${config.title}</h2>
+            <p class="text-gray-600 dark:text-gray-400">${config.subtitle}</p>
+        </div>
+        
+        <div class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">${config.targetLabel}</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="goal-target" placeholder="${config.targetPlaceholder}" 
+                               class="modern-input pl-8 text-center font-semibold">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">${config.currentLabel}</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="goal-current" placeholder="${config.currentPlaceholder}" 
+                               class="modern-input pl-8 text-center font-semibold">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Step 4: Financial Position & Debt (COMBINED)
+function prepareFinancialPosition() {
+    const container = document.getElementById('clean-financial-position-content');
+    const data = cleanOnboardingData.data;
+    
+    container.innerHTML = `
+        <div class="text-center mb-6">
+            <div class="text-4xl mb-3">💰</div>
+            <h2 class="text-xl font-semibold mb-2">Your Financial Position</h2>
+            <p class="text-gray-600 dark:text-gray-400">Tell us about your current savings and any debts</p>
+        </div>
+        
+        <div class="space-y-6">
+            <!-- Current Savings Section -->
+            <div class="card p-4">
+                <h3 class="font-medium mb-4">Current Savings</h3>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Total Savings</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">£</span>
+                        <input type="number" id="clean-total-savings-input" placeholder="2,500" class="modern-input pl-8 text-center font-semibold">
+                    </div>
+                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                        Total money you have saved across all accounts
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Debt Section -->
+            <div class="card p-4">
+                <h3 class="font-medium mb-4">Current Debts (Optional)</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Add any debts to get better financial planning recommendations</p>
+                
+                <div id="clean-debt-list" class="space-y-3 mb-4"></div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="addCleanDebt()" class="modern-button modern-button-secondary w-full">+ Add Debt</button>
+                    <button onclick="skipCleanDebts()" class="modern-button modern-button-outline w-full">No Debts</button>
+                </div>
+            </div>
+            
+            <!-- Impact Preview -->
+            <div id="financial-impact-preview" class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 hidden">
+                <h4 class="font-medium mb-3 text-blue-700 dark:text-blue-300">Financial Impact Preview</h4>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span>Current Savings:</span>
+                        <span id="preview-savings" class="font-mono">£0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Total Debt:</span>
+                        <span id="preview-debt" class="font-mono text-red-600">£0</span>
+                    </div>
+                    <div class="flex justify-between font-medium border-t border-blue-200 dark:border-blue-800 pt-2">
+                        <span>Net Worth:</span>
+                        <span id="preview-net-worth" class="font-mono">£0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Estimated Monthly Debt Payments:</span>
+                        <span id="preview-debt-payments" class="font-mono">£0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add event listener to savings input to update preview
+    const savingsInput = document.getElementById('clean-total-savings-input');
+    if (savingsInput) {
+        savingsInput.addEventListener('input', updateFinancialPreview);
+    }
+    
+    // Initialize preview
+    updateFinancialPreview();
+}
+
+function updateFinancialPreview() {
+    const savingsInput = document.getElementById('clean-total-savings-input');
+    const previewDiv = document.getElementById('financial-impact-preview');
+    const previewSavings = document.getElementById('preview-savings');
+    const previewDebt = document.getElementById('preview-debt');
+    const previewNetWorth = document.getElementById('preview-net-worth');
+    const previewDebtPayments = document.getElementById('preview-debt-payments');
+    
+    if (!savingsInput || !previewDiv) return;
+    
+    const savings = parseFloat(savingsInput.value) || 0;
+    const debts = cleanOnboardingData.data.debts || [];
+    const totalDebt = debts.reduce((sum, debt) => sum + debt.balance, 0);
+    const monthlyDebtPayments = debts.reduce((sum, debt) => sum + Math.max(debt.balance * 0.02, 25), 0);
+    const netWorth = savings - totalDebt;
+    
+    if (savings > 0 || totalDebt > 0) {
+        previewDiv.classList.remove('hidden');
+        
+        if (previewSavings) previewSavings.textContent = `£${savings.toLocaleString()}`;
+        if (previewDebt) previewDebt.textContent = `£${totalDebt.toLocaleString()}`;
+        if (previewNetWorth) {
+            previewNetWorth.textContent = `£${netWorth.toLocaleString()}`;
+            previewNetWorth.className = `font-mono ${netWorth >= 0 ? 'text-green-600' : 'text-red-600'}`;
+        }
+        if (previewDebtPayments) previewDebtPayments.textContent = `£${monthlyDebtPayments.toLocaleString()}`;
+    } else {
+        previewDiv.classList.add('hidden');
+    }
+}
+
+// Step 3C: Timeline & Review  
+function prepareGoalReview() {
+    const container = document.getElementById('clean-goal-review-content');
+    const data = cleanOnboardingData.data;
+    const goalDetails = data.goalDetails || {};
+    
+    const target = goalDetails.target || 0;
+    const current = goalDetails.current || 0;
+    const monthlyCommitment = goalDetails.monthlyCommitment || 0;
+    const remaining = Math.max(target - current, 0);
+    const monthsToComplete = monthlyCommitment > 0 ? Math.ceil(remaining / monthlyCommitment) : 0;
+    const currentProgress = target > 0 ? (current / target) * 100 : 0;
+    
+    container.innerHTML = `
+        <div class="text-center mb-6">
+            <div class="text-4xl mb-3">📊</div>
+            <h2 class="text-xl font-semibold mb-2">Your Goal Timeline</h2>
+            <p class="text-gray-600 dark:text-gray-400">Review your plan before proceeding</p>
+        </div>
+        
+        <div class="space-y-6">
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                <h3 class="font-medium mb-3">Goal Summary</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span>Target:</span>
+                        <span class="font-mono">£${target.toLocaleString()}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Current:</span>
+                        <span class="font-mono">£${current.toLocaleString()}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Still needed:</span>
+                        <span class="font-mono">£${remaining.toLocaleString()}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Monthly commitment:</span>
+                        <span class="font-mono">£${monthlyCommitment.toLocaleString()}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                <h3 class="font-medium mb-3 text-blue-700 dark:text-blue-300">Timeline Projection</h3>
+                <div class="text-center mb-4">
+                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                        ${monthsToComplete} months
+                    </div>
+                    <div class="text-sm text-blue-600 dark:text-blue-400">to reach your goal</div>
+                </div>
+                
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-2">
+                    <div class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: ${Math.min(currentProgress, 100)}%"></div>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                    <span>${currentProgress.toFixed(1)}% complete</span>
+                    <span>${target > 0 ? ((target - current) / target * 100).toFixed(1) : 0}% remaining</span>
+                </div>
+            </div>
+            
+            ${monthsToComplete > 36 ? `
+                <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700 dark:text-yellow-300">
+                                This timeline is quite long. Consider increasing your monthly commitment or adjusting your target to reach your goal sooner.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+// Step 5: Plan Activation (ENHANCED)
+// Step 5: Plan Activation (ENHANCED, patched)
+function preparePlanActivation() {
+    const container = document.getElementById('clean-plan-activation-content');
+    if (!container) return;
+
+    // Build shell first so #clean-summary-content exists
+    container.innerHTML = `
+        <div class="text-center mb-6">
+            <div class="text-4xl mb-3">🚀</div>
+            <h2 class="text-xl font-semibold mb-2">Activate Your Financial Plan</h2>
+            <p class="text-gray-600 dark:text-gray-400">Your personalized plan is ready to go!</p>
+        </div>
+
+        <!-- Plan Summary -->
+        <div class="card p-4 mb-6">
+            <h3 class="font-medium mb-4">Your Plan Summary</h3>
+            <div id="clean-summary-content"></div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="card p-4 mb-6">
+            <h3 class="font-medium mb-4">What Happens Next</h3>
+            <div class="space-y-3">
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-xs font-medium text-blue-600 dark:text-blue-400">1</div>
+                    <div>
+                        <div class="font-medium">Your plan will be activated</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">All goals and budgets will be set up in your account</div>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-xs font-medium text-blue-600 dark:text-blue-400">2</div>
+                    <div>
+                        <div class="font-medium">Start tracking expenses</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Log your spending to stay on track with your budget</div>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-xs font-medium text-blue-600 dark:text-blue-400">3</div>
+                    <div>
+                        <div class="font-medium">Monitor your progress</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Watch your goals grow and adjust as needed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Health Preview -->
+        <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 mb-6">
+            <h4 class="font-medium mb-3 text-green-700 dark:text-green-300">Your Financial Health Score</h4>
+            <div class="flex items-center gap-4">
+                <div class="flex-1">
+                    <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="activation-health-score">Calculating...</div>
+                    <div class="text-sm text-green-600 dark:text-green-400">Expected score with this plan</div>
+                </div>
+                <div class="text-4xl">📈</div>
+            </div>
+        </div>
+
+        <!-- Activation Button -->
+        <div class="text-center">
+            <button onclick="activateFinancialPlan()" class="modern-button modern-button-primary px-8 py-3 text-lg font-semibold">
+                🚀 Activate My Plan
+            </button>
+            <div class="text-xs text-gray-600 dark:text-gray-400 mt-2">This will complete your onboarding and set up your account</div>
+        </div>
+    `;
+
+    // Populate summary and score once container is in DOM
+    generateCleanSummary();
+    calculateActivationHealthScore();
+}
+
+function calculateActivationHealthScore() {
+    const data = cleanOnboardingData.data;
+    const scoreElement = document.getElementById('activation-health-score');
+    
+    if (!scoreElement) return;
+    
+    // Simplified health score calculation
+    let score = 50; // Base score
+    
+    // Income vs Budget ratio
+    const surplus = data.monthlyIncome - data.monthlyBudget;
+    const surplusRatio = surplus / data.monthlyIncome;
+    if (surplusRatio > 0.2) score += 20;
+    else if (surplusRatio > 0.1) score += 10;
+    else if (surplusRatio < 0) score -= 30;
+    
+    // Savings to income ratio
+    const savingsRatio = data.totalSavings / (data.monthlyIncome * 12);
+    if (savingsRatio > 0.5) score += 15;
+    else if (savingsRatio > 0.25) score += 10;
+    else if (savingsRatio > 0.1) score += 5;
+    
+    // Debt considerations
+    const totalDebt = data.debts.reduce((sum, debt) => sum + debt.balance, 0);
+    if (totalDebt === 0) score += 10;
+    else if (totalDebt < data.monthlyIncome * 6) score += 5;
+    else if (totalDebt > data.monthlyIncome * 12) score -= 15;
+    
+    // Goal commitment
+    if (data.goalDetails.monthlyCommitment > 0) score += 10;
+    
+    // Cap the score
+    score = Math.max(0, Math.min(100, score));
+    
+    scoreElement.textContent = `${Math.round(score)}/100`;
+}
+
+function activateFinancialPlan() {
+    // This function will complete the onboarding
+    finishCleanOnboarding();
+}
+
 // 2. ADD missing validateCleanGoalDetails function
 function validateCleanGoalDetails() {
     const inputs = document.querySelectorAll('#clean-goal-details-content input, #clean-goal-details-content select');
@@ -2937,6 +3845,205 @@ function validateCleanGoalDetails() {
     return true;
 }
 
+function updateCommitmentCalculations() {
+    const targetInput = document.getElementById('goal-target');
+    const currentInput = document.getElementById('goal-current');
+    const slider = document.getElementById('monthly-commitment-slider');
+    const commitmentAmount = document.getElementById('commitment-amount');
+    const timelineDisplay = document.getElementById('timeline-display');
+    const timelineMonths = document.getElementById('timeline-months');
+    const timelineProgress = document.getElementById('timeline-progress');
+    const timelineCurrent = document.getElementById('timeline-current');
+    const timelineTarget = document.getElementById('timeline-target');
+    const warningDiv = document.getElementById('commitment-warning');
+    const warningText = document.getElementById('warning-text');
+    
+    if (!targetInput || !currentInput || !slider) return;
+    
+    const target = parseFloat(targetInput.value) || 0;
+    const current = parseFloat(currentInput.value) || 0;
+    const monthlyCommitment = parseFloat(slider.value) || 0;
+    const remaining = Math.max(target - current, 0);
+    
+    // Update commitment amount display
+    if (commitmentAmount) {
+        commitmentAmount.textContent = `£${monthlyCommitment.toLocaleString()}`;
+    }
+    
+    // Save to onboarding data
+    cleanOnboardingData.data.goalDetails = {
+        target: target,
+        current: current,
+        monthlyCommitment: monthlyCommitment
+    };
+    
+    if (target > 0 && monthlyCommitment > 0) {
+        // Calculate timeline
+        const monthsToComplete = Math.ceil(remaining / monthlyCommitment);
+        const currentProgress = current > 0 ? (current / target) * 100 : 0;
+        
+        // Show timeline
+        if (timelineDisplay) timelineDisplay.classList.remove('hidden');
+        if (timelineMonths) {
+            timelineMonths.textContent = monthsToComplete === 1 ? '1 month' : `${monthsToComplete} months`;
+        }
+        if (timelineProgress) {
+            timelineProgress.style.width = `${Math.min(currentProgress, 100)}%`;
+        }
+        if (timelineCurrent) {
+            timelineCurrent.textContent = `£${current.toLocaleString()} (current)`;
+        }
+        if (timelineTarget) {
+            timelineTarget.textContent = `£${target.toLocaleString()} (target)`;
+        }
+        
+        // Show warnings if needed
+        if (monthsToComplete > 60) {
+            warningDiv.classList.remove('hidden');
+            warningText.textContent = `At this rate, it will take ${monthsToComplete} months (${Math.round(monthsToComplete/12)} years) to reach your goal. Consider increasing your monthly commitment.`;
+        } else if (monthlyCommitment > (cleanOnboardingData.data.monthlyIncome - cleanOnboardingData.data.monthlyBudget) * 0.8) {
+            warningDiv.classList.remove('hidden');
+            warningText.textContent = 'This commitment uses most of your surplus. Make sure to leave room for other goals and unexpected expenses.';
+        } else {
+            warningDiv.classList.add('hidden');
+        }
+    } else {
+        if (timelineDisplay) timelineDisplay.classList.add('hidden');
+        if (warningDiv) warningDiv.classList.add('hidden');
+    }
+    
+    // Update quick options when calculations change
+    generateCommitmentOptions();
+}
+
+function generateCommitmentOptions() {
+    const targetInput = document.getElementById('goal-target');
+    const currentInput = document.getElementById('goal-current');
+    const buttonsContainer = document.getElementById('commitment-buttons');
+    const optionsDiv = document.getElementById('commitment-options');
+    
+    if (!targetInput || !currentInput || !buttonsContainer) return;
+    
+    const target = parseFloat(targetInput.value) || 0;
+    const current = parseFloat(currentInput.value) || 0;
+    const remaining = Math.max(target - current, 0);
+    const surplus = cleanOnboardingData.data.monthlyIncome - cleanOnboardingData.data.monthlyBudget;
+    
+    if (target > 0 && remaining > 0) {
+        optionsDiv.classList.remove('hidden');
+        
+        // Generate smart commitment options
+        const options = [];
+        
+        // Option 1: Complete in 1 year
+        const oneYearAmount = Math.ceil(remaining / 12);
+        if (oneYearAmount <= surplus) {
+            options.push({ 
+                label: 'Complete in 1 Year', 
+                amount: oneYearAmount, 
+                description: `£${oneYearAmount.toLocaleString()}/month` 
+            });
+        }
+        
+        // Option 2: Complete in 2 years
+        const twoYearAmount = Math.ceil(remaining / 24);
+        if (twoYearAmount <= surplus && twoYearAmount !== oneYearAmount) {
+            options.push({ 
+                label: 'Complete in 2 Years', 
+                amount: twoYearAmount, 
+                description: `£${twoYearAmount.toLocaleString()}/month` 
+            });
+        }
+        
+        // Option 3: Use 50% of surplus
+        const halfSurplus = Math.floor(surplus * 0.5);
+        if (halfSurplus > 0 && !options.some(opt => Math.abs(opt.amount - halfSurplus) < 50)) {
+            const months = Math.ceil(remaining / halfSurplus);
+            options.push({ 
+                label: 'Balanced Approach', 
+                amount: halfSurplus, 
+                description: `£${halfSurplus.toLocaleString()}/month (${months} months)` 
+            });
+        }
+        
+        // Option 4: Aggressive (80% of surplus)
+        const aggressiveAmount = Math.floor(surplus * 0.8);
+        if (aggressiveAmount > halfSurplus && !options.some(opt => Math.abs(opt.amount - aggressiveAmount) < 50)) {
+            const months = Math.ceil(remaining / aggressiveAmount);
+            options.push({ 
+                label: 'Aggressive Plan', 
+                amount: aggressiveAmount, 
+                description: `£${aggressiveAmount.toLocaleString()}/month (${months} months)` 
+            });
+        }
+        
+        buttonsContainer.innerHTML = options.slice(0, 4).map(option => `
+            <button onclick="setCommitmentAmount(${option.amount})" 
+                    class="modern-button modern-button-secondary text-left p-3">
+                <div class="font-medium text-sm">${option.label}</div>
+                <div class="text-xs text-gray-600 dark:text-gray-400">${option.description}</div>
+            </button>
+        `).join('');
+    } else {
+        optionsDiv.classList.add('hidden');
+    }
+}
+
+function updateDebtCalculations() {
+    const slider = document.getElementById('debt-extra-payment-slider');
+    const strategySelect = document.getElementById('debt-strategy');
+    const extraAmountSpan = document.getElementById('debt-extra-amount');
+    const timelineDisplay = document.getElementById('debt-timeline-display');
+    const minPaymentsSpan = document.getElementById('debt-min-payments');
+    const totalPaymentSpan = document.getElementById('debt-total-payment');
+    const timelineMonthsSpan = document.getElementById('debt-timeline-months');
+    
+    if (!slider || !cleanOnboardingData.data.debts || cleanOnboardingData.data.debts.length === 0) return;
+    
+    const extraPayment = parseFloat(slider.value) || 0;
+    const strategy = strategySelect ? strategySelect.value : 'Avalanche (highest interest first)';
+    
+    // Calculate minimum payments
+    const totalMinPayments = cleanOnboardingData.data.debts.reduce((sum, debt) => 
+        sum + Math.max(debt.balance * 0.02, 25), 0);
+    const totalPayment = totalMinPayments + extraPayment;
+    
+    // Update display
+    if (extraAmountSpan) extraAmountSpan.textContent = `£${extraPayment.toLocaleString()}`;
+    if (minPaymentsSpan) minPaymentsSpan.textContent = `£${totalMinPayments.toLocaleString()}`;
+    if (totalPaymentSpan) totalPaymentSpan.textContent = `£${totalPayment.toLocaleString()}`;
+    
+    // Calculate simplified payoff timeline
+    const totalDebt = cleanOnboardingData.data.debts.reduce((sum, debt) => sum + debt.balance, 0);
+    const avgInterest = cleanOnboardingData.data.debts.length > 0 ? 
+        cleanOnboardingData.data.debts.reduce((sum, debt) => sum + debt.interest, 0) / cleanOnboardingData.data.debts.length : 0;
+    
+    // Simplified calculation - actual debt payoff is more complex with interest compounding
+    const monthsToPayoff = totalPayment > 0 ? Math.ceil(totalDebt / totalPayment) : 0;
+    
+    if (timelineMonthsSpan) timelineMonthsSpan.textContent = `${monthsToPayoff} months`;
+    
+    if (timelineDisplay) {
+        timelineDisplay.classList.remove('hidden');
+    }
+    
+    // Save debt strategy to goal details
+    cleanOnboardingData.data.goalDetails = {
+        ...cleanOnboardingData.data.goalDetails,
+        'debt-strategy': strategy,
+        'debt-extra-payment': extraPayment,
+        'debt-total-payment': totalPayment
+    };
+}
+
+function setCommitmentAmount(amount) {
+    const slider = document.getElementById('monthly-commitment-slider');
+    if (slider) {
+        slider.value = amount;
+        updateCommitmentCalculations();
+    }
+}
+
 // 3. ADD missing debt management functions
 function addCleanDebt() {
     const debtList = document.getElementById('clean-debt-list');
@@ -2948,9 +4055,9 @@ function addCleanDebt() {
             <div class="grid grid-cols-2 gap-2">
                 <div class="relative">
                     <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium text-sm">£</span>
-                    <input type="number" placeholder="5,000" class="modern-input pl-8 debt-balance text-sm font-semibold text-center">
+                    <input type="number" placeholder="5,000" class="modern-input pl-8 debt-balance text-sm font-semibold text-center" oninput="updateFinancialPreview()">
                 </div>
-                <input type="number" placeholder="18.9%" step="0.1" class="modern-input debt-interest text-sm font-semibold text-center">
+                <input type="number" placeholder="18.9%" step="0.1" class="modern-input debt-interest text-sm font-semibold text-center" oninput="updateFinancialPreview()">
             </div>
             <button onclick="removeCleanDebt(this)" class="text-red-600 hover:text-red-800 text-xs">Remove</button>
         </div>
@@ -2960,6 +4067,7 @@ function addCleanDebt() {
 
 function removeCleanDebt(button) {
     button.closest('.clean-debt-item').remove();
+    updateFinancialPreview();
 }
 
 function skipCleanDebts() {
@@ -3003,26 +4111,23 @@ function saveCurrentStepData() {
                 break;
                 
             case 3:
-                // Save goal details - collect all inputs in the dynamic content
-                const goalInputs = document.querySelectorAll('#clean-goal-details-content input, #clean-goal-details-content select');
-                goalInputs.forEach(input => {
-                    if (input.value) {
-                        cleanOnboardingData.data.goalDetails[input.id] = input.value;
-                    }
-                });
+                // Step 3: Save complete goal planning (target, current, commitment)
+                const targetInput = document.getElementById('goal-target');
+                const currentInput = document.getElementById('goal-current');
+                const slider = document.getElementById('monthly-commitment-slider');
+                if (targetInput) cleanOnboardingData.data.goalDetails.target = parseFloat(targetInput.value) || 0;
+                if (currentInput) cleanOnboardingData.data.goalDetails.current = parseFloat(currentInput.value) || 0;
+                if (slider) cleanOnboardingData.data.goalDetails.monthlyCommitment = parseFloat(slider.value) || 0;
                 break;
                 
             case 4:
+                // Step 4: Save financial position and debts
+                const savingsInput = document.getElementById('clean-total-savings-input');
+                if (savingsInput) cleanOnboardingData.data.totalSavings = parseFloat(savingsInput.value) || 0;
+                // Use monthly budget as monthly expenses since they're the same thing
+                cleanOnboardingData.data.monthlyExpenses = cleanOnboardingData.data.monthlyBudget;
                 // Save debts - handled by collectCleanDebts function
                 collectCleanDebts();
-                break;
-                
-            case 5:
-                // Save current position
-                const savingsInput = document.getElementById('clean-total-savings-input');
-                const expensesInput = document.getElementById('clean-expenses-input');
-                if (savingsInput) cleanOnboardingData.data.totalSavings = parseFloat(savingsInput.value) || 0;
-                if (expensesInput) cleanOnboardingData.data.monthlyExpenses = parseFloat(expensesInput.value) || 0;
                 break;
         }
     } catch (error) {
@@ -3056,40 +4161,27 @@ function restoreCurrentStepData() {
                 break;
                 
             case 3:
-                // Restore goal details - use a more reliable approach
-                const restoreGoalDetails = () => {
-                    let fieldsRestored = 0;
-                    const totalFields = Object.keys(data.goalDetails).length;
-                    
-                    Object.keys(data.goalDetails).forEach(fieldId => {
-                        const input = document.getElementById(fieldId);
-                        if (input && data.goalDetails[fieldId]) {
-                            input.value = data.goalDetails[fieldId];
-                            fieldsRestored++;
-                        }
-                    });
-                    
-                    // If not all fields were found, try again after a short delay
-                    if (fieldsRestored < totalFields && fieldsRestored === 0) {
-                        setTimeout(restoreGoalDetails, 50);
-                    }
-                };
+                // Step 3: Restore complete goal planning
+                const targetInput = document.getElementById('goal-target');
+                const currentInput = document.getElementById('goal-current');
+                const slider = document.getElementById('monthly-commitment-slider');
                 
-                // Try immediately first, then with delay if needed
-                restoreGoalDetails();
+                if (data.goalDetails) {
+                    if (targetInput && data.goalDetails.target) targetInput.value = data.goalDetails.target;
+                    if (currentInput && data.goalDetails.current) currentInput.value = data.goalDetails.current;
+                    if (slider && data.goalDetails.monthlyCommitment) {
+                        slider.value = data.goalDetails.monthlyCommitment;
+                        // Trigger calculations after restoration
+                        setTimeout(() => updateCommitmentCalculations(), 100);
+                    }
+                }
                 break;
                 
             case 4:
-                // Restore debts
-                restoreDebts();
-                break;
-                
-            case 5:
-                // Restore current position
+                // Step 4: Restore financial position and debts
                 const savingsInput = document.getElementById('clean-total-savings-input');
-                const expensesInput = document.getElementById('clean-expenses-input');
                 if (savingsInput && data.totalSavings) savingsInput.value = data.totalSavings;
-                if (expensesInput && data.monthlyExpenses) expensesInput.value = data.monthlyExpenses;
+                restoreDebts();
                 break;
         }
     } catch (error) {
@@ -3266,6 +4358,47 @@ function generateCleanSummary() {
                             <div class="flex justify-between items-center text-sm gap-2">
                                 <span>Timeline:</span>
                                 <span class="highlight-number font-mono">${months} months</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (data.primaryGoal === 'debt') {
+        // Calculate debt payoff strategy
+        const strategy = data.goalDetails['debt-strategy'] || 'Avalanche (highest interest first)';
+        const totalMinPayments = data.debts.reduce((sum, debt) => sum + Math.max(debt.balance * 0.02, 25), 0);
+        const extraPayment = Math.max(monthlySurplus - 50, 0); // Leave £50 buffer
+        const totalPayment = totalMinPayments + extraPayment;
+        
+        // Calculate payoff timeline (simplified calculation)
+        const avgInterest = data.debts.length > 0 ? 
+            data.debts.reduce((sum, debt) => sum + debt.interest, 0) / data.debts.length : 0;
+        const monthsToPayoff = totalDebt > 0 && totalPayment > 0 ? 
+            Math.ceil(totalDebt / totalPayment) : 0;
+        
+        goalSummary = `
+            <div class="clean-summary-card">
+                <div class="flex gap-2">
+                    <div class="text-lg flex-shrink-0">💳</div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold mb-2">Debt Payoff Plan</h3>
+                        <div class="space-y-1">
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Strategy:</span>
+                                <span class="highlight-number font-mono">${strategy.split(' ')[0]}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Total Monthly Payment:</span>
+                                <span class="highlight-number font-mono">£${totalPayment.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Payoff Timeline:</span>
+                                <span class="highlight-number font-mono">${monthsToPayoff} months</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm gap-2">
+                                <span>Extra Payment:</span>
+                                <span class="highlight-number text-green-600 font-mono">+£${extraPayment.toLocaleString()}/month</span>
                             </div>
                         </div>
                     </div>
@@ -7150,5 +8283,83 @@ function renderMobileExpenseList(expArr) {
 
 // ]]>
 </script>
+
+<!-- Added by ChatGPT 2025-06-22 -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  /* Rename Monthly Commitment to Monthly Contribution */
+  document.querySelectorAll('label').forEach(lbl => {
+    if(/Monthly Commitment/i.test(lbl.textContent)) {
+      lbl.textContent = lbl.textContent.replace(/Commitment/i, 'Contribution');
+    }
+  });
+
+  /* Lock body scroll when confirmation overlay is visible */
+  const overlay = document.getElementById('goal-confirmation-overlay');
+  if (overlay) {
+    const observer = new MutationObserver(() => {
+      if (!overlay.classList.contains('hidden')) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    });
+    observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  /* Micro‑copy for emergency fund inputs */
+  const cleanStep3 = document.getElementById('clean-step-3');
+  if (cleanStep3) {
+    const title = cleanStep3.querySelector('h3');
+    if (title && /Emergency Fund/i.test(title.textContent)) {
+      cleanStep3.querySelectorAll('input[type="number"]').forEach(input => {
+        const note = document.createElement('div');
+        note.className = 'text-xs text-gray-500 mt-1';
+        note.innerText = 'Only enter what’s earmarked specifically for emergencies.';
+        input.parentElement.appendChild(note);
+      });
+    }
+  }
+});
+
+/* APR “I don’t know” helper */
+function toggleAprUnknown(box) {
+  const item = box.closest('.clean-debt-item');
+  if (!item) return;
+  const interestInput = item.querySelector('.debt-interest');
+  if (!interestInput) return;
+  if (box.checked) {
+    interestInput.value = '';
+    interestInput.disabled = true;
+    interestInput.placeholder = 'N/A';
+  } else {
+    interestInput.disabled = false;
+    interestInput.placeholder = '18.9%';
+  }
+}
+
+/* Patch addCleanDebt to append the unknown‑APR checkbox */
+(function() {
+  if (!window.addCleanDebt) return;
+  const originalAddCleanDebt = window.addCleanDebt;
+  window.addCleanDebt = function() {
+    originalAddCleanDebt();
+    const debtList = document.getElementById('clean-debt-list');
+    const item = debtList ? debtList.lastElementChild : null;
+    if (item && !item.querySelector('.apr-unknown')) {
+      const interestInput = item.querySelector('input[type="number"]');
+      if (interestInput) interestInput.classList.add('debt-interest');
+      const wrapper = document.createElement('div');
+      wrapper.className = 'flex items-center mt-1';
+      wrapper.innerHTML = '<input type="checkbox" class="apr-unknown mr-2" onclick="toggleAprUnknown(this)"><span class="text-xs">I don’t know the APR</span>';
+      const grid = item.querySelector('.grid');
+      if (grid) {
+        grid.appendChild(wrapper);
+      }
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
