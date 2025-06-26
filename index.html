@@ -15,7 +15,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     
     <!-- Content Security Policy for PWA -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdn.plaid.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https: http://localhost:8000 http://127.0.0.1:8000; frame-src https://cdn.plaid.com;">
     
     <!-- PWA Icons -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='iconGradient' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233b82f6'/%3E%3Cstop offset='100%25' style='stop-color:%231d4ed8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='0' y='0' width='32' height='32' rx='6' fill='url(%23iconGradient)'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='rgba(255,255,255,0.9)' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='1'/%3E%3Ccircle cx='16' cy='16' r='3' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='1'/%3E%3C/svg%3E">
@@ -29,6 +29,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css">
     <style>
@@ -81,6 +82,7 @@
             box-shadow: var(--shadow-sm);
             transition: background-color 0.3s, border-color 0.3s;
         }
+        
         .stat-card {
             background-color: var(--bg-tertiary);
             border: 1px solid var(--border-color);
@@ -1548,6 +1550,44 @@
                                 </tbody>
                             </table>
                         </div>
+                        
+                        <!-- Expenses Pagination -->
+                        <div id="expenses-pagination" class="flex items-center justify-between pt-6 mt-4 border-t border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span>Show</span>
+                                <select id="expenses-per-page" onchange="changeExpensesPerPage(this.value)" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-sm">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                </select>
+                                <span>entries</span>
+                            </div>
+                            
+                            <div class="flex items-center gap-3">
+                                <span id="expenses-page-info" class="text-sm text-gray-600 dark:text-gray-400"></span>
+                                <div class="flex gap-1">
+                                    <button onclick="goToExpensesPage('first')" id="expenses-first-btn" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" title="First page">
+                                        ⏮
+                                    </button>
+                                    <button onclick="changeExpensesPage('prev')" id="expenses-prev-btn" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Previous
+                                    </button>
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-sm text-gray-500">Page</span>
+                                        <input type="number" id="expenses-page-input" min="1" onchange="goToExpensesPage(this.value)" class="w-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm text-center bg-white dark:bg-gray-800">
+                                        <span id="expenses-total-pages" class="text-sm text-gray-500"></span>
+                                    </div>
+                                    <button onclick="changeExpensesPage('next')" id="expenses-next-btn" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Next
+                                    </button>
+                                    <button onclick="goToExpensesPage('last')" id="expenses-last-btn" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" title="Last page">
+                                        ⏭
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -1631,6 +1671,43 @@
                                 </tbody>
                             </table>
                         </div>
+                        
+                        <!-- Recurring Pagination -->
+                        <div id="recurring-pagination" class="flex items-center justify-between pt-6 mt-4 border-t border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span>Show</span>
+                                <select id="recurring-per-page" onchange="changeRecurringPerPage(this.value)" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-sm">
+                                    <option value="10">10</option>
+                                    <option value="15" selected>15</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                </select>
+                                <span>entries</span>
+                            </div>
+                            
+                            <div class="flex items-center gap-3">
+                                <span id="recurring-page-info" class="text-sm text-gray-600 dark:text-gray-400"></span>
+                                <div class="flex gap-1">
+                                    <button onclick="goToRecurringPage('first')" id="recurring-first-btn" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" title="First page">
+                                        ⏮
+                                    </button>
+                                    <button onclick="changeRecurringPage('prev')" id="recurring-prev-btn" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Previous
+                                    </button>
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-sm text-gray-500">Page</span>
+                                        <input type="number" id="recurring-page-input" min="1" onchange="goToRecurringPage(this.value)" class="w-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm text-center bg-white dark:bg-gray-800">
+                                        <span id="recurring-total-pages" class="text-sm text-gray-500"></span>
+                                    </div>
+                                    <button onclick="changeRecurringPage('next')" id="recurring-next-btn" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Next
+                                    </button>
+                                    <button onclick="goToRecurringPage('last')" id="recurring-last-btn" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" title="Last page">
+                                        ⏭
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1638,22 +1715,20 @@
                 <!-- Replace your insights tab HTML with this better layout -->
 <div id="insights-tab" class="tab-content hidden fade-in">
     <!-- Priority Content First -->
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
-        <!-- Smart Recommendations (Most Important) -->
-        <div class="xl:col-span-2">
-            <div class="card p-6">
-                <h2 class="ai-section-title">
-                    <span class="text-xl">💡</span>
-                    <span>Smart Recommendations</span>
-                    <span id="action-count" class="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full hidden"></span>
-                </h2>
-                <div id="smart-recommendations" class="space-y-3">
-                    <!-- JS-rendered content -->
-                </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Smart Recommendations -->
+        <div class="card p-6">
+            <h2 class="ai-section-title">
+                <span class="text-xl">💡</span>
+                <span>Smart Recommendations</span>
+                <span id="action-count" class="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full hidden"></span>
+            </h2>
+            <div id="smart-recommendations" class="space-y-3">
+                <!-- JS-rendered content -->
             </div>
         </div>
         
-        <!-- Month-End Projection (Quick Overview) -->
+        <!-- Your Goals -->
         <div class="card p-6">
             <h2 class="ai-section-title">
                 <span class="text-xl">🎯</span>
@@ -1666,7 +1741,7 @@
     </div>
 
     <!-- Secondary Content -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div class="grid grid-cols-1 gap-6 mb-6">
         <!-- Your Monthly Story (Combined with metrics) -->
         <div class="card p-6">
             <h2 class="ai-section-title">
@@ -1854,6 +1929,14 @@
                         <span>Import Data (JSON)</span>
                         <input type="file" accept=".json" onchange="importData(event)" class="hidden">
                     </label>
+                    <button onclick="connectBankAccount()" class="modern-button modern-button-secondary w-full justify-start" id="connect-bank-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                        <span>Connect Bank Account</span>
+                    </button>
+                    <button onclick="importBankTransactions()" class="modern-button modern-button-secondary w-full justify-start" id="import-transactions-btn" style="display: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                        <span>Import Bank Transactions</span>
+                    </button>
                      <button onclick="openHelpModal()" class="modern-button modern-button-secondary w-full justify-start">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         <span>Help & Documentation</span>
@@ -2055,35 +2138,97 @@
                             </div>
                             <div>
                                 <h4 class="font-semibold text-md mb-2">📊 Insights</h4>
-                                <p class="mb-2">This tab uses AI to analyze your spending and provide deeper insights into your financial habits.</p>
+                                <p class="mb-2">Advanced AI-powered analysis of your spending with banking integration and optimization recommendations.</p>
                                 <ul class="list-disc ml-5 space-y-1">
-                                    <li><strong>7-Day Forecast:</strong> Shows you any recurring expenses that are due in the next week.</li>
-                                    <li><strong>Month-End Projection:</strong> Forecasts your total spending and savings by the end of the current month.</li>
-                                    <li><strong>Smart Recommendations:</strong> Provides actionable tips based on your spending patterns, like reviewing subscriptions or high non-essential spending.</li>
-                                    <li><strong>Your Monthly Story:</strong> A narrative summary of your financial activity for the month, highlighting key metrics.</li>
-                                    <li><strong>Charts:</strong> Visualize your month-over-month spending and savings trends.</li>
+                                    <li><strong>Points Optimization:</strong> Identifies missed credit card rewards opportunities from your imported transactions. Shows potential annual value and recommends optimal cards for different spending categories.</li>
+                                    <li><strong>Goal Impact Analysis:</strong> Real-time calculations showing how your spending affects goal completion timelines. Compares current trajectory vs optimized scenarios.</li>
+                                    <li><strong>Smart Recommendations:</strong> Actionable tips based on spending patterns, including points optimization, subscription reviews, and budget adjustments.</li>
+                                    <li><strong>7-Day Forecast:</strong> Upcoming recurring expenses and their impact on your budget and goals.</li>
+                                    <li><strong>Month-End Projection:</strong> Forecasts total spending, savings, and goal progress by month-end.</li>
+                                    <li><strong>Your Monthly Story:</strong> Narrative summary highlighting key financial metrics and achievements.</li>
                                 </ul>
                             </div>
                         </div>
                     </section>
                     <section>
-                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">🎯 Goals & Savings Management</h3>
+                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">🎯 Goals & Real-time Impact Analysis</h3>
                         <ul class="list-disc ml-5 space-y-2">
                             <li><strong>Goal Types:</strong> Choose from 6 goal templates: House Deposit, Emergency Fund, Dream Vacation, Investment Fund, Debt Payoff, or create Custom goals with your own targets.</li>
-                            <li><strong>Savings Allocation:</strong> Set your total savings amount and allocate portions to specific goals. Track allocated vs unallocated amounts using the YNAB-style "give every dollar a job" approach.</li>
-                            <li><strong>Progress Tracking:</strong> Monitor progress with visual progress bars, percentage completion, and remaining amounts needed for each goal.</li>
-                            <li><strong>Timeline Management:</strong> Set target completion dates and see recommended monthly commitments to reach your goals on time.</li>
-                            <li><strong>Financial Health Impact:</strong> Goals contribute to your overall financial health score. Having emergency funds and debt payoff goals improves your score.</li>
-                            <li><strong>Goal Editing:</strong> Easily adjust target amounts, current progress, timelines, and allocations. Add new goals or remove completed ones as your priorities change.</li>
-                            <li><strong>Dashboard Integration:</strong> View goal progress cards on your main dashboard with quick access to detailed editing and management tools.</li>
+                            <li><strong>Real-time Timeline Calculations:</strong> See how your current spending patterns affect goal completion dates. Uses smart algorithms to estimate realistic monthly savings capacity.</li>
+                            <li><strong>Optimization Impact Display:</strong> Compare "Current Timeline" vs "With Optimization" to see how points optimization and spending changes can accelerate your goals.</li>
+                            <li><strong>Smart Savings Estimation:</strong> Goal-specific calculations account for debt payment capacity (20% of available income) and realistic savings rates based on your financial situation.</li>
+                            <li><strong>Progress Acceleration Metrics:</strong> See exactly how many days/months faster you can reach goals through optimization strategies.</li>
+                            <li><strong>Savings Allocation:</strong> YNAB-style "give every dollar a job" approach with live allocation tracking and unallocated amount calculations.</li>
+                            <li><strong>Dynamic Progress Tracking:</strong> Visual progress bars, percentage completion, and real-time updates when transactions are imported or goals are modified.</li>
+                            <li><strong>Enhanced Dashboard Integration:</strong> Goal cards show current timeline, optimization potential, and actionable acceleration tips.</li>
                         </ul>
                     </section>
                     <section>
-                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">⚙️ Settings & Data</h3>
+                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">🏦 Banking Integration & Transaction Import</h3>
+                        <ul class="list-disc ml-5 space-y-2">
+                            <li><strong>Connect Bank Accounts:</strong> Use Plaid integration to securely connect your bank accounts. Click "Connect Bank Account" in Settings to start the secure authentication process.</li>
+                            <li><strong>Automatic Transaction Import:</strong> Import up to 30 days of recent transactions with automatic categorization based on merchant names and spending patterns.</li>
+                            <li><strong>Duplicate Prevention:</strong> Smart deduplication ensures imported transactions don't conflict with manually entered expenses.</li>
+                            <li><strong>Points Optimization Analysis:</strong> Imported transactions are automatically analyzed for credit card rewards optimization opportunities.</li>
+                            <li><strong>Real-time Goal Impact:</strong> New transactions immediately update goal timeline calculations and optimization recommendations.</li>
+                            <li><strong>Security:</strong> Bank connections use Plaid's bank-grade security. No banking credentials are stored in the app - only secure access tokens are used.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">💳 Points Optimization Calculations</h3>
+                        <div class="space-y-3">
+                            <p><strong>Credit Card Rewards Database:</strong></p>
+                            <ul class="list-disc ml-5 space-y-1 text-xs">
+                                <li>Amex Gold: 4x points on Food & Drink, 1x on other categories</li>
+                                <li>Amex Green: 3x points on Transport, 1x on other categories</li>
+                                <li>Virgin Red: 3x points on Shopping, 2x on Transport, 1x on others</li>
+                            </ul>
+                            <p><strong>Point Value Estimates (Conservative):</strong></p>
+                            <ul class="list-disc ml-5 space-y-1 text-xs">
+                                <li>Amex Points: £0.005 per point</li>
+                                <li>Virgin Points: £0.01 per point</li>
+                                <li>ANA Miles: £0.012 per mile</li>
+                            </ul>
+                            <p><strong>Optimization Formula:</strong></p>
+                            <div class="bg-gray-100 dark:bg-gray-800 p-3 rounded text-xs font-mono">
+                                potentialValue = transactionAmount × pointRate × pointValue<br>
+                                annualSavings = monthlyMissedValue × 12<br>
+                                Example: £100 at Tesco with Amex Gold = £100 × 4 × 0.005 = £2.00
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">📈 Goal Timeline Calculations</h3>
+                        <div class="space-y-3">
+                            <p><strong>Debt Payoff Goals:</strong></p>
+                            <div class="bg-gray-100 dark:bg-gray-800 p-3 rounded text-xs font-mono">
+                                availableIncome = max(0, monthlyIncome - monthlyBudget)<br>
+                                paymentCapacity = availableIncome × 0.2  // 20% allocation<br>
+                                monthlyPayment = max(£50, paymentCapacity)<br>
+                                monthsToCompletion = remainingDebt ÷ monthlyPayment
+                            </div>
+                            <p><strong>Savings Goals (House, Emergency, etc.):</strong></p>
+                            <div class="bg-gray-100 dark:bg-gray-800 p-3 rounded text-xs font-mono">
+                                surplus = max(0, monthlyIncome - monthlySpending)<br>
+                                monthlySavings = max(£50, min(surplus × 0.5, monthlyIncome × 0.1))<br>
+                                monthsToGoal = remainingAmount ÷ monthlySavings
+                            </div>
+                            <p><strong>Optimization Impact:</strong></p>
+                            <div class="bg-gray-100 dark:bg-gray-800 p-3 rounded text-xs font-mono">
+                                optimizedSavings = baseSavings + monthlyPointsValue<br>
+                                optimizedTimeline = remainingAmount ÷ optimizedSavings<br>
+                                timeSaved = originalTimeline - optimizedTimeline
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">⚙️ Settings & Data Management</h3>
                          <ul class="list-disc ml-5 space-y-2">
+                            <li><strong>Banking Setup:</strong> Connect bank accounts via Plaid for automatic transaction import. Backend server handles secure token exchange.</li>
                             <li><strong>Currency & Theme:</strong> Change your display currency and switch between light and dark modes.</li>
-                            <li><strong>Data Management:</strong> Use the "Export Data" button to save a JSON backup of all your information. You can restore from a backup using the "Import Data" button.</li>
-                            <li><strong>Privacy:</strong> All your data is stored <strong>only in your browser's local storage</strong>. It is never sent to a server. This means your information is completely private, but it also means clearing your browser data will erase your expense records. Please export your data regularly as a backup.</li>
+                            <li><strong>Data Management:</strong> Export complete financial data as JSON backup. Import data to restore previous state.</li>
+                            <li><strong>Privacy:</strong> All personal data stored <strong>only in browser localStorage</strong>. Banking integration uses secure tokens without storing credentials. Clear browser data will erase records - export regularly.</li>
+                            <li><strong>Backend Integration:</strong> Banking features require the backend server (Node.js/Express) running on localhost:8000 with proper Plaid API credentials.</li>
                         </ul>
                     </section>
                 </div>
@@ -2302,6 +2447,12 @@
         let totalSavings = 0;
         let totalDebt = 0;
         let healthScoreHistory = {};
+        
+        // Pagination variables (global scope)
+        window.expensesCurrentPage = 1;
+        window.expensesItemsPerPage = 5; // Start with 5 to test pagination
+        window.recurringCurrentPage = 1;
+        window.recurringItemsPerPage = 15;
         let currencyConfig = {
             'AUD': { symbol: 'A$', locale: 'en-AU' },
             'CAD': { symbol: 'C$', locale: 'en-CA' },
@@ -2441,7 +2592,6 @@ let goalTemplates = {
             recentExpensesContainer: document.getElementById('recent-expenses'),
             expensesTableBody: document.getElementById('expenses-table'),
             recurringTableBody: document.getElementById('recurring-table'),
-            settingsMenu: document.getElementById('settings-menu'),
             themeToggle: document.getElementById('theme-toggle'),
             currencySelect: document.getElementById('currency-select'),
             toast: document.getElementById('toast'),
@@ -2728,6 +2878,71 @@ function validateCleanStep() {
             
         case 3:
             // Step 3: Complete Goal Planning validation
+            // Special handling for debt goals
+            if (data.primaryGoal === 'debt') {
+                console.log('=== DEBT VALIDATION START ===');
+                console.log('Current data.debts before collection:', data.debts);
+                
+                // Collect debt data from the form before validation
+                const debtItems = document.querySelectorAll('.debt-entry-item');
+                console.log('Found debt items:', debtItems.length);
+                
+                const debts = [];
+                
+                debtItems.forEach((item, index) => {
+                    const name = item.querySelector('.debt-name').value || '';
+                    const balance = parseFloat(item.querySelector('.debt-balance').value) || 0;
+                    const interest = parseFloat(item.querySelector('.debt-interest').value) || 0;
+                    
+                    console.log(`Debt item ${index + 1}:`, { name, balance, interest });
+                    
+                    if (balance > 0) {
+                        debts.push({ name: name || 'Debt', balance, interest });
+                    }
+                });
+                
+                console.log('Collected debts from form:', debts);
+                
+                // Update the data object with collected debts
+                data.debts = debts;
+                console.log('Updated data.debts:', data.debts);
+                
+                // Validate that at least one debt is entered
+                if (!debts || debts.length === 0) {
+                    console.error('VALIDATION FAILED: No debts found');
+                    showToast('Please add at least one debt to continue', 'error');
+                    return false;
+                }
+                
+                // Validate strategy is selected
+                const strategy = document.getElementById('debt-strategy')?.value;
+                console.log('Selected strategy:', strategy);
+                if (!strategy) {
+                    console.error('VALIDATION FAILED: No strategy selected');
+                    showToast('Please select a payoff strategy from the dropdown', 'error');
+                    return false;
+                }
+                
+                // Save debt-specific data
+                data.goalDetails['debt-strategy'] = strategy;
+                const extraPayment = parseFloat(document.getElementById('debt-extra-payment-slider')?.value) || 0;
+                data.goalDetails['debt-extra-payment'] = extraPayment;
+                const totalDebt = debts.reduce((sum, debt) => sum + debt.balance, 0);
+                data.goalDetails.target = totalDebt;
+                data.goalDetails.current = 0; // Start with 0 paid off
+                data.goalDetails.monthlyCommitment = extraPayment;
+                
+                console.log('DEBT VALIDATION PASSED:', {
+                    debts: debts,
+                    strategy: strategy,
+                    extraPayment: extraPayment,
+                    totalDebt: totalDebt
+                });
+                console.log('=== DEBT VALIDATION END ===');
+                return true;
+            }
+            
+            // Regular goal validation
             const targetInput = document.getElementById('goal-target');
             const slider = document.getElementById('monthly-commitment-slider');
             
@@ -2863,18 +3078,33 @@ function finishCleanOnboarding() {
     }
     
     if (data.primaryGoal === 'debt') {
+        console.log('Creating debt goal with data.debts:', data.debts);
+        const totalDebt = (data.debts || []).reduce((sum, debt) => sum + debt.balance, 0);
+        console.log('Calculated totalDebt:', totalDebt);
+        
+        if (totalDebt === 0) {
+            console.error('ERROR: Total debt is 0! data.debts:', data.debts);
+            showToast('Error: No debt data found. Please go back and add your debts.', 'error');
+            return;
+        }
+        
         userGoals.push({
             id: Date.now() + 4,
             type: 'debt_payoff',
             name: 'Debt Payoff',
-            target: data.goalDetails['debt-total'] || 0,
-            currentProgress: data.goalDetails['debt-paid'] || 0,
+            target: totalDebt, // Use calculated total debt
+            currentProgress: 0, // Start with 0 paid off
             unit: 'currency',
-            timeline: data.goalDetails['debt-timeline'],
+            timeline: data.goalDetails['debt-timeline'] || '',
             status: 'active',
             priority: 'primary',
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            // Add debt-specific properties
+            strategy: data.goalDetails['debt-strategy'] || '',
+            extraPayment: data.goalDetails['debt-extra-payment'] || 0,
+            debts: data.debts || []
         });
+        console.log('Created debt goal:', userGoals[userGoals.length - 1]);
     }
     
     if (data.primaryGoal === 'custom') {
@@ -3159,12 +3389,20 @@ function prepareGoalCommitment() {
             
             <div class="space-y-6">
                 <div>
-                    <label class="block text-sm font-medium mb-3">Payoff Strategy</label>
-                    <select id="debt-strategy" class="modern-input" onchange="updateDebtCalculations()">
-                        <option value="Avalanche (highest interest first)">Avalanche - Pay highest interest first</option>
-                        <option value="Snowball (smallest balance first)">Snowball - Pay smallest balance first</option>
-                        <option value="Equal payments">Equal Payments - Split evenly</option>
-                    </select>
+                    <label class="block text-sm font-medium mb-3">Payoff Strategy <span class="text-gray-500">(Required - Select from dropdown)</span></label>
+                    <div class="relative">
+                        <select id="debt-strategy" class="modern-input appearance-none pr-10 cursor-pointer" onchange="updateDebtCalculations()">
+                            <option value="">🔽 Choose your payoff strategy...</option>
+                            <option value="Avalanche (highest interest first)">🏔️ Avalanche - Pay highest interest first</option>
+                            <option value="Snowball (smallest balance first)">⛄ Snowball - Pay smallest balance first</option>
+                            <option value="Equal payments">⚖️ Equal Payments - Split evenly</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
                     <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">Choose the strategy that motivates you most</div>
                 </div>
                 
@@ -3187,20 +3425,20 @@ function prepareGoalCommitment() {
                     </div>
                 </div>
                 
-                <div id="debt-timeline-display" class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 hidden">
-                    <h4 class="font-medium mb-3">Payoff Timeline</h4>
+                <div id="debt-timeline-display" class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800 hidden">
+                    <h4 class="font-medium mb-3 text-blue-700 dark:text-blue-300">Payoff Timeline</h4>
                     <div class="space-y-2">
-                        <div class="flex justify-between text-sm">
+                        <div class="flex justify-between text-sm text-gray-700 dark:text-gray-300">
                             <span>Minimum Payments:</span>
-                            <span id="debt-min-payments" class="font-mono">£0</span>
+                            <span id="debt-min-payments" class="font-mono text-blue-600 dark:text-blue-400">£0</span>
                         </div>
-                        <div class="flex justify-between text-sm">
+                        <div class="flex justify-between text-sm text-gray-700 dark:text-gray-300">
                             <span>Total Monthly Payment:</span>
-                            <span id="debt-total-payment" class="font-mono">£0</span>
+                            <span id="debt-total-payment" class="font-mono text-blue-600 dark:text-blue-400">£0</span>
                         </div>
-                        <div class="flex justify-between text-sm">
+                        <div class="flex justify-between text-sm text-gray-700 dark:text-gray-300">
                             <span>Debt-Free Timeline:</span>
-                            <span id="debt-timeline-months" class="font-mono">0 months</span>
+                            <span id="debt-timeline-months" class="font-mono text-green-600 dark:text-green-400">0 months</span>
                         </div>
                     </div>
                 </div>
@@ -3336,30 +3574,45 @@ function prepareCompleteGoalPlanning() {
     
     // Special handling for debt payoff goals
     if (goal === 'debt') {
-        const totalDebt = data.debts.reduce((sum, debt) => sum + debt.balance, 0);
+        const totalDebt = (data.debts || []).reduce((sum, debt) => sum + debt.balance, 0);
         container.innerHTML = `
             <div class="text-center mb-6">
                 <div class="text-4xl mb-3">💳</div>
                 <h2 class="text-xl font-semibold mb-2">Debt Payoff Plan</h2>
-                <p class="text-gray-600 dark:text-gray-400">Eliminate your debt strategically</p>
+                <p class="text-gray-600 dark:text-gray-400">Add your debts and choose your payoff strategy</p>
             </div>
             
-            <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 mb-6">
+            <!-- Debt Entry Section -->
+            <div class="card p-4 mb-6">
+                <h3 class="font-medium mb-4">Your Debts</h3>
+                <div id="debt-entry-list" class="space-y-3 mb-4"></div>
+                <button onclick="addDebtEntry()" class="modern-button modern-button-secondary w-full">+ Add Debt</button>
+            </div>
+            
+            <div id="debt-summary-section" class="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 mb-6 ${totalDebt === 0 ? 'hidden' : ''}">
                 <div class="text-center">
                     <div class="text-sm text-red-600 dark:text-red-400 font-medium">Total Debt to Pay Off</div>
-                    <div class="text-2xl font-bold text-red-700 dark:text-red-300">£${totalDebt.toLocaleString()}</div>
-                    <div class="text-xs text-red-500 dark:text-red-400">From ${data.debts.length} debt(s) you entered</div>
+                    <div class="text-2xl font-bold text-red-700 dark:text-red-300" id="total-debt-display">£${totalDebt.toLocaleString()}</div>
+                    <div class="text-xs text-red-500 dark:text-red-400" id="debt-count-display">From ${(data.debts || []).length} debt(s) you entered</div>
                 </div>
             </div>
             
             <div class="space-y-6">
                 <div>
-                    <label class="block text-sm font-medium mb-3">Payoff Strategy</label>
-                    <select id="debt-strategy" class="modern-input" onchange="updateDebtCalculations()">
-                        <option value="Avalanche (highest interest first)">Avalanche - Pay highest interest first</option>
-                        <option value="Snowball (smallest balance first)">Snowball - Pay smallest balance first</option>
-                        <option value="Equal payments">Equal Payments - Split evenly</option>
-                    </select>
+                    <label class="block text-sm font-medium mb-3">Payoff Strategy <span class="text-gray-500">(Required - Select from dropdown)</span></label>
+                    <div class="relative">
+                        <select id="debt-strategy" class="modern-input appearance-none pr-10 cursor-pointer" onchange="updateDebtCalculations()">
+                            <option value="">🔽 Choose your payoff strategy...</option>
+                            <option value="Avalanche (highest interest first)">🏔️ Avalanche - Pay highest interest first</option>
+                            <option value="Snowball (smallest balance first)">⛄ Snowball - Pay smallest balance first</option>
+                            <option value="Equal payments">⚖️ Equal Payments - Split evenly</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
                     <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">Choose the strategy that motivates you most</div>
                 </div>
                 
@@ -3382,28 +3635,47 @@ function prepareCompleteGoalPlanning() {
                     </div>
                 </div>
                 
-                <div id="debt-timeline-display" class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 hidden">
-                    <h4 class="font-medium mb-3">Payoff Timeline</h4>
+                <div id="debt-timeline-display" class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800 hidden">
+                    <h4 class="font-medium mb-3 text-blue-700 dark:text-blue-300">Payoff Timeline</h4>
                     <div class="space-y-2">
-                        <div class="flex justify-between text-sm">
+                        <div class="flex justify-between text-sm text-gray-700 dark:text-gray-300">
                             <span>Minimum Payments:</span>
-                            <span id="debt-min-payments" class="font-mono">£0</span>
+                            <span id="debt-min-payments" class="font-mono text-blue-600 dark:text-blue-400">£0</span>
                         </div>
-                        <div class="flex justify-between text-sm">
+                        <div class="flex justify-between text-sm text-gray-700 dark:text-gray-300">
                             <span>Total Monthly Payment:</span>
-                            <span id="debt-total-payment" class="font-mono">£0</span>
+                            <span id="debt-total-payment" class="font-mono text-blue-600 dark:text-blue-400">£0</span>
                         </div>
-                        <div class="flex justify-between text-sm">
+                        <div class="flex justify-between text-sm text-gray-700 dark:text-gray-300">
                             <span>Debt-Free Timeline:</span>
-                            <span id="debt-timeline-months" class="font-mono">0 months</span>
+                            <span id="debt-timeline-months" class="font-mono text-green-600 dark:text-green-400">0 months</span>
                         </div>
                     </div>
                 </div>
             </div>
         `;
         
-        // Initialize debt calculations
-        updateDebtCalculations();
+        // Initialize debt calculations and restore existing debts
+        setTimeout(() => {
+            const debtList = document.getElementById('debt-entry-list');
+            if (debtList && data.debts && data.debts.length > 0) {
+                // Restore existing debts
+                data.debts.forEach(debt => {
+                    addDebtEntry();
+                    const lastItem = debtList.lastElementChild;
+                    if (lastItem) {
+                        lastItem.querySelector('.debt-name').value = debt.name || '';
+                        lastItem.querySelector('.debt-balance').value = debt.balance || '';
+                        lastItem.querySelector('.debt-interest').value = debt.interest || '';
+                    }
+                });
+                updateDebtSummary();
+            } else if (debtList && debtList.children.length === 0) {
+                // Auto-add first debt entry if none exist
+                addDebtEntry();
+            }
+            updateDebtCalculations();
+        }, 100);
         return;
     }
     
@@ -3689,46 +3961,92 @@ function prepareGoalDetails() {
     `;
 }
 
-// Step 4: Financial Position & Debt (COMBINED)
+// Step 4: Financial Position & Debt (CONTEXT-AWARE)
 function prepareFinancialPosition() {
     const container = document.getElementById('clean-financial-position-content');
     const data = cleanOnboardingData.data;
+    const isDebtGoal = data.primaryGoal === 'debt';
     
-    container.innerHTML = `
-        <div class="text-center mb-6">
-            <div class="text-4xl mb-3">💰</div>
-            <h2 class="text-xl font-semibold mb-2">Your Financial Position</h2>
-            <p class="text-gray-600 dark:text-gray-400">Tell us about your current savings and any debts</p>
-        </div>
-        
-        <div class="space-y-6">
-            <!-- Current Savings Section -->
-            <div class="card p-4">
-                <h3 class="font-medium mb-4">Current Savings</h3>
-                <div>
-                    <label class="block text-sm font-medium mb-2">Total Savings</label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
-                        <input type="number" id="clean-total-savings-input" placeholder="2,500" class="modern-input pl-6 pr-4 font-semibold">
-                    </div>
-                    <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">
-                        Total money you have saved across all accounts (your goal allocations will be portions of this total)
-                    </div>
-                </div>
+    if (isDebtGoal) {
+        // Simplified view for debt goals - only savings needed
+        container.innerHTML = `
+            <div class="text-center mb-6">
+                <div class="text-4xl mb-3">💰</div>
+                <h2 class="text-xl font-semibold mb-2">Your Current Savings</h2>
+                <p class="text-gray-600 dark:text-gray-400">How much do you have saved across all accounts?</p>
             </div>
             
-            <!-- Debt Section -->
-            <div class="card p-4">
-                <h3 class="font-medium mb-4">Current Debts (Optional)</h3>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Add any debts to get better goal recommendations and progress tracking</p>
+            <div class="space-y-6">
+                <!-- Current Savings Section -->
+                <div class="card p-4">
+                    <h3 class="font-medium mb-4">Total Savings</h3>
+                    <div>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
+                            <input type="number" id="clean-total-savings-input" placeholder="2,500" class="modern-input pl-6 pr-4 font-semibold">
+                        </div>
+                        <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                            Total money you have saved across all accounts (used to calculate your net worth after debt payoff)
+                        </div>
+                    </div>
+                </div>
                 
-                <div id="clean-debt-list" class="space-y-3 mb-4"></div>
-                
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="addCleanDebt()" class="modern-button modern-button-secondary w-full">+ Add Debt</button>
-                    <button onclick="skipCleanDebts()" class="modern-button modern-button-outline w-full">No Debts</button>
+                <!-- Debt Summary (Read-only) -->
+                <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-4">
+                    <h4 class="font-medium mb-3 text-red-700 dark:text-red-300">Your Debt Summary</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span>Total Debt:</span>
+                            <span class="font-mono text-red-600 dark:text-red-400">£${(data.debts || []).reduce((sum, debt) => sum + debt.balance, 0).toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Number of Debts:</span>
+                            <span class="font-mono">${(data.debts || []).length}</span>
+                        </div>
+                    </div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                        ✓ Debts already configured in previous step
+                    </div>
                 </div>
             </div>
+        `;
+    } else {
+        // Full view for other goals - savings + optional debts
+        container.innerHTML = `
+            <div class="text-center mb-6">
+                <div class="text-4xl mb-3">💰</div>
+                <h2 class="text-xl font-semibold mb-2">Your Financial Position</h2>
+                <p class="text-gray-600 dark:text-gray-400">Tell us about your current savings and any debts</p>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Current Savings Section -->
+                <div class="card p-4">
+                    <h3 class="font-medium mb-4">Current Savings</h3>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Total Savings</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
+                            <input type="number" id="clean-total-savings-input" placeholder="2,500" class="modern-input pl-6 pr-4 font-semibold">
+                        </div>
+                        <div class="text-xs text-gray-700 dark:text-gray-300 mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                            Total money you have saved across all accounts (your goal allocations will be portions of this total)
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Debt Section -->
+                <div class="card p-4">
+                    <h3 class="font-medium mb-4">Current Debts (Optional)</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Add any debts to get better goal recommendations and progress tracking</p>
+                    
+                    <div id="clean-debt-list" class="space-y-3 mb-4"></div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="addCleanDebt()" class="modern-button modern-button-secondary w-full">+ Add Debt</button>
+                        <button onclick="skipCleanDebts()" class="modern-button modern-button-outline w-full">No Debts</button>
+                    </div>
+                </div>
             
             <!-- Impact Preview -->
             <div id="financial-impact-preview" class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 hidden">
@@ -3754,16 +4072,14 @@ function prepareFinancialPosition() {
             </div>
         </div>
     `;
-    
-    // Add event listener to savings input to update preview
-    const savingsInput = document.getElementById('clean-total-savings-input');
-    if (savingsInput) {
-        savingsInput.addEventListener('input', updateFinancialPreview);
     }
     
-    // Note: Debt restoration is handled by restoreCurrentStepData() to avoid conflicts
-    // Just initialize the financial preview
+    // Add event listener to savings input to update preview (works for both debt and non-debt goals)
     setTimeout(() => {
+        const savingsInput = document.getElementById('clean-total-savings-input');
+        if (savingsInput) {
+            savingsInput.addEventListener('input', updateFinancialPreview);
+        }
         updateFinancialPreview();
     }, 100);
 }
@@ -3952,12 +4268,9 @@ function prepareGoalActivation() {
             </div>
         </div>
 
-        <!-- Activation Button -->
+        <!-- Ready to activate -->
         <div class="text-center">
-            <button onclick="activateGoalSafely()" class="modern-button modern-button-primary px-8 py-3 text-lg font-semibold">
-                🚀 Activate My Goal
-            </button>
-            <div class="text-xs text-gray-600 dark:text-gray-400 mt-2">This will complete your onboarding and set up your account</div>
+            <div class="text-gray-600 dark:text-gray-400">Click "Activate My Goal" below to complete setup</div>
         </div>
     `;
 
@@ -4356,6 +4669,91 @@ function addCleanDebt() {
     debtList.appendChild(debtItem);
 }
 
+// New function for debt entry in goal planning (Step 3)
+function addDebtEntry() {
+    const debtList = document.getElementById('debt-entry-list');
+    if (!debtList) return;
+    
+    const debtItem = document.createElement('div');
+    debtItem.className = 'debt-entry-item border border-gray-200 dark:border-gray-600 rounded-lg p-4';
+    debtItem.innerHTML = `
+        <div class="space-y-3">
+            <input type="text" placeholder="Debt name (e.g., Credit Card)" class="modern-input debt-name text-sm font-medium">
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Balance</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium text-sm">£</span>
+                        <input type="number" placeholder="5,000" class="modern-input pl-8 debt-balance text-sm font-semibold" oninput="updateDebtSummary()">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Interest Rate (%)</label>
+                    <input type="number" placeholder="18.9" step="0.1" class="modern-input debt-interest text-sm font-semibold" oninput="updateDebtSummary()">
+                </div>
+            </div>
+            <button onclick="removeDebtEntry(this)" class="text-red-600 hover:text-red-800 text-xs">Remove</button>
+        </div>
+    `;
+    debtList.appendChild(debtItem);
+    
+    // Auto-add first debt entry if this is the first one
+    if (debtList.children.length === 1) {
+        updateDebtSummary();
+    }
+}
+
+function removeDebtEntry(button) {
+    button.closest('.debt-entry-item').remove();
+    updateDebtSummary();
+}
+
+function updateDebtSummary() {
+    const debtItems = document.querySelectorAll('.debt-entry-item');
+    let totalDebt = 0;
+    const debts = [];
+    
+    console.log('updateDebtSummary called, found', debtItems.length, 'debt items');
+    
+    debtItems.forEach((item, index) => {
+        const name = item.querySelector('.debt-name').value || '';
+        const balance = parseFloat(item.querySelector('.debt-balance').value) || 0;
+        const interest = parseFloat(item.querySelector('.debt-interest').value) || 0;
+        
+        console.log(`Debt ${index + 1}:`, { name, balance, interest });
+        
+        if (balance > 0) {
+            totalDebt += balance;
+            debts.push({ name: name || 'Debt', balance, interest });
+        }
+    });
+    
+    console.log('Total debts collected:', debts);
+    console.log('Total debt amount:', totalDebt);
+    
+    // Update cleanOnboardingData
+    cleanOnboardingData.data.debts = debts;
+    console.log('Updated cleanOnboardingData.data.debts:', cleanOnboardingData.data.debts);
+    
+    // Update UI
+    const summarySection = document.getElementById('debt-summary-section');
+    const totalDisplay = document.getElementById('total-debt-display');
+    const countDisplay = document.getElementById('debt-count-display');
+    
+    if (summarySection && totalDisplay && countDisplay) {
+        if (totalDebt > 0) {
+            summarySection.classList.remove('hidden');
+            totalDisplay.textContent = `£${totalDebt.toLocaleString()}`;
+            countDisplay.textContent = `From ${debts.length} debt(s) you entered`;
+        } else {
+            summarySection.classList.add('hidden');
+        }
+    }
+    
+    // Update debt calculations if elements exist
+    updateDebtCalculations();
+}
+
 function removeCleanDebt(button) {
     button.closest('.clean-debt-item').remove();
     updateFinancialPreview();
@@ -4466,6 +4864,35 @@ function saveCurrentStepData() {
                     cleanOnboardingData.data.goalDetails['custom-target'] = targetValue;
                     cleanOnboardingData.data.goalDetails['custom-current'] = currentValue;
                     cleanOnboardingData.data.goalDetails['custom-commitment'] = commitmentValue;
+                } else if (goal === 'debt') {
+                    // For debt goals, collect debt data from Step 3 form
+                    const debtItems = document.querySelectorAll('.debt-entry-item');
+                    const debts = [];
+                    
+                    debtItems.forEach(item => {
+                        const name = item.querySelector('.debt-name').value || '';
+                        const balance = parseFloat(item.querySelector('.debt-balance').value) || 0;
+                        const interest = parseFloat(item.querySelector('.debt-interest').value) || 0;
+                        
+                        if (balance > 0) {
+                            debts.push({ name: name || 'Debt', balance, interest });
+                        }
+                    });
+                    
+                    cleanOnboardingData.data.debts = debts;
+                    console.log('Saved debts in case 3:', debts);
+                    
+                    // Save strategy and extra payment
+                    const strategy = document.getElementById('debt-strategy')?.value || '';
+                    const extraPayment = parseFloat(document.getElementById('debt-extra-payment-slider')?.value) || 0;
+                    
+                    cleanOnboardingData.data.goalDetails['debt-strategy'] = strategy;
+                    cleanOnboardingData.data.goalDetails['debt-extra-payment'] = extraPayment;
+                    
+                    const totalDebt = debts.reduce((sum, debt) => sum + debt.balance, 0);
+                    cleanOnboardingData.data.goalDetails.target = totalDebt;
+                    cleanOnboardingData.data.goalDetails.current = 0;
+                    cleanOnboardingData.data.goalDetails.monthlyCommitment = extraPayment;
                 }
                 break;
                 
@@ -4478,21 +4905,26 @@ function saveCurrentStepData() {
                 
                 cleanOnboardingData.data.monthlyExpenses = cleanOnboardingData.data.monthlyBudget;
                 
-                // Save debts directly
-                cleanOnboardingData.data.debts = [];
-                document.querySelectorAll('.clean-debt-item').forEach(item => {
-                    const name = item.querySelector('.debt-name')?.value || '';
-                    const balance = parseFloat(item.querySelector('.debt-balance')?.value) || 0;
-                    const interest = parseFloat(item.querySelector('.debt-interest')?.value) || 0;
+                // Save debts directly (but only if not a debt payoff goal - debt goals collect debt data in Step 3)
+                if (cleanOnboardingData.data.primaryGoal !== 'debt') {
+                    cleanOnboardingData.data.debts = [];
+                    document.querySelectorAll('.clean-debt-item').forEach(item => {
+                        const name = item.querySelector('.debt-name')?.value || '';
+                        const balance = parseFloat(item.querySelector('.debt-balance')?.value) || 0;
+                        const interest = parseFloat(item.querySelector('.debt-interest')?.value) || 0;
                     
-                    if (balance > 0) {
-                        cleanOnboardingData.data.debts.push({
-                            name: name || 'Debt',
-                            balance: balance,
-                            interest: interest
-                        });
-                    }
-                });
+                        if (balance > 0) {
+                            cleanOnboardingData.data.debts.push({
+                                name: name || 'Debt',
+                                balance: balance,
+                                interest: interest
+                            });
+                        }
+                    });
+                } else {
+                    // For debt payoff goals, preserve existing debt data from Step 3
+                    console.log('Step 4: Preserving debt data for debt goal:', cleanOnboardingData.data.debts);
+                }
                 break;
         }
     } catch (error) {
@@ -5339,6 +5771,9 @@ function calculateEmergencyFundProgress(goal) {
 function updateGoalProgressDisplay() {
     calculateGoalProgress();
     
+    // Update impact analysis when goals are updated
+    updateGoalImpactDisplay();
+    
     const goalDisplay = document.getElementById('goal-progress-display');
     
     if (!userGoals || userGoals.length === 0) {
@@ -5936,38 +6371,77 @@ function renderGoalsModal() {
         // Create detailed info for the modal
         let detailedInfo = '';
         if (goal.unit === 'currency') {
-            detailedInfo = `
-                <div class="text-sm space-y-2 mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded">
-                    <div class="flex justify-between">
-                        <span>Allocated:</span>
-                        <span class="font-medium">${formatCurrency(goal.currentProgress)}</span>
+            if (goal.type === 'debt_payoff') {
+                // Special handling for debt payoff goals
+                detailedInfo = `
+                    <div class="text-sm space-y-2 mt-3 p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                        <div class="flex justify-between">
+                            <span>Total Debt:</span>
+                            <span class="font-medium text-red-600 dark:text-red-400">${formatCurrency(goal.target)}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Amount Paid Off:</span>
+                            <span class="font-medium text-green-600 dark:text-green-400">${formatCurrency(goal.currentProgress)}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Remaining Debt:</span>
+                            <span class="font-medium text-red-600 dark:text-red-400">${formatCurrency(remaining)}</span>
+                        </div>
+                        ${goal.strategy ? `
+                        <div class="flex justify-between text-xs pt-2 border-t border-red-200 dark:border-red-800">
+                            <span>Strategy:</span>
+                            <span>${goal.strategy}</span>
+                        </div>
+                        ` : ''}
+                        ${goal.extraPayment > 0 ? `
+                        <div class="flex justify-between text-xs">
+                            <span>Extra Monthly Payment:</span>
+                            <span>${formatCurrency(goal.extraPayment)}</span>
+                        </div>
+                        ` : ''}
+                        ${totalSavings > 0 ? `
+                        <div class="flex justify-between text-xs border-t border-red-200 dark:border-red-800 pt-2">
+                            <span>Net Worth After Payoff:</span>
+                            <span class="text-green-600 dark:text-green-400">${formatCurrency(totalSavings - remaining)}</span>
+                        </div>
+                        ` : ''}
                     </div>
-                    <div class="flex justify-between">
-                        <span>Target:</span>
-                        <span class="font-medium">${formatCurrency(goal.target)}</span>
+                `;
+            } else {
+                // Regular savings goals
+                detailedInfo = `
+                    <div class="text-sm space-y-2 mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded">
+                        <div class="flex justify-between">
+                            <span>Allocated:</span>
+                            <span class="font-medium">${formatCurrency(goal.currentProgress)}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Target:</span>
+                            <span class="font-medium">${formatCurrency(goal.target)}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Still needed:</span>
+                            <span class="font-medium text-purple-600">${formatCurrency(remaining)}</span>
+                        </div>
+                        ${totalSavings > 0 ? `
+                        <div class="flex justify-between text-xs pt-2 border-t border-gray-200 dark:border-gray-600">
+                            <span>Total savings:</span>
+                            <span>${formatCurrency(totalSavings)}</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>Unallocated:</span>
+                            <span>${formatCurrency(totalSavings - goal.currentProgress)}</span>
+                        </div>
+                        ` : ''}
+                        ${totalDebt > 0 ? `
+                        <div class="flex justify-between text-xs border-t border-gray-200 dark:border-gray-600 pt-2">
+                            <span>Net worth:</span>
+                            <span class="text-red-500">${formatCurrency(totalSavings - totalDebt)}</span>
+                        </div>
+                        ` : ''}
                     </div>
-                    <div class="flex justify-between">
-                        <span>Still needed:</span>
-                        <span class="font-medium text-purple-600">${formatCurrency(remaining)}</span>
-                    </div>
-                    ${totalSavings > 0 ? `
-                    <div class="flex justify-between text-xs pt-2 border-t border-gray-200 dark:border-gray-600">
-                        <span>Total savings:</span>
-                        <span>${formatCurrency(totalSavings)}</span>
-                    </div>
-                    <div class="flex justify-between text-xs">
-                        <span>Unallocated:</span>
-                        <span>${formatCurrency(totalSavings - goal.currentProgress)}</span>
-                    </div>
-                    ` : ''}
-                    ${totalDebt > 0 ? `
-                    <div class="flex justify-between text-xs border-t border-gray-200 dark:border-gray-600 pt-2">
-                        <span>Net worth:</span>
-                        <span class="text-red-500">${formatCurrency(totalSavings - totalDebt)}</span>
-                    </div>
-                    ` : ''}
-                </div>
-            `;
+                `;
+            }
         }
         
         return `
@@ -5991,14 +6465,18 @@ function renderGoalsModal() {
 
 function calculateGoalProgressPercent(goal) {
     if (goal.unit === 'percent') {
-        return (goal.currentProgress / goal.target) * 100;
+        return goal.target > 0 ? (goal.currentProgress / goal.target) * 100 : 0;
     } else if (goal.unit === 'currency') {
         if (goal.type === 'category_limit' || goal.type === 'coffee_budget') {
             return goal.currentProgress; // Already calculated as percentage
         }
+        if (goal.target === 0) {
+            console.warn('Goal has 0 target:', goal);
+            return 0;
+        }
         return (goal.currentProgress / goal.target) * 100;
     } else if (goal.unit === 'days') {
-        return (goal.currentProgress / goal.target) * 100;
+        return goal.target > 0 ? (goal.currentProgress / goal.target) * 100 : 0;
     }
     return 0;
 }
@@ -6054,9 +6532,9 @@ function closeGoalSelection() {
                 if (activeTab === 'insights') {
                     updateChartsAndInsights();
                 } else if (activeTab === 'expenses') {
-                    renderExpensesTable_NEW();
+                    renderExpensesTable();
                 } else if (activeTab === 'recurring') {
-                    renderRecurringTable_NEW();
+                    renderRecurringTable();
                 }
                 saveData();
         }
@@ -6465,7 +6943,8 @@ function closeGoalSelection() {
         
         // --- Filtering Logic ---
         function applyExpenseFilters() {
-            renderExpensesTable_NEW();
+            window.expensesCurrentPage = 1; // Reset to first page when filtering
+            renderExpensesTable();
             showToast('Filters applied');
         }
 
@@ -6474,12 +6953,14 @@ function closeGoalSelection() {
             document.getElementById('expense-filter-date-to').value = '';
             document.getElementById('expense-filter-category').value = '';
             document.getElementById('expense-filter-type').value = '';
-            renderExpensesTable_NEW();
+            window.expensesCurrentPage = 1; // Reset to first page when clearing
+            renderExpensesTable();
             showToast('Filters cleared');
         }
 
         function applyRecurringFilters() {
-            renderRecurringTable_NEW();
+            window.recurringCurrentPage = 1; // Reset to first page when filtering
+            renderRecurringTable();
             showToast('Filters applied');
         }
 
@@ -6487,7 +6968,8 @@ function closeGoalSelection() {
             document.getElementById('recurring-filter-type').value = '';
             document.getElementById('recurring-filter-category').value = '';
             document.getElementById('recurring-filter-frequency').value = '';
-            renderRecurringTable_NEW();
+            window.recurringCurrentPage = 1; // Reset to first page when clearing
+            renderRecurringTable();
             showToast('Filters cleared');
         }
         
@@ -6829,8 +7311,8 @@ function closeGoalSelection() {
 
             // ✅ These functions should now work properly
             renderRecentExpenses();
-            renderExpensesTable_NEW();
-            renderRecurringTable_NEW();
+            renderExpensesTable();
+            renderRecurringTable();
             
             if (activeTab === 'insights') {
                 updateChartsAndInsights();
@@ -7134,7 +7616,12 @@ function closeGoalSelection() {
         }
 
         function renderExpensesTable() {
+            console.log('=== PAGINATION DEBUG START ===');
+            console.log('Current page:', window.expensesCurrentPage || 1);
+            console.log('Items per page:', window.expensesItemsPerPage || 15);
+            
             let allExpenses = [...expenses];
+            console.log('Total expenses:', allExpenses.length);
 
             // Apply filters
             const dateFrom = document.getElementById('expense-filter-date-from').value;
@@ -7150,6 +7637,8 @@ function closeGoalSelection() {
                 if (typeFilter && e.type !== typeFilter && !(typeFilter === 'Recurring' && e.recurringSourceId)) passes = false;
                 return passes;
             });
+
+            console.log('Filtered expenses:', filteredExpenses.length);
 
             // Sort filtered expenses
             filteredExpenses.sort((a, b) => {
@@ -7170,10 +7659,63 @@ function closeGoalSelection() {
             const tableBody = DOMElements.expensesTableBody;
             if (filteredExpenses.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</td></tr>`;
+                document.getElementById('expenses-pagination').style.display = 'none';
+                console.log('=== PAGINATION DEBUG END (no data) ===');
                 return;
             }
 
-            tableBody.innerHTML = filteredExpenses.map(expense => {
+            // SIMPLE PAGINATION - NO COMPLEX LOGIC
+            const currentPage = window.expensesCurrentPage || 1;
+            const itemsPerPage = window.expensesItemsPerPage || 15;
+            const totalItems = filteredExpenses.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+            const pageItems = filteredExpenses.slice(startIndex, endIndex);
+
+            console.log('PAGINATION CALCULATION:');
+            console.log('- Total items:', totalItems);
+            console.log('- Current page:', currentPage);
+            console.log('- Items per page:', itemsPerPage);
+            console.log('- Total pages:', totalPages);
+            console.log('- Start index:', startIndex);
+            console.log('- End index:', endIndex);
+            console.log('- Page items count:', pageItems.length);
+
+            // Update pagination display
+            const pagination = document.getElementById('expenses-pagination');
+            if (pagination) {
+                pagination.style.display = 'flex';
+                
+                const pageInfo = document.getElementById('expenses-page-info');
+                if (pageInfo) {
+                    pageInfo.textContent = `${startIndex + 1}-${endIndex} of ${totalItems}`;
+                }
+                
+                const pageInput = document.getElementById('expenses-page-input');
+                if (pageInput) {
+                    pageInput.value = currentPage;
+                    pageInput.max = totalPages;
+                }
+                
+                const totalPagesSpan = document.getElementById('expenses-total-pages');
+                if (totalPagesSpan) {
+                    totalPagesSpan.textContent = `of ${totalPages}`;
+                }
+                
+                // Update buttons
+                const prevBtn = document.getElementById('expenses-prev-btn');
+                const nextBtn = document.getElementById('expenses-next-btn');
+                const firstBtn = document.getElementById('expenses-first-btn');
+                const lastBtn = document.getElementById('expenses-last-btn');
+                
+                if (prevBtn) prevBtn.disabled = currentPage <= 1;
+                if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+                if (firstBtn) firstBtn.disabled = currentPage <= 1;
+                if (lastBtn) lastBtn.disabled = currentPage >= totalPages;
+            }
+
+            tableBody.innerHTML = pageItems.map(expense => {
                 const isRecurringInstance = !!expense.recurringSourceId;
                 const isCancelled = expense.status === 'cancelled';
                 const originalRecurringItem = isRecurringInstance ? recurringItems.find(r => r.id === expense.recurringSourceId) : null;
@@ -7228,9 +7770,12 @@ function closeGoalSelection() {
                     </tr>
                 `;
             }).join('');
+            
+            console.log('Table rendered with', pageItems.length, 'items');
+            console.log('=== PAGINATION DEBUG END ===');
         }
 
-        function renderRecurringTable() {
+        window.renderRecurringTable = function renderRecurringTable() {
             DOMElements.recurringTableBody.innerHTML = '';
             const type = document.getElementById('recurring-filter-type').value;
             const category = document.getElementById('recurring-filter-category').value;
@@ -7248,10 +7793,24 @@ function closeGoalSelection() {
 
             if (filtered.length === 0) {
                 DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="9" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
+                updateRecurringPagination(0, 0);
                 return;
             }
 
-            filtered.forEach(item => {
+            // Calculate pagination
+            const totalItems = filtered.length;
+            const totalPages = Math.ceil(totalItems / window.recurringItemsPerPage);
+            const startIndex = (window.recurringCurrentPage - 1) * window.recurringItemsPerPage;
+            const endIndex = startIndex + window.recurringItemsPerPage;
+            const pageItems = filtered.slice(startIndex, endIndex);
+
+            // Update pagination controls
+            updateRecurringPagination(totalItems, totalPages);
+
+            // Clear table first
+            DOMElements.recurringTableBody.innerHTML = '';
+
+            pageItems.forEach(item => {
                 const tr = document.createElement('tr');
                 const isSelected = selectedRecurringIds.has(item.id);
                 tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
@@ -7283,6 +7842,185 @@ function closeGoalSelection() {
                     </td>
                 `;
                 DOMElements.recurringTableBody.appendChild(tr);
+            });
+        }
+
+        // --- Pagination Functions ---
+        function updateExpensesPagination(totalItems, totalPages) {
+            const pageInfo = document.getElementById('expenses-page-info');
+            const prevBtn = document.getElementById('expenses-prev-btn');
+            const nextBtn = document.getElementById('expenses-next-btn');
+            const firstBtn = document.getElementById('expenses-first-btn');
+            const lastBtn = document.getElementById('expenses-last-btn');
+            const pageInput = document.getElementById('expenses-page-input');
+            const totalPagesSpan = document.getElementById('expenses-total-pages');
+            const pagination = document.getElementById('expenses-pagination');
+
+            console.log('updateExpensesPagination called:', { totalItems, totalPages, currentPage: expensesCurrentPage });
+
+            if (totalItems === 0) {
+                pagination.style.display = 'none';
+                return;
+            }
+
+            pagination.style.display = 'flex';
+            
+            const startItem = (window.expensesCurrentPage - 1) * window.expensesItemsPerPage + 1;
+            const endItem = Math.min(window.expensesCurrentPage * window.expensesItemsPerPage, totalItems);
+            
+            pageInfo.textContent = `${startItem}-${endItem} of ${totalItems}`;
+            
+            // Update page input and total pages
+            pageInput.value = window.expensesCurrentPage;
+            pageInput.max = totalPages;
+            totalPagesSpan.textContent = `of ${totalPages}`;
+            
+            // Update button states
+            prevBtn.disabled = window.expensesCurrentPage <= 1;
+            nextBtn.disabled = window.expensesCurrentPage >= totalPages;
+            firstBtn.disabled = window.expensesCurrentPage <= 1;
+            lastBtn.disabled = window.expensesCurrentPage >= totalPages;
+            
+            console.log('Pagination UI updated:', { startItem, endItem, totalItems });
+        }
+
+        function updateRecurringPagination(totalItems, totalPages) {
+            const pageInfo = document.getElementById('recurring-page-info');
+            const prevBtn = document.getElementById('recurring-prev-btn');
+            const nextBtn = document.getElementById('recurring-next-btn');
+            const firstBtn = document.getElementById('recurring-first-btn');
+            const lastBtn = document.getElementById('recurring-last-btn');
+            const pageInput = document.getElementById('recurring-page-input');
+            const totalPagesSpan = document.getElementById('recurring-total-pages');
+            const pagination = document.getElementById('recurring-pagination');
+
+            if (totalItems === 0) {
+                pagination.style.display = 'none';
+                return;
+            }
+
+            pagination.style.display = 'flex';
+            
+            const startItem = (window.recurringCurrentPage - 1) * window.recurringItemsPerPage + 1;
+            const endItem = Math.min(window.recurringCurrentPage * window.recurringItemsPerPage, totalItems);
+            
+            pageInfo.textContent = `${startItem}-${endItem} of ${totalItems}`;
+            
+            // Update page input and total pages
+            pageInput.value = window.recurringCurrentPage;
+            pageInput.max = totalPages;
+            totalPagesSpan.textContent = `of ${totalPages}`;
+            
+            // Update button states
+            prevBtn.disabled = window.recurringCurrentPage <= 1;
+            nextBtn.disabled = window.recurringCurrentPage >= totalPages;
+            firstBtn.disabled = window.recurringCurrentPage <= 1;
+            lastBtn.disabled = window.recurringCurrentPage >= totalPages;
+        }
+
+        // SIMPLE PAGINATION FUNCTIONS
+        window.changeExpensesPage = function(direction) {
+            console.log('changeExpensesPage called with:', direction);
+            if (direction === 'prev' && (window.expensesCurrentPage || 1) > 1) {
+                window.expensesCurrentPage = (window.expensesCurrentPage || 1) - 1;
+            } else if (direction === 'next') {
+                window.expensesCurrentPage = (window.expensesCurrentPage || 1) + 1;
+            }
+            console.log('New page:', window.expensesCurrentPage);
+            renderExpensesTable();
+        }
+
+        window.changeRecurringPage = function(direction) {
+            if (direction === 'prev' && window.recurringCurrentPage > 1) {
+                window.recurringCurrentPage--;
+            } else if (direction === 'next') {
+                window.recurringCurrentPage++;
+            }
+            renderRecurringTable();
+        }
+
+        window.changeExpensesPerPage = function(value) {
+            console.log('changeExpensesPerPage called with:', value);
+            window.expensesItemsPerPage = parseInt(value) || 15;
+            window.expensesCurrentPage = 1;
+            console.log('Items per page set to:', window.expensesItemsPerPage);
+            renderExpensesTable();
+        }
+
+        window.changeRecurringPerPage = function(value) {
+            window.recurringItemsPerPage = parseInt(value);
+            window.recurringCurrentPage = 1; // Reset to first page
+            renderRecurringTable();
+        }
+
+        window.goToExpensesPage = function(target) {
+            console.log('goToExpensesPage called with:', target);
+            
+            // Simple approach - don't overcomplicate
+            if (target === 'first') {
+                window.expensesCurrentPage = 1;
+            } else if (target === 'last') {
+                // Calculate total pages on the fly
+                const totalItems = expenses.length; // Use simple total for now
+                const totalPages = Math.ceil(totalItems / (window.expensesItemsPerPage || 15));
+                window.expensesCurrentPage = totalPages;
+            } else {
+                const page = parseInt(target);
+                if (page >= 1) {
+                    window.expensesCurrentPage = page;
+                }
+            }
+            console.log('Going to page:', window.expensesCurrentPage);
+            renderExpensesTable();
+        }
+
+        window.goToRecurringPage = function(target) {
+            const filteredRecurring = getFilteredRecurring(); // We need this to calculate total pages
+            const totalPages = Math.ceil(filteredRecurring.length / window.recurringItemsPerPage);
+            
+            if (target === 'first') {
+                window.recurringCurrentPage = 1;
+            } else if (target === 'last') {
+                window.recurringCurrentPage = totalPages;
+            } else {
+                const page = parseInt(target);
+                if (page >= 1 && page <= totalPages) {
+                    window.recurringCurrentPage = page;
+                }
+            }
+            renderRecurringTable();
+        }
+
+        // Helper functions to get filtered data (extracted from render functions)
+        function getFilteredExpenses() {
+            let allExpenses = [...expenses];
+
+            // Apply filters
+            const dateFrom = document.getElementById('expense-filter-date-from').value;
+            const dateTo = document.getElementById('expense-filter-date-to').value;
+            const categoryFilter = document.getElementById('expense-filter-category').value;
+            const typeFilter = document.getElementById('expense-filter-type').value;
+
+            return allExpenses.filter(e => {
+                let passes = true;
+                if (dateFrom && e.date < dateFrom) passes = false;
+                if (dateTo && e.date > dateTo) passes = false;
+                if (categoryFilter && e.category !== categoryFilter) passes = false;
+                if (typeFilter && e.type !== typeFilter && !(typeFilter === 'Recurring' && e.recurringSourceId)) passes = false;
+                return passes;
+            });
+        }
+
+        function getFilteredRecurring() {
+            const type = document.getElementById('recurring-filter-type').value;
+            const category = document.getElementById('recurring-filter-category').value;
+            const frequency = document.getElementById('recurring-filter-frequency').value;
+
+            return recurringItems.filter(item => {
+                if (type && item.type !== type) return false;
+                if (category && item.category !== category) return false;
+                if (frequency && item.frequency !== frequency) return false;
+                return true;
             });
         }
         
@@ -7469,12 +8207,904 @@ function closeGoalSelection() {
             setTimeout(() => { DOMElements.toast.className = 'toast'; }, 3000);
         }
 
-        window.addEventListener('click', (e) => {
-            const settingsContainer = DOMElements.settingsMenu.parentElement;
-            if (settingsContainer && !DOMElements.settingsMenu.classList.contains('hidden') && !settingsContainer.contains(e.target)) {
-                DOMElements.settingsMenu.classList.add('hidden');
+        // Plaid Integration Functions
+        const BACKEND_URL = 'http://localhost:8000';  // Changed from 127.0.0.1 to localhost
+        let plaidAccessToken = localStorage.getItem('plaid_access_token');
+
+        // Also add this test function to verify connectivity
+        async function testBackendConnection() {
+            try {
+                console.log('Testing backend connection...');
+                const response = await fetch(`${BACKEND_URL}/health`);
+                console.log('Health check response:', response.status, response.statusText);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Backend health:', data);
+                    showToast('Backend connection successful!', 'success');
+                } else {
+                    throw new Error(`Health check failed: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Backend connection test failed:', error);
+                showToast(`Backend connection failed: ${error.message}`, 'error');
+            }
         }
-        });
+
+        // Call this function in console to test: testBackendConnection()
+
+        async function connectBankAccount() {
+            try {
+                const connectBtn = document.getElementById('connect-bank-btn');
+                connectBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Connecting...</span>';
+                
+                // Get link token from backend
+                const linkTokenResponse = await fetch(`${BACKEND_URL}/api/create_link_token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (!linkTokenResponse.ok) {
+                    throw new Error('Failed to create link token');
+                }
+                
+                const { link_token } = await linkTokenResponse.json();
+                
+                // Initialize Plaid Link
+                const handler = Plaid.create({
+                    token: link_token,
+                    onSuccess: async (public_token, metadata) => {
+                        try {
+                            await exchangePublicToken(public_token);
+                            showToast('Bank account connected successfully!');
+                            connectBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Connected ✓</span>';
+                            document.getElementById('import-transactions-btn').style.display = 'flex';
+                        } catch (error) {
+                            console.error('Error exchanging token:', error);
+                            showToast('Failed to connect bank account', 'error');
+                            resetConnectButton();
+                        }
+                    },
+                    onLoad: () => {
+                        // Handle loading
+                    },
+                    onExit: (err, metadata) => {
+                        if (err != null) {
+                            console.error('Plaid Link error:', err);
+                            showToast('Bank connection cancelled', 'error');
+                        }
+                        resetConnectButton();
+                    },
+                    onEvent: (eventName, metadata) => {
+                        // Handle events
+                    }
+                });
+                
+                handler.open();
+                
+            } catch (error) {
+                console.error('Error connecting bank account:', error);
+                showToast('Failed to connect bank account', 'error');
+                resetConnectButton();
+            }
+        }
+
+        async function exchangePublicToken(publicToken) {
+            const response = await fetch(`${BACKEND_URL}/api/exchange_public_token`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ public_token: publicToken })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to exchange public token');
+            }
+            
+            const { access_token } = await response.json();
+            plaidAccessToken = access_token;
+            localStorage.setItem('plaid_access_token', access_token);
+            
+            // Import transactions immediately after connecting
+            await importBankTransactions();
+        }
+
+        async function importBankTransactions() {
+            if (!plaidAccessToken) {
+                showToast('No bank account connected', 'error');
+                return;
+            }
+            
+            try {
+                console.log('Starting transaction import with token:', plaidAccessToken);
+                console.log('Backend URL:', BACKEND_URL);
+                
+                // Add timeout and better error handling
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                
+                const response = await fetch(`${BACKEND_URL}/api/transactions`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ access_token: plaidAccessToken }),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                console.log('Backend response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Response error:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const responseData = await response.json();
+                console.log('Backend response data:', responseData);
+                
+                const { transactions } = responseData;
+                console.log('Transactions received:', transactions?.length, transactions);
+                
+                if (!transactions || !Array.isArray(transactions)) {
+                    throw new Error('Invalid transactions data received');
+                }
+                
+                const importedCount = processPlaidTransactions(transactions);
+                console.log('Imported count:', importedCount);
+                
+                if (importedCount > 0) {
+                    showToast(`Imported ${importedCount} new transactions from your bank`);
+                    updateDisplay();
+                    
+                    // Close settings modal and navigate to expenses page
+                    document.getElementById('settings-modal').classList.add('hidden');
+                    showTab('expenses');
+                } else {
+                    showToast('No new transactions to import');
+                    
+                    // Still close settings and go to expenses even if no new transactions
+                    document.getElementById('settings-modal').classList.add('hidden');
+                    showTab('expenses');
+                }
+                
+            } catch (error) {
+                console.error('Error importing transactions:', error);
+                
+                if (error.name === 'AbortError') {
+                    showToast('Request timeout - please try again', 'error');
+                } else if (error instanceof TypeError && error.message.includes('fetch')) {
+                    showToast('Network error - check if backend is running', 'error');
+                } else {
+                    showToast(`Failed to import transactions: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        function processPlaidTransactions(plaidTransactions) {
+            console.log('Processing Plaid transactions:', plaidTransactions);
+            let importedCount = 0;
+            const existingTransactionIds = new Set(expenses.map(e => e.plaidId).filter(id => id));
+            console.log('Existing transaction IDs:', existingTransactionIds);
+            
+            for (const transaction of plaidTransactions) {
+                console.log('Processing transaction:', transaction);
+                
+                // Skip if we already have this transaction
+                if (existingTransactionIds.has(transaction.transaction_id)) {
+                    console.log('Skipping duplicate transaction:', transaction.transaction_id);
+                    continue;
+                }
+                
+                const transformedExpense = transformPlaidTransaction(transaction);
+                console.log('Transformed expense:', transformedExpense);
+                
+                expenses.push(transformedExpense);
+                importedCount++;
+            }
+            
+            console.log('Total expenses after import:', expenses.length);
+            console.log('Imported count:', importedCount);
+            
+            if (importedCount > 0) {
+                saveData();
+                generateEnhancedPointsOptimization(expenses); // Replace existing call
+                updateGoalImpactDisplay(); // Add this new call
+            }
+            
+            return importedCount;
+        }
+
+        function transformPlaidTransaction(transaction) {
+            // Map Plaid categories to app categories
+            const categoryMap = {
+                'Food and Drink': 'Food/Drink',
+                'Shops': 'Shopping',
+                'Transportation': 'Transport',
+                'Healthcare': 'Health',
+                'Entertainment': 'Entertainment',
+                'Travel': 'Transport',
+                'Bills': 'Utilities',
+                'Transfer': 'Other',
+                'Restaurants': 'Food/Drink',
+                'Public Transportation': 'Transport',
+                'Digital Purchase': 'Shopping',
+                'Supermarkets and Groceries': 'Shopping'
+            };
+            
+            // Get the first (most specific) category from Plaid
+            const plaidCategory = transaction.category?.[0] || 'Other';
+            const appCategory = categoryMap[plaidCategory] || 'Other';
+            
+            // Extract clean merchant name
+            let merchantName = transaction.merchant_name || transaction.name || 'Unknown';
+            // Remove common bank transaction prefixes
+            merchantName = merchantName.replace(/^(CARD PURCHASE |DEBIT CARD |ATM |)/, '');
+            
+            // Determine expense type based on category
+            const essentialCategories = ['Transport', 'Utilities', 'Health'];
+            const expenseType = essentialCategories.includes(appCategory) ? 'Essential' : 'Non-Essential';
+            
+            return {
+                id: Date.now() + Math.random(),
+                plaidId: transaction.transaction_id,
+                name: merchantName,
+                cost: Math.abs(transaction.amount), // Ensure positive number
+                type: expenseType,
+                category: appCategory,
+                date: transaction.date,
+                paymentMethod: 'Bank Account',
+                status: 'active',
+                source: 'plaid'
+            };
+        }
+
+        // Enhanced Points Optimization System
+        class PointsOptimizationEngine {
+            constructor() {
+                // Credit card rewards mapping
+                this.cardRewards = {
+                    'amex_gold': {
+                        name: 'Amex Gold',
+                        categories: {
+                            'Food & Drink': 4, // 4x points
+                            'Shopping': 1,
+                            'Transport': 1,
+                            'default': 1
+                        }
+                    },
+                    'amex_green': {
+                        name: 'Amex Green',
+                        categories: {
+                            'Transport': 3, // 3x points  
+                            'Food & Drink': 1,
+                            'Shopping': 1,
+                            'default': 1
+                        }
+                    },
+                    'virgin_red': {
+                        name: 'Virgin Red',
+                        categories: {
+                            'Shopping': 3, // 3x points at certain retailers
+                            'Transport': 2, // 2x for Virgin services
+                            'Food & Drink': 1,
+                            'default': 1
+                        }
+                    }
+                };
+                
+                // Points value in GBP (conservative estimates)
+                this.pointValues = {
+                    'amex': 0.005, // £0.005 per point
+                    'virgin': 0.01, // £0.01 per point
+                    'ana': 0.012   // £0.012 per mile
+                };
+            }
+            
+            // Analyze a transaction for point optimization opportunities
+            analyzeTransaction(transaction) {
+                const opportunities = [];
+                const amount = transaction.cost;
+                const category = transaction.category;
+                
+                // Find best card for this transaction
+                let bestCard = null;
+                let bestPoints = 0;
+                let bestValue = 0;
+                
+                for (const [cardId, card] of Object.entries(this.cardRewards)) {
+                    const pointsRate = card.categories[category] || card.categories.default;
+                    const potentialPoints = Math.floor(amount * pointsRate);
+                    const pointValue = potentialPoints * this.pointValues.amex; // Assuming Amex for now
+                    
+                    if (pointValue > bestValue) {
+                        bestCard = card;
+                        bestPoints = potentialPoints;
+                        bestValue = pointValue;
+                    }
+                }
+                
+                // If transaction was made with suboptimal method, flag opportunity
+                if (transaction.paymentMethod === 'Bank Account' || transaction.paymentMethod === 'Debit Card') {
+                    opportunities.push({
+                        type: 'missed_points',
+                        transaction_id: transaction.id,
+                        merchant: transaction.name,
+                        amount: amount,
+                        category: category,
+                        date: transaction.date,
+                        recommended_card: bestCard.name,
+                        potential_points: bestPoints,
+                        potential_value: bestValue,
+                        message: `Could have earned ${bestPoints} points (worth £${bestValue.toFixed(2)}) using ${bestCard.name}`
+                    });
+                }
+                
+                return opportunities;
+            }
+            
+            // Analyze all transactions for optimization opportunities
+            analyzeAllTransactions(transactions) {
+                const allOpportunities = [];
+                let totalMissedValue = 0;
+                
+                transactions.forEach(transaction => {
+                    if (transaction.source === 'plaid') { // Only analyze imported transactions
+                        const opportunities = this.analyzeTransaction(transaction);
+                        allOpportunities.push(...opportunities);
+                        
+                        opportunities.forEach(opp => {
+                            totalMissedValue += opp.potential_value;
+                        });
+                    }
+                });
+                
+                return {
+                    opportunities: allOpportunities,
+                    totalMissedValue: totalMissedValue,
+                    summary: this.generateOptimizationSummary(allOpportunities)
+                };
+            }
+            
+            // Generate merchant-specific recommendations
+            generateMerchantRecommendations(transactions) {
+                const merchantSpending = {};
+                
+                // Group spending by merchant
+                transactions.forEach(transaction => {
+                    if (transaction.source === 'plaid') {
+                        const merchant = transaction.name;
+                        if (!merchantSpending[merchant]) {
+                            merchantSpending[merchant] = {
+                                total: 0,
+                                count: 0,
+                                category: transaction.category,
+                                transactions: []
+                            };
+                        }
+                        merchantSpending[merchant].total += transaction.cost;
+                        merchantSpending[merchant].count += 1;
+                        merchantSpending[merchant].transactions.push(transaction);
+                    }
+                });
+                
+                // Generate recommendations for top merchants
+                const recommendations = [];
+                const topMerchants = Object.entries(merchantSpending)
+                    .sort(([,a], [,b]) => b.total - a.total)
+                    .slice(0, 5);
+                    
+                topMerchants.forEach(([merchant, data]) => {
+                    const bestCard = this.getBestCardForCategory(data.category);
+                    const monthlyPoints = Math.floor(data.total * bestCard.pointsRate);
+                    const monthlyValue = monthlyPoints * this.pointValues.amex;
+                    
+                    recommendations.push({
+                        merchant: merchant,
+                        monthlySpending: data.total,
+                        recommendedCard: bestCard.name,
+                        monthlyPoints: monthlyPoints,
+                        monthlyValue: monthlyValue,
+                        annualValue: monthlyValue * 12
+                    });
+                });
+                
+                return recommendations;
+            }
+            
+            // Get best card for a category
+            getBestCardForCategory(category) {
+                let bestCard = { name: 'Amex Gold', pointsRate: 1 };
+                let bestRate = 1;
+                
+                for (const [cardId, card] of Object.entries(this.cardRewards)) {
+                    const rate = card.categories[category] || card.categories.default;
+                    if (rate > bestRate) {
+                        bestCard = { name: card.name, pointsRate: rate };
+                        bestRate = rate;
+                    }
+                }
+                
+                return bestCard;
+            }
+            
+            // Generate summary insights
+            generateOptimizationSummary(opportunities) {
+                if (opportunities.length === 0) {
+                    return "Great job! You're already optimizing your spending.";
+                }
+                
+                const totalValue = opportunities.reduce((sum, opp) => sum + opp.potential_value, 0);
+                const topCategory = this.getTopMissedCategory(opportunities);
+                
+                return {
+                    totalMissedValue: totalValue,
+                    monthlyPotential: totalValue,
+                    annualPotential: totalValue * 12,
+                    topRecommendation: `Switch to optimized cards for ${topCategory} spending`,
+                    quickWin: `Start using the right card for your top spending categories`
+                };
+            }
+            
+            // Get category with most missed value
+            getTopMissedCategory(opportunities) {
+                const categoryTotals = {};
+                
+                opportunities.forEach(opp => {
+                    if (!categoryTotals[opp.category]) {
+                        categoryTotals[opp.category] = 0;
+                    }
+                    categoryTotals[opp.category] += opp.potential_value;
+                });
+                
+                return Object.entries(categoryTotals)
+                    .sort(([,a], [,b]) => b - a)[0]?.[0] || 'General';
+            }
+        }
+
+        // Initialize the points optimization engine
+        const pointsEngine = new PointsOptimizationEngine();
+
+        // Enhanced function to replace existing generatePointsOptimizationSuggestions
+        function generateEnhancedPointsOptimization(transactions) {
+            const analysis = pointsEngine.analyzeAllTransactions(transactions);
+            const merchantRecs = pointsEngine.generateMerchantRecommendations(transactions);
+            
+            // Store enhanced insights
+            localStorage.setItem('pointsAnalysis', JSON.stringify(analysis));
+            localStorage.setItem('merchantRecommendations', JSON.stringify(merchantRecs));
+            localStorage.setItem('pointsOptimizationSuggestions', JSON.stringify(analysis.opportunities));
+            
+            console.log('Enhanced points analysis:', analysis);
+            console.log('Merchant recommendations:', merchantRecs);
+            
+            return analysis;
+        }
+
+        // Legacy function for backward compatibility
+        function generatePointsOptimizationSuggestions(transactions) {
+            return generateEnhancedPointsOptimization(expenses);
+        }
+
+        function resetConnectButton() {
+            const connectBtn = document.getElementById('connect-bank-btn');
+            connectBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg><span>Connect Bank Account</span>';
+        }
+
+        // Enhanced Insights Dashboard Display Functions
+        function renderEnhancedInsights() {
+            const pointsAnalysis = JSON.parse(localStorage.getItem('pointsAnalysis') || '{"opportunities": [], "totalMissedValue": 0}');
+            const merchantRecs = JSON.parse(localStorage.getItem('merchantRecommendations') || '[]');
+            
+            // Only render if there are opportunities to show
+            if (pointsAnalysis.opportunities && pointsAnalysis.opportunities.length > 0) {
+                // Create a dedicated section for points insights if it doesn't exist
+                let pointsSection = document.getElementById('points-optimization-section');
+                if (!pointsSection) {
+                    pointsSection = document.createElement('div');
+                    pointsSection.id = 'points-optimization-section';
+                    
+                    // Insert before the smart recommendations
+                    const smartRecommendationsContainer = document.getElementById('smart-recommendations');
+                    if (smartRecommendationsContainer && smartRecommendationsContainer.parentNode) {
+                        smartRecommendationsContainer.parentNode.insertBefore(pointsSection, smartRecommendationsContainer);
+                    }
+                }
+                
+                // Render the points insights
+                pointsSection.innerHTML = renderPointsOptimizationInsights(pointsAnalysis, merchantRecs);
+                
+                // Badge will be updated by the main insights function
+            }
+        }
+
+        function renderPointsOptimizationInsights(analysis, merchantRecs) {
+            if (analysis.opportunities.length === 0) {
+                return `
+                    <div class="text-center p-6 bg-green-50 dark:bg-green-900/20 rounded-lg mb-4">
+                        <div class="text-2xl mb-2">🎯</div>
+                        <h3 class="font-semibold text-green-800 dark:text-green-200 mb-2">Perfect Optimization!</h3>
+                        <p class="text-sm text-green-600 dark:text-green-300">You're already maximizing your points potential.</p>
+                    </div>
+                `;
+            }
+            
+            const totalMissed = analysis.totalMissedValue;
+            const annualPotential = totalMissed * 12;
+            
+            return `
+                <!-- Points Optimization Summary Card -->
+                <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-4 mb-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <div class="text-2xl">💳</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-200">Points Optimization</h3>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">Based on your spending patterns</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-bold text-purple-600 dark:text-purple-400">£${totalMissed.toFixed(2)}</div>
+                            <div class="text-xs text-gray-500">potential monthly</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3 text-center">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-3">
+                            <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">Monthly Potential</div>
+                            <div class="text-lg font-bold text-green-600">£${totalMissed.toFixed(2)}</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-3">
+                            <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">Annual Potential</div>
+                            <div class="text-lg font-bold text-blue-600">£${annualPotential.toFixed(2)}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Top Opportunities -->
+                <div class="space-y-3 mb-4">
+                    <h4 class="font-semibold text-gray-800 dark:text-gray-200 text-sm">🎯 Top Opportunities</h4>
+                    ${analysis.opportunities.slice(0, 3).map(opp => `
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-100 dark:border-gray-700">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex-1">
+                                    <div class="font-medium text-gray-800 dark:text-gray-200">${opp.merchant}</div>
+                                    <div class="text-xs text-gray-500">${opp.category} • ${opp.date}</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-semibold text-green-600">£${opp.potential_value.toFixed(2)}</div>
+                                    <div class="text-xs text-gray-500">${opp.potential_points} points</div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">
+                                💡 ${opp.message}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <!-- Merchant Recommendations -->
+                ${merchantRecs.length > 0 ? `
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-800 dark:text-gray-200 text-sm mb-3">🏪 Your Top Merchants</h4>
+                        <div class="space-y-2">
+                            ${merchantRecs.slice(0, 3).map(rec => `
+                                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-100 dark:border-gray-700">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <div class="font-medium text-gray-800 dark:text-gray-200">${rec.merchant}</div>
+                                            <div class="text-xs text-gray-500">Monthly: £${rec.monthlySpending.toFixed(2)}</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-sm font-semibold text-blue-600">${rec.recommendedCard}</div>
+                                            <div class="text-xs text-green-600">+£${rec.monthlyValue.toFixed(2)}/month</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+                
+                <!-- Action Button -->
+                <div class="mb-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+                    <button onclick="showDetailedOptimization()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors">
+                        View Detailed Analysis
+                    </button>
+                </div>
+            `;
+        }
+
+
+        function showDetailedOptimization() {
+            const analysis = JSON.parse(localStorage.getItem('pointsAnalysis') || '{"opportunities": []}');
+            const merchantRecs = JSON.parse(localStorage.getItem('merchantRecommendations') || '[]');
+            
+            // Create a detailed modal or navigate to a detailed view
+            console.log('Detailed optimization analysis:', { analysis, merchantRecs });
+            
+            // For now, show a detailed toast
+            const totalAnnual = analysis.totalMissedValue * 12;
+            showToast(`Annual optimization potential: £${totalAnnual.toFixed(2)}. Check console for details.`, 'info');
+        }
+
+        // Goal Impact Analysis System
+        class GoalImpactAnalyzer {
+            constructor() {
+                this.pointValues = {
+                    'amex': 0.005,
+                    'virgin': 0.01,
+                    'ana': 0.012
+                };
+            }
+            
+            // Calculate how spending affects goal timeline
+            calculateGoalImpact(goals, transactions, pointsOptimization) {
+                const goalImpacts = [];
+                
+                goals.forEach(goal => {
+                    if (goal.status !== 'active') return;
+                    
+                    const monthlySpending = this.calculateMonthlySpending(transactions);
+                    const monthlyPointsValue = this.calculateMonthlyPointsValue(pointsOptimization);
+                    const currentSavings = goal.current || 0;
+                    const targetAmount = goal.target;
+                    const remainingAmount = targetAmount - currentSavings;
+                    
+                    console.log(`Goal ${goal.name}:`, {
+                        type: goal.type,
+                        current: currentSavings,
+                        target: targetAmount,
+                        remaining: remainingAmount,
+                        monthlySpending,
+                        monthlyPointsValue
+                    });
+                    
+                    // Current trajectory (without optimization)
+                    const monthlySavingsCurrent = this.estimateMonthlySavings(monthlySpending, goal.type);
+                    const monthsToGoalCurrent = remainingAmount / (monthlySavingsCurrent || 1);
+                    
+                    console.log(`${goal.name} calculation:`, {
+                        monthlySavingsCurrent,
+                        monthsToGoalCurrent,
+                        monthlyIncome: monthlyIncome || 0,
+                        monthlyBudget: monthlyBudget || 0
+                    });
+                    
+                    // Optimized trajectory (with points optimization)
+                    const monthlySavingsOptimized = monthlySavingsCurrent + monthlyPointsValue;
+                    const monthsToGoalOptimized = remainingAmount / monthlySavingsOptimized;
+                    
+                    // Time saved through optimization
+                    const timeSavedMonths = monthsToGoalCurrent - monthsToGoalOptimized;
+                    
+                    goalImpacts.push({
+                        goalId: goal.id,
+                        goalName: goal.name,
+                        goalType: goal.type,
+                        target: targetAmount,
+                        current: currentSavings,
+                        remaining: remainingAmount,
+                        progressPercent: (currentSavings / targetAmount) * 100,
+                        
+                        // Current trajectory
+                        monthsToGoalCurrent: monthsToGoalCurrent,
+                        completionDateCurrent: this.addMonthsToDate(new Date(), monthsToGoalCurrent),
+                        
+                        // Optimized trajectory  
+                        monthsToGoalOptimized: monthsToGoalOptimized,
+                        completionDateOptimized: this.addMonthsToDate(new Date(), monthsToGoalOptimized),
+                        
+                        // Impact metrics
+                        timeSavedMonths: timeSavedMonths,
+                        timeSavedDays: timeSavedMonths * 30,
+                        monthlyPointsBoost: monthlyPointsValue,
+                        annualPointsBoost: monthlyPointsValue * 12,
+                        
+                        // Recommendations
+                        recommendations: this.generateGoalRecommendations(goal, monthlySpending, monthlyPointsValue)
+                    });
+                });
+                
+                return goalImpacts;
+            }
+            
+            // Calculate monthly spending from transactions
+            calculateMonthlySpending(transactions) {
+                const now = new Date();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+                
+                return transactions
+                    .filter(t => {
+                        const transactionDate = new Date(t.date);
+                        return transactionDate.getMonth() === currentMonth && 
+                               transactionDate.getFullYear() === currentYear &&
+                               t.status === 'active';
+                    })
+                    .reduce((total, t) => total + t.cost, 0);
+            }
+            
+            // Calculate monthly points value from optimization opportunities
+            calculateMonthlyPointsValue(pointsOptimization) {
+                if (!pointsOptimization || !pointsOptimization.totalMissedValue) {
+                    return 0;
+                }
+                return pointsOptimization.totalMissedValue;
+            }
+            
+            // Estimate monthly savings based on goal type and available income
+            estimateMonthlySavings(monthlySpending, goalType) {
+                // Get user's monthly budget and income
+                const userIncome = monthlyIncome || 0;
+                const userBudget = monthlyBudget || 0;
+                
+                // For debt payoff, use a more realistic calculation
+                if (goalType === 'debt') {
+                    // Use 20% of available income after essential expenses as baseline
+                    const availableAfterBudget = Math.max(0, userIncome - userBudget);
+                    const debtPaymentCapacity = availableAfterBudget * 0.2;
+                    
+                    // Minimum payment should be at least £50/month to be realistic
+                    return Math.max(50, debtPaymentCapacity);
+                } else {
+                    // For other goals, use 10% of income or available surplus
+                    const surplus = Math.max(0, userIncome - monthlySpending);
+                    return Math.max(50, Math.min(surplus * 0.5, userIncome * 0.1));
+                }
+            }
+            
+            // Add months to a date
+            addMonthsToDate(date, months) {
+                const result = new Date(date);
+                result.setMonth(result.getMonth() + months);
+                return result;
+            }
+            
+            // Format date for display
+            formatDate(date) {
+                return date.toLocaleDateString('en-GB', { 
+                    year: 'numeric', 
+                    month: 'short' 
+                });
+            }
+            
+            // Generate goal-specific recommendations
+            generateGoalRecommendations(goal, monthlySpending, monthlyPointsValue) {
+                const recommendations = [];
+                
+                if (monthlyPointsValue > 0) {
+                    recommendations.push({
+                        type: 'points_optimization',
+                        message: `Use points strategically to accelerate your ${goal.name} goal by ${Math.round(monthlyPointsValue * 30)} days per month`,
+                        impact: monthlyPointsValue
+                    });
+                }
+                
+                if (goal.type === 'house') {
+                    recommendations.push({
+                        type: 'spending_reduction',
+                        message: 'Consider reducing non-essential spending by 5% to reach your house deposit faster',
+                        impact: monthlySpending * 0.05
+                    });
+                }
+                
+                if (goal.type === 'emergency') {
+                    recommendations.push({
+                        type: 'automatic_allocation',
+                        message: 'Set up automatic transfers to build your emergency fund consistently',
+                        impact: 'behavioral'
+                    });
+                }
+                
+                return recommendations;
+            }
+        }
+
+        // Initialize goal impact analyzer
+        const goalImpactAnalyzer = new GoalImpactAnalyzer();
+
+        // Enhanced function to update goal displays with impact analysis
+        function updateGoalsWithImpactAnalysis() {
+            const goals = userGoals || [];
+            const pointsAnalysis = JSON.parse(localStorage.getItem('pointsAnalysis') || '{"totalMissedValue": 0}');
+            
+            if (goals.length === 0) return;
+            
+            const goalImpacts = goalImpactAnalyzer.calculateGoalImpact(goals, expenses, pointsAnalysis);
+            
+            // Store impact analysis for display
+            localStorage.setItem('goalImpacts', JSON.stringify(goalImpacts));
+            
+            // Update goal display
+            renderGoalImpactCards(goalImpacts);
+            
+            console.log('Goal impact analysis:', goalImpacts);
+        }
+
+        // Render enhanced goal cards with impact analysis
+        function renderGoalImpactCards(goalImpacts) {
+            const goalsContainer = document.getElementById('goals-dashboard');
+            if (!goalsContainer || goalImpacts.length === 0) return;
+            
+            goalsContainer.innerHTML = `
+                <div class="space-y-4">
+                    ${goalImpacts.map(impact => `
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-100 dark:border-gray-700">
+                            <!-- Goal Header -->
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-200">${impact.goalName}</h3>
+                                    <p class="text-sm text-gray-500">£${impact.current.toLocaleString()} / £${impact.target.toLocaleString()}</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-medium text-gray-600 dark:text-gray-400">${impact.progressPercent.toFixed(1)}%</div>
+                                    <div class="text-xs text-gray-500">complete</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Progress Bar -->
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
+                                <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                                     style="width: ${Math.min(impact.progressPercent, 100)}%"></div>
+                            </div>
+                            
+                            <!-- Impact Analysis -->
+                            <div class="grid grid-cols-2 gap-3 mb-3">
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500">Current Timeline</div>
+                                    <div class="font-semibold text-gray-800 dark:text-gray-200">
+                                        ${impact.monthsToGoalCurrent > 12 ? 
+                                            `${(impact.monthsToGoalCurrent / 12).toFixed(1)} years` : 
+                                            `${Math.round(impact.monthsToGoalCurrent)} months`}
+                                    </div>
+                                    <div class="text-xs text-gray-500">${goalImpactAnalyzer.formatDate(impact.completionDateCurrent)}</div>
+                                </div>
+                                
+                                ${impact.timeSavedMonths > 0 ? `
+                                    <div class="text-center">
+                                        <div class="text-xs text-green-600">With Optimization</div>
+                                        <div class="font-semibold text-green-700">
+                                            ${impact.monthsToGoalOptimized > 12 ? 
+                                                `${(impact.monthsToGoalOptimized / 12).toFixed(1)} years` : 
+                                                `${Math.round(impact.monthsToGoalOptimized)} months`}
+                                        </div>
+                                        <div class="text-xs text-green-600">
+                                            ${Math.round(impact.timeSavedDays)} days faster!
+                                        </div>
+                                    </div>
+                                ` : `
+                                    <div class="text-center">
+                                        <div class="text-xs text-gray-500">Points Boost</div>
+                                        <div class="font-semibold text-blue-600">£${impact.monthlyPointsBoost.toFixed(2)}</div>
+                                        <div class="text-xs text-gray-500">per month</div>
+                                    </div>
+                                `}
+                            </div>
+                            
+                            <!-- Quick Action -->
+                            ${impact.timeSavedMonths > 0 ? `
+                                <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
+                                    <div class="text-sm text-green-800 dark:text-green-200">
+                                        💡 <strong>Optimize spending</strong> to reach this goal ${Math.round(impact.timeSavedDays)} days earlier
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Call this function when transactions are updated
+        function updateGoalImpactDisplay() {
+            updateGoalsWithImpactAnalysis();
+        }
+
+
+        // Settings modal is handled by onclick="closeSettings()" on the backdrop
+        // No need for window click handler since we use a modal, not a dropdown menu
 
         
         // --- Auto-Categorization ---
@@ -7976,8 +9606,48 @@ class LensSmartInsights {
                 action: 'Consider travel alternatives'
             });
         }
+
+        // Enhanced points optimization recommendations
+        const pointsAnalysis = JSON.parse(localStorage.getItem('pointsAnalysis') || '{}');
+        const merchantRecs = JSON.parse(localStorage.getItem('merchantRecommendations') || '[]');
         
-        return recommendations.slice(0, 5); // Return top 5
+        if (pointsAnalysis.opportunities && pointsAnalysis.opportunities.length > 0) {
+            const totalMissedValue = pointsAnalysis.totalMissedValue || 0;
+            const annualPotential = totalMissedValue * 12;
+            const topCategory = pointsAnalysis.summary?.topRecommendation || 'Use optimized credit cards';
+            
+            recommendations.push({
+                type: 'efficiency',
+                priority: 'high',
+                title: `Optimize Credit Card Usage`,
+                description: `You're missing £${totalMissedValue.toFixed(2)}/month (£${annualPotential.toFixed(2)}/year) in rewards value. ${topCategory}.`,
+                icon: '💳',
+                potentialSaving: Math.floor(annualPotential),
+                actionable: true,
+                category: 'points_optimization',
+                action: pointsAnalysis.summary?.quickWin || 'Use rewards cards for purchases'
+            });
+        }
+        
+        // Add merchant-specific recommendations
+        if (merchantRecs.length > 0) {
+            const topMerchant = merchantRecs[0];
+            if (topMerchant.annualValue > 50) {
+                recommendations.push({
+                    type: 'efficiency',
+                    priority: 'medium',
+                    title: `Optimize ${topMerchant.merchant} Spending`,
+                    description: `You spend £${topMerchant.monthlySpending.toFixed(2)}/month at ${topMerchant.merchant}. Using ${topMerchant.recommendedCard} could earn £${topMerchant.annualValue.toFixed(2)}/year in rewards.`,
+                    icon: '🎯',
+                    potentialSaving: Math.floor(topMerchant.annualValue),
+                    actionable: true,
+                    category: 'merchant_optimization',
+                    action: `Use ${topMerchant.recommendedCard} at ${topMerchant.merchant}`
+                });
+            }
+        }
+        
+        return recommendations.slice(0, 6); // Return top 6 to include points optimization
     }
 
     prioritizeRecommendations(recommendations) {
@@ -8147,7 +9817,14 @@ function updateAiInsightsWithSmartAnalytics() {
             renderSmartRecommendations(recommendations);
             renderSmartMonthlyStory(monthlyStory);
             renderMonthEndProjectionSmart(budgetRisk);
-            updateRecommendationBadge(recommendations.length);
+            
+            // Add enhanced points optimization insights and update combined badge
+            renderEnhancedInsights();
+            
+            // Update badge with combined count
+            const pointsAnalysis = JSON.parse(localStorage.getItem('pointsAnalysis') || '{"opportunities": []}');
+            const totalRecommendations = recommendations.length + pointsAnalysis.opportunities.length;
+            updateRecommendationBadge(totalRecommendations);
             
         } catch (error) {
             console.error('Smart analytics error:', error);
@@ -8609,8 +10286,8 @@ function showInsightsError() {
             "Salary": "💰", "Bonus": "⭐", "Investment": "📈", "Gift": "🎁", "Other Income": "🪙"
         };
 
-        // Enhanced renderExpensesTable function
-        function renderExpensesTable_NEW() {
+        // DEPRECATED: Enhanced renderExpensesTable function (replaced with paginated version)
+        function renderExpensesTable_NEW_DEPRECATED() {
             let allExpenses = [...expenses];
 
             // Apply filters (existing filter logic)
@@ -8840,8 +10517,8 @@ function showInsightsError() {
             }, {});
         }
 
-        // Enhanced recurring table rendering for mobile
-        function renderRecurringTable_NEW() {
+        // DEPRECATED: Enhanced recurring table rendering for mobile (replaced with paginated version)
+        function renderRecurringTable_NEW_DEPRECATED() {
             DOMElements.recurringTableBody.innerHTML = '';
             const type = document.getElementById('recurring-filter-type').value;
             const category = document.getElementById('recurring-filter-category').value;
@@ -8953,9 +10630,9 @@ function showInsightsError() {
       // Add responsive behavior
       function handleResize() {
           if (activeTab === 'expenses') {
-                renderExpensesTable_NEW();
+                renderExpensesTable();
           } else if (activeTab === 'recurring') {
-                renderRecurringTable_NEW();
+                renderRecurringTable();
           }
       }
 
@@ -9178,29 +10855,44 @@ function renderMobileExpenseList(expArr) {
 }
 
 /* ---------- Hook into existing flow ---------- */
-(function(){
-    // Wrap original NEW renderer
-    const original = window.renderExpensesTable_NEW;
-    window.renderExpensesTable_NEW = function() {
-        const args = Array.from(arguments);
-        const expensesArr = args[0] ?? (typeof filteredExpenses !== 'undefined' ? filteredExpenses : window.expenses ?? []);
-        renderMobileExpenseList(expensesArr);
-        // Always call original for desktop
-        original?.apply(this, args);
-    };
-
-    // Initial render for first load
-    document.addEventListener('DOMContentLoaded', () => {
-        window.renderExpensesTable_NEW();
-    });
+// Mobile rendering integration - do this after DOM loads when functions are defined
+document.addEventListener('DOMContentLoaded', () => {
+    // Store the original render function before wrapping
+    const originalRenderExpensesTable = window.renderExpensesTable;
+    
+    if (originalRenderExpensesTable) {
+        // Wrap the renderExpensesTable function to add mobile rendering
+        window.renderExpensesTable = function() {
+            // Call the original function first
+            originalRenderExpensesTable.apply(this, arguments);
+            
+            // Then add mobile rendering with filtered and paginated data
+            if (typeof getFilteredExpenses === 'function') {
+                const filteredExpenses = getFilteredExpenses();
+                const currentPage = window.expensesCurrentPage || 1;
+                const itemsPerPage = window.expensesItemsPerPage || 15;
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const pageItems = filteredExpenses.slice(startIndex, endIndex);
+                renderMobileExpenseList(pageItems);
+            } else {
+                const expensesArr = window.expenses ?? [];
+                renderMobileExpenseList(expensesArr);
+            }
+        };
+    }
 
     // Re-render on resize (cheap debounce)
     let resizeTo = null;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTo);
-        resizeTo = setTimeout(() => window.renderExpensesTable_NEW(), 150);
+        resizeTo = setTimeout(() => {
+            if (window.renderExpensesTable) {
+                window.renderExpensesTable();
+            }
+        }, 150);
     });
-})(); 
+}); 
 
 
 
