@@ -9185,20 +9185,156 @@ function closeGoalSelection() {
 
         // Enhanced function to update goal displays with impact analysis
         function updateGoalsWithImpactAnalysis() {
-            const goals = userGoals || [];
-            const pointsAnalysis = JSON.parse(localStorage.getItem('pointsAnalysis') || '{"totalMissedValue": 0}');
+            console.log('=== UPDATING GOALS WITH IMPACT ANALYSIS ===');
             
-            if (goals.length === 0) return;
+            // STEP 1: Load goals from the correct source
+            let goals = [];
             
-            const goalImpacts = goalImpactAnalyzer.calculateGoalImpact(goals, expenses, pointsAnalysis);
+            // Try userGoals first
+            if (userGoals && userGoals.length > 0) {
+                goals = userGoals;
+                console.log('Loaded goals from userGoals variable:', goals);
+            } 
+            // If that fails, load from localStorage
+            else {
+                try {
+                    const storedGoals = localStorage.getItem('userGoals');
+                    if (storedGoals && storedGoals !== 'null' && storedGoals !== '[]') {
+                        goals = JSON.parse(storedGoals);
+                        // Update the global variable so other functions can use it
+                        userGoals = goals;
+                        console.log('Loaded goals from localStorage:', goals);
+                    }
+                } catch (error) {
+                    console.error('Error loading goals from localStorage:', error);
+                }
+            }
             
-            // Store impact analysis for display
-            localStorage.setItem('goalImpacts', JSON.stringify(goalImpacts));
+            // STEP 2: Get the goals dashboard container
+            const goalsContainer = document.getElementById('goals-dashboard');
+            if (!goalsContainer) {
+                console.error('Goals dashboard container not found');
+                return;
+            }
             
-            // Update goal display
-            renderGoalImpactCards(goalImpacts);
+            // STEP 3: Handle empty goals case
+            if (!goals || goals.length === 0) {
+                console.log('No goals found, showing empty state');
+                goalsContainer.innerHTML = `
+                    <div class="text-center py-6">
+                        <div class="text-3xl mb-2">🎯</div>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">No goals set yet</p>
+                        <button onclick="openGoalsModal()" class="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium">
+                            Set your first goal →
+                        </button>
+                    </div>
+                `;
+                return;
+            }
             
-            console.log('Goal impact analysis:', goalImpacts);
+            // STEP 4: Render goals with correct current data
+            console.log('Rendering', goals.length, 'goals');
+            
+            const goalsHTML = goals.map(goal => {
+                // Calculate actual progress percentage
+                const current = goal.currentProgress || 0;
+                const target = goal.target || 1;
+                const progressPercent = target > 0 ? (current / target) * 100 : 0;
+                const remaining = Math.max(0, target - current);
+                
+                console.log(`Goal "${goal.name}":`, {
+                    current: current,
+                    target: target,
+                    progressPercent: progressPercent.toFixed(1) + '%'
+                });
+                
+                // Calculate timeline if monthly contribution exists
+                let timelineText = '';
+                if (goal.monthlyContribution && goal.monthlyContribution > 0 && remaining > 0) {
+                    const monthsRemaining = Math.ceil(remaining / goal.monthlyContribution);
+                    if (monthsRemaining <= 12) {
+                        timelineText = `${monthsRemaining} months remaining`;
+                    } else {
+                        const years = Math.round(monthsRemaining / 12 * 10) / 10;
+                        timelineText = `${years} years remaining`;
+                    }
+                } else if (progressPercent >= 100) {
+                    timelineText = '🎉 Complete!';
+                } else {
+                    timelineText = 'Set monthly contribution for timeline';
+                }
+                
+                return `
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-700 transition-all duration-200">
+                        <!-- Goal Header -->
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-base">${goal.name || 'Unnamed Goal'}</h3>
+                                <p class="text-sm text-gray-500 mt-1">
+                                    ${formatCurrency(current)} / ${formatCurrency(target)}
+                                </p>
+                            </div>
+                            <div class="text-right ml-4">
+                                <div class="text-lg font-bold ${progressPercent >= 100 ? 'text-green-600' : 'text-blue-600'} dark:text-blue-400">
+                                    ${progressPercent.toFixed(1)}%
+                                </div>
+                                <div class="text-xs text-gray-500">complete</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-4">
+                            <div class="h-3 rounded-full transition-all duration-500 ${progressPercent >= 100 ? 'bg-green-500' : 'bg-blue-600'}" 
+                                 style="width: ${Math.min(progressPercent, 100)}%"></div>
+                        </div>
+                        
+                        <!-- Goal Details Grid -->
+                        <div class="grid grid-cols-1 gap-2 text-sm">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500">Still needed:</span>
+                                <span class="font-semibold ${remaining > 0 ? 'text-purple-600' : 'text-green-600'}">
+                                    ${remaining > 0 ? formatCurrency(remaining) : 'Complete!'}
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500">Timeline:</span>
+                                <span class="font-medium text-gray-800 dark:text-gray-200 text-right">
+                                    ${timelineText}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        ${progressPercent >= 100 ? `
+                            <div class="mt-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg text-center">
+                                <span class="text-green-600 dark:text-green-400 text-sm font-semibold">
+                                    🎉 Congratulations! Goal achieved!
+                                </span>
+                            </div>
+                        ` : progressPercent > 50 ? `
+                            <div class="mt-3 p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-center">
+                                <span class="text-blue-600 dark:text-blue-400 text-xs font-medium">
+                                    Great progress! You're over halfway there! 💪
+                                </span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            // STEP 5: Add the edit button at the bottom
+            goalsContainer.innerHTML = `
+                <div class="space-y-4">
+                    ${goalsHTML}
+                    
+                    <div class="text-center pt-2">
+                        <button onclick="openGoalsModal()" class="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium transition-colors">
+                            View details & edit goals →
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            console.log('Goals successfully rendered in insights tab');
         }
 
         // Render enhanced goal cards with impact analysis
@@ -9825,7 +9961,27 @@ class LensSmartInsights {
             }
         }
         
-        return recommendations.slice(0, 6); // Return top 6 to include points optimization
+        // DEDUPLICATION LOGIC - Add this instead of the simple return
+        const deduplicatedRecommendations = [];
+        const groupedByType = new Map();
+
+        recommendations.forEach(rec => {
+            const key = `${rec.type}_${rec.category}`;
+            if (!groupedByType.has(key)) {
+                groupedByType.set(key, rec);
+            } else {
+                // If similar recommendation exists, combine the savings
+                const existing = groupedByType.get(key);
+                existing.potentialSaving += rec.potentialSaving;
+            }
+        });
+
+        return Array.from(groupedByType.values())
+            .sort((a, b) => {
+                const priorityOrder = { urgent: 4, high: 3, medium: 2, low: 1 };
+                return (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
+            })
+            .slice(0, 8); // Limit to top 8 recommendations
     }
 
     prioritizeRecommendations(recommendations) {
@@ -9890,26 +10046,73 @@ class LensSmartInsights {
 
     predictDaySpending(dayOfWeek, date) {
         try {
-            const { last3Months } = this.monthlyData;
+            const dateNum = date.getDate();
             
-            const sameDaySpending = last3Months
-                .filter(e => e.dayOfWeek === dayOfWeek)
-                .map(e => e.cost);
+            // Check for recurring expenses on this day
+            const recurringForDay = this.recurringItems.filter(item => {
+                if (item.status !== 'active') return false;
                 
-            const avgSpending = sameDaySpending.length > 0 ? 
-                sameDaySpending.reduce((a, b) => a + b, 0) / sameDaySpending.length : 0;
+                const daysDiff = Math.floor((date - new Date(item.startDate)) / (1000 * 60 * 60 * 24));
+                
+                switch(item.frequency) {
+                    case 'weekly': return daysDiff % 7 === 0;
+                    case 'monthly': return date.getDate() === new Date(item.startDate).getDate();
+                    case 'daily': return true;
+                    default: return false;
+                }
+            });
             
-            const confidence = Math.min(95, Math.max(40, sameDaySpending.length * 10));
-            const reasoning = `Based on ${sameDaySpending.length} similar days`;
+            const recurringAmount = recurringForDay.reduce((sum, item) => sum + item.amount, 0);
+            
+            if (recurringAmount > 0) {
+                return {
+                    amount: recurringAmount,
+                    confidence: 90,
+                    reasoning: `${recurringForDay.length} scheduled recurring expense(s)`,
+                    hasRecurring: true
+                };
+            }
+            
+            // Historical pattern analysis
+            const sameDayOfWeekExpenses = this.processedExpenses.filter(e => 
+                e.dayOfWeek === dayOfWeek && !e.isRecurring
+            );
+            
+            const sameDateExpenses = this.processedExpenses.filter(e => 
+                e.date.getDate() === dateNum && !e.isRecurring
+            );
+            
+            const recentExpenses = this.processedExpenses.filter(e => {
+                const daysDiff = Math.floor((this.now - e.date) / (1000 * 60 * 60 * 24));
+                return daysDiff <= 30 && e.dayOfWeek === dayOfWeek && !e.isRecurring;
+            }).slice(0, 10);
+            
+            let avgSpending = 0;
+            let confidence = 25;
+            let reasoning = 'Limited historical data';
+            
+            if (recentExpenses.length >= 3) {
+                avgSpending = recentExpenses.reduce((sum, e) => sum + e.cost, 0) / recentExpenses.length;
+                confidence = Math.min(85, 25 + (recentExpenses.length * 8));
+                reasoning = `Based on ${recentExpenses.length} recent similar days`;
+            } else if (sameDayOfWeekExpenses.length >= 2) {
+                avgSpending = sameDayOfWeekExpenses.reduce((sum, e) => sum + e.cost, 0) / sameDayOfWeekExpenses.length;
+                confidence = Math.min(65, 25 + (sameDayOfWeekExpenses.length * 5));
+                reasoning = `Based on ${sameDayOfWeekExpenses.length} similar weekdays`;
+            } else if (sameDateExpenses.length >= 1) {
+                avgSpending = sameDateExpenses.reduce((sum, e) => sum + e.cost, 0) / sameDateExpenses.length;
+                confidence = Math.min(50, 25 + (sameDateExpenses.length * 10));
+                reasoning = `Based on ${sameDateExpenses.length} similar date(s)`;
+            }
             
             return {
                 amount: avgSpending,
-                confidence,
+                confidence: Math.round(confidence),
                 reasoning,
                 hasRecurring: false
             };
         } catch (error) {
-            return { amount: 0, confidence: 0, reasoning: 'Unable to predict', hasRecurring: false };
+            return { amount: 0, confidence: 20, reasoning: 'Unable to predict', hasRecurring: false };
         }
     }
 
@@ -9925,6 +10128,30 @@ class LensSmartInsights {
                 };
             }
             
+            // Calculate actual top category
+            const categoryTotals = {};
+            thisMonth.forEach(expense => {
+                const cat = expense.category || 'Other';
+                categoryTotals[cat] = (categoryTotals[cat] || 0) + expense.cost;
+            });
+            
+            // Get the actual top category
+            let topCategory = 'Various';
+            if (Object.keys(categoryTotals).length > 0) {
+                const topCategoryEntry = Object.entries(categoryTotals)
+                    .sort(([,a], [,b]) => b - a)[0];
+                
+                const topCategorySpending = topCategoryEntry[1];
+                const topCategoryPercentage = (topCategorySpending / totalSpent) * 100;
+                
+                // Only show specific category if it represents >30% of spending
+                if (topCategoryPercentage > 30) {
+                    topCategory = topCategoryEntry[0];
+                } else {
+                    topCategory = 'Diversified spending';
+                }
+            }
+            
             const totalIncome = this.monthlyIncome + this.getMonthlyRecurringIncome();
             const savingsRate = totalIncome > 0 ? ((totalIncome - totalSpent) / totalIncome) * 100 : 0;
             
@@ -9936,11 +10163,20 @@ class LensSmartInsights {
                 story += `Excellent <strong>${savingsRate.toFixed(0)}% savings rate</strong>! `;
             } else if (savingsRate > 0) {
                 story += `Good <strong>${savingsRate.toFixed(0)}% savings rate</strong>. `;
+            } else {
+                story += `Your spending is currently above your tracked income. `;
+            }
+            
+            // Add category insight
+            if (topCategory !== 'Various' && topCategory !== 'Diversified spending') {
+                story += `Your top spending category is <strong>${topCategory}</strong>.`;
+            } else {
+                story += `You have <strong>well-diversified spending</strong> across categories.`;
             }
             
             const metrics = {
                 savingsRate: savingsRate.toFixed(0),
-                topCategory: 'Various',
+                topCategory: topCategory,
                 spendingDays: spendingDays
             };
             
@@ -10049,24 +10285,22 @@ function renderSmart7DayForecast(forecast) {
     }
     
     container.innerHTML = `
-        <div class="space-y-3">
-            <div class="text-xs text-gray-500 mb-3 italic">
-                📊 Predictions based on your spending patterns
-            </div>
-            ${forecast.map(day => `
-                <div class="flex justify-between items-center p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
-                    <div>
-                        <div class="font-medium text-gray-800 dark:text-gray-200">${day.date}</div>
-                        <div class="text-xs text-gray-500 mt-1">${day.reasoning}</div>
-            </div>
-                    <div class="text-right">
-                        <div class="font-semibold ${day.predicted > 0 ? 'text-red-500' : 'text-gray-400'} dark:text-red-400">
-                            ${day.predicted > 0 ? formatCurrency(day.predicted) : 'No spending predicted'}
-                        </div>
-                        <div class="text-xs text-gray-400">${day.confidence}% confidence</div>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+            ${forecast.map(day => {
+                // Calculate confidence level text
+                const confidenceLevel = day.confidence >= 80 ? 'High' : 
+                                       day.confidence >= 50 ? 'Medium' : 'Low';
+                
+                return `
+                    <div class="flex flex-col bg-white dark:bg-gray-800 p-4 rounded-md shadow border border-gray-100 dark:border-gray-700">
+                        <span class="font-medium text-gray-800 dark:text-gray-200">${day.date}</span>
+                        <span class="font-semibold self-end ${day.predicted > 0 ? 'text-red-500' : 'text-gray-400'} text-lg">
+                            ${day.predicted > 0 ? formatCurrency(day.predicted) : '£0'}
+                        </span>
+                        <span class="text-xs text-gray-500 mt-1">${confidenceLevel} confidence</span>
                     </div>
-                </div>
-            `).join('')}
+                `;
+            }).join('')}
         </div>
     `;
 }
@@ -10222,30 +10456,73 @@ function updateRecommendationBadge(count) {
 }
 
 function handleRecommendationClick(category, recommendation) {
-    // Handle different recommendation actions
+    // Get the recommendation element to remove it
+    const clickedElement = event.target.closest('.border-l-4');
+    
+    if (clickedElement) {
+        // Visual feedback - fade out the card
+        clickedElement.style.transition = 'opacity 0.3s ease';
+        clickedElement.style.opacity = '0.5';
+        
+        // Update the recommendation count badge
+        const badge = document.getElementById('action-count');
+        const currentCount = parseInt(badge.textContent) || 0;
+        const newCount = Math.max(0, currentCount - 1);
+        
+        if (newCount > 0) {
+            badge.textContent = newCount;
+        } else {
+            badge.classList.add('hidden');
+        }
+        
+        // Remove the card after animation
+        setTimeout(() => {
+            clickedElement.remove();
+            
+            // Check if this was the last recommendation
+            const remainingRecs = document.querySelectorAll('#smart-recommendations .border-l-4');
+            if (remainingRecs.length === 0) {
+                document.getElementById('smart-recommendations').innerHTML = `
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-3">🎉</div>
+                        <div class="font-medium text-gray-800 dark:text-gray-200 mb-2">All recommendations handled!</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">
+                            Keep up the great work! New recommendations will appear as your spending patterns change.
+                        </div>
+                    </div>
+                `;
+            }
+        }, 300);
+    }
+    
+    // Handle different recommendation actions with better feedback
     switch(category) {
         case 'weekend_control':
-            // Could open a weekend budget setting modal
-            showToast('Set a weekend spending limit in Settings', 'info');
+            showToast('💡 Tip: Try setting a weekend spending limit in Settings', 'success');
             break;
         case 'impulse_control':
-            // Could show impulse spending tips
-            showToast('Try waiting 24 hours before non-essential purchases', 'info');
+            showToast('💡 Tip: Wait 24 hours before making non-essential purchases over £30', 'success');
             break;
-        case 'merchant_optimization':
-            // Could show merchant comparison
-            showToast('Research alternative merchants for better prices', 'info');
+        case 'same_day_duplicates':
+            showToast('💡 Tip: Plan your shopping trips to avoid multiple same-day purchases', 'success');
+            break;
+        case 'large_spending':
+            showToast('💡 Tip: Consider a 48-hour cooling-off period for purchases over £100', 'success');
+            break;
+        case 'transport_optimization':
+            showToast('💡 Tip: Look into monthly travel cards or alternative transport methods', 'success');
+            break;
+        case 'points_optimization':
+            showToast('💡 Tip: Check your credit card rewards categories for optimal usage', 'success');
             break;
         case 'subscription_tracking':
-            // Could open add recurring item modal
             showRecurringForm();
             break;
         case 'budget_risk':
-            // Could open budget adjustment modal
             openSettings('budget');
             break;
         default:
-            showToast('Recommendation noted! Check insights regularly for updates.', 'info');
+            showToast('✅ Recommendation noted!', 'success');
     }
 }
 
