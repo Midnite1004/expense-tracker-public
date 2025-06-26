@@ -1228,6 +1228,187 @@
         /* No-scroll CSS - Prevent horizontal scrolling */
         html,body{max-width:100%;overflow-x:hidden;}
         .table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;}
+        
+        /* Enhanced Pagination Styling */
+        .pagination-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 1rem;
+            margin: 0;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            border-radius: 0 0 0.75rem 0.75rem;
+        }
+        
+        .pagination-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        .pagination-info select {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            min-width: 70px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .pagination-info select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0;
+        }
+        
+        .pagination-status {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .pagination-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .pagination-nav-btn {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            min-height: 36px;
+        }
+        
+        .pagination-nav-btn:hover:not(:disabled) {
+            background-color: var(--bg-secondary);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+        
+        .pagination-nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: var(--bg-tertiary);
+        }
+        
+        .pagination-page-input-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0 0.75rem;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            margin: 0 0.25rem;
+        }
+        
+        .pagination-page-input {
+            width: 3.5rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            text-align: center;
+            font-weight: 600;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .pagination-page-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background-color: white;
+        }
+        
+        .dark .pagination-page-input:focus {
+            background-color: var(--bg-secondary);
+        }
+        
+        .pagination-page-total {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        /* Dark mode improvements */
+        .dark .pagination-container {
+            background-color: var(--bg-primary);
+            border-color: var(--border-color);
+        }
+        
+        .dark .pagination-info select,
+        .dark .pagination-nav-btn,
+        .dark .pagination-page-input {
+            background-color: var(--bg-primary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        .dark .pagination-nav-btn:hover:not(:disabled) {
+            background-color: var(--bg-secondary);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+        
+        .dark .pagination-nav-btn:disabled {
+            background-color: var(--bg-tertiary);
+            color: var(--text-tertiary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .pagination-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .pagination-controls {
+                gap: 0.75rem;
+            }
+            
+            .pagination-status {
+                font-size: 0.8125rem;
+            }
+            
+            .pagination-nav-btn {
+                padding: 0.375rem 0.625rem;
+                font-size: 0.8125rem;
+                min-width: 32px;
+                min-height: 32px;
+            }
+            
+            .pagination-page-input {
+                width: 3rem;
+                padding: 0.375rem 0.5rem;
+                font-size: 0.8125rem;
+            }
+        }
     </style>
 
 <style>
@@ -1552,10 +1733,10 @@
                         </div>
                         
                         <!-- Expenses Pagination -->
-                        <div id="expenses-pagination" class="flex items-center justify-between pt-6 mt-4 border-t border-gray-200 dark:border-gray-700">
-                            <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <div id="expenses-pagination" class="pagination-container">
+                            <div class="pagination-info">
                                 <span>Show</span>
-                                <select id="expenses-per-page" onchange="changeExpensesPerPage(this.value)" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-sm">
+                                <select id="expenses-per-page" onchange="changeExpensesPerPage(this.value)">
                                     <option value="5" selected>5</option>
                                     <option value="10">10</option>
                                     <option value="15">15</option>
@@ -1565,24 +1746,24 @@
                                 <span>entries</span>
                             </div>
                             
-                            <div class="flex items-center gap-3">
-                                <span id="expenses-page-info" class="text-sm text-gray-600 dark:text-gray-400"></span>
-                                <div class="flex gap-1">
-                                    <button onclick="goToExpensesPage('first')" id="expenses-first-btn" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" title="First page">
+                            <div class="pagination-controls">
+                                <span id="expenses-page-info" class="pagination-status"></span>
+                                <div class="pagination-buttons">
+                                    <button onclick="goToExpensesPage('first')" id="expenses-first-btn" class="pagination-nav-btn" title="First page">
                                         ⏮
                                     </button>
-                                    <button onclick="changeExpensesPage('prev')" id="expenses-prev-btn" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <button onclick="changeExpensesPage('prev')" id="expenses-prev-btn" class="pagination-nav-btn">
                                         Previous
                                     </button>
-                                    <div class="flex items-center gap-1">
+                                    <div class="pagination-page-input-container">
                                         <span class="text-sm text-gray-500">Page</span>
-                                        <input type="number" id="expenses-page-input" min="1" onchange="goToExpensesPage(this.value)" class="w-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm text-center bg-white dark:bg-gray-800">
-                                        <span id="expenses-total-pages" class="text-sm text-gray-500"></span>
+                                        <input type="number" id="expenses-page-input" min="1" onchange="goToExpensesPage(this.value)" class="pagination-page-input">
+                                        <span id="expenses-total-pages" class="pagination-page-total"></span>
                                     </div>
-                                    <button onclick="changeExpensesPage('next')" id="expenses-next-btn" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <button onclick="changeExpensesPage('next')" id="expenses-next-btn" class="pagination-nav-btn">
                                         Next
                                     </button>
-                                    <button onclick="goToExpensesPage('last')" id="expenses-last-btn" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" title="Last page">
+                                    <button onclick="goToExpensesPage('last')" id="expenses-last-btn" class="pagination-nav-btn" title="Last page">
                                         ⏭
                                     </button>
                                 </div>
@@ -1673,10 +1854,10 @@
                         </div>
                         
                         <!-- Recurring Pagination -->
-                        <div id="recurring-pagination" class="flex items-center justify-between pt-6 mt-4 border-t border-gray-200 dark:border-gray-700">
-                            <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <div id="recurring-pagination" class="pagination-container">
+                            <div class="pagination-info">
                                 <span>Show</span>
-                                <select id="recurring-per-page" onchange="changeRecurringPerPage(this.value)" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-sm">
+                                <select id="recurring-per-page" onchange="changeRecurringPerPage(this.value)">
                                     <option value="10">10</option>
                                     <option value="15" selected>15</option>
                                     <option value="25">25</option>
@@ -1685,24 +1866,24 @@
                                 <span>entries</span>
                             </div>
                             
-                            <div class="flex items-center gap-3">
-                                <span id="recurring-page-info" class="text-sm text-gray-600 dark:text-gray-400"></span>
-                                <div class="flex gap-1">
-                                    <button onclick="goToRecurringPage('first')" id="recurring-first-btn" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" title="First page">
+                            <div class="pagination-controls">
+                                <span id="recurring-page-info" class="pagination-status"></span>
+                                <div class="pagination-buttons">
+                                    <button onclick="goToRecurringPage('first')" id="recurring-first-btn" class="pagination-nav-btn" title="First page">
                                         ⏮
                                     </button>
-                                    <button onclick="changeRecurringPage('prev')" id="recurring-prev-btn" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <button onclick="changeRecurringPage('prev')" id="recurring-prev-btn" class="pagination-nav-btn">
                                         Previous
                                     </button>
-                                    <div class="flex items-center gap-1">
+                                    <div class="pagination-page-input-container">
                                         <span class="text-sm text-gray-500">Page</span>
-                                        <input type="number" id="recurring-page-input" min="1" onchange="goToRecurringPage(this.value)" class="w-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm text-center bg-white dark:bg-gray-800">
-                                        <span id="recurring-total-pages" class="text-sm text-gray-500"></span>
+                                        <input type="number" id="recurring-page-input" min="1" onchange="goToRecurringPage(this.value)" class="pagination-page-input">
+                                        <span id="recurring-total-pages" class="pagination-page-total"></span>
                                     </div>
-                                    <button onclick="changeRecurringPage('next')" id="recurring-next-btn" class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <button onclick="changeRecurringPage('next')" id="recurring-next-btn" class="pagination-nav-btn">
                                         Next
                                     </button>
-                                    <button onclick="goToRecurringPage('last')" id="recurring-last-btn" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" title="Last page">
+                                    <button onclick="goToRecurringPage('last')" id="recurring-last-btn" class="pagination-nav-btn" title="Last page">
                                         ⏭
                                     </button>
                                 </div>
@@ -3319,7 +3500,7 @@ function prepareGoalCommitment() {
             targetPlaceholder: '50,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '5,000',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         emergency: { 
             icon: '💰', 
@@ -3328,7 +3509,7 @@ function prepareGoalCommitment() {
             targetPlaceholder: '10,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '1,000',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         vacation: { 
             icon: '✈️', 
@@ -3337,7 +3518,7 @@ function prepareGoalCommitment() {
             targetPlaceholder: '3,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '500',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         investment: { 
             icon: '📈', 
@@ -3346,7 +3527,7 @@ function prepareGoalCommitment() {
             targetPlaceholder: '10,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '1,000',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         custom: { 
             icon: '🎯', 
@@ -3355,7 +3536,7 @@ function prepareGoalCommitment() {
             targetPlaceholder: '5,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '500',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         debt: { 
             icon: '💳', 
@@ -3687,7 +3868,7 @@ function prepareCompleteGoalPlanning() {
             targetPlaceholder: '50,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '5,000',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         emergency: { 
             icon: '💰', 
@@ -3696,7 +3877,7 @@ function prepareCompleteGoalPlanning() {
             targetPlaceholder: '10,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '1,000',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         vacation: { 
             icon: '✈️', 
@@ -3705,7 +3886,7 @@ function prepareCompleteGoalPlanning() {
             targetPlaceholder: '3,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '500',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         investment: { 
             icon: '📈', 
@@ -3714,7 +3895,7 @@ function prepareCompleteGoalPlanning() {
             targetPlaceholder: '10,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '1,000',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         custom: { 
             icon: '🎯', 
@@ -3723,7 +3904,7 @@ function prepareCompleteGoalPlanning() {
             targetPlaceholder: '5,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '500',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         }
     };
     
@@ -3888,7 +4069,7 @@ function prepareGoalDetails() {
             targetPlaceholder: '50,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '5,000',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         emergency: { 
             icon: '💰', 
@@ -3897,7 +4078,7 @@ function prepareGoalDetails() {
             targetPlaceholder: '10,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '1,000',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         vacation: { 
             icon: '✈️', 
@@ -3906,7 +4087,7 @@ function prepareGoalDetails() {
             targetPlaceholder: '3,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '500',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         investment: { 
             icon: '📈', 
@@ -3915,7 +4096,7 @@ function prepareGoalDetails() {
             targetPlaceholder: '10,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '1,000',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         },
         custom: { 
             icon: '🎯', 
@@ -3924,7 +4105,7 @@ function prepareGoalDetails() {
             targetPlaceholder: '5,000',
             targetLabel: 'How much do you need?',
             currentPlaceholder: '500',
-            currentLabel: 'How much have you allocated to this goal?'
+            currentLabel: 'Amount allocated to this goal'
         }
     };
     
@@ -8006,7 +8187,16 @@ function closeGoalSelection() {
                 if (dateFrom && e.date < dateFrom) passes = false;
                 if (dateTo && e.date > dateTo) passes = false;
                 if (categoryFilter && e.category !== categoryFilter) passes = false;
-                if (typeFilter && e.type !== typeFilter && !(typeFilter === 'Recurring' && e.recurringSourceId)) passes = false;
+                
+                // Fixed typeFilter logic
+                if (typeFilter) {
+                    if (typeFilter === 'Recurring') {
+                        if (!e.recurringSourceId) passes = false;
+                    } else {
+                        if (e.type !== typeFilter) passes = false;
+                    }
+                }
+                
                 return passes;
             });
         }
