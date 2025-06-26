@@ -1512,10 +1512,6 @@
                                 <button class="text-sm text-blue-600 dark:text-blue-400 opacity-70 hover:opacity-100 hover:underline" onclick="openSettings('budget')">
                                     Edit budget & income
                                 </button>
-                                <span class="text-gray-300">•</span>
-                                <button class="text-sm text-purple-600 dark:text-purple-400 opacity-70 hover:opacity-100 hover:underline" onclick="openEditTotalSavings()">
-                                    Edit total savings
-                                </button>
                             </div>
                 
                             <!-- Budget Health & Progress -->
@@ -2403,6 +2399,30 @@
                         </div>
                     </section>
                     <section>
+                        <h3 class="text-lg font-semibold mb-3 border-b pb-2">🎯 Goal Modal Calculations</h3>
+                        <div class="space-y-3">
+                            <p><strong>Understanding Your Goal Breakdown:</strong></p>
+                            <ul class="list-disc ml-5 space-y-2 text-sm">
+                                <li><strong>Goal target:</strong> The total amount you're saving for</li>
+                                <li><strong>Total savings:</strong> Your complete savings across all accounts</li>
+                                <li><strong>Allocated to goal:</strong> Portion of savings assigned to this specific goal</li>
+                                <li><strong>Unallocated:</strong> Savings not yet assigned to any goal</li>
+                                <li><strong>Still needed:</strong> Gap between target and allocated amount</li>
+                            </ul>
+                            <p><strong>Financial Position (when you have debt):</strong></p>
+                            <div class="bg-gray-100 dark:bg-gray-800 p-3 rounded text-xs font-mono">
+                                Net Worth = Total Savings - Total Debt<br>
+                                Example: £10,000 savings - £4,500 debt = £5,500 net worth
+                            </div>
+                            <p><strong>Allocation System (YNAB-style):</strong></p>
+                            <ul class="list-disc ml-5 space-y-1 text-sm">
+                                <li>Every pound of savings should be "allocated" to a specific goal</li>
+                                <li>Unallocated savings can be assigned to new or existing goals</li>
+                                <li>Multiple goals can share your total savings pool</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section>
                         <h3 class="text-lg font-semibold mb-3 border-b pb-2">⚙️ Settings & Data Management</h3>
                          <ul class="list-disc ml-5 space-y-2">
                             <li><strong>Banking Setup:</strong> Connect bank accounts via Plaid for automatic transaction import. Backend server handles secure token exchange.</li>
@@ -3125,7 +3145,7 @@ function validateCleanStep() {
             
             // Regular goal validation
             const targetInput = document.getElementById('goal-target');
-            const slider = document.getElementById('monthly-commitment-slider');
+            const slider = document.getElementById('monthly-commitment-slider') || document.getElementById('monthly-commitment-slider-alt');
             
             if (!targetInput) {
                 showToast('Please enter your goal target amount', 'error');
@@ -3141,13 +3161,16 @@ function validateCleanStep() {
             
             if (!slider) {
                 showToast('Please set a monthly commitment amount', 'error');
+                console.log('Slider validation failed - no slider found');
                 return false;
             }
             
             const monthlyCommitment = parseFloat(slider.value) || 0;
+            console.log('Validation: slider value =', slider.value, 'parsed =', monthlyCommitment);
             
             if (monthlyCommitment <= 0) {
                 showToast('Please set a monthly commitment amount using the slider', 'error');
+                console.log('Monthly commitment validation failed:', monthlyCommitment);
                 return false;
             }
             
@@ -3205,7 +3228,8 @@ function finishCleanOnboarding() {
     }
     
     if (data.primaryGoal === 'emergency') {
-        const months = parseInt(data.goalDetails['emergency-months']?.charAt(0)) || 6;
+        const monthsValue = data.goalDetails['emergency-months'];
+        const months = monthsValue ? parseInt(String(monthsValue).charAt(0)) || 6 : 6;
         const userTarget = data.goalDetails['emergency-target'] || (data.monthlyExpenses * months);
         console.log('Emergency fund creation:', {
             savedTarget: data.goalDetails['emergency-target'],
@@ -3330,7 +3354,14 @@ function finishCleanOnboarding() {
     
     // Save everything
     console.log('About to save data, userGoals:', userGoals);
-    saveData();
+    try {
+        saveData();
+        console.log('Data saved successfully');
+    } catch (saveError) {
+        console.error('Error saving data:', saveError);
+        throw saveError;
+    }
+    
     console.log('Data saved. Checking localStorage...');
     const savedData = JSON.parse(localStorage.getItem('lensAppData') || '{}');
     console.log('Saved userGoals:', savedData.userGoals);
@@ -3343,19 +3374,33 @@ function finishCleanOnboarding() {
             modal.classList.add('hidden');
         }
         
-        updateDisplay();
+        try {
+            updateDisplay();
+            console.log('Display updated successfully');
+        } catch (displayError) {
+            console.error('Error updating display:', displayError);
+            throw displayError;
+        }
         
         showToast('Welcome to Lens! Your personalized financial tracker is ready.', 'success');
         
         // Start tour
         setTimeout(() => {
-            if (localStorage.getItem('tourComplete') !== 'true') {
-                launchOnboardingTour();
+            try {
+                if (localStorage.getItem('tourComplete') !== 'true') {
+                    launchOnboardingTour();
+                }
+            } catch (tourError) {
+                console.error('Error launching tour:', tourError);
+                // Don't throw here since tour is optional
             }
         }, 1000);
         
     } catch (error) {
         console.error('Error finishing onboarding:', error);
+        console.error('Error stack:', error.stack);
+        console.error('Onboarding data at error:', cleanOnboardingData);
+        
         // Fallback: just close the modal
         const modal = document.getElementById('clean-onboarding-modal');
         if (modal) {
@@ -3674,7 +3719,7 @@ function prepareGoalCommitment() {
                 <div class="space-y-3">
                     <input type="range" id="monthly-commitment-slider" 
                            min="0" max="${surplus}" step="50" value="0"
-                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider monthly-commitment-main"
                            onchange="updateCommitmentCalculations()" oninput="updateCommitmentCalculations()">
                     
                     <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
@@ -3956,9 +4001,9 @@ function prepareCompleteGoalPlanning() {
             <div class="card p-4">
                 <h3 class="font-medium mb-4">Monthly Commitment</h3>
                 <div class="space-y-3">
-                    <input type="range" id="monthly-commitment-slider" 
+                    <input type="range" id="monthly-commitment-slider-alt" 
                            min="0" max="${surplus}" step="50" value="0"
-                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider monthly-commitment-alt"
                            onchange="updateCommitmentCalculations()" oninput="updateCommitmentCalculations()">
                     
                     <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
@@ -4015,7 +4060,7 @@ function prepareCompleteGoalPlanning() {
         if (data.goalDetails && Object.keys(data.goalDetails).length > 0) {
             const targetInput = document.getElementById('goal-target');
             const currentInput = document.getElementById('goal-current');
-            const slider = document.getElementById('monthly-commitment-slider');
+            const slider = document.getElementById('monthly-commitment-slider') || document.getElementById('monthly-commitment-slider-alt');
             
             if (targetInput && data.goalDetails.target !== undefined) {
                 targetInput.value = data.goalDetails.target;
@@ -4633,7 +4678,7 @@ function validateCleanGoalDetails() {
 function updateCommitmentCalculations() {
     const targetInput = document.getElementById('goal-target');
     const currentInput = document.getElementById('goal-current');
-    const slider = document.getElementById('monthly-commitment-slider');
+    const slider = document.getElementById('monthly-commitment-slider') || document.getElementById('monthly-commitment-slider-alt');
     const commitmentAmount = document.getElementById('commitment-amount');
     const timelineDisplay = document.getElementById('timeline-display');
     const timelineMonths = document.getElementById('timeline-months');
@@ -4822,11 +4867,33 @@ function updateDebtCalculations() {
 }
 
 function setCommitmentAmount(amount) {
-    const slider = document.getElementById('monthly-commitment-slider');
-    if (slider) {
-        slider.value = amount;
-        updateCommitmentCalculations();
+    console.log('setCommitmentAmount called with:', amount);
+    
+    // Find the correct slider - there might be multiple in different steps
+    const sliders = [
+        document.getElementById('monthly-commitment-slider'),
+        document.getElementById('monthly-commitment-slider-alt')
+    ].filter(Boolean); // Remove null values
+    
+    if (sliders.length === 0) {
+        console.log('No sliders found!');
+        return;
     }
+    
+    // Update all found sliders
+    sliders.forEach((slider, index) => {
+        console.log(`Updating slider ${index + 1}, current value:`, slider.value);
+        slider.value = amount;
+        console.log(`Slider ${index + 1} value set to:`, slider.value);
+        
+        // Trigger events
+        slider.dispatchEvent(new Event('input', { bubbles: true }));
+        slider.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    
+    // Call update function
+    updateCommitmentCalculations();
+    console.log('updateCommitmentCalculations called');
 }
 
 // 3. ADD missing debt management functions
@@ -5008,7 +5075,7 @@ function saveCurrentStepData() {
                 }
                 const targetInput = document.getElementById('goal-target');
                 const currentInput = document.getElementById('goal-current');
-                const slider = document.getElementById('monthly-commitment-slider');
+                const slider = document.getElementById('monthly-commitment-slider') || document.getElementById('monthly-commitment-slider-alt');
                 
                 // Save both generic and goal-specific field names for compatibility
                 const targetValue = parseFloat(targetInput?.value) || 0;
@@ -5142,7 +5209,7 @@ function restoreCurrentStepData() {
                 // Step 3: Restore complete goal planning
                 const targetInput = document.getElementById('goal-target');
                 const currentInput = document.getElementById('goal-current');
-                const slider = document.getElementById('monthly-commitment-slider');
+                const slider = document.getElementById('monthly-commitment-slider') || document.getElementById('monthly-commitment-slider-alt');
                 
                 if (data.goalDetails) {
                     if (targetInput && data.goalDetails.target) targetInput.value = data.goalDetails.target;
@@ -5161,7 +5228,12 @@ function restoreCurrentStepData() {
                     // Restore savings
                     const savingsInput = document.getElementById('clean-total-savings-input');
                     if (savingsInput) {
-                        savingsInput.value = data.totalSavings || 0;
+                        if (data.totalSavings) {
+                            savingsInput.value = data.totalSavings;
+                        } else {
+                            savingsInput.value = '';
+                            savingsInput.placeholder = '2,500';
+                        }
                     }
                     
                     // Restore debts
@@ -6036,100 +6108,6 @@ function closeGoalEditingModal() {
     document.getElementById('goal-editing-modal').classList.add('hidden');
 }
 
-function openEditTotalSavings() {
-    // Pre-populate the input with current total savings
-    const input = document.getElementById('edit-total-savings-input');
-    input.value = totalSavings;
-    
-    // Show current allocation breakdown
-    updateCurrentAllocationDisplay();
-    
-    // Show the modal
-    document.getElementById('edit-total-savings-modal').classList.remove('hidden');
-    
-    // Focus the input
-    setTimeout(() => input.focus(), 100);
-}
-
-function closeEditTotalSavings() {
-    document.getElementById('edit-total-savings-modal').classList.add('hidden');
-}
-
-function updateCurrentAllocationDisplay() {
-    const container = document.getElementById('current-allocation-display');
-    
-    // Calculate current allocations
-    const allocatedAmount = userGoals.reduce((sum, goal) => {
-        if (goal.unit === 'currency') {
-            return sum + goal.currentProgress;
-        }
-        return sum;
-    }, 0);
-    
-    const unallocated = totalSavings - allocatedAmount;
-    
-    container.innerHTML = `
-        <div class="flex justify-between">
-            <span>Goal allocations:</span>
-            <span>${formatCurrency(allocatedAmount)}</span>
-        </div>
-        <div class="flex justify-between">
-            <span>Unallocated:</span>
-            <span>${formatCurrency(unallocated)}</span>
-        </div>
-        <div class="flex justify-between font-medium border-t border-gray-300 dark:border-gray-600 pt-1 mt-1">
-            <span>Total:</span>
-            <span>${formatCurrency(totalSavings)}</span>
-        </div>
-    `;
-}
-
-function saveTotalSavings() {
-    const input = document.getElementById('edit-total-savings-input');
-    const newTotalSavings = parseFloat(input.value) || 0;
-    
-    // Validate the input
-    if (newTotalSavings < 0) {
-        showToast('Total savings cannot be negative', 'error');
-        return;
-    }
-    
-    // Calculate total allocated amount
-    const allocatedAmount = userGoals.reduce((sum, goal) => {
-        if (goal.unit === 'currency') {
-            return sum + goal.currentProgress;
-        }
-        return sum;
-    }, 0);
-    
-    // Warn if new total is less than allocated amount
-    if (newTotalSavings < allocatedAmount) {
-        showToast(`Warning: New total (${formatCurrency(newTotalSavings)}) is less than your allocated amount (${formatCurrency(allocatedAmount)})`, 'warning');
-        // Allow but show warning
-    }
-    
-    // Update the global variable
-    totalSavings = newTotalSavings;
-    
-    // Save to localStorage
-    saveData();
-    
-    // Update the display
-    updateDisplay();
-    updateGoalProgressDisplay();
-    
-    // Close the modal
-    closeEditTotalSavings();
-    
-    // Show success message
-    showToast(`Total savings updated to ${formatCurrency(newTotalSavings)}`, 'success');
-    
-    // Refresh the goals modal if it's open
-    const goalsModal = document.getElementById('goals-modal');
-    if (!goalsModal.classList.contains('hidden')) {
-        renderGoalsModal();
-    }
-}
 
 function updateSavingsAllocation() {
     const input = document.getElementById('edit-total-savings-main');
@@ -6593,31 +6571,40 @@ function renderGoalsModal() {
                 detailedInfo = `
                     <div class="text-sm space-y-2 mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded">
                         <div class="flex justify-between">
-                            <span>Allocated:</span>
-                            <span class="font-medium">${formatCurrency(goal.currentProgress)}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Target:</span>
+                            <span>Goal target:</span>
                             <span class="font-medium">${formatCurrency(goal.target)}</span>
                         </div>
+                        ${totalSavings > 0 ? `
                         <div class="flex justify-between">
+                            <span>Total savings:</span>
+                            <span class="font-medium text-green-600 dark:text-green-400">${formatCurrency(totalSavings)}</span>
+                        </div>
+                        ` : ''}
+                        <div class="flex justify-between">
+                            <span>Allocated to goal:</span>
+                            <span class="font-medium text-green-600 dark:text-green-400">${formatCurrency(goal.currentProgress)}</span>
+                        </div>
+                        ${totalSavings > 0 ? `
+                        <div class="flex justify-between">
+                            <span>Unallocated:</span>
+                            <span class="font-medium text-green-600 dark:text-green-400">${formatCurrency(totalSavings - goal.currentProgress)}</span>
+                        </div>
+                        ` : ''}
+                        <div class="flex justify-between pb-2 border-b border-gray-200 dark:border-gray-600">
                             <span>Still needed:</span>
                             <span class="font-medium text-purple-600">${formatCurrency(remaining)}</span>
                         </div>
-                        ${totalSavings > 0 ? `
-                        <div class="flex justify-between text-xs pt-2 border-t border-gray-200 dark:border-gray-600">
-                            <span>Total savings:</span>
-                            <span>${formatCurrency(totalSavings)}</span>
+                        ${totalDebt > 0 ? `
+                        <div class="flex justify-between text-xs pt-2">
+                            <span>Total debt:</span>
+                            <span class="text-red-500">-${formatCurrency(totalDebt)}</span>
                         </div>
                         <div class="flex justify-between text-xs">
-                            <span>Unallocated:</span>
-                            <span>${formatCurrency(totalSavings - goal.currentProgress)}</span>
-                        </div>
-                        ` : ''}
-                        ${totalDebt > 0 ? `
-                        <div class="flex justify-between text-xs border-t border-gray-200 dark:border-gray-600 pt-2">
-                            <span>Net worth:</span>
-                            <span class="text-red-500">${formatCurrency(totalSavings - totalDebt)}</span>
+                            <span class="flex items-center gap-1">
+                                Net worth:
+                                <span class="tooltip-trigger cursor-help text-gray-400 hover:text-gray-600" title="Net worth = Total savings (${formatCurrency(totalSavings)}) - Total debt (${formatCurrency(totalDebt)}) = ${formatCurrency(totalSavings - totalDebt)}">ⓘ</span>
+                            </span>
+                            <span class="${totalSavings - totalDebt >= 0 ? 'text-green-600' : 'text-red-500'}">${formatCurrency(totalSavings - totalDebt)}</span>
                         </div>
                         ` : ''}
                     </div>
@@ -6668,9 +6655,10 @@ function formatGoalProgress(goal) {
             const spent = goal.target * (1 - goal.currentProgress / 100);
             return `${formatCurrency(spent)} / ${formatCurrency(goal.target)}`;
         } else if (goal.type === 'emergency_fund' && goal.months && monthlyExpenses > 0) {
-            // Show coverage for emergency fund goals
+            // Show coverage for emergency fund goals with percentage
             const coverageMonths = (goal.currentProgress / monthlyExpenses).toFixed(1);
-            return `${formatCurrency(goal.currentProgress)} / ${formatCurrency(goal.target)} (${coverageMonths} months coverage)`;
+            const percentage = Math.round((goal.currentProgress / goal.target) * 100);
+            return `${formatCurrency(goal.currentProgress)} / ${formatCurrency(goal.target)} (${coverageMonths} months coverage) — ${percentage}% complete`;
         }
         return `${formatCurrency(goal.currentProgress)} / ${formatCurrency(goal.target)}`;
     } else if (goal.unit === 'percent') {
