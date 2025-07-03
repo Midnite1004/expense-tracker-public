@@ -1973,9 +1973,7 @@
                     </svg>
                     <span class="nav-text">Insights</span>
                 </button>
-            </nav>
-            
-            <div class="sidebar-nav" style="margin-top: auto; padding-top: 0;">
+                
                 <button onclick="showTab('settings')" id="nav-settings" class="nav-item">
                     <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
@@ -1989,7 +1987,7 @@
                     </svg>
                     <span class="nav-text">Help</span>
                 </button>
-            </div>
+            </nav>
         </div>
         
         <!-- Main Content Area -->
@@ -2464,7 +2462,7 @@
             <div class="metric-card">
                 <div class="text-sm opacity-90">Monthly Income</div>
                 <div class="text-2xl font-bold" id="insights-monthly-income">£0</div>
-                <div class="text-xs opacity-75 mt-1">From your settings</div>
+                <div class="text-xs opacity-75 mt-1">From settings</div>
             </div>
             <div class="metric-card">
                 <div class="text-sm opacity-90">Monthly Budget</div>
@@ -2474,17 +2472,17 @@
             <div class="metric-card">
                 <div class="text-sm opacity-90">Daily Budget</div>
                 <div class="text-2xl font-bold" id="insights-daily-budget">£0</div>
-                <div class="text-xs opacity-75 mt-1" id="daily-budget-source">Auto-calculated</div>
+                <div class="text-xs opacity-75 mt-1">Auto-calculated</div>
             </div>
             <div class="metric-card">
-                <div class="text-sm opacity-90">Monthly Surplus</div>
-                <div class="text-2xl font-bold" id="insights-surplus">£0</div>
-                <div class="text-xs opacity-75 mt-1" id="surplus-status">Income - Budget</div>
+                <div class="text-sm opacity-90">Goal Impact</div>
+                <div class="text-2xl font-bold" id="goal-impact">+2 weeks</div>
+                <div class="text-xs opacity-75 mt-1">House deposit delay</div>
             </div>
             <div class="metric-card">
                 <div class="text-sm opacity-90">Forecast</div>
-                <div class="text-2xl font-bold" id="monthly-forecast">£0</div>
-                <div class="text-xs opacity-75 mt-1" id="forecast-status">Based on spending</div>
+                <div class="text-2xl font-bold" id="monthly-forecast">£4,200</div>
+                <div class="text-xs opacity-75 mt-1" id="forecast-status">5% over budget</div>
             </div>
         </div>
 
@@ -2603,7 +2601,7 @@
                 </div>
                 <div class="card-content space-y-4">
                     <div>
-                        <label for="monthly-income" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label for="settings-monthly-income" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Monthly Income
                         </label>
                         <div class="relative">
@@ -2656,16 +2654,16 @@
                         </div>
                     </div>
                     
-                    <!-- Save Actions for Budget & Income -->
-                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <button onclick="cancelBudgetSettings()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-sm">
+                    <!-- Save/Cancel Buttons for Budget Settings -->
+                    <div class="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <button onclick="cancelSettings()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium">
                             Cancel
                         </button>
-                        <button onclick="saveSettingsWithInsightsUpdate()" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2 text-sm">
+                        <button onclick="saveSettingsWithInsightsUpdate()" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            Save Budget & Income
+                            Save Settings
                         </button>
                     </div>
                 </div>
@@ -2804,7 +2802,7 @@
         </div>
     </div>
 
-    <!-- Removed save buttons - now handled per section -->
+    <!-- Save Actions -->
 </div>
 
 
@@ -3478,7 +3476,6 @@
                 </div>
             </div>
 
-            <!-- Removed old save buttons - now handled per section -->
         </div>
     </div>
     
@@ -5453,6 +5450,7 @@ let goalTemplates = {
                 applyTheme();
                 updateCurrencyUI();
                 updateDisplay();
+                updateInsightsTiles();
                 showTab('overview');
                 DOMElements.expenseDate.value = new Date().toISOString().split('T')[0];
                 DOMElements.recurringStartDate.value = new Date().toISOString().split('T')[0];
@@ -5904,23 +5902,12 @@ function finishCleanOnboarding() {
     try {
         const data = cleanOnboardingData.data;
         
-        console.log('🔥 FINISHING ONBOARDING - UPDATING GLOBAL VARIABLES');
-        console.log('Onboarding data:', { 
-            monthlyIncome: data.monthlyIncome, 
-            monthlyBudget: data.monthlyBudget,
-            monthlyExpenses: data.monthlyExpenses 
-        });
-        console.log('BEFORE update - Global variables:', { monthlyIncome, monthlyBudget, monthlyExpenses });
-        
         // Update main app variables with safe defaults
         monthlyIncome = data.monthlyIncome || 0;
         monthlyBudget = data.monthlyBudget || 0;
         monthlyExpenses = data.monthlyExpenses || data.monthlyBudget || 0;
         totalSavings = data.totalSavings || 0;
         totalDebt = (data.debts || []).reduce((sum, debt) => sum + debt.balance, 0);
-        
-        console.log('AFTER update - Global variables:', { monthlyIncome, monthlyBudget, monthlyExpenses });
-        console.log('✅ Global variables updated from onboarding data');
     
     // Create real goals
     userGoals = [];
@@ -6091,20 +6078,6 @@ function finishCleanOnboarding() {
         try {
             updateDisplay();
             console.log('Display updated successfully');
-            
-            // Update insights tiles with new onboarding data
-            if (typeof updateInsightsTiles === 'function') {
-                updateInsightsTiles();
-                console.log('Insights tiles updated with onboarding data');
-            }
-            
-            // Force refresh settings form if it exists to ensure it shows the new values
-            if (typeof initializeSettingsForm === 'function') {
-                setTimeout(() => {
-                    console.log('🔄 Force refreshing settings form with new onboarding data');
-                    initializeSettingsForm();
-                }, 500);
-            }
         } catch (displayError) {
             console.error('Error updating display:', displayError);
             throw displayError;
@@ -10357,36 +10330,12 @@ function closeGoalSelection() {
 
         // --- Data Load/Save ---
         function loadData() {
-            console.log('🔄 Loading data from storage');
-            let data = null;
-            
-            // Try authManager first if available
-            if (typeof authManager !== 'undefined' && authManager.getUserData) {
-                try {
-                    data = authManager.getUserData('lensAppData');
-                    console.log('✅ Loaded from authManager:', !!data);
-                } catch (error) {
-                    console.log('AuthManager load failed, trying localStorage:', error.message);
-                }
-            }
-            
-            // Fallback to localStorage if authManager failed or unavailable
-            if (!data) {
-                const localData = localStorage.getItem('lensAppData');
-                if (localData) {
-                    data = localData;
-                    console.log('✅ Loaded from localStorage fallback');
-                }
-            }
-            
+            const data = authManager.getUserData('lensAppData');
             if (data) {
                 const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
-                console.log('📊 Parsed data:', { 
-                    monthlyIncome: parsedData.monthlyIncome, 
-                    monthlyBudget: parsedData.monthlyBudget,
-                    hasExpenses: !!parsedData.expenses?.length 
-                });
-                
+                console.log('loadData - raw data from localStorage:', data);
+                console.log('loadData - parsedData.userGoals:', parsedData.userGoals);
+                console.log('loadData - userGoals before assignment:', userGoals);
                 expenses = parsedData.expenses || [];
                 recurringItems = parsedData.recurringItems || [];
                 monthlyBudget = parsedData.monthlyBudget || 0;
@@ -10398,20 +10347,11 @@ function closeGoalSelection() {
                 currentCurrencyCode = parsedData.currentCurrencyCode || 'GBP';
                 activeTab = parsedData.activeTab || 'overview';
                 userGoals = parsedData.userGoals || [];
-                dailyBudget = parsedData.dailyBudget || 0;
-                dailyBudgetOverride = parsedData.dailyBudgetOverride || false;
-                
-                console.log('✅ Data loaded successfully:', { monthlyIncome, monthlyBudget });
-            } else {
-                console.log('ℹ️ No saved data found, using defaults');
+                console.log('loadData - userGoals after assignment:', userGoals);
             }
-            
             const savedDarkMode = localStorage.getItem('darkMode');
             if (savedDarkMode !== null) {
-                const themeToggle = document.getElementById('dark-mode-toggle');
-                if (themeToggle) {
-                    themeToggle.checked = savedDarkMode === 'true';
-                }
+                 DOMElements.themeToggle.checked = savedDarkMode === 'true';
             }
         }
 
@@ -11215,11 +11155,6 @@ function closeGoalSelection() {
             // Update daily budget coaching display
             if (dailyBudgetCoach && dailyBudgetCoach.isInitialized) {
                 dailyBudgetCoach.refreshDailyBudgetDisplay();
-            }
-            
-            // Update insights tiles if on insights tab
-            if (activeTab === 'insights' && typeof updateInsightsTiles === 'function') {
-                updateInsightsTiles();
             }
 
             console.timeEnd('updateDisplay');
@@ -13181,9 +13116,9 @@ function closeGoalSelection() {
 
         // --- Settings Page Population ---
         function populateSettingsForm() {
-            // Populate budget and income fields using new unique IDs
-            const budgetInput = document.getElementById('settings-monthly-budget');
-            const incomeInput = document.getElementById('settings-monthly-income');
+            // Populate budget and income fields
+            const budgetInput = document.getElementById('monthly-budget');
+            const incomeInput = document.getElementById('monthly-income');
             const currencySelect = document.getElementById('currency-selector');
             const darkModeToggle = document.getElementById('dark-mode-toggle');
             
@@ -15257,10 +15192,7 @@ function initializeSettingsForm() {
     console.log('🔥 INITIALIZING SETTINGS FORM WITH CURRENT VALUES');
     console.log('Current global values:', { monthlyIncome, monthlyBudget, dailyBudget });
     
-    // REMOVED: Automatic loadData() call that was overriding user changes
-    // The form should trust the current global variables, not reload from storage
-    
-    // Populate budget and income fields with CURRENT global variables using new unique IDs
+    // Populate budget and income fields with CURRENT global variables, not localStorage
     const budgetInput = document.getElementById('settings-monthly-budget');
     const incomeInput = document.getElementById('settings-monthly-income');
     const dailyBudgetInput = document.getElementById('settings-daily-budget');
@@ -15269,29 +15201,11 @@ function initializeSettingsForm() {
     
     if (budgetInput) {
         budgetInput.value = monthlyBudget > 0 ? monthlyBudget : '';  // ✅ Use global variable
-        console.log('✅ Set budget input to:', budgetInput.value, '(from global monthlyBudget:', monthlyBudget, ')');
-        
-        // Add real-time budget calculation updates
-        budgetInput.addEventListener('input', function() {
-            console.log('🔄 Budget input changed to:', this.value);
-            const tempBudget = parseFloat(this.value) || 0;
-            const tempIncome = parseFloat(incomeInput?.value) || 0;
-            console.log('Real-time calculation:', { tempIncome, tempBudget, surplus: tempIncome - tempBudget });
-            updateBudgetHelper(tempIncome, tempBudget);
-        });
+        console.log('✅ Set budget input to:', budgetInput.value);
     }
     if (incomeInput) {
         incomeInput.value = monthlyIncome > 0 ? monthlyIncome : '';  // ✅ Use global variable  
         console.log('✅ Set income input to:', incomeInput.value);
-        
-        // Add real-time budget calculation updates
-        incomeInput.addEventListener('input', function() {
-            console.log('🔄 Income input changed to:', this.value);
-            const tempIncome = parseFloat(this.value) || 0;
-            const tempBudget = parseFloat(budgetInput?.value) || 0;
-            console.log('Real-time calculation:', { tempIncome, tempBudget, surplus: tempIncome - tempBudget });
-            updateBudgetHelper(tempIncome, tempBudget);
-        });
     }
     if (dailyBudgetInput) {
         dailyBudgetInput.value = dailyBudget > 0 && dailyBudgetOverride ? dailyBudget : '';
@@ -15304,42 +15218,7 @@ function initializeSettingsForm() {
         darkModeToggle.checked = document.body.classList.contains('dark');
     }
     
-    // Initialize budget helper with current form values
-    const currentIncome = parseFloat(incomeInput?.value) || 0;
-    const currentBudget = parseFloat(budgetInput?.value) || 0;
-    console.log('Initializing budget helper with form values:', { currentIncome, currentBudget });
-    updateBudgetHelper(currentIncome, currentBudget);
-    
-    // Also update global variables to match form values to ensure consistency
-    if (currentIncome > 0) monthlyIncome = currentIncome;
-    if (currentBudget > 0) monthlyBudget = currentBudget;
-    console.log('Updated global variables to match form:', { monthlyIncome, monthlyBudget });
-    
-    console.log('🎉 Settings form initialized with current values and real-time updates');
-}
-
-// Helper function for real-time budget calculations
-function updateBudgetHelper(income, budget) {
-    const surplus = income - budget;
-    const dailyBudgetCalc = budget > 0 ? budget / 30 : 0;
-    const savingsRate = income > 0 ? (surplus / income) * 100 : 0;
-    
-    const surplusDisplay = document.getElementById('budget-surplus-display');
-    const dailyDisplay = document.getElementById('daily-budget-display');
-    const savingsDisplay = document.getElementById('savings-rate-display');
-    
-    if (surplusDisplay) {
-        surplusDisplay.innerHTML = `• Monthly Surplus: <span class="font-semibold ${surplus >= 0 ? 'text-green-600' : 'text-red-600'}">${formatCurrency(surplus)}</span> (Income - Budget)`;
-    }
-    
-    if (dailyDisplay) {
-        dailyDisplay.innerHTML = `• Daily Budget: <span class="font-semibold">${formatCurrency(dailyBudgetCalc)}</span>`;
-    }
-    
-    if (savingsDisplay) {
-        const rateColor = savingsRate >= 20 ? 'text-green-600' : savingsRate >= 10 ? 'text-yellow-600' : 'text-red-600';
-        savingsDisplay.innerHTML = `• Savings Rate: <span class="font-semibold ${rateColor}">${savingsRate.toFixed(1)}%</span> of income`;
-    }
+    console.log('🎉 Settings form initialized with current values');
 }
 
 // Override the existing showTab function to work with Trezor navigation
@@ -15460,9 +15339,9 @@ function clearAllData() {
 
 // Add event listeners for real-time updates
 document.addEventListener('DOMContentLoaded', function() {
-    const incomeInput = document.getElementById('monthly-income');
-    const budgetInput = document.getElementById('monthly-budget');
-    const dailyInput = document.getElementById('daily-budget');
+    const incomeInput = document.getElementById('settings-monthly-income');
+    const budgetInput = document.getElementById('settings-monthly-budget');
+    const dailyInput = document.getElementById('settings-daily-budget');
     
     if (incomeInput) incomeInput.addEventListener('input', updateBudgetCalculations);
     if (budgetInput) budgetInput.addEventListener('input', updateBudgetCalculations);
@@ -15977,54 +15856,48 @@ function updateChartsAndInsights() {
 }
 
 function saveSettingsWithInsightsUpdate() {
-    console.log('💾 SAVING SETTINGS - COMPLETE DATA OVERRIDE');
+    console.log('🔥 SAVING SETTINGS - FORCE UPDATE ALL VALUES');
     
-    // Get form inputs using new unique IDs
+    // Get form inputs with correct IDs
     const budgetInput = document.getElementById('settings-monthly-budget');
     const incomeInput = document.getElementById('settings-monthly-income');
     const dailyBudgetInput = document.getElementById('settings-daily-budget');
     
-    console.log('Found elements:', {
+    console.log('Form elements found:', {
         budget: !!budgetInput,
         income: !!incomeInput,
         daily: !!dailyBudgetInput
     });
     
     if (!budgetInput || !incomeInput) {
-        showToast('Settings form elements not found', 'error');
+        showToast('Settings form not found', 'error');
         return;
     }
-    
-    console.log('Current form values:', {
-        budget: budgetInput.value,
-        income: incomeInput.value,
-        daily: dailyBudgetInput?.value
-    });
     
     // Extract values
     const incomeValue = parseFloat(incomeInput.value) || 0;
     const budgetValue = parseFloat(budgetInput.value) || 0;
     const dailyValue = parseFloat(dailyBudgetInput?.value) || 0;
     
+    console.log('New values from form:', { incomeValue, budgetValue, dailyValue });
+    
     // Validation
     if (incomeValue <= 0) {
         showToast('Please enter a valid monthly income', 'error');
-        incomeInput.focus();
         return;
     }
     
     if (budgetValue <= 0) {
         showToast('Please enter a valid monthly budget', 'error');
-        budgetInput.focus();
         return;
     }
     
-    console.log('BEFORE update:', { monthlyIncome, monthlyBudget, monthlyExpenses, dailyBudget });
+    console.log('BEFORE update - Global variables:', { monthlyIncome, monthlyBudget, monthlyExpenses });
     
-    // 🔥 UPDATE GLOBAL VARIABLES
+    // 🔥 UPDATE ALL GLOBAL VARIABLES
     monthlyIncome = incomeValue;
     monthlyBudget = budgetValue;
-    monthlyExpenses = budgetValue; // Keep in sync
+    monthlyExpenses = budgetValue;
     
     if (dailyValue > 0) {
         dailyBudget = dailyValue;
@@ -16034,215 +15907,101 @@ function saveSettingsWithInsightsUpdate() {
         dailyBudgetOverride = false;
     }
     
-    console.log('AFTER update:', { monthlyIncome, monthlyBudget, monthlyExpenses, dailyBudget });
+    console.log('AFTER update - Global variables:', { monthlyIncome, monthlyBudget, monthlyExpenses });
     
-    // 🔥 SAVE TO PRIMARY DATA STORAGE (lensAppData)
-    saveData();
-    console.log('✅ Saved to primary storage (lensAppData)');
-    
-    // 🔥 OVERRIDE ONBOARDING DATA TO PREVENT CONFLICTS
+    // 🔥 FORCE SAVE TO BOTH STORAGE LOCATIONS
     try {
-        // Get existing onboarding data or create new
-        let onboardingData;
-        try {
-            const existingData = localStorage.getItem('cleanOnboardingData');
-            onboardingData = existingData ? JSON.parse(existingData) : { completed: true, data: {} };
-        } catch (e) {
-            onboardingData = { completed: true, data: {} };
-        }
+        // Save to main app data
+        saveData();
+        console.log('✅ Saved to lensAppData');
         
-        // Update onboarding data with new values
-        onboardingData.data.monthlyIncome = monthlyIncome;
-        onboardingData.data.monthlyBudget = monthlyBudget;
-        onboardingData.data.monthlyExpenses = monthlyExpenses;
-        onboardingData.data.totalSavings = totalSavings;
-        onboardingData.data.totalDebt = totalDebt;
-        
-        // Save updated onboarding data
+        // Force update onboarding data to prevent override
+        const onboardingData = {
+            completed: true,
+            currentStep: 6,
+            data: {
+                monthlyIncome: monthlyIncome,
+                monthlyBudget: monthlyBudget,
+                monthlyExpenses: monthlyExpenses,
+                totalSavings: totalSavings || 0,
+                debts: [],
+                primaryGoal: 'custom',
+                goalDetails: {}
+            }
+        };
         localStorage.setItem('cleanOnboardingData', JSON.stringify(onboardingData));
-        console.log('✅ Updated cleanOnboardingData to prevent override');
+        console.log('✅ Updated onboarding data');
         
-        // Also update the global cleanOnboardingData object if it exists
-        if (typeof cleanOnboardingData !== 'undefined' && cleanOnboardingData.data) {
-            cleanOnboardingData.data.monthlyIncome = monthlyIncome;
-            cleanOnboardingData.data.monthlyBudget = monthlyBudget;
-            cleanOnboardingData.data.monthlyExpenses = monthlyExpenses;
-            console.log('✅ Updated global cleanOnboardingData object');
+        // Force update dashboard tiles immediately
+        updateDisplay();
+        console.log('✅ Updated dashboard display');
+        
+        // Force update budget calculations
+        updateBudgetCalculations();
+        console.log('✅ Updated budget calculations');
+        
+        // Force update insights tiles with new values
+        updateInsightsTiles();
+        console.log('✅ Updated insights tiles');
+        
+        // Force update insights if on insights tab
+        if (activeTab === 'insights') {
+            updateChartsAndInsights();
+            console.log('✅ Updated insights');
         }
         
     } catch (error) {
-        console.warn('Could not update onboarding data:', error);
-    }
-    
-    // 🔥 FORCE UPDATE ALL UI COMPONENTS IMMEDIATELY
-    console.log('🔄 Updating all UI components...');
-    
-    // Update display functions
-    updateDisplay();
-    updateBudgetCalculations();
-    
-    // Force update insights tiles immediately
-    if (typeof updateInsightsTiles === 'function') {
-        updateInsightsTiles();
-        console.log('✅ Updated insights tiles');
-    }
-    
-    // Force update dashboard tiles
-    const monthlyBudgetDisplay = document.getElementById('monthly-budget');
-    if (monthlyBudgetDisplay && monthlyBudgetDisplay.textContent) {
-        monthlyBudgetDisplay.textContent = formatCurrency(monthlyBudget);
-        console.log('✅ Updated dashboard budget tile');
-    }
-    
-    // Update all elements with monthly-budget ID or class
-    document.querySelectorAll('[id*="monthly-budget"], [class*="monthly-budget"]').forEach(element => {
-        if (element.textContent && element.textContent.includes('£')) {
-            element.textContent = formatCurrency(monthlyBudget);
-        }
-    });
-    
-    // Update overview stat cards
-    const budgetStatCard = document.querySelector('[id*="monthly-budget"]');
-    if (budgetStatCard) {
-        budgetStatCard.textContent = formatCurrency(monthlyBudget);
-        console.log('✅ Updated budget stat card');
-    }
-    
-    // Force refresh the settings form to show updated values using new unique IDs
-    setTimeout(() => {
-        const settingsBudgetInput = document.getElementById('settings-monthly-budget');
-        const settingsIncomeInput = document.getElementById('settings-monthly-income');
-        if (settingsBudgetInput) {
-            settingsBudgetInput.value = monthlyBudget;
-            console.log('✅ Refreshed settings budget input');
-        }
-        if (settingsIncomeInput) {
-            settingsIncomeInput.value = monthlyIncome;
-            console.log('✅ Refreshed settings income input');
-        }
-        
-        // Update the budget helper with the new values
-        updateBudgetHelper(monthlyIncome, monthlyBudget);
-        console.log('✅ Refreshed budget helper calculations');
-    }, 100);
-    
-    // Force refresh of budget progress and health indicators
-    if (typeof updateBudgetProgress === 'function') {
-        updateBudgetProgress();
-    }
-    if (typeof updateHealthScore === 'function') {
-        updateHealthScore();
-    }
-    if (typeof updateGoalsWithImpactAnalysis === 'function') {
-        updateGoalsWithImpactAnalysis();
-    }
-    
-    // Update insights if on insights tab
-    if (typeof generateBasicInsights === 'function') {
-        generateBasicInsights();
+        console.error('Error saving settings:', error);
+        showToast('Error saving settings', 'error');
+        return;
     }
     
     const surplus = monthlyIncome - monthlyBudget;
-    showToast(`Settings saved! Monthly surplus: ${formatCurrency(surplus)}`, 'success');
+    console.log('Final surplus calculation:', monthlyIncome, '-', monthlyBudget, '=', surplus);
     
-    // Close settings modal if it exists
+    showToast(`Settings saved! Income: ${formatCurrency(monthlyIncome)}, Budget: ${formatCurrency(monthlyBudget)}, Surplus: ${formatCurrency(surplus)}`, 'success');
+    
+    // Close settings modal
     if (typeof closeSettings === 'function') {
         closeSettings();
     }
     
-    console.log('🎉 SETTINGS SAVE COMPLETE - All data sources updated and UI refreshed');
-    console.log('Final values:', { monthlyIncome, monthlyBudget, monthlyExpenses, dailyBudget, surplus });
+    console.log('🎉 SETTINGS SAVE COMPLETE - NEW VALUES APPLIED');
 }
 
-// Cancel function for budget settings
-function cancelBudgetSettings() {
-    console.log('🔄 Canceling budget settings changes');
-    
-    // Reset form fields to current global values using new unique IDs
-    const budgetInput = document.getElementById('settings-monthly-budget');
-    const incomeInput = document.getElementById('settings-monthly-income');
-    const dailyBudgetInput = document.getElementById('settings-daily-budget');
-    
-    if (budgetInput) {
-        budgetInput.value = monthlyBudget > 0 ? monthlyBudget : '';
-    }
-    if (incomeInput) {
-        incomeInput.value = monthlyIncome > 0 ? monthlyIncome : '';
-    }
-    if (dailyBudgetInput) {
-        dailyBudgetInput.value = dailyBudget > 0 && dailyBudgetOverride ? dailyBudget : '';
-    }
-    
-    // Reset budget helper display
-    updateBudgetCalculations();
-    
-    showToast('Changes canceled - values reset to current settings', 'info');
-    console.log('✅ Budget settings reset to current values');
-}
-
-// Function to update insights tiles with actual global variables
 function updateInsightsTiles() {
-    console.log('🔄 Updating insights tiles with actual values');
-    console.log('Current values:', { monthlyIncome, monthlyBudget, dailyBudget, dailyBudgetOverride });
+    console.log('Updating insights tiles with:', { monthlyIncome, monthlyBudget, dailyBudget });
     
-    // Update monthly income
-    const incomeElement = document.getElementById('insights-monthly-income');
-    if (incomeElement) {
-        incomeElement.textContent = formatCurrency(monthlyIncome);
+    // Update insights tiles
+    const insightsIncome = document.getElementById('insights-monthly-income');
+    const insightsBudget = document.getElementById('insights-monthly-budget');
+    const insightsDailyBudget = document.getElementById('insights-daily-budget');
+    const budgetPercentage = document.getElementById('budget-percentage');
+    
+    if (insightsIncome) {
+        insightsIncome.textContent = formatCurrency(monthlyIncome);
+        console.log('✅ Updated insights income to:', formatCurrency(monthlyIncome));
     }
     
-    // Update monthly budget
-    const budgetElement = document.getElementById('insights-monthly-budget');
-    if (budgetElement) {
-        budgetElement.textContent = formatCurrency(monthlyBudget);
+    if (insightsBudget) {
+        insightsBudget.textContent = formatCurrency(monthlyBudget);
+        console.log('✅ Updated insights budget to:', formatCurrency(monthlyBudget));
     }
     
-    // Update budget percentage
-    const budgetPercentageElement = document.getElementById('budget-percentage');
-    if (budgetPercentageElement && monthlyIncome > 0) {
-        const percentage = Math.round((monthlyBudget / monthlyIncome) * 100);
-        budgetPercentageElement.textContent = `${percentage}% of income`;
+    if (insightsDailyBudget) {
+        insightsDailyBudget.textContent = formatCurrency(dailyBudget);
+        console.log('✅ Updated insights daily budget to:', formatCurrency(dailyBudget));
     }
     
-    // Update daily budget
-    const dailyBudgetElement = document.getElementById('insights-daily-budget');
-    const dailyBudgetSourceElement = document.getElementById('daily-budget-source');
-    if (dailyBudgetElement) {
-        const displayDailyBudget = dailyBudgetOverride && dailyBudget > 0 ? dailyBudget : (monthlyBudget / 30);
-        dailyBudgetElement.textContent = formatCurrency(displayDailyBudget);
-        
-        if (dailyBudgetSourceElement) {
-            dailyBudgetSourceElement.textContent = dailyBudgetOverride ? 'Custom set' : 'Auto-calculated';
-        }
+    if (budgetPercentage && monthlyIncome > 0) {
+        const percentage = ((monthlyBudget / monthlyIncome) * 100).toFixed(0);
+        budgetPercentage.textContent = `${percentage}% of income`;
+        console.log('✅ Updated budget percentage to:', `${percentage}% of income`);
     }
-    
-    // Update monthly surplus
-    const surplusElement = document.getElementById('insights-surplus');
-    if (surplusElement) {
-        const surplus = monthlyIncome - monthlyBudget;
-        surplusElement.textContent = formatCurrency(surplus);
-        surplusElement.className = `text-2xl font-bold ${surplus >= 0 ? 'text-green-600' : 'text-red-600'}`;
-    }
-    
-    // Update surplus status
-    const surplusStatusElement = document.getElementById('surplus-status');
-    if (surplusStatusElement) {
-        const surplus = monthlyIncome - monthlyBudget;
-        if (surplus >= 0) {
-            surplusStatusElement.textContent = 'Available to save';
-        } else {
-            surplusStatusElement.textContent = 'Over budget';
-        }
-    }
-    
-    console.log('✅ Insights tiles updated with actual values');
 }
 
 function generateBasicInsights() {
     console.log('Using basic insights fallback');
-    
-    // First update the insights tiles with actual values
-    updateInsightsTiles();
     
     const container = document.getElementById('insights-container');
     if (!container) return;
@@ -16558,14 +16317,14 @@ USAGE INSTRUCTIONS:
 7. All settings changes will immediately update the insights
 */
 
-// 🔥 DISABLED - Using initializeSettingsForm instead to avoid conflicts
-// This auto-save functionality is now handled in initializeSettingsForm
+// 🔥 ADD THIS CODE TO YOUR index.html FILE
+// This will auto-save settings when you type in the fields
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Auto-save setup disabled - using initializeSettingsForm instead');
+    console.log('Setting up auto-save for settings page...');
     
-    // DISABLED: Add auto-save functionality to settings inputs
-    function setupAutoSaveSettings_DISABLED() {
+    // Add auto-save functionality to settings inputs
+    function setupAutoSaveSettings() {
         const incomeInput = document.getElementById('settings-monthly-income');
         const budgetInput = document.getElementById('settings-monthly-budget');
         const dailyInput = document.getElementById('settings-daily-budget');
@@ -16657,7 +16416,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Initialize after a short delay to ensure page is loaded
-    // setTimeout(setupAutoSaveSettings_DISABLED, 1000); // DISABLED
+    setTimeout(setupAutoSaveSettings, 1000);
     
     // Also setup when switching to settings tab
     const originalShowTab = window.showTab;
@@ -16665,7 +16424,7 @@ document.addEventListener('DOMContentLoaded', function() {
         window.showTab = function(tabName) {
             originalShowTab(tabName);
             if (tabName === 'settings') {
-                // setTimeout(setupAutoSaveSettings_DISABLED, 100); // DISABLED - using initializeSettingsForm instead
+                setTimeout(setupAutoSaveSettings, 100);
             }
         };
     }
