@@ -177,6 +177,10 @@
             overflow: hidden;
         }
         
+        .trezor-sidebar.collapsed .sidebar-toggle {
+            margin-left: 0;
+        }
+        
         .trezor-sidebar.collapsed .sidebar-toggle svg {
             transform: rotate(180deg);
         }
@@ -1988,6 +1992,45 @@
 #goal-confirmation-overlay {
     position: fixed !important;
 }
+
+/* Daily Coaching Badge Styles */
+.daily-coaching-badge {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: inline-block;
+    margin: 0.5rem 0;
+}
+
+.daily-coaching-badge.warning {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.daily-coaching-badge.alert {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.metric-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.category-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--start-color), var(--end-color));
+}
 </style>
 
 </head>
@@ -2062,11 +2105,6 @@
             <header class="trezor-header">
                 <h1 class="page-title" id="current-page-title">Dashboard</h1>
                 <div class="header-actions">
-                    <!-- Subscription Status Badge -->
-                    <div id="subscription-badge" class="hidden">
-                        <!-- Will be populated by subscription manager -->
-                    </div>
-                    
                     <button onclick="toggleTheme()" class="btn-icon" title="Toggle theme">
                         <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
@@ -2079,6 +2117,11 @@
                                 <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
                             </svg>
                         </button>
+                    </div>
+                    
+                    <!-- Subscription Status Badge -->
+                    <div id="subscription-badge" class="hidden">
+                        <!-- Will be populated by subscription manager -->
                     </div>
                 </div>
             </header>
@@ -2368,7 +2411,7 @@
                                     <div class="pagination-page-input-container">
                                         <span class="text-sm text-gray-500">Page</span>
                                         <input type="number" id="expenses-page-input" min="1" onchange="goToExpensesPage(this.value)" class="pagination-page-input">
-                                        <span id="expenses-total-pages" class="pagination-page-total"></span>
+                                        <span id="expenses-total-pages" class="-page-total"></span>
                                     </div>
                                     <button onclick="changeExpensesPage('next')" id="expenses-next-btn" class="pagination-nav-btn">
                                         Next
@@ -2505,18 +2548,11 @@
                 
                 <!-- Replace your insights tab HTML with this better layout -->
 <div id="insights-tab" class="tab-content hidden fade-in">
-    <div class="max-w-7xl mx-auto space-y-6">
-        <!-- Header with View Toggle -->
+    <div class="max-w-6xl mx-auto space-y-6 p-4">
+        <!-- Header -->
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Enhanced Expense Insights</h1>
-            <p class="text-gray-600 mb-4">Advanced budget analytics with predictive insights and goal impact tracking</p>
-            
-            <!-- View Toggle -->
-            <div class="flex justify-center gap-2 mb-6">
-                <button onclick="setView('daily')" id="daily-btn" class="toggle-button active px-4 py-2 rounded-lg border">Daily View</button>
-                <button onclick="setView('weekly')" id="weekly-btn" class="toggle-button px-4 py-2 rounded-lg border">Weekly View</button>
-                <button onclick="setView('monthly')" id="monthly-btn" class="toggle-button px-4 py-2 rounded-lg border">Monthly Trend</button>
-            </div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Your Financial Insights</h1>
+            <p class="text-gray-600 dark:text-gray-300">Smart analysis with real-time daily budget coaching</p>
         </div>
 
         <!-- Smart Alerts Section -->
@@ -2524,90 +2560,90 @@
             <!-- Will be populated by JavaScript -->
         </div>
 
-        <!-- Quick Stats with Goal Impact -->
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-            <div class="metric-card">
-                <div class="text-sm opacity-90">Monthly Income</div>
-                <div class="text-2xl font-bold" id="insights-monthly-income">£0</div>
-                <div class="text-xs opacity-75 mt-1">From settings</div>
-            </div>
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div class="metric-card">
                 <div class="text-sm opacity-90">Monthly Budget</div>
-                <div class="text-2xl font-bold" id="insights-monthly-budget">£0</div>
-                <div class="text-xs opacity-75 mt-1" id="budget-percentage">0% of income</div>
+                <div class="text-2xl font-bold" id="monthly-budget-display">£0</div>
+                <div class="text-xs opacity-75 mt-1" id="budget-vs-income">0% of income</div>
+            </div>
+            <div class="metric-card">
+                <div class="text-sm opacity-90">Total Spent</div>
+                <div class="text-2xl font-bold" id="total-spent-display">£0</div>
+                <div class="text-xs opacity-75 mt-1" id="spent-vs-budget">0% of budget</div>
             </div>
             <div class="metric-card">
                 <div class="text-sm opacity-90">Daily Budget</div>
-                <div class="text-2xl font-bold" id="insights-daily-budget">£0</div>
-                <div class="text-xs opacity-75 mt-1">Auto-calculated</div>
+                <div class="text-2xl font-bold" id="daily-budget-display">£0</div>
+                <div class="text-xs opacity-75 mt-1" id="daily-budget-status">Auto-calculated</div>
             </div>
             <div class="metric-card">
-                <div class="text-sm opacity-90">Goal Impact</div>
-                <div class="text-2xl font-bold" id="goal-impact">+2 weeks</div>
-                <div class="text-xs opacity-75 mt-1">House deposit delay</div>
-            </div>
-            <div class="metric-card">
-                <div class="text-sm opacity-90">Forecast</div>
-                <div class="text-2xl font-bold" id="monthly-forecast">£4,200</div>
-                <div class="text-xs opacity-75 mt-1" id="forecast-status">5% over budget</div>
+                <div class="text-sm opacity-90">Today's Spending</div>
+                <div class="text-2xl font-bold" id="today-spent-display">£0</div>
+                <div class="text-xs opacity-75 mt-1" id="today-remaining">£0 remaining today</div>
             </div>
         </div>
 
-        <!-- Budget Coaching Panel -->
+        <!-- Daily Spending Visualization Chart -->
         <div class="card p-6 mb-6">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">💡 Smart Budget Coach</h3>
-                <div class="text-sm text-gray-500">Real-time guidance</div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="coaching-panel">
-                <!-- Will be populated by JavaScript -->
-            </div>
-        </div>
-
-        <!-- Main Chart with Enhanced Features -->
-        <div class="card p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold text-gray-900">Spending Analysis</h2>
-                <div class="flex items-center gap-4 text-sm">
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-blue-500 rounded"></div>
-                        <span>Income</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-orange-500 rounded"></div>
-                        <span>Monthly Budget</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-green-500 rounded"></div>
-                        <span>Daily Budget</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-purple-500 rounded"></div>
-                        <span>Your Spending</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-red-500 rounded"></div>
-                        <span>Prediction</span>
-                    </div>
+            <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
+                <div>
+                    <h2 class="text-xl font-semibold mb-2">Daily Spending Visualization</h2>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Track your daily spending patterns with budget alerts and reference lines</p>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <button class="period-toggle active" onclick="setInsightsPeriod('7days')" data-period="7days">7 Days</button>
+                    <button class="period-toggle" onclick="setInsightsPeriod('30days')" data-period="30days">30 Days</button>
+                    <button class="period-toggle" onclick="setInsightsPeriod('90days')" data-period="90days">90 Days</button>
                 </div>
             </div>
-            <div class="relative h-96">
-                <canvas id="budgetChart"></canvas>
+
+            <!-- Chart Container -->
+            <div class="relative h-96 w-full mb-4">
+                <canvas id="daily-spending-insights-chart"></canvas>
+            </div>
+
+            <!-- Legend -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-1 bg-yellow-500 rounded"></div>
+                    <span>Daily Budget: <span class="currency-symbol">£</span><span id="insights-daily-budget-display">--</span></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-1 bg-red-500 rounded"></div>
+                    <span>Monthly Budget: <span class="currency-symbol">£</span><span id="insights-monthly-budget-display">--</span></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-1 bg-green-500 rounded"></div>
+                    <span>Monthly Income: <span class="currency-symbol">£</span><span id="insights-monthly-income-display">--</span></span>
+                </div>
             </div>
         </div>
+
+        <!-- Real-Time Daily Coaching -->
+        <div class="card p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🎯 Daily Budget Coach</h3>
+                <div class="text-sm text-gray-500">Real-time guidance</div>
+            </div>
+            <div id="daily-coaching-container">
+                <!-- Will be populated with dynamic coaching messages -->
+            </div>
+        </div>
+
 
         <!-- Category Breakdown -->
         <div class="card p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">🏷️ Category Spending Analysis</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Category Spending</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <h4 class="font-medium text-gray-700 mb-3">Top Categories This Month</h4>
+                    <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-3">Top Categories This Month</h4>
                     <div class="space-y-3" id="category-breakdown">
                         <!-- Will be populated by JavaScript -->
                     </div>
                 </div>
                 <div>
-                    <h4 class="font-medium text-gray-700 mb-3">Budget Impact by Category</h4>
+                    <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-3">Category Distribution</h4>
                     <div class="relative h-64">
                         <canvas id="categoryChart"></canvas>
                     </div>
@@ -2615,41 +2651,19 @@
             </div>
         </div>
 
-        <!-- Enhanced Daily Breakdown -->
+        <!-- Smart Insights -->
         <div class="card p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">📅 Daily Spending Breakdown</h3>
-                <div class="text-sm text-gray-500">Last 14 days</div>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-7 gap-4" id="daily-breakdown">
-                <!-- Will be populated by JavaScript -->
-            </div>
-        </div>
-
-        <!-- Advanced Insights with Predictions -->
-        <div class="card p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">🔮 Predictive Insights & Recommendations</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">💡 Smart Insights</h3>
             <div class="space-y-4" id="insights-container">
                 <!-- Will be populated by JavaScript -->
             </div>
         </div>
 
-        <!-- Spending Velocity & Patterns -->
+        <!-- Budget Coach Recommendations -->
         <div class="card p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">📈 Spending Velocity & Patterns</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <h4 class="font-medium text-gray-700 mb-3">Weekly Spending Pattern</h4>
-                    <div class="space-y-2" id="weekly-pattern">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-                <div>
-                    <h4 class="font-medium text-gray-700 mb-3">Spending Acceleration</h4>
-                    <div class="relative h-48">
-                        <canvas id="velocityChart"></canvas>
-                    </div>
-                </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">📊 Budget Performance</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="coaching-panel">
+                <!-- Will be populated by JavaScript -->
             </div>
         </div>
     </div>
@@ -2709,6 +2723,18 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             <span id="daily-budget-calculation">Leave empty to auto-calculate (Monthly ÷ 30)</span>
                         </p>
+                        
+                        <!-- Daily Budget Coaching Toggle -->
+                        <div class="flex items-center justify-between mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <div>
+                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Enable Daily Budget Coaching</label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Get real-time spending guidance in Insights tab</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="daily-budget-enabled" class="sr-only peer" onchange="toggleDailyBudgetCoaching()">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
                     </div>
                     
                     <!-- Quick Budget Calculation Helper -->
@@ -2764,6 +2790,22 @@
                             <option value="USD">USD - US Dollar ($)</option>
                         </select>
                     </div>
+
+                    <!-- Income Display Settings -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Chart Display Options</h3>
+                        
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Show Income Line on Charts</label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Display monthly income reference line on spending charts</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="income-display-enabled" class="sr-only peer" onchange="toggleIncomeDisplay()">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2817,6 +2859,7 @@
                     </p>
                 </div>
             </div>
+
 
             <!-- Quick Actions -->
             <div class="trezor-card">
@@ -3416,6 +3459,57 @@
     background-color: var(--insights-bg-primary);
     border-color: #334155;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Period toggle buttons for insights chart */
+.period-toggle {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+}
+
+.period-toggle.active {
+    background: var(--accent-blue);
+    color: white;
+    border-color: var(--accent-blue);
+}
+
+.period-toggle:hover:not(.active) {
+    background: var(--border-color);
+}
+
+/* Chart container for insights */
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+/* Period button styles (alternative to period-toggle) */
+.period-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.period-btn.active {
+    background: var(--accent-blue);
+    color: white;
+    border-color: var(--accent-blue);
+}
+
+.period-btn:hover:not(.active) {
+    background: var(--border-color);
 }
 
 /* Recommendation cards with better dark mode */
@@ -5327,6 +5421,9 @@
         let spendingTrendChart = null;
         let categorySpendingChart = null;
         let monthlySavingsChart = null;
+        let dailySpendingInsightsChart = null;
+        let currentInsightsPeriod = '7days';
+        let chartPeriod = 30;
         let aiSavingsCache = null;
         let aiSpendingCache = null;
         let lastAiUpdate = 0;
@@ -5519,6 +5616,7 @@ let goalTemplates = {
                 updateDisplay();
                 restoreSidebarState();
                 updateInsightsTiles();
+                loadInsightsSettings();
                 showTab('overview');
                 DOMElements.expenseDate.value = new Date().toISOString().split('T')[0];
                 DOMElements.recurringStartDate.value = new Date().toISOString().split('T')[0];
@@ -10758,6 +10856,128 @@ function closeGoalSelection() {
             DOMElements.modalCurrency.textContent = symbol;
             DOMElements.recurringModalCurrency.textContent = symbol;
             DOMElements.currencySelect.value = currentCurrencyCode;
+            
+            // Update ALL currency symbol spans throughout the app
+            const currencySymbolElements = document.querySelectorAll('.currency-symbol');
+            currencySymbolElements.forEach(element => {
+                element.textContent = symbol;
+            });
+            
+            // Update insights chart if on insights tab
+            if (activeTab === 'insights' && dailySpendingInsightsChart) {
+                updateDailySpendingInsightsChart();
+            }
+        }
+
+        // --- Daily Budget & Income Display Settings ---
+        function toggleDailyBudget() {
+            const enabled = document.getElementById('daily-budget-enabled').checked;
+            localStorage.setItem('dailyBudgetEnabled', enabled.toString());
+            
+            if (enabled) {
+                const amount = parseFloat(document.getElementById('daily-budget-amount').value) || (monthlyBudget / 30);
+                enableDailyBudget(amount);
+            } else {
+                disableDailyBudget();
+            }
+        }
+
+        function updateDailyBudget() {
+            const enabled = document.getElementById('daily-budget-enabled').checked;
+            if (enabled) {
+                const amount = parseFloat(document.getElementById('daily-budget-amount').value);
+                if (amount > 0) {
+                    localStorage.setItem('dailyBudget', amount.toString());
+                    enableDailyBudget(amount);
+                }
+            }
+        }
+
+        function toggleIncomeDisplay() {
+            const enabled = document.getElementById('income-display-enabled').checked;
+            localStorage.setItem('monthlyIncomeEnabled', enabled.toString());
+            
+            if (enabled) {
+                enableMonthlyIncomeDisplay();
+            } else {
+                disableMonthlyIncomeDisplay();
+            }
+        }
+
+        function enableDailyBudget(amount) {
+            // Store the daily budget amount
+            localStorage.setItem('dailyBudget', amount.toString());
+            localStorage.setItem('dailyBudgetEnabled', 'true');
+            
+            // Update insights if open
+            if (activeTab === 'insights' && window.FinanceInsights) {
+                window.FinanceInsights.refresh();
+            }
+            
+            // Show daily budget coaching elements
+            const coachingElements = document.querySelectorAll('.daily-coaching-badge');
+            coachingElements.forEach(el => el.style.display = 'inline-block');
+        }
+
+        function disableDailyBudget() {
+            localStorage.setItem('dailyBudgetEnabled', 'false');
+            
+            // Hide daily budget coaching elements
+            const coachingElements = document.querySelectorAll('.daily-coaching-badge');
+            coachingElements.forEach(el => el.style.display = 'none');
+            
+            // Update insights if open
+            if (activeTab === 'insights' && window.FinanceInsights) {
+                window.FinanceInsights.refresh();
+            }
+        }
+
+        function enableMonthlyIncomeDisplay() {
+            localStorage.setItem('monthlyIncomeEnabled', 'true');
+            
+            // Update charts to show income line
+            if (activeTab === 'insights') {
+                updateChartsAndInsights();
+            }
+        }
+
+        function disableMonthlyIncomeDisplay() {
+            localStorage.setItem('monthlyIncomeEnabled', 'false');
+            
+            // Update charts to hide income line
+            if (activeTab === 'insights') {
+                updateChartsAndInsights();
+            }
+        }
+
+        function loadInsightsSettings() {
+            const dailyBudgetEnabled = localStorage.getItem('dailyBudgetEnabled') === 'true';
+            const incomeDisplayEnabled = localStorage.getItem('monthlyIncomeEnabled') === 'true';
+            const dailyBudgetAmount = localStorage.getItem('dailyBudget');
+            
+            // Update checkbox states
+            const dailyBudgetCheckbox = document.getElementById('daily-budget-enabled');
+            const incomeDisplayCheckbox = document.getElementById('income-display-enabled');
+            const dailyBudgetInput = document.getElementById('daily-budget-amount');
+            
+            if (dailyBudgetCheckbox) dailyBudgetCheckbox.checked = dailyBudgetEnabled;
+            if (incomeDisplayCheckbox) incomeDisplayCheckbox.checked = incomeDisplayEnabled;
+            if (dailyBudgetInput && dailyBudgetAmount) {
+                dailyBudgetInput.value = dailyBudgetAmount;
+            }
+            
+            // Apply settings
+            if (dailyBudgetEnabled && dailyBudgetAmount) {
+                enableDailyBudget(parseFloat(dailyBudgetAmount));
+            } else {
+                disableDailyBudget();
+            }
+            
+            if (incomeDisplayEnabled) {
+                enableMonthlyIncomeDisplay();
+            } else {
+                disableMonthlyIncomeDisplay();
+            }
         }
 
         // --- Expense Management ---
@@ -10832,6 +11052,11 @@ function closeGoalSelection() {
             updateDisplay();
             closeModal();
             showToast(`Expense '${name}' saved successfully.`, "success");
+            
+            // Refresh insights after adding expense
+            if (activeTab === 'insights') {
+                setTimeout(updateChartsAndInsights, 100);
+            }
         }
         
         function quickAddExpense(name, category, type, cost) {
@@ -10867,6 +11092,11 @@ function closeGoalSelection() {
             saveData();
             updateDisplay();
             showToast(`${name} added successfully for ${formatCurrency(cost)}.`);
+            
+            // Refresh insights after adding expense
+            if (activeTab === 'insights') {
+                setTimeout(updateChartsAndInsights, 100);
+            }
         }
 
         function editExpense(id) {
@@ -10891,6 +11121,11 @@ function closeGoalSelection() {
                 expenses.splice(index, 1);
                 updateDisplay();
                 showToast(`Expense '${expenseName}' deleted.`, 'info');
+                
+                // Refresh insights after deleting expense
+                if (activeTab === 'insights') {
+                    setTimeout(updateChartsAndInsights, 100);
+                }
             }
         }
 
@@ -10977,7 +11212,7 @@ function closeGoalSelection() {
                 const index = recurringItems.findIndex(r => r.id === editingRecurring.id);
                 if (index !== -1) recurringItems[index] = recurringItem;
             } else {
-                recurringItems.unshift(recurringItem); // Add to beginning for chronological order
+                recurringItems.push(recurringItem); // Add to end, sorting will handle chronological order
             }
 
             saveData();
@@ -11774,7 +12009,7 @@ function closeGoalSelection() {
 
             // SIMPLE PAGINATION - NO COMPLEX LOGIC
             const currentPage = window.expensesCurrentPage || 1;
-            const itemsPerPage = window.expensesItemsPerPage || 15;
+            const itemsPerPage = window.expensesItemsPerPage || 25;
             const totalItems = filteredExpenses.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             const startIndex = (currentPage - 1) * itemsPerPage;
@@ -11896,8 +12131,8 @@ function closeGoalSelection() {
                 return true;
             });
 
-            // Fix: Sort by ID (newest first) since ID is timestamp-based
-            filtered.sort((a, b) => b.id - a.id);
+            // Sort chronologically by start date (latest first)
+            filtered.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
             if (filtered.length === 0) {
                 DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="9" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
@@ -14672,7 +14907,7 @@ function showInsightsError() {
                 }
             } else {
                 // Adding new recurring item
-                recurringItems.unshift(recurringItem);
+                recurringItems.push(recurringItem);
                 showToast(`Recurring ${type} '${name}' saved successfully!`);
             }
             
@@ -14940,7 +15175,7 @@ function showInsightsError() {
                 return true;
             });
 
-            filtered.sort((a, b) => b.id - a.id);
+            filtered.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
             if (filtered.length === 0) {
                 DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="8" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
@@ -15279,7 +15514,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof getFilteredExpenses === 'function') {
                 const filteredExpenses = getFilteredExpenses();
                 const currentPage = window.expensesCurrentPage || 1;
-                const itemsPerPage = window.expensesItemsPerPage || 15;
+                const itemsPerPage = window.expensesItemsPerPage || 25;
                 const startIndex = (currentPage - 1) * itemsPerPage;
                 const endIndex = startIndex + itemsPerPage;
                 const pageItems = filteredExpenses.slice(startIndex, endIndex);
@@ -16706,11 +16941,1334 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ===========================
+// COMPLETE FINANCE INSIGHTS CLASS
+// ===========================
+
+class FinanceInsights {
+    constructor() {
+        this.monthlyIncome = 0;
+        this.monthlyBudget = 0;
+        this.dailyBudget = 0;
+        this.dailyBudgetEnabled = false;
+        this.monthlyIncomeEnabled = false;
+        this.expenses = [];
+        this.goals = [];
+        this.recurringExpenses = [];
+        
+        // Initialize with data from your existing app
+        this.loadFinancialData();
+        this.render();
+    }
+
+    loadFinancialData() {
+        try {
+            // Load data from the same source as the main app
+            const data = authManager.getUserData('lensAppData');
+            let parsedData = {};
+            
+            if (data) {
+                parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+            }
+            
+            // Connect to existing global variables and localStorage data
+            this.monthlyIncome = window.monthlyIncome || parsedData.monthlyIncome || 0;
+            this.monthlyBudget = window.monthlyBudget || parsedData.monthlyBudget || 0;
+            this.expenses = window.expenses || parsedData.expenses || [];
+            this.goals = window.userGoals || parsedData.userGoals || [];
+            this.recurringExpenses = window.recurringItems || parsedData.recurringItems || [];
+            
+            // Load daily budget from the main settings field
+            const dailyBudgetInput = document.getElementById('settings-daily-budget');
+            const dailyBudgetValue = dailyBudgetInput ? parseFloat(dailyBudgetInput.value) : 0;
+            
+            // Use the daily budget from settings, or calculate from monthly if empty
+            this.dailyBudget = dailyBudgetValue > 0 ? dailyBudgetValue : (this.monthlyBudget / 30);
+            
+            // Load coaching and income display settings
+            const savedDailyBudgetEnabled = localStorage.getItem('dailyBudgetEnabled');
+            const savedIncomeEnabled = localStorage.getItem('monthlyIncomeEnabled');
+            
+            this.dailyBudgetEnabled = savedDailyBudgetEnabled === 'true';
+            this.monthlyIncomeEnabled = savedIncomeEnabled === 'true';
+            
+            console.log('Loaded financial data:', {
+                income: this.monthlyIncome,
+                budget: this.monthlyBudget,
+                dailyBudget: this.dailyBudget,
+                dailyBudgetEnabled: this.dailyBudgetEnabled,
+                expenseCount: this.expenses.length
+            });
+        } catch (error) {
+            console.error('Error loading financial data:', error);
+        }
+    }
+
+    getCurrentMonthExpenses() {
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+        
+        return this.expenses.filter(expense => {
+            const expenseDate = new Date(expense.date);
+            return expenseDate.getMonth() === currentMonth && 
+                   expenseDate.getFullYear() === currentYear;
+        });
+    }
+
+    getTodayExpenses() {
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+        
+        return this.expenses.filter(expense => {
+            const expenseDate = new Date(expense.date);
+            return expenseDate.toISOString().split('T')[0] === todayString;
+        });
+    }
+
+    calculateDailySpendingByDay() {
+        const currentExpenses = this.getCurrentMonthExpenses();
+        const dailyTotals = {};
+        
+        // Initialize all days of the month
+        const today = new Date();
+        const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        
+        for (let i = 1; i <= daysInMonth; i++) {
+            dailyTotals[i] = 0;
+        }
+        
+        // Sum expenses by day - ensure we're reading actual transaction amounts
+        currentExpenses.forEach(expense => {
+            try {
+                const expenseDate = new Date(expense.date);
+                const day = expenseDate.getDate();
+                const amount = parseFloat(expense.amount) || 0;
+                
+                // Only count positive amounts (actual spending)
+                if (amount > 0 && day >= 1 && day <= daysInMonth) {
+                    dailyTotals[day] += amount;
+                }
+            } catch (error) {
+                console.warn('Error processing expense:', expense, error);
+            }
+        });
+        
+        console.log('Daily spending calculated:', dailyTotals);
+        return dailyTotals;
+    }
+
+    calculateInsights() {
+        const currentMonthExpenses = this.getCurrentMonthExpenses();
+        const todayExpenses = this.getTodayExpenses();
+        const oneTimeTotal = currentMonthExpenses.reduce((sum, exp) => sum + (parseFloat(exp.amount) || 0), 0);
+        const recurringTotal = this.calculateMonthlyRecurringTotal();
+        const totalSpent = oneTimeTotal + recurringTotal;
+        const todaySpent = todayExpenses.reduce((sum, exp) => sum + (parseFloat(exp.amount) || 0), 0);
+        
+        const remainingBudget = this.monthlyBudget - totalSpent;
+        const spentPercentage = this.monthlyBudget > 0 ? (totalSpent / this.monthlyBudget) * 100 : 0;
+        
+        const today = new Date();
+        const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        const dayOfMonth = today.getDate();
+        const daysRemaining = daysInMonth - dayOfMonth;
+        
+        // Daily budget calculations
+        const todayRemaining = this.dailyBudget - todaySpent;
+        const isOverDailyBudget = todaySpent > this.dailyBudget;
+        
+        // Simple projection
+        const dailyAverage = oneTimeTotal / dayOfMonth;
+        const projectedTotal = (dailyAverage * daysInMonth) + recurringTotal;
+
+        return {
+            totalSpent,
+            remainingBudget,
+            spentPercentage,
+            projectedTotal,
+            dailyAverage,
+            daysInMonth,
+            dayOfMonth,
+            daysRemaining,
+            todaySpent,
+            todayRemaining,
+            isOverDailyBudget,
+            oneTimeTotal,
+            recurringTotal,
+            currentMonthExpenses
+        };
+    }
+
+    calculateMonthlyRecurringTotal() {
+        return this.recurringExpenses.reduce((total, item) => {
+            const amount = parseFloat(item.amount) || 0;
+            switch (item.frequency) {
+                case 'weekly': return total + (amount * 4.33);
+                case 'bi-weekly': return total + (amount * 2.17);
+                case 'monthly': return total + amount;
+                case 'quarterly': return total + (amount / 3);
+                case 'annually': return total + (amount / 12);
+                default: return total + amount;
+            }
+        }, 0);
+    }
+
+    generateDailyCoaching() {
+        const insights = this.calculateInsights();
+        const container = document.getElementById('daily-coaching-container');
+        
+        if (!container) return;
+        
+        let coachingMessage = '';
+        let badgeClass = '';
+        
+        if (!this.dailyBudgetEnabled) {
+            coachingMessage = `💡 Enable daily budget in settings to get real-time spending guidance throughout the day.`;
+            badgeClass = 'alert';
+        } else if (insights.todaySpent === 0) {
+            coachingMessage = `🌟 Great start! You have £${this.dailyBudget.toFixed(2)} to spend today.`;
+            badgeClass = '';
+        } else if (insights.isOverDailyBudget) {
+            const overage = insights.todaySpent - this.dailyBudget;
+            coachingMessage = `⚠️ You've spent £${overage.toFixed(2)} over today's budget. Consider making coffee at home or postponing non-essential purchases.`;
+            badgeClass = 'warning';
+        } else if (insights.todayRemaining < (this.dailyBudget * 0.2)) {
+            coachingMessage = `🎯 Almost at your daily limit! £${insights.todayRemaining.toFixed(2)} remaining for today.`;
+            badgeClass = 'alert';
+        } else {
+            coachingMessage = `✅ Doing great! £${insights.todayRemaining.toFixed(2)} left for today. You're ${insights.daysRemaining} days away from month-end.`;
+            badgeClass = '';
+        }
+        
+        container.innerHTML = `
+            <div class="daily-coaching-badge ${badgeClass}">
+                ${coachingMessage}
+            </div>
+        `;
+    }
+
+    updateMetrics() {
+        const insights = this.calculateInsights();
+        
+        // Update metric cards
+        const elements = {
+            'monthly-budget-display': `£${this.monthlyBudget.toFixed(0)}`,
+            'total-spent-display': `£${insights.totalSpent.toFixed(0)}`,
+            'daily-budget-display': `£${this.dailyBudget.toFixed(0)}`,
+            'today-spent-display': `£${insights.todaySpent.toFixed(0)}`
+        };
+        
+        Object.entries(elements).forEach(([id, text]) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        });
+        
+        // Update subtitles
+        const budgetVsIncome = this.monthlyIncome > 0 ? (this.monthlyBudget / this.monthlyIncome * 100).toFixed(0) : 0;
+        const dailyBudgetStatus = this.dailyBudgetEnabled ? 'Enabled' : 'Auto-calculated';
+        
+        const subtitles = {
+            'budget-vs-income': `${budgetVsIncome}% of income`,
+            'spent-vs-budget': `${insights.spentPercentage.toFixed(0)}% of budget`,
+            'daily-budget-status': dailyBudgetStatus,
+            'today-remaining': `£${Math.max(0, insights.todayRemaining).toFixed(0)} remaining today`
+        };
+        
+        Object.entries(subtitles).forEach(([id, text]) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        });
+    }
+
+
+
+    showNotification(type, message) {
+        // Create notification if it doesn't exist
+        let notification = document.getElementById('spending-notification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'spending-notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                max-width: 400px;
+                padding: 12px 16px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 1000;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+            `;
+            document.body.appendChild(notification);
+        }
+        
+        // Set color based on type
+        const colors = {
+            critical: '#dc2626',
+            warning: '#f59e0b',
+            info: '#3b82f6'
+        };
+        
+        notification.style.backgroundColor = colors[type] || colors.info;
+        notification.textContent = message;
+        
+        // Show notification
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateX(0)';
+        
+        // Hide after 5 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+        }, 5000);
+    }
+
+    render() {
+        this.updateMetrics();
+        this.generateDailyCoaching();
+        this.renderAlerts();
+        this.renderCategoryBreakdown();
+        this.renderInsights();
+        this.renderCoaching();
+        this.createCategoryChart();
+    }
+
+    renderAlerts() {
+        const insights = this.calculateInsights();
+        const container = document.getElementById('alerts-section');
+        if (!container) return;
+        
+        const alerts = [];
+
+        // Daily budget alerts
+        if (this.dailyBudgetEnabled && insights.isOverDailyBudget) {
+            const overage = insights.todaySpent - this.dailyBudget;
+            alerts.push({
+                type: 'warning',
+                icon: '📅',
+                title: 'Daily Budget Exceeded',
+                message: `You're £${overage.toFixed(2)} over today's budget of £${this.dailyBudget.toFixed(2)}`,
+                action: 'Try to keep tomorrow under budget to stay on track'
+            });
+        }
+
+        // Monthly budget alerts
+        if (insights.spentPercentage > 90) {
+            alerts.push({
+                type: 'warning',
+                icon: '⚠️',
+                title: 'Monthly Budget Alert',
+                message: `You've used ${insights.spentPercentage.toFixed(0)}% of your monthly budget`,
+                action: 'Consider reducing discretionary spending'
+            });
+        }
+
+        if (alerts.length === 0) {
+            container.innerHTML = `
+                <div class="card p-4 rounded-lg col-span-full bg-green-50 border border-green-200">
+                    <div class="flex items-center gap-3">
+                        <div class="text-2xl">📈</div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">All Systems Green</h4>
+                            <p class="text-gray-700 text-sm">Your spending is healthy and on track</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = alerts.map(alert => `
+            <div class="card p-4 rounded-lg ${alert.type === 'warning' ? 'bg-yellow-50 border border-yellow-200' : 'bg-red-50 border border-red-200'}">
+                <div class="flex items-start gap-3">
+                    <div class="text-2xl">${alert.icon}</div>
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-gray-900 mb-1">${alert.title}</h4>
+                        <p class="text-gray-700 text-sm mb-2">${alert.message}</p>
+                        <p class="text-xs font-medium text-gray-600">${alert.action}</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    renderCategoryBreakdown() {
+        const container = document.getElementById('category-breakdown');
+        if (!container) return;
+        
+        container.innerHTML = '<p class="text-gray-500 text-sm">Category breakdown coming soon...</p>';
+    }
+
+    renderInsights() {
+        const container = document.getElementById('insights-container');
+        if (!container) return;
+        
+        const insights = this.calculateInsights();
+        
+        const insightsList = [
+            {
+                icon: '📊',
+                title: 'Spending Pattern',
+                description: `You're averaging £${insights.dailyAverage.toFixed(2)} per day in expenses.`,
+                type: 'info'
+            },
+            {
+                icon: '🎯',
+                title: 'Monthly Projection',
+                description: `At current rate, you'll spend £${insights.projectedTotal.toFixed(2)} this month.`,
+                type: insights.projectedTotal > this.monthlyBudget ? 'warning' : 'success'
+            }
+        ];
+
+        container.innerHTML = insightsList.map(insight => `
+            <div class="flex items-start gap-4 p-4 rounded-lg ${insight.type === 'warning' ? 'bg-yellow-50 border border-yellow-200' : insight.type === 'success' ? 'bg-green-50 border border-green-200' : 'bg-blue-50 border border-blue-200'}">
+                <div class="text-2xl">${insight.icon}</div>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-gray-900 mb-1">${insight.title}</h4>
+                    <p class="text-gray-700 text-sm">${insight.description}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    renderCoaching() {
+        const container = document.getElementById('coaching-panel');
+        if (!container) return;
+        
+        const insights = this.calculateInsights();
+        
+        const recommendations = [
+            {
+                title: 'Budget Status',
+                value: insights.spentPercentage > 90 ? 'Caution' : 'Healthy',
+                subtitle: 'Current month status',
+                type: insights.spentPercentage > 90 ? 'warning' : 'success'
+            },
+            {
+                title: 'Days Remaining',
+                value: insights.daysRemaining.toString(),
+                subtitle: 'In this month',
+                type: 'info'
+            },
+            {
+                title: 'Daily Average',
+                value: `£${insights.dailyAverage.toFixed(0)}`,
+                subtitle: 'Current spending rate',
+                type: 'info'
+            }
+        ];
+
+        container.innerHTML = recommendations.map(rec => `
+            <div class="text-center p-4 rounded-lg bg-gray-50">
+                <div class="text-2xl font-bold ${rec.type === 'success' ? 'text-green-600' : rec.type === 'warning' ? 'text-red-600' : 'text-blue-600'}">${rec.value}</div>
+                <div class="text-sm font-medium text-gray-700">${rec.title}</div>
+                <div class="text-xs text-gray-500">${rec.subtitle}</div>
+            </div>
+        `).join('');
+    }
+
+    createCategoryChart() {
+        const ctx = document.getElementById('categoryChart');
+        if (!ctx) return;
+        
+        // Simple placeholder for now
+        const chart = ctx.getContext('2d');
+        chart.fillStyle = '#6b7280';
+        chart.font = '16px Inter';
+        chart.textAlign = 'center';
+        chart.fillText('Category chart coming soon', ctx.width / 2, ctx.height / 2);
+    }
+
+    // Method to refresh insights (called when expenses are added/updated)
+    refresh() {
+        this.loadFinancialData();
+        this.render();
+    }
+}
+
+// ===========================
+// DAILY SPENDING INSIGHTS CHART
+// ===========================
+
+// Initialize the daily spending insights chart
+function initializeDailySpendingInsightsChart() {
+    const ctx = document.getElementById('daily-spending-insights-chart');
+    if (!ctx) {
+        console.error('❌ Canvas element not found: daily-spending-insights-chart');
+        return;
+    }
+    
+    console.log('✅ Initializing Daily Spending Chart');
+    
+    // CRITICAL: Destroy existing chart first
+    if (dailySpendingInsightsChart) {
+        dailySpendingInsightsChart.destroy();
+        dailySpendingInsightsChart = null;
+    }
+    
+    // CRITICAL: Ensure period matches the active button on initialization
+    const activeButton = document.querySelector('.period-toggle.active');
+    if (activeButton) {
+        currentInsightsPeriod = activeButton.getAttribute('data-period') || '7days';
+        console.log('✅ Set period from active button:', currentInsightsPeriod);
+    }
+    
+    // Get theme for styling
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    // Create chart with proper configuration
+    dailySpendingInsightsChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Daily Spending',
+                data: [],
+                backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                showLine: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'point'
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        displayFormats: {
+                            day: 'MMM dd'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Date',
+                        color: isDark ? '#cbd5e1' : '#64748b'
+                    },
+                    ticks: {
+                        color: isDark ? '#cbd5e1' : '#64748b'
+                    },
+                    grid: {
+                        color: isDark ? '#334155' : '#e2e8f0'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount (£)',
+                        color: isDark ? '#cbd5e1' : '#64748b'
+                    },
+                    ticks: {
+                        color: isDark ? '#cbd5e1' : '#64748b',
+                        callback: function(value) {
+                            return '£' + value.toFixed(0);
+                        }
+                    },
+                    grid: {
+                        color: isDark ? '#334155' : '#e2e8f0'
+                    }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: isDark ? '#1e293b' : '#ffffff',
+                    titleColor: isDark ? '#f1f5f9' : '#1e293b',
+                    bodyColor: isDark ? '#f1f5f9' : '#1e293b',
+                    borderColor: isDark ? '#475569' : '#e2e8f0',
+                    borderWidth: 1,
+                    callbacks: {
+                        title: function(context) {
+                            return 'Loading...';
+                        },
+                        label: function(context) {
+                            return `£${context.parsed.y.toFixed(2)}`;
+                        }
+                    }
+                }
+            },
+            onClick: function(event, elements) {
+                if (elements.length > 0) {
+                    console.log('Chart clicked:', elements[0]);
+                }
+            }
+        }
+    });
+    
+    // Load data immediately with correct period
+    updateDailySpendingInsightsChart();
+    
+    // Apply the advanced tooltip system after initialization
+    setTimeout(() => {
+        applyAdvancedTooltipSystem();
+    }, 500);
+    
+    console.log('✅ Chart initialized with period:', currentInsightsPeriod);
+}
+
+// Update the insights chart with real data
+function updateDailySpendingInsightsChart() {
+    if (!dailySpendingInsightsChart) {
+        console.log('⚠️ Chart not initialized, skipping update');
+        return;
+    }
+    
+    console.log('📊 Updating chart for period:', currentInsightsPeriod);
+    
+    const chartData = getDailySpendingInsightsData();
+    dailySpendingInsightsChart.data.datasets[0].data = chartData;
+    
+    // Update time scale based on period
+    const timeUnit = currentInsightsPeriod === '7days' ? 'day' : 
+                     currentInsightsPeriod === '30days' ? 'day' : 'week';
+    
+    if (dailySpendingInsightsChart.options.scales.x.time) {
+        dailySpendingInsightsChart.options.scales.x.time.unit = timeUnit;
+    }
+    
+    // Update chart
+    dailySpendingInsightsChart.update('none');
+    
+    console.log('✅ Chart updated successfully');
+}
+
+// Get daily spending data for insights chart (uses your existing expenses array)
+function getDailySpendingInsightsData() {
+    console.log('🔍 FIXED: Getting daily spending data for period:', currentInsightsPeriod);
+    
+    if (!expenses || expenses.length === 0) {
+        console.log('⚠️ No expenses data available');
+        return [];
+    }
+    
+    // Determine number of days based on current period
+    const days = currentInsightsPeriod === '7days' ? 7 : 
+                 currentInsightsPeriod === '30days' ? 30 : 90;
+    
+    // CRITICAL FIX: Use proper local date calculation
+    const today = new Date();
+    const endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    
+    // Generate the last N days including today
+    const dates = [];
+    for (let i = days - 1; i >= 0; i--) {
+        const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+        const dateStr = date.getFullYear() + '-' + 
+                       String(date.getMonth() + 1).padStart(2, '0') + '-' + 
+                       String(date.getDate()).padStart(2, '0');
+        dates.push(dateStr);
+    }
+    
+    console.log('📅 DATES GENERATED:', dates.slice(0, 3), '...', dates.slice(-3));
+    
+    // Initialize daily totals for all dates
+    const dailyTotals = {};
+    dates.forEach(dateStr => {
+        dailyTotals[dateStr] = 0;
+    });
+    
+    // Sum expenses by date
+    expenses.forEach(expense => {
+        if (expense.status !== 'active') return;
+        
+        const expenseDate = expense.date;
+        if (dailyTotals.hasOwnProperty(expenseDate)) {
+            const amount = parseFloat(expense.cost || expense.amount || 0);
+            if (!isNaN(amount) && amount > 0) {
+                dailyTotals[expenseDate] += amount;
+            }
+        }
+    });
+    
+    // Convert to chart data format with proper date objects
+    const chartData = dates.map(dateStr => {
+        // Create proper date for Chart.js
+        const [year, month, day] = dateStr.split('-').map(Number);
+        const dateObj = new Date(year, month - 1, day);
+        
+        return {
+            x: dateObj.getTime(), // Use timestamp for Chart.js
+            y: dailyTotals[dateStr],
+            dateString: dateStr // Keep string for expense lookup
+        };
+    });
+    
+    console.log(`📊 Generated ${chartData.length} data points for ${days} days`);
+    console.log('Sample data with dates:', chartData.slice(0, 3).map(d => ({ 
+        date: new Date(d.x).toDateString(), 
+        amount: d.y, 
+        dateString: d.dateString 
+    })));
+    
+    return chartData;
+}
+
+// Set chart period
+function setInsightsPeriod(period) {
+    console.log('🔄 FIXED: Switching to period:', period);
+    
+    // CRITICAL: Validate period parameter
+    if (!period || !['7days', '30days', '90days'].includes(period)) {
+        console.error('❌ Invalid period:', period);
+        return;
+    }
+    
+    // Update the global period variable FIRST
+    currentInsightsPeriod = period;
+    console.log('✅ Period set to:', currentInsightsPeriod);
+    
+    // Update button states - CRITICAL FIX
+    document.querySelectorAll('.period-toggle').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const activeBtn = document.querySelector(`[data-period="${period}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+        console.log('✅ Button state updated for:', period);
+    } else {
+        console.error('❌ Button not found for period:', period);
+        return;
+    }
+    
+    // Update chart data for all periods (no special 90-day handling)
+    updateDailySpendingInsightsChart();
+    
+    // Reapply tooltip system for new period
+    setTimeout(() => {
+        applyAdvancedTooltipSystem();
+    }, 300);
+    
+    console.log('✅ Period switch completed:', period);
+}
+
+// Update legend values
+function updateInsightsLegendValues() {
+    const dailyElement = document.getElementById('insights-daily-budget-display');
+    const monthlyElement = document.getElementById('insights-monthly-budget-display');
+    const incomeElement = document.getElementById('insights-monthly-income-display');
+    
+    // Use your global variables (they should exist in your app)
+    if (dailyElement) {
+        dailyElement.textContent = dailyBudget > 0 ? dailyBudget.toFixed(0) : '--';
+    }
+    if (monthlyElement) {
+        monthlyElement.textContent = monthlyBudget > 0 ? monthlyBudget.toFixed(0) : '--';
+    }
+    if (incomeElement) {
+        incomeElement.textContent = monthlyIncome > 0 ? monthlyIncome.toFixed(0) : '--';
+    }
+    
+    console.log('Updated legend values:', {
+        daily: dailyBudget,
+        monthly: monthlyBudget,
+        income: monthlyIncome
+    });
+}
+
+function debugExpenseStructure() {
+    console.log('=== EXPENSE STRUCTURE DEBUG ===');
+    console.log('Total expenses:', expenses.length);
+    
+    if (expenses.length > 0) {
+        console.log('First expense structure:', expenses[0]);
+        console.log('Expense properties:', Object.keys(expenses[0]));
+        
+        // Check what field contains the amount
+        const firstExpense = expenses[0];
+        console.log('Amount fields check:');
+        console.log('- expense.amount:', firstExpense.amount);
+        console.log('- expense.cost:', firstExpense.cost);
+        console.log('- expense.value:', firstExpense.value);
+        
+        // Check active expenses
+        const activeExpenses = expenses.filter(e => e.status === 'active');
+        console.log('Active expenses:', activeExpenses.length);
+        
+        if (activeExpenses.length > 0) {
+            console.log('Sample active expense:', activeExpenses[0]);
+        }
+    }
+    
+    console.log('Budget settings:');
+    console.log('- dailyBudget:', dailyBudget);
+    console.log('- monthlyBudget:', monthlyBudget);
+    console.log('- monthlyIncome:', monthlyIncome);
+    console.log('================================');
+}
+
+// 🔥 ADD: Function to manually test chart data
+function testChartData() {
+    console.log('🧪 Testing chart data generation...');
+    
+    debugExpenseStructure();
+    
+    const chartData = getDailySpendingInsightsData();
+    console.log('Generated chart data:', chartData);
+    
+    const totalSpending = chartData.reduce((sum, point) => sum + point.y, 0);
+    console.log('Total spending in chart period:', totalSpending);
+    
+    // Test if chart exists
+    const chartCanvas = document.getElementById('daily-spending-insights-chart');
+    console.log('Chart canvas found:', !!chartCanvas);
+    console.log('Chart instance exists:', !!dailySpendingInsightsChart);
+    
+    if (dailySpendingInsightsChart) {
+        console.log('Current chart data:', dailySpendingInsightsChart.data.datasets[0].data);
+    }
+}
+
+// Advanced Tooltip System - FIXED VERSION
+function applyAdvancedTooltipSystem() {
+    if (!dailySpendingInsightsChart) {
+        console.log('⚠️ Chart not ready for tooltip application');
+        return false;
+    }
+    
+    console.log('🔧 Applying FIXED advanced tooltip system for period:', currentInsightsPeriod);
+    
+    // CRITICAL: Store chart data in closure to avoid stale references
+    let currentChartData = getDailySpendingInsightsData();
+    
+    // Helper functions
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('en-GB', { 
+            style: 'currency', 
+            currency: 'GBP' 
+        }).format(amount);
+    }
+    
+    function getExpensesForDate(dateString) {
+        if (!expenses || !Array.isArray(expenses)) return [];
+        return expenses.filter(expense => 
+            expense.date === dateString && 
+            expense.status === 'active'
+        );
+    }
+    
+    function truncateText(text, maxLength = 20) {
+        if (!text || text.length <= maxLength) return text;
+        return text.substring(0, maxLength - 3) + '...';
+    }
+    
+    // CRITICAL FIX: Proper date parsing from chart data
+    function getDateFromChartPoint(chartPoint) {
+        // Chart point now has timestamp in x and dateString for lookup
+        if (chartPoint.x) {
+            return new Date(chartPoint.x);
+        }
+        return new Date();
+    }
+    
+    // Apply the FIXED tooltip configuration
+    dailySpendingInsightsChart.options.plugins.tooltip = {
+        enabled: true,
+        backgroundColor: document.documentElement.classList.contains('dark') ? '#1e293b' : '#ffffff',
+        titleColor: document.documentElement.classList.contains('dark') ? '#f1f5f9' : '#1e293b',
+        bodyColor: document.documentElement.classList.contains('dark') ? '#f1f5f9' : '#1e293b',
+        borderColor: document.documentElement.classList.contains('dark') ? '#475569' : '#e2e8f0',
+        borderWidth: 1,
+        callbacks: {
+            title: function(context) {
+                if (context.length === 0) return '';
+                
+                const dataIndex = context[0].dataIndex;
+                // CRITICAL FIX: Get current chart data
+                const chartData = dailySpendingInsightsChart.data.datasets[0].data;
+                const dataPoint = chartData[dataIndex];
+                
+                if (!dataPoint) return 'Unknown Date';
+                
+                // Use the timestamp to create proper date
+                const date = new Date(dataPoint.x);
+                console.log('🔍 TOOLTIP DATE:', date.toDateString(), 'from timestamp:', dataPoint.x);
+                
+                return date.toLocaleDateString('en-GB', { 
+                    weekday: 'long', 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric' 
+                });
+            },
+            label: function(context) {
+                const dataIndex = context.dataIndex;
+                const amount = context.parsed.y;
+                
+                // CRITICAL FIX: Get the date string for expense lookup
+                const chartData = dailySpendingInsightsChart.data.datasets[0].data;
+                const dataPoint = chartData[dataIndex];
+                const dateString = dataPoint?.dateString;
+                
+                if (!dateString) return [`Total spent: ${formatCurrency(amount)}`];
+                
+                console.log('🔍 LOOKING FOR EXPENSES ON:', dateString);
+                const dayExpenses = getExpensesForDate(dateString);
+                
+                const lines = [];
+                lines.push(`Total spent: ${formatCurrency(amount)}`);
+                
+                // Add budget comparison if daily budget is set
+                if (typeof dailyBudget !== 'undefined' && dailyBudget > 0) {
+                    if (amount > dailyBudget) {
+                        lines.push(`⚠️ Over daily budget by ${formatCurrency(amount - dailyBudget)}`);
+                    }
+                }
+                
+                lines.push(`📊 ${dayExpenses.length} expense${dayExpenses.length !== 1 ? 's' : ''}`);
+                
+                // Show individual expenses (limit to prevent huge tooltips)
+                if (dayExpenses.length > 0) {
+                    lines.push(''); // Empty line for spacing
+                    dayExpenses.slice(0, 5).forEach(expense => {
+                        const cost = expense.cost || expense.amount || 0;
+                        const description = expense.name || expense.description || expense.merchant || 'Unknown';
+                        lines.push(`• ${truncateText(description)}: ${formatCurrency(cost)}`);
+                    });
+                    
+                    if (dayExpenses.length > 5) {
+                        lines.push(`... and ${dayExpenses.length - 5} more`);
+                    }
+                }
+                
+                return lines;
+            }
+        }
+    };
+    
+    // FIXED: Enable click functionality for all periods with proper expense filtering
+    dailySpendingInsightsChart.options.onClick = function(event, elements) {
+        if (elements.length > 0) {
+            const dataIndex = elements[0].index;
+            const chartData = dailySpendingInsightsChart.data.datasets[0].data;
+            const dataPoint = chartData[dataIndex];
+            const dateString = dataPoint?.dateString;
+            
+            if (dateString) {
+                console.log('📅 Clicked on date:', dateString);
+                const dayExpenses = getExpensesForDate(dateString);
+                console.log('Expenses for this day:', dayExpenses);
+                
+                // Navigate to expenses tab and filter by date
+                if (typeof window.showTab === 'function') {
+                    window.showTab('expenses');
+                    
+                    // Set date filters to the clicked date
+                    setTimeout(() => {
+                        const dateFromInput = document.getElementById('expense-filter-date-from');
+                        const dateToInput = document.getElementById('expense-filter-date-to');
+                        
+                        if (dateFromInput && dateToInput) {
+                            dateFromInput.value = dateString;
+                            dateToInput.value = dateString;
+                            
+                            // Trigger the expense table update
+                            if (typeof window.renderExpensesTable === 'function') {
+                                window.renderExpensesTable();
+                            }
+                        }
+                    }, 100);
+                }
+            }
+        }
+    };
+    
+    // CRITICAL: Force update to apply new configuration
+    dailySpendingInsightsChart.update('resize');
+    
+    console.log('✅ FIXED advanced tooltip system applied successfully');
+    return true;
+}
+
+// 🔥 ENSURE: Chart updates when you switch to insights tab
+function ensureChartOnInsightsTab() {
+    // Hook into tab switching to ensure chart initializes properly
+    const originalShowTab = window.showTab;
+    if (originalShowTab) {
+        window.showTab = function(tabName) {
+            const result = originalShowTab.apply(this, arguments);
+            
+            if (tabName === 'insights') {
+                console.log('🎯 Switched to insights tab');
+                setTimeout(() => {
+                    // Check if chart needs initialization
+                    if (!dailySpendingInsightsChart) {
+                        initializeDailySpendingInsightsChart();
+                    } else {
+                        // Just update if already exists
+                        updateDailySpendingInsightsChart();
+                    }
+                }, 100);
+            }
+            
+            return result;
+        };
+    }
+}
+
+// Helper function to ensure chart updates on data changes
+function ensureChartUpdatesOnDataChange() {
+    // Update chart if on insights tab
+    if (activeTab === 'insights' && dailySpendingInsightsChart) {
+        setTimeout(() => {
+            updateDailySpendingInsightsChart();
+        }, 100);
+    }
+}
+
+// Add this function to ensure chart initialization on insights tab
+function initializeInsightsTab() {
+    // Only initialize if we're on insights tab and chart doesn't exist
+    if (activeTab === 'insights' && !dailySpendingInsightsChart) {
+        setTimeout(() => {
+            initializeDailySpendingInsightsChart();
+        }, 100);
+    }
+}
+
+// Debug Functions for Testing
+window.debugChartIssues = function() {
+    console.log('=== CHART DEBUG INFO ===');
+    console.log('Current period:', currentInsightsPeriod);
+    console.log('Chart exists:', !!dailySpendingInsightsChart);
+    console.log('Canvas exists:', !!document.getElementById('daily-spending-insights-chart'));
+    console.log('Expenses count:', expenses?.length || 0);
+    console.log('Active button:', document.querySelector('.period-toggle.active')?.getAttribute('data-period'));
+    
+    if (dailySpendingInsightsChart) {
+        console.log('Chart data points:', dailySpendingInsightsChart.data.datasets[0].data.length);
+    }
+    
+    const chartData = getDailySpendingInsightsData();
+    console.log('Generated data points:', chartData.length);
+    console.log('Non-zero days:', chartData.filter(d => d.y > 0).length);
+    console.log('========================');
+};
+
+window.forceReinitChart = function() {
+    console.log('Force reinitializing chart...');
+    if (dailySpendingInsightsChart) {
+        dailySpendingInsightsChart.destroy();
+        dailySpendingInsightsChart = null;
+    }
+    initializeDailySpendingInsightsChart();
+};
+
+window.test90DayChart = function() {
+    console.log('🧪 Testing 90-day chart specifically...');
+    console.log('Current period:', currentInsightsPeriod);
+    
+    // Force set to 90 days
+    setInsightsPeriod('90days');
+    
+    setTimeout(() => {
+        console.log('After 90-day switch:');
+        console.log('- Chart exists:', !!dailySpendingInsightsChart);
+        console.log('- Current period:', currentInsightsPeriod);
+        console.log('- Active button:', document.querySelector('.period-toggle.active')?.textContent);
+        
+        const data = getDailySpendingInsightsData();
+        console.log('- Data points:', data.length);
+        console.log('- Sample data:', data.slice(0, 3));
+        
+        if (dailySpendingInsightsChart) {
+            console.log('- Chart data points:', dailySpendingInsightsChart.data.datasets[0].data.length);
+        }
+    }, 1000);
+};
+
+// Debug helper function to help debug data issues
+function debugChartData() {
+    console.log('=== CHART DEBUG INFO ===');
+    console.log('Expenses count:', expenses.length);
+    console.log('Sample expenses:', expenses.slice(0, 3));
+    console.log('Current period:', currentInsightsPeriod);
+    console.log('Budget settings:', { dailyBudget, monthlyBudget, monthlyIncome });
+    
+    const chartData = getDailySpendingInsightsData();
+    console.log('Chart data points:', chartData.length);
+    console.log('Non-zero days:', chartData.filter(d => d.y > 0));
+    console.log('========================');
+}
+
+// Daily spending chart fix confirmation
+console.log('🎯 Daily Spending Chart fixes loaded! Your chart should now show correct data.');
+
+// Enhanced budget alerts function (integrates with your existing notification system)
+function checkDailySpendingAlerts(date, amount) {
+    const alerts = [];
+
+    // Calculate daily total for the date
+    const dayTotal = expenses
+        .filter(e => e.date === date)
+        .reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+
+    // Daily budget alert
+    if (dailyBudget > 0 && dayTotal > dailyBudget) {
+        alerts.push({
+            type: 'warning',
+            message: `⚠️ Daily spending exceeded! Spent ${formatCurrency(dayTotal)} vs budget of ${formatCurrency(dailyBudget)}`
+        });
+    }
+
+    // Single expense exceeds monthly income alert
+    if (monthlyIncome > 0 && amount > monthlyIncome) {
+        alerts.push({
+            type: 'danger',
+            message: `🚨 CRITICAL: This ${formatCurrency(amount)} expense exceeds your entire monthly income!`
+        });
+    }
+
+    // Monthly budget alert
+    const thisMonthStart = new Date();
+    thisMonthStart.setDate(1);
+    const monthTotal = expenses
+        .filter(e => new Date(e.date) >= thisMonthStart)
+        .reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+
+    if (monthlyBudget > 0 && monthTotal > monthlyBudget) {
+        alerts.push({
+            type: 'danger',
+            message: `🚨 Monthly budget exceeded! Spent ${formatCurrency(monthTotal)} vs budget of ${formatCurrency(monthlyBudget)}`
+        });
+    }
+
+    // Show alerts using your existing notification system
+    alerts.forEach(alert => {
+        if (typeof showToast === 'function') {
+            showToast(alert.message, alert.type);
+        }
+    });
+}
+
+
+// ===========================
+// UPDATE SHOWTAB FUNCTION
+// ===========================
+
+// Modify your existing showTab function to initialize insights
+const originalShowTabInsights = window.showTab;
+window.showTab = function(tabName) {
+    // Call original showTab function
+    if (originalShowTabInsights) {
+        originalShowTabInsights(tabName);
+    }
+    
+    // Initialize insights when insights tab is opened
+    if (tabName === 'insights') {
+        setTimeout(() => {
+            if (!window.FinanceInsights) {
+                window.FinanceInsights = new FinanceInsights();
+            } else {
+                window.FinanceInsights.refresh();
+            }
+            
+            // Initialize the new daily spending insights chart
+            initializeDailySpendingInsightsChart();
+        }, 100);
+    }
+};
+
+// ===========================
+// REFRESH INSIGHTS ON DATA CHANGES
+// ===========================
+
+// Override existing functions to refresh insights
+const originalAddExpenseInsights = window.addExpense;
+window.addExpense = function() {
+    const result = originalAddExpenseInsights ? originalAddExpenseInsights.apply(this, arguments) : null;
+    if (window.FinanceInsights && activeTab === 'insights') {
+        setTimeout(() => {
+            window.FinanceInsights.refresh();
+            updateDailySpendingInsightsChart();
+        }, 100);
+    }
+    
+    // Check for spending alerts on new expenses
+    if (arguments.length >= 2) {
+        const date = arguments[0];
+        const amount = parseFloat(arguments[1]) || 0;
+        checkDailySpendingAlerts(date, amount);
+    }
+    
+    return result;
+};
+
+const originalDeleteExpenseInsights = window.deleteExpense;
+window.deleteExpense = function() {
+    const result = originalDeleteExpenseInsights ? originalDeleteExpenseInsights.apply(this, arguments) : null;
+    if (window.FinanceInsights && activeTab === 'insights') {
+        setTimeout(() => {
+            window.FinanceInsights.refresh();
+            updateDailySpendingInsightsChart();
+        }, 100);
+    }
+    return result;
+};
+
+// Update chart colors when theme changes
+function updateChartTheme() {
+    if (dailySpendingInsightsChart && activeTab === 'insights') {
+        const isDarkMode = document.documentElement.classList.contains('dark');
+        const textColor = isDarkMode ? '#cbd5e1' : '#64748b';
+        const gridColor = isDarkMode ? '#334155' : '#e2e8f0';
+        
+        dailySpendingInsightsChart.options.scales.x.title.color = textColor;
+        dailySpendingInsightsChart.options.scales.x.grid.color = gridColor;
+        dailySpendingInsightsChart.options.scales.x.ticks.color = textColor;
+        dailySpendingInsightsChart.options.scales.y.title.color = textColor;
+        dailySpendingInsightsChart.options.scales.y.grid.color = gridColor;
+        dailySpendingInsightsChart.options.scales.y.ticks.color = textColor;
+        
+        dailySpendingInsightsChart.options.plugins.tooltip.backgroundColor = isDarkMode ? '#1a1d1f' : '#ffffff';
+        dailySpendingInsightsChart.options.plugins.tooltip.titleColor = isDarkMode ? '#f8f9fa' : '#0f1419';
+        dailySpendingInsightsChart.options.plugins.tooltip.bodyColor = isDarkMode ? '#cbd5e1' : '#64748b';
+        dailySpendingInsightsChart.options.plugins.tooltip.borderColor = isDarkMode ? '#334155' : '#e2e8f0';
+        
+        dailySpendingInsightsChart.update('none');
+    }
+}
+
+// ===========================
+// SETTINGS INTEGRATION WITH CONSOLIDATED SYSTEM
+// ===========================
+
+// New function for the consolidated daily budget coaching toggle
+function toggleDailyBudgetCoaching() {
+    const enabled = document.getElementById('daily-budget-enabled').checked;
+    localStorage.setItem('dailyBudgetEnabled', enabled.toString());
+    
+    // Refresh insights when coaching is toggled
+    if (window.FinanceInsights && activeTab === 'insights') {
+        setTimeout(() => window.FinanceInsights.refresh(), 100);
+    }
+    
+    console.log('Daily budget coaching', enabled ? 'enabled' : 'disabled');
+}
+
+// Override settings save to refresh insights
+const originalSaveSettings = window.saveSettings;
+window.saveSettings = function() {
+    if (originalSaveSettings) {
+        originalSaveSettings();
+    }
+    // Refresh insights when settings are saved (daily budget value may have changed)
+    if (window.FinanceInsights && activeTab === 'insights') {
+        setTimeout(() => window.FinanceInsights.refresh(), 100);
+    }
+};
+
+// Override the settings save function specifically for insights
+const originalSaveSettingsWithInsightsUpdate = window.saveSettingsWithInsightsUpdate;
+window.saveSettingsWithInsightsUpdate = function() {
+    if (originalSaveSettingsWithInsightsUpdate) {
+        originalSaveSettingsWithInsightsUpdate();
+    } else if (window.saveSettings) {
+        window.saveSettings();
+    }
+    // Always refresh insights when this function is called
+    if (window.FinanceInsights) {
+        setTimeout(() => {
+            window.FinanceInsights.refresh();
+            updateDailySpendingInsightsChart();
+        }, 100);
+    }
+};
+
+// Add income display toggle functionality to existing system
+function enableMonthlyIncomeDisplay() {
+    localStorage.setItem('monthlyIncomeEnabled', 'true');
+    if (window.FinanceInsights) {
+        window.FinanceInsights.refresh();
+        updateDailySpendingInsightsChart();
+    }
+}
+
+function disableMonthlyIncomeDisplay() {
+    localStorage.setItem('monthlyIncomeEnabled', 'false');
+    if (window.FinanceInsights) {
+        window.FinanceInsights.refresh();
+        updateDailySpendingInsightsChart();
+    }
+}
+
+function toggleIncomeDisplay() {
+    const enabled = document.getElementById('income-display-enabled').checked;
+    if (enabled) {
+        enableMonthlyIncomeDisplay();
+    } else {
+        disableMonthlyIncomeDisplay();
+    }
+}
+
+// Load all insights-related settings when page loads
+function loadInsightsSettings() {
+    // Load income display setting
+    const incomeDisplayEnabled = localStorage.getItem('monthlyIncomeEnabled') === 'true';
+    const incomeDisplayCheckbox = document.getElementById('income-display-enabled');
+    
+    if (incomeDisplayCheckbox) {
+        incomeDisplayCheckbox.checked = incomeDisplayEnabled;
+    }
+    
+    // Load daily budget coaching setting
+    const dailyBudgetEnabled = localStorage.getItem('dailyBudgetEnabled') === 'true';
+    const dailyBudgetCheckbox = document.getElementById('daily-budget-enabled');
+    
+    if (dailyBudgetCheckbox) {
+        dailyBudgetCheckbox.checked = dailyBudgetEnabled;
+    }
+}
+
+// Initialize settings when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(loadInsightsSettings, 500);
+});
+
+//🔥 INITIALIZE: Set up the fixes when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔧 Applying chart fixes...');
+    
+    // Set up chart fixes
+    ensureChartOnInsightsTab();
+    
+    // Add debug functions to window for testing
+    window.debugExpenseStructure = debugExpenseStructure;
+    window.testChartData = testChartData;
+    
+    // If already on insights tab, initialize immediately
+    if (typeof activeTab !== 'undefined' && activeTab === 'insights') {
+        setTimeout(() => {
+            initializeDailySpendingInsightsChart();
+        }, 500);
+    }
+    
+    console.log('✅ Expense data structure fixes applied');
+    console.log('🔍 Run debugExpenseStructure() in console to check your data');
+    console.log('🧪 Run testChartData() in console to test chart generation');
+});
+
+console.log('🎯 Chart data structure fix loaded! Now using expense.cost instead of expense.amount');
+
 </script>
 
             </div> <!-- trezor-content -->
         </div> <!-- trezor-main -->
     </div> <!-- trezor-app -->
+        </script>
 
 </body>
 </html>
