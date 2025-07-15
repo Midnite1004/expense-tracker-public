@@ -458,9 +458,97 @@
                 padding-bottom: 80px; /* Space for mobile nav */
             }
             
-            /* Fix mobile grid */
-            .grid {
+            /* Fix mobile grid - be more specific to avoid breaking Quick Add */
+            .grid:not(.quick-add-grid):not(.stats-grid) {
                 grid-template-columns: 1fr !important;
+            }
+            
+            /* Mobile-optimized Quick Add buttons */
+            .quick-add-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.75rem !important; /* 12px */
+            }
+            
+            .quick-add-button {
+                padding: 0.5rem !important; /* 8px */
+            }
+            
+            .quick-add-content {
+                gap: 0.5rem !important; /* 8px */
+            }
+            
+            .quick-add-icon {
+                width: 2rem !important; /* 32px */
+                height: 2rem !important;
+            }
+            
+            .quick-add-title {
+                font-size: 0.875rem !important; /* text-sm */
+                font-weight: 500 !important;
+            }
+            
+            .quick-add-category {
+                font-size: 0.75rem !important; /* text-xs */
+            }
+            
+            .quick-add-price {
+                font-size: 0.875rem !important; /* text-sm */
+                font-weight: 600 !important;
+            }
+            
+            /* Responsive card padding */
+            .card {
+                padding: 1rem !important; /* 16px instead of 24px */
+                margin-bottom: 1rem !important; /* 16px instead of 24px */
+            }
+            
+            /* Stats grid should be 2 columns on mobile */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.75rem !important;
+            }
+        }
+        
+        /* Enhanced hover effects for all screen sizes */
+        @media (min-width: 769px) {
+            /* More noticeable Quick Add button hover effects on desktop */
+            .quick-add-button:hover {
+                background-color: rgb(219 234 254) !important; /* blue-100 */
+                border-color: rgb(59 130 246) !important; /* blue-500 */
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+                transform: translateY(-1px) !important;
+            }
+            
+            .dark .quick-add-button:hover {
+                background-color: rgb(30 58 138) !important; /* blue-900/30 */
+                border-color: rgb(59 130 246) !important; /* blue-500 */
+            }
+            
+            /* Enhanced Quick Action button hover effects */
+            button[onclick="showAddForm()"]:hover {
+                background-color: rgb(29 78 216) !important; /* blue-700 */
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+                transform: translateY(-1px) !important;
+            }
+            
+            button[onclick="showAddIncomeForm()"]:hover,
+            button[onclick="showRecurringForm()"]:hover {
+                background-color: rgb(249 250 251) !important; /* gray-50 */
+                border-color: rgb(59 130 246) !important; /* blue-500 */
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+                transform: translateY(-1px) !important;
+            }
+            
+            .dark button[onclick="showAddIncomeForm()"]:hover,
+            .dark button[onclick="showRecurringForm()"]:hover {
+                background-color: rgb(55 65 81) !important; /* gray-700 */
+                border-color: rgb(59 130 246) !important; /* blue-500 */
+            }
+            
+            /* Enhanced Add Income button in top area */
+            .btn-primary:hover {
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+                transform: translateY(-1px) !important;
             }
         }
         
@@ -2666,7 +2754,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     </div>
 
                     <!-- 2. STATS ROW (4 cards exactly as shown) -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 stats-grid">
                         <div class="stat-card">
                             <div class="stat-card-title">Monthly Budget</div>
                             <div class="stat-card-value text-blue-600" id="monthly-budget">£0.00</div>
@@ -2694,11 +2782,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <h3 class="text-lg font-semibold">Quick Add</h3>
                             <span class="text-sm text-gray-500">Add common expenses instantly</span>
                         </div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 quick-add-grid">
                             <div id="quick-add-coffee" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group transform hover:scale-105">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-amber-500 group-hover:bg-amber-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200">
+                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button">
+                                    <div class="flex items-center gap-3 quick-add-content">
+                                        <div class="w-10 h-10 bg-amber-500 group-hover:bg-amber-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <!-- Simple cup -->
                                                 <path d="M17 8h1a4 4 0 0 1 0 8h-1"/>
@@ -2710,58 +2798,58 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <div class="font-medium text-gray-900 dark:text-gray-100">Coffee</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">Food/Drink</div>
+                                            <div class="font-medium text-gray-900 dark:text-gray-100 quick-add-title">Coffee</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400 quick-add-category">Food/Drink</div>
                                         </div>
-                                        <span class="font-medium text-amber-600 dark:text-amber-400">£5.00</span>
+                                        <span class="font-medium text-amber-600 dark:text-amber-400 quick-add-price">£5.00</span>
                                     </div>
                                 </button>
                             </div>
                             <div id="quick-add-transport" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group transform hover:scale-105">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-blue-500 group-hover:bg-blue-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200">
+                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button">
+                                    <div class="flex items-center gap-3 quick-add-content">
+                                        <div class="w-10 h-10 bg-blue-500 group-hover:bg-blue-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <div class="font-medium text-gray-900 dark:text-gray-100">Transport</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">Essential</div>
+                                            <div class="font-medium text-gray-900 dark:text-gray-100 quick-add-title">Transport</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400 quick-add-category">Essential</div>
                                         </div>
-                                        <span class="font-medium text-blue-600 dark:text-blue-400">£10.00</span>
+                                        <span class="font-medium text-blue-600 dark:text-blue-400 quick-add-price">£10.00</span>
                                     </div>
                                 </button>
                             </div>
                             <div id="quick-add-lunch" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group transform hover:scale-105">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-green-500 group-hover:bg-green-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200">
+                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button">
+                                    <div class="flex items-center gap-3 quick-add-content">
+                                        <div class="w-10 h-10 bg-green-500 group-hover:bg-green-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M8.1 13.34l2.83-2.83L3.91 3.5a4.008 4.008 0 0 0 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.20-1.10-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/>
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <div class="font-medium text-gray-900 dark:text-gray-100">Lunch</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">Food/Drink</div>
+                                            <div class="font-medium text-gray-900 dark:text-gray-100 quick-add-title">Lunch</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400 quick-add-category">Food/Drink</div>
                                         </div>
-                                        <span class="font-medium text-green-600 dark:text-green-400">£15.00</span>
+                                        <span class="font-medium text-green-600 dark:text-green-400 quick-add-price">£15.00</span>
                                     </div>
                                 </button>
                             </div>
                             <div id="quick-add-groceries" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group transform hover:scale-105">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-purple-500 group-hover:bg-purple-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200">
+                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button">
+                                    <div class="flex items-center gap-3 quick-add-content">
+                                        <div class="w-10 h-10 bg-purple-500 group-hover:bg-purple-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <div class="font-medium text-gray-900 dark:text-gray-100">Groceries</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">Essential</div>
+                                            <div class="font-medium text-gray-900 dark:text-gray-100 quick-add-title">Groceries</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400 quick-add-category">Essential</div>
                                         </div>
-                                        <span class="font-medium text-purple-600 dark:text-purple-400">£50.00</span>
+                                        <span class="font-medium text-purple-600 dark:text-purple-400 quick-add-price">£50.00</span>
                                     </div>
                                 </button>
                             </div>
@@ -2769,7 +2857,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     </div>
 
                     <!-- 3. MAIN CONTENT ROW (2 columns exactly as shown) -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-4 md:mb-6">
                         <!-- LEFT COLUMN (wider - 2/3 width) -->
                         <div class="lg:col-span-2 space-y-6">
                                                         <!-- Budget Progress & Health -->
@@ -2777,11 +2865,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <div class="flex justify-between items-center mb-6">
                                     <div class="flex items-center gap-2">
                                         <h3 class="text-xl font-semibold">Budget Progress & Health</h3>
-                                        <div class="relative group">
-                                            <svg class="w-5 h-5 text-gray-500 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="relative">
+                                            <svg class="w-5 h-5 text-gray-500 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="toggleBudgetHealthTooltip()">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
-                                            <div class="absolute left-1/2 transform -translate-x-1/2 top-8 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                                            <div id="budget-health-tooltip-container" class="absolute left-1/2 transform -translate-x-1/2 top-8 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg px-3 py-2 opacity-0 transition-opacity whitespace-nowrap z-10 pointer-events-none">
                                                 <div id="budget-health-tooltip">
                                                     <strong>Budget Health Score (0-100)</strong><br>
                                                     Based on spending habits, budget adherence,<br>
@@ -2843,7 +2931,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     
                                     <!-- Right side: Circular health score -->
                                     <div class="text-center">
-                                        <div class="relative w-20 h-20 group">
+                                        <div class="relative w-20 h-20">
                                             <svg class="w-20 h-20 transform -rotate-90" viewBox="0 0 100 100">
                                                 <!-- Background circle -->
                                                 <circle cx="50" cy="50" r="45" stroke="#e5e7eb" stroke-width="8" fill="none"/>
@@ -2854,10 +2942,16 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </svg>
                                             <!-- Score text in center -->
                                             <div class="absolute inset-0 flex items-center justify-center">
-                                                <span class="text-xl font-bold cursor-help" id="health-score-display">--</span>
+                                                <span class="text-xl font-bold" id="health-score-display">--</span>
                                             </div>
-                                            <!-- Tooltip for health score - FIXED POSITION -->
-                                            <div class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                                            <!-- Info icon positioned at top right of circle -->
+                                            <div class="absolute -top-1 -right-1">
+                                                <svg class="w-4 h-4 text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="toggleHealthScoreTooltip()">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </div>
+                                            <!-- Health Score Tooltip positioned near the circle -->
+                                            <div id="health-score-tooltip-container" class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg px-3 py-2 opacity-0 transition-opacity whitespace-nowrap z-10 pointer-events-none w-64">
                                                 <div id="health-score-tooltip">
                                                     <strong>Health Score Components:</strong><br>
                                                     • Budget usage & spending pace<br>
@@ -3412,7 +3506,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <input type="number" 
                                    id="settings-monthly-income" 
                                    placeholder="Enter your monthly income" 
-                                   class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg">
+                                   class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg"
+                                   onchange="updateIncome(this.value)" oninput="updateIncome(this.value)">
                         </div>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Your total monthly income before taxes</p>
                     </div>
@@ -4138,7 +4233,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     </div>
                     <div>
                         <label class="block text-xs font-medium">Monthly Income</label>
-                        <input type="number" id="settings-income-input" placeholder="e.g., 3500" class="modern-input mt-1">
+                        <input type="number" id="settings-income-input" placeholder="e.g., 3500" class="modern-input mt-1" onchange="updateIncome(this.value)" oninput="updateIncome(this.value)">
                     </div>
                 </div>
             
@@ -11851,6 +11946,48 @@ function closeGoalSelection() {
             saveData();
             updateDisplay();
         }
+
+        // --- Tooltip Management ---
+        function toggleBudgetHealthTooltip() {
+            const tooltip = document.getElementById('budget-health-tooltip-container');
+            if (tooltip.style.opacity === '1') {
+                tooltip.style.opacity = '0';
+                tooltip.style.pointerEvents = 'none';
+            } else {
+                tooltip.style.opacity = '1';
+                tooltip.style.pointerEvents = 'auto';
+            }
+        }
+
+        function toggleHealthScoreTooltip() {
+            const tooltip = document.getElementById('health-score-tooltip-container');
+            if (tooltip.style.opacity === '1') {
+                tooltip.style.opacity = '0';
+                tooltip.style.pointerEvents = 'none';
+            } else {
+                tooltip.style.opacity = '1';
+                tooltip.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Hide tooltips when clicking outside
+        document.addEventListener('click', function(event) {
+            const budgetTooltip = document.getElementById('budget-health-tooltip-container');
+            const scoreTooltip = document.getElementById('health-score-tooltip-container');
+            
+            // Check if click is outside both tooltips and their triggers
+            if (!event.target.closest('#budget-health-tooltip-container') && 
+                !event.target.closest('svg[onclick="toggleBudgetHealthTooltip()"]')) {
+                budgetTooltip.style.opacity = '0';
+                budgetTooltip.style.pointerEvents = 'none';
+            }
+            
+            if (!event.target.closest('#health-score-tooltip-container') && 
+                !event.target.closest('svg[onclick="toggleHealthScoreTooltip()"]')) {
+                scoreTooltip.style.opacity = '0';
+                scoreTooltip.style.pointerEvents = 'none';
+            }
+        });
 
         // --- Currency Management ---
         function changeCurrency(value) {
