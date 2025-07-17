@@ -567,6 +567,7 @@
         
         /* Mobile Bottom Navigation Enhancement */
         .mobile-bottom-nav {
+            padding-bottom: 24px;
             position: fixed;
             bottom: 0;
             left: 0;
@@ -4057,7 +4058,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <!-- Budget insight box -->
                                         <div class="bg-blue-50 rounded-lg p-3 border border-blue-100">
                                             <div class="flex items-center gap-2">
-                                                <span class="text-sm" id="ai-insight">📊 Projection: Set up your budget to get insights</span>
+                                                <span class="text-sm" id="ai-insight">📈 Projection: Set up your budget to get insights</span>
                                             </div>
                                             <div class="text-xs text-gray-600 mt-1" id="ai-insight-status">No data</div>
                                         </div>
@@ -4984,7 +4985,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     </div>
 
                     <div class="help-component">
-                        <h4 class="help-component-title">📅 Upcoming Bills</h4>
+                        <h4 class="help-component-title">↻ Upcoming Bills</h4>
                         <p class="help-component-description">
                             Shows the next 3 upcoming recurring items with due dates and amounts to help you plan your spending.
                         </p>
@@ -5219,7 +5220,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             <!-- Settings & Configuration Section -->
             <div class="help-section">
                 <button class="help-section-header" onclick="toggleHelpSection('settings-configuration')">
-                    <span class="help-section-title">⚙️ Settings & Configuration</span>
+                    <span class="help-section-title">⚙ Settings & Configuration</span>
                     <span id="settings-configuration-toggle" class="help-toggle">▼</span>
                 </button>
                 <div id="settings-configuration-content" class="help-section-content">
@@ -8111,7 +8112,7 @@ function prepareCleanGoalDetails() {
     
     const configs = {
         house: {
-            title: '🏠 House Deposit Goal',
+            title: '▦ House Deposit Goal',
             subtitle: 'Tell us about your house purchase plan',
             fields: [
                 { id: 'house-target', label: 'Target Deposit Amount', placeholder: '50,000', type: 'currency' },
@@ -14891,7 +14892,7 @@ function closeGoalSelection() {
         function renderRecentExpenses() {
             console.log('🔍 renderRecentExpenses called');
             console.log('📊 Total expenses:', expenses.length);
-            console.log('📋 Sample expenses:', expenses.slice(0, 3));
+            console.log('🛍️ Sample expenses:', expenses.slice(0, 3));
             
             // Ensure container exists
             if (!DOMElements.recentExpensesContainer) {
@@ -18125,9 +18126,9 @@ function showInsightsError() {
 
         // Category to icon mapping
         const categoryIcons = {
-            "Housing": "🏠", "Utilities": "💡", "Transport": "🚗", "Food/Drink": "🍔",
+            "Housing": "🏠", "Utilities": "💡", "Transport": "🛍️", "Food/Drink": "🍔",
             "Entertainment": "🎬", "Shopping": "🛍️", "Health": "❤️", "Personal Care": "🧴",
-            "Education": "🎓", "Debt": "💳", "Subscriptions": "🔁", "Other": "❓",
+            "Education": "🎓", "Debt": "💳", "Subscriptions": "🔁", "Other": "❔",
             "Salary": "💰", "Bonus": "⭐", "Investment": "📈", "Gift": "🎁", "Other Income": "🪙"
         };
 
@@ -18556,13 +18557,13 @@ function showInsightsError() {
     <nav class="mobile-bottom-nav">
         <button id="mobile-tab-overview" onclick="showTab('overview')" class="bottom-nav-item active">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
             </svg>
             <span>Overview</span>
         </button>
         <button id="mobile-tab-expenses" onclick="showTab('expenses')" class="bottom-nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H19M7 13v4a2 2 0 002 2h8a2 2 0 002-2v-4m-8 6a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z" />
             </svg>
             <span>Expenses</span>
         </button>
@@ -18579,7 +18580,7 @@ function showInsightsError() {
         </button>
         <button id="mobile-tab-insights" onclick="showTab('insights')" class="bottom-nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
             <span>Insights</span>
         </button>
