@@ -5007,7 +5007,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 quick-add-grid">
                             <div id="quick-add-coffee" class="quick-add-wrapper">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Coffee', 5.00, 'Food/Drink')">
+                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Coffee', 'Food/Drink', 'Non-Essential', 5.00)">
                                     <div class="flex items-center gap-3 quick-add-content">
                                         <div class="w-10 h-10 bg-amber-500 group-hover:bg-amber-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -5027,7 +5027,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 </button>
                             </div>
                             <div id="quick-add-transport" class="quick-add-wrapper">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Transport', 10.00, 'Essential')">
+                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Transport', 'Essential', 'Essential', 10.00)">
                                     <div class="flex items-center gap-3 quick-add-content">
                                         <div class="w-10 h-10 bg-blue-500 group-hover:bg-blue-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -5043,7 +5043,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 </button>
                             </div>
                             <div id="quick-add-lunch" class="quick-add-wrapper">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Lunch', 15.00, 'Food/Drink')">
+                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Lunch', 'Food/Drink', 'Non-Essential', 15.00)">
                                     <div class="flex items-center gap-3 quick-add-content">
                                         <div class="w-10 h-10 bg-green-500 group-hover:bg-green-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -5059,7 +5059,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 </button>
                             </div>
                             <div id="quick-add-groceries" class="quick-add-wrapper">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Groceries', 50.00, 'Essential')">
+                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Groceries', 'Essential', 'Essential', 50.00)">
                                     <div class="flex items-center gap-3 quick-add-content">
                                         <div class="w-10 h-10 bg-purple-500 group-hover:bg-purple-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -14537,6 +14537,9 @@ function closeGoalSelection() {
         }
         
         function quickAddExpense(name, category, type, cost) {
+            // Debug logging for desktop quick add
+            console.log('🔧 Desktop Quick Add Debug:', { name, category, type, cost, date: getLocalDateString() });
+            
             // Check for spending intervention (only when viewing insights tab)
             if (activeTab === 'insights' && dailyBudgetCoach && dailyBudgetCoach.isInitialized) {
                 const intervention = dailyBudgetCoach.checkSpendingIntervention(cost);
@@ -14551,13 +14554,24 @@ function closeGoalSelection() {
             const expense = {
                     id: Date.now(),
                 name: name,
-                cost: cost,
+                cost: parseFloat(cost) || 0, // Ensure cost is a number
                 type: type || 'Non-Essential',
                 category: category || 'Other',
                 date: getLocalDateString(),
                 paymentMethod: '',
                     status: 'active'
                 };
+            
+            // Debug: Log the exact parameters received
+            console.log('🔧 Parameter Debug:', {
+                received: { name, category, type, cost },
+                parsed: { 
+                    name: expense.name,
+                    category: expense.category,
+                    type: expense.type,
+                    cost: expense.cost
+                }
+            });
             expenses.push(expense);
             console.log('🆕 quickAddExpense - expense added:', expense);
             console.log('📊 quickAddExpense - total expenses now:', expenses.length);
@@ -15493,6 +15507,31 @@ function closeGoalSelection() {
             
             // Update income section
             updateIncomeSection();
+            
+            // Force update monthly savings display
+            const monthlySavingsElement = document.getElementById('monthly-savings');
+            if (monthlySavingsElement) {
+                const totalMonthlyIncome = calculateTotalIncomeFromRecurring();
+                const totalSpent = allMonthlyExpenses.reduce((sum, e) => sum + (parseFloat(e.cost) || 0), 0);
+                const savingsAmount = totalMonthlyIncome - totalSpent;
+                
+                monthlySavingsElement.textContent = formatCurrency(savingsAmount);
+                
+                // Update color based on savings amount
+                if (savingsAmount >= 0) {
+                    monthlySavingsElement.classList.remove('text-red-600', 'dark:text-red-400');
+                    monthlySavingsElement.classList.add('text-purple-600', 'dark:text-purple-400');
+                } else {
+                    monthlySavingsElement.classList.remove('text-purple-600', 'dark:text-purple-400');
+                    monthlySavingsElement.classList.add('text-red-600', 'dark:text-red-400');
+                }
+                
+                console.log('💰 Monthly savings updated:', {
+                    income: totalMonthlyIncome,
+                    spent: totalSpent,
+                    savings: savingsAmount
+                });
+            }
         }
 
         // --- Income Calculation Functions ---
@@ -15524,15 +15563,33 @@ function closeGoalSelection() {
                 return e.status === 'active' && 
                        expenseDate.getMonth() === currentMonth && 
                        expenseDate.getFullYear() === currentYear;
-            }).reduce((sum, e) => sum + e.cost, 0);
+            }).reduce((sum, e) => {
+                const cost = parseFloat(e.cost) || 0;
+                console.log('💰 Expense cost debug:', { name: e.name, cost: e.cost, parsed: cost });
+                return sum + cost;
+            }, 0);
             
-            const savingsAmount = totalMonthlyIncome - totalSpent;
-            const savingsRate = totalMonthlyIncome > 0 ? (savingsAmount / totalMonthlyIncome) * 100 : 0;
+            // Ensure all values are valid numbers
+            const validIncome = (typeof totalMonthlyIncome === 'number' && !isNaN(totalMonthlyIncome)) ? totalMonthlyIncome : 0;
+            const validSpent = (typeof totalSpent === 'number' && !isNaN(totalSpent)) ? totalSpent : 0;
             
-            // Update savings rate display
+            const savingsAmount = validIncome - validSpent;
+            const savingsRate = validIncome > 0 ? (savingsAmount / validIncome) * 100 : 0;
+            
+            // Update savings rate display with NaN protection
             const savingsRateElement = document.getElementById('savings-rate-display');
             if (savingsRateElement) {
-                savingsRateElement.textContent = `💰 Savings Rate: ${savingsRate.toFixed(0)}%`;
+                const displayRate = (typeof savingsRate === 'number' && !isNaN(savingsRate)) ? savingsRate.toFixed(0) : '0';
+                savingsRateElement.textContent = `💰 Savings Rate: ${displayRate}%`;
+                
+                // Debug logging for savings rate calculation
+                console.log('💰 Savings Rate Debug:', {
+                    totalMonthlyIncome,
+                    totalSpent,
+                    savingsAmount,
+                    savingsRate,
+                    displayRate
+                });
             }
             
             // Update monthly savings card
@@ -23721,10 +23778,21 @@ function updateTodaysBudget() {
 // Helper function to get local date string (timezone-aware)
 function getLocalDateString() {
     const now = new Date();
+    // Use local timezone to avoid date shifting issues
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    const localDate = `${year}-${month}-${day}`;
+    
+    // Debug logging to help identify timezone issues
+    console.log('🌍 Date debug:', {
+        utc: now.toISOString(),
+        local: localDate,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        offset: now.getTimezoneOffset()
+    });
+    
+    return localDate;
 }
 
 // Fix today's spending display - find purple text element
@@ -23861,6 +23929,72 @@ window.debugInsightsPage = function() {
     updateTodaysBudget();
     
     console.log('✅ === DEBUG COMPLETE ===');
+};
+
+// COMPREHENSIVE DEBUG FUNCTION - Check all major functionality
+window.debugAllIssues = function() {
+    console.log('🔍 === COMPREHENSIVE DEBUG ===');
+    
+    // 1. Check date functionality
+    console.log('📅 Date Debug:');
+    console.log('- Current date (getLocalDateString):', getLocalDateString());
+    console.log('- Current date (new Date):', new Date().toISOString().split('T')[0]);
+    console.log('- Timezone:', Intl.DateTimeFormat().resolvedOptions().timeZone);
+    console.log('- Timezone offset:', new Date().getTimezoneOffset());
+    
+    // 2. Check quick add functionality
+    console.log('⚡ Quick Add Debug:');
+    console.log('- Main quickAddExpense function exists:', typeof quickAddExpense === 'function');
+    console.log('- FAB quickAddExpense function exists:', typeof window.quickAddExpense === 'function');
+    
+    // 3. Check monthly savings
+    console.log('💰 Monthly Savings Debug:');
+    const monthlySavingsElement = document.getElementById('monthly-savings');
+    console.log('- Monthly savings element exists:', !!monthlySavingsElement);
+    if (monthlySavingsElement) {
+        console.log('- Monthly savings value:', monthlySavingsElement.textContent);
+    }
+    
+    // 4. Check income calculation
+    console.log('💵 Income Debug:');
+    console.log('- Monthly income variable:', monthlyIncome);
+    console.log('- Recurring items:', recurringItems?.length || 0);
+    
+    // 5. Check expenses
+    console.log('📊 Expenses Debug:');
+    console.log('- Total expenses:', expenses?.length || 0);
+    if (expenses && expenses.length > 0) {
+        const today = getLocalDateString();
+        const todayExpenses = expenses.filter(e => e.date === today);
+        console.log('- Today\'s expenses:', todayExpenses.length);
+        console.log('- Today\'s date being used:', today);
+        
+        // Check for any expenses with cost = 0
+        const zeroCostExpenses = expenses.filter(e => parseFloat(e.cost) === 0);
+        console.log('- Expenses with cost = 0:', zeroCostExpenses.length);
+        if (zeroCostExpenses.length > 0) {
+            console.log('- Sample zero cost expense:', zeroCostExpenses[0]);
+        }
+    }
+    
+    // 6. Check all major functions exist
+    console.log('🔧 Function Existence Check:');
+    const functionsToCheck = [
+        'updateDisplay', 'saveData', 'renderExpensesTable', 
+        'updateIncomeSection', 'calculateTotalIncomeFromRecurring',
+        'getMonthlyRecurringTotals', 'formatCurrency'
+    ];
+    
+    functionsToCheck.forEach(funcName => {
+        console.log(`- ${funcName}:`, typeof window[funcName] === 'function');
+    });
+    
+    // 7. Force update everything
+    console.log('🔄 Force updating everything...');
+    if (typeof updateDisplay === 'function') updateDisplay();
+    if (typeof updateIncomeSection === 'function') updateIncomeSection();
+    
+    console.log('✅ === COMPREHENSIVE DEBUG COMPLETE ===');
 };
 
 // BRUTE FORCE FIX - Force real spending data into the elements
@@ -24703,7 +24837,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="fab-quick-actions">
             <div class="fab-section-title">Quick Add</div>
             <div class="fab-quick-grid">
-                <button class="fab-quick-item" onclick="quickAddExpense('Coffee', 5, 'Food/Drink')">
+                <button class="fab-quick-item" onclick="fabQuickAddExpense('Coffee', 5, 'Food/Drink')">
                     <div class="fab-quick-icon coffee">☕</div>
                     <div class="fab-quick-content">
                         <div class="fab-quick-label">Coffee</div>
@@ -24712,7 +24846,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="fab-quick-amount">£5</div>
                 </button>
                 
-                <button class="fab-quick-item" onclick="quickAddExpense('Lunch', 15, 'Food/Drink')">
+                <button class="fab-quick-item" onclick="fabQuickAddExpense('Lunch', 15, 'Food/Drink')">
                     <div class="fab-quick-icon lunch">🍽️</div>
                     <div class="fab-quick-content">
                         <div class="fab-quick-label">Lunch</div>
@@ -24721,7 +24855,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="fab-quick-amount">£15</div>
                 </button>
                 
-                <button class="fab-quick-item" onclick="quickAddExpense('Transport', 10, 'Transport')">
+                <button class="fab-quick-item" onclick="fabQuickAddExpense('Transport', 10, 'Transport')">
                     <div class="fab-quick-icon transport">🚇</div>
                     <div class="fab-quick-content">
                         <div class="fab-quick-label">Transport</div>
@@ -24730,7 +24864,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="fab-quick-amount">£10</div>
                 </button>
                 
-                <button class="fab-quick-item" onclick="quickAddExpense('Groceries', 50, 'Shopping')">
+                <button class="fab-quick-item" onclick="fabQuickAddExpense('Groceries', 50, 'Shopping')">
                     <div class="fab-quick-icon groceries">🛒</div>
                     <div class="fab-quick-content">
                         <div class="fab-quick-label">Groceries</div>
@@ -24795,18 +24929,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Quick Add Functions
-        function quickAddExpense(name, amount, category) {
+        function fabQuickAddExpense(name, amount, category) {
             closeFabMenu();
             
-            // Create expense object
+            // Debug logging
+            console.log('🔧 FAB Quick Add Debug:', { name, amount, category, date: getLocalDateString() });
+            
+            // Create expense object with proper parameter mapping
             const expense = {
                 id: Date.now(),
                 name: name,
-                cost: amount,
+                cost: parseFloat(amount) || 0, // Ensure it's a number
                 category: category,
-                date: new Date().toISOString().split('T')[0],
+                type: 'Non-Essential', // Default type for quick add
+                date: getLocalDateString(), // Use the proper date function
                 paymentMethod: 'Cash',
-                type: 'Expense',
                 status: 'active'
             };
             
@@ -24816,6 +24953,10 @@ document.addEventListener('DOMContentLoaded', function() {
             updateDisplay();
             renderExpensesTable();
             showToast(`Added ${name} - ${formatCurrency(amount)}`, 'success');
+            
+            // Debug: Check if expense was added correctly
+            console.log('✅ FAB Quick Add Result:', expense);
+            console.log('📊 Total expenses now:', expenses.length);
         }
         
         // Form Opening Functions
