@@ -1824,6 +1824,125 @@
             .trezor-content .card:has(h3:contains("Quick Actions")) {
                 display: none !important;
             }
+            
+            /* 1. Extend progress bars and projections components */
+            .card.p-4:has(#budget-progress-bar) {
+                padding: 1.5rem !important;
+            }
+            
+            #budget-progress-bar {
+                height: 1rem !important;
+                border-radius: 0.5rem !important;
+            }
+            
+            /* Extend projection components */
+            .card.p-4:has(.bg-blue-50) {
+                padding: 1.5rem !important;
+            }
+            
+            .bg-blue-50 {
+                padding: 1rem !important;
+                margin: 0.5rem 0 !important;
+            }
+            
+            /* 2. Fix information too close to right edge */
+            .trezor-content {
+                padding: 1rem !important;
+                max-width: 100vw !important;
+                overflow-x: hidden !important;
+            }
+            
+            .card {
+                margin: 0.5rem 0 !important;
+                padding: 1rem !important;
+                box-sizing: border-box !important;
+            }
+            
+            /* 3. Fix bottom navigation positioning */
+            .mobile-bottom-nav {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                background: var(--bg-primary) !important;
+                border-top: 1px solid var(--border-color) !important;
+                padding: 0.5rem 0 !important;
+                z-index: 50 !important;
+                height: auto !important;
+                min-height: 60px !important;
+            }
+            
+            .bottom-nav-item {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 0.25rem !important;
+                padding: 0.5rem 0.75rem !important;
+                min-height: 50px !important;
+            }
+            
+            .bottom-nav-item svg {
+                width: 1.25rem !important;
+                height: 1.25rem !important;
+                margin-bottom: 0.125rem !important;
+            }
+            
+            .bottom-nav-item span {
+                font-size: 0.625rem !important;
+                line-height: 1 !important;
+                margin-top: 0 !important;
+            }
+            
+            /* 4. Reduce FAB size for better button visibility */
+            .floating-quick-add {
+                width: 48px !important;
+                height: 48px !important;
+                bottom: 80px !important;
+                right: 16px !important;
+            }
+            
+            .floating-quick-add svg {
+                width: 24px !important;
+                height: 24px !important;
+            }
+            
+            /* 5. Prevent horizontal layout changes */
+            @media (orientation: landscape) {
+                .trezor-content {
+                    max-width: 100vw !important;
+                    width: 100vw !important;
+                }
+                
+                .card {
+                    max-width: 100% !important;
+                    width: 100% !important;
+                }
+                
+                .stats-grid {
+                    grid-template-columns: 1fr 1fr !important;
+                }
+                
+                .mobile-bottom-nav {
+                    position: fixed !important;
+                    bottom: 0 !important;
+                }
+            }
+            
+            /* 6. Swap Save/Cancel button positions */
+            .modal-footer {
+                display: flex !important;
+                gap: 0.75rem !important;
+                justify-content: space-between !important;
+            }
+            
+            .modal-footer button:first-child {
+                order: 2 !important;
+            }
+            
+            .modal-footer button:last-child {
+                order: 1 !important;
+            }
         }
         /* Trezor Suite Button Styles */
         .btn-primary {
@@ -3406,6 +3525,125 @@
             }
         }
         
+        /* ========== MOBILE LAYOUT FIXES ========== */
+        @media (max-width: 768px) {
+            /* Extend progress bars and projection components to full width */
+            .progress-container,
+            .projection-container,
+            .budget-progress,
+            .spending-projection {
+                width: 100% !important;
+                max-width: none !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            
+            /* Fix content too close to right edge */
+            .dashboard-content,
+            .tab-content,
+            .card,
+            .metric-card,
+            .insights-grid {
+                padding-right: 16px !important;
+                margin-right: 0 !important;
+            }
+            
+            /* Adjust bottom navigation positioning and spacing */
+            .bottom-nav {
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                padding: 8px 16px !important;
+                gap: 8px !important;
+            }
+            
+            .bottom-nav-item {
+                flex: 1 !important;
+                min-width: 0 !important;
+                padding: 8px 4px !important;
+            }
+            
+            .bottom-nav-icon {
+                width: 20px !important;
+                height: 20px !important;
+                margin-bottom: 4px !important;
+            }
+            
+            .bottom-nav-text {
+                font-size: 10px !important;
+                line-height: 1.2 !important;
+            }
+            
+            /* Center health score number in circular progress */
+            .health-score-container {
+                position: relative !important;
+            }
+            
+            .health-score-number {
+                position: absolute !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                font-size: 14px !important;
+                font-weight: 600 !important;
+                z-index: 2 !important;
+            }
+            
+            /* Prevent layout changes on horizontal orientation */
+            @media (orientation: landscape) {
+                .dashboard-content,
+                .tab-content,
+                .card,
+                .metric-card {
+                    max-width: 100% !important;
+                    width: 100% !important;
+                }
+                
+                .bottom-nav {
+                    position: fixed !important;
+                    bottom: 0 !important;
+                }
+            }
+            
+            /* Swap Cancel and Save button positions */
+            .modal-footer {
+                flex-direction: row-reverse !important;
+            }
+            
+            .modal-footer button:first-child {
+                order: 2 !important;
+            }
+            
+            .modal-footer button:last-child {
+                order: 1 !important;
+            }
+            
+            /* Hide Add Income section, Quick Add, and Quick Actions on mobile dashboard */
+            .dashboard-content:has(.add-income-section),
+            .dashboard-content:has(.quick-add-component),
+            .dashboard-content:has(.quick-actions-section) {
+                display: none !important;
+            }
+            
+            /* Alternative selectors for hiding components */
+            .add-income-section,
+            .quick-add-component,
+            .quick-actions-section,
+            .dashboard-content > div:has(h3:contains("Add Income")),
+            .dashboard-content > div:has(h3:contains("Quick Add")),
+            .dashboard-content > div:has(h3:contains("Quick Actions")) {
+                display: none !important;
+            }
+            
+            /* More specific selectors for hiding components */
+            .dashboard-content > div:nth-child(2),
+            .dashboard-content > div:nth-child(3),
+            .dashboard-content > div:nth-child(4) {
+                display: none !important;
+            }
+        }
+        
         /* Enhanced Insights CSS */
         .card {
             background: var(--color-surface);
@@ -3877,8 +4115,8 @@ button, .btn, input[type="button"], input[type="submit"] {
             position: fixed;
             bottom: 85px;
             right: 20px;
-            width: 56px;
-            height: 56px;
+            width: 48px;
+            height: 48px;
             background: var(--accent-primary);
             border-radius: 50%;
             display: flex;
@@ -3898,8 +4136,8 @@ button, .btn, input[type="button"], input[type="submit"] {
         }
         
         .mobile-fab svg {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
