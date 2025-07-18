@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Character encoding and viewport configuration for responsive design -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="format-detection" content="telephone=no">
     <title>Lens - Personal Finance Tracker</title>
     
-    <!-- PWA Meta Tags -->
+    <!-- Progressive Web App (PWA) configuration for installable app experience -->
     <meta name="description" content="Clear financial insight for personal expense tracking and budgeting">
     <meta name="theme-color" content="#2F4F4F">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,31 +15,39 @@
     <meta name="apple-mobile-web-app-title" content="Lens">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- Content Security Policy for PWA -->
+    <!-- Content Security Policy: Defines allowed sources for scripts, styles, and connections -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdn.plaid.com https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https: http://localhost:8000 http://127.0.0.1:8000 https://accounts.google.com https://oauth2.googleapis.com; frame-src https://cdn.plaid.com https://accounts.google.com;">
     
-    <!-- PWA Icons -->
+    <!-- App icons for various platforms and PWA installation -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='iconGradient' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233b82f6'/%3E%3Cstop offset='100%25' style='stop-color:%231d4ed8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='0' y='0' width='32' height='32' rx='6' fill='url(%23iconGradient)'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='rgba(255,255,255,0.9)' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='1'/%3E%3Ccircle cx='16' cy='16' r='3' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='1'/%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
     <link rel="mask-icon" href="icons/icon-192x192.png" color="#3b82f6">
     
-    <!-- PWA Manifest -->
+    <!-- PWA Manifest: Defines app metadata for installation -->
     <link rel="manifest" href="./manifest.json">
     
-    <!-- Your existing scripts -->
+    <!-- External dependencies: UI framework, charting library, and banking integration -->
+    <!-- Tailwind CSS: Utility-first CSS framework for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js: Library for rendering financial charts and graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Date adapter for Chart.js time-based charts -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <!-- Plaid Link: Integration for secure bank account connection -->
     <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
-    <!-- Google Sign-In script removed - authentication disabled -->
+    <!-- Typography: Inter font for consistent text rendering -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Driver.js: User onboarding tour library -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css">
     <style>
+        /* Global font family configuration with system font fallbacks */
         * {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
+        
+        /* CSS Custom Properties for theme colors and consistent design system */
         :root {
-            /* Light mode colors */
+            /* Light mode color palette */
             --color-primary: #0066CC;
             --color-primary-hover: #0052A3;
             --color-success: #00A651;
@@ -60,7 +69,7 @@
             --color-border: #E8EAED;
             --color-border-focus: #0066CC;
             
-            /* Legacy mappings for compatibility */
+            /* Legacy variable mappings maintained for backward compatibility with existing components */
             --bg-primary: var(--color-bg-primary);
             --bg-secondary: var(--color-bg-secondary);
             --bg-tertiary: var(--color-bg-tertiary);
@@ -82,7 +91,7 @@
             --health-score-ok: var(--color-warning);
             --health-score-bad: var(--color-error);
             
-            /* Trezor Suite Layout Variables */
+            /* Layout system variables inspired by Trezor Suite design patterns */
             --sidebar-width: 240px;
             --sidebar-collapsed-width: 64px;
             --header-height: 64px;
@@ -91,8 +100,9 @@
             --border-radius-xs: 2px;
         }
 
+        /* Dark theme overrides using data attribute for explicit theme control */
         [data-theme="dark"] {
-            /* Dark mode - Claude/Anthropic inspired */
+            /* Dark mode color palette with improved contrast and warm grays */
             --color-primary: #4A9EFF;
             --color-primary-hover: #66B3FF;
             --color-success: #00C964;
@@ -138,7 +148,7 @@
             --health-score-bad: var(--color-error);
         }
         
-        /* Theme Toggle Icon Styles */
+        /* Theme toggle icon transitions between light (sun) and dark (moon) modes */
         .theme-icon {
             transition: all 0.3s ease;
         }
@@ -159,7 +169,7 @@
             display: block;
         }
         
-        /* Ensure the theme toggle button has proper styling */
+        /* Theme toggle button hover effect for user feedback */
         #theme-toggle-btn {
             position: relative;
         }
@@ -167,6 +177,7 @@
         #theme-toggle-btn:hover {
             transform: scale(1.05);
         }
+        /* Base body styles with theme-aware colors and smooth transitions */
         body {
             background-color: var(--bg-secondary);
             color: var(--text-primary);
@@ -176,13 +187,14 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
-        /* Trezor Suite Layout System */
+        /* Main application container using flexbox layout */
         .trezor-app {
             display: flex;
             min-height: 100vh;
             background-color: var(--bg-secondary);
         }
         
+        /* Fixed sidebar navigation with collapsible functionality */
         .trezor-sidebar {
             width: var(--sidebar-width);
             background-color: var(--bg-primary);
@@ -201,6 +213,7 @@
             width: var(--sidebar-collapsed-width);
         }
         
+        /* Sidebar header containing logo and brand name */
         .sidebar-header {
             padding: 1.5rem;
             border-bottom: 1px solid var(--border-color);
@@ -271,11 +284,12 @@
             overflow-y: auto;
         }
         
-        /* Collapse button rotation */
+        /* Visual indicator for sidebar collapse state - rotates chevron icon */
         .trezor-sidebar.collapsed .nav-item[title="Toggle sidebar"] svg {
             transform: rotate(180deg);
         }
         
+        /* Navigation item styling with hover and active states */
         .nav-item {
             display: flex;
             align-items: center;
@@ -342,7 +356,7 @@
             position: relative;
         }
         
-        /* Tooltip for collapsed state */
+        /* Tooltip display when sidebar is collapsed - shows nav item labels on hover */
         .trezor-sidebar.collapsed .nav-item::after {
             content: attr(data-tooltip);
             position: absolute;
@@ -414,7 +428,7 @@
             overflow-y: auto;
         }
         
-        /* Fix layout issues */
+        /* Content area constraints to prevent horizontal overflow */
         .trezor-content {
             max-width: 100%;
             overflow-x: hidden;
@@ -431,18 +445,19 @@
             max-width: 100%;
         }
         
-        /* Fix card overflow */
+        /* Card component styling with text wrapping for long content */
         .card, .trezor-card {
             max-width: 100%;
             box-sizing: border-box;
             word-wrap: break-word;
         }
         
-        /* =============================================
-           COMPREHENSIVE MOBILE IMPROVEMENTS
-           ============================================= */
+        /* 
+         * Mobile-First Responsive Design Section
+         * Features: Floating action button, bottom sheet modal, and enhanced navigation
+         */
         
-        /* Floating Quick Add Button */
+        /* Floating action button (FAB) for quick expense entry on mobile */
         .floating-quick-add {
             position: fixed;
             bottom: 100px;
@@ -472,7 +487,7 @@
             color: white;
         }
         
-        /* Quick Add Modal */
+        /* Bottom sheet modal for mobile quick actions with safe area support */
         .quick-add-modal {
             position: fixed;
             bottom: 0;
@@ -565,7 +580,7 @@
             font-size: 14px;
         }
         
-        /* Mobile Bottom Navigation Enhancement */
+        /* Fixed bottom navigation bar for mobile devices with blur effect */
         .mobile-bottom-nav {
             padding-bottom: 24px;
             position: fixed;
@@ -583,7 +598,7 @@
             transition: transform 0.3s ease;
         }
         
-        /* Hide mobile nav when modal is open */
+        /* Animation to hide bottom nav when modal overlays are active */
         .mobile-bottom-nav.modal-open {
             transform: translateY(100%);
         }
@@ -6187,29 +6202,44 @@ button, .btn, input[type="button"], input[type="submit"] {
     </div>
 </div>
 
-    <!-- Toast Notification -->
+    <!-- Toast notification container for user feedback messages -->
     <div id="toast" class="toast"></div>
 
+    <!-- Driver.js library for interactive user onboarding tours -->
     <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
-    <!-- Google Sign-In script removed - authentication disabled -->
+    
     <script>
-        // --- AuthManager Class ---
+        /**
+         * Authentication Manager Class
+         * Handles user authentication, session management, and token refresh
+         * Note: Google OAuth functionality has been disabled
+         */
         class AuthManager {
             constructor() {
+                // Backend API endpoint for authentication services
                 this.baseURL = 'http://localhost:8000';
+                // Current authenticated user object
                 this.currentUser = null;
+                // JWT access token for API requests
                 this.accessToken = null;
+                // Refresh token for obtaining new access tokens
                 this.refreshToken = null;
+                // Google OAuth initialization flag (currently disabled)
                 this.googleInitialized = false;
                 this.googleClientId = null;
                 
                 this.init();
             }
             
+            /**
+             * Initialize authentication state from stored session
+             * Verifies existing tokens and refreshes if necessary
+             */
             async init() {
-                // Check for existing session
+                // Restore tokens from localStorage if available
                 this.loadTokensFromStorage();
                 
+                // Validate existing session
                 if (this.refreshToken) {
                     try {
                         await this.verifyToken();
@@ -6218,13 +6248,15 @@ button, .btn, input[type="button"], input[type="submit"] {
                         this.clearSession();
                     }
                 }
-                
-                // Google OAuth initialization removed - authentication disabled
             }
             
-            // Google authentication methods removed - authentication system disabled
-            
-            // Authentication Methods
+            /**
+             * Register new user account
+             * @param {string} email - User email address
+             * @param {string} password - User password
+             * @param {string} name - User display name
+             * @returns {Promise<Object>} User data and authentication tokens
+             */
             async register(email, password, name) {
                 try {
                     const response = await fetch(`${this.baseURL}/auth/register`, {
@@ -7165,31 +7197,44 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         const dailyBudgetCoach = new DailyBudgetCoach();
         
-        // --- State Variables ---
-        let expenses = [];
-        let recurringItems = [];
-        let selectedExpenseIds = new Set();
-        let selectedRecurringIds = new Set();
-        let editingExpense = null;
-        let editingRecurring = null;
-        let monthlyBudget = 4000.00;
-        let monthlyIncome = 10000.00;
-        let monthlyExpenses = 0;
-        let totalSavings = 0;
-        let totalDebt = 0;
+        /**
+         * Global Application State Management
+         * Core data structures that power the entire application
+         */
         
-        // Daily Budget Coaching Variables
-        let dailyBudget = null; // Will be calculated from monthlyBudget / 30
-        let dailyBudgetOverride = false;
-        let todaySpent = 0;
-        let dailySpendingHistory = {}; // { 'YYYY-MM-DD': amount }
-        let healthScoreHistory = {};
+        // Financial transaction arrays
+        let expenses = [];              // Array of expense objects with amount, category, date, etc.
+        let recurringItems = [];        // Array of recurring expenses (subscriptions, bills)
         
-        // Pagination variables (global scope)
+        // Selection state for bulk operations
+        let selectedExpenseIds = new Set();     // IDs of selected expenses for bulk actions
+        let selectedRecurringIds = new Set();   // IDs of selected recurring items
+        
+        // Editing state for forms
+        let editingExpense = null;      // Currently editing expense object
+        let editingRecurring = null;    // Currently editing recurring item
+        
+        // Financial configuration
+        let monthlyBudget = 4000.00;    // User's monthly spending limit
+        let monthlyIncome = 10000.00;   // User's monthly income
+        let monthlyExpenses = 0;        // Calculated total of monthly expenses
+        let totalSavings = 0;           // Total savings across all accounts
+        let totalDebt = 0;              // Total debt amount
+        
+        // Daily budget tracking for real-time guidance
+        let dailyBudget = null;         // Calculated as monthlyBudget / 30
+        let dailyBudgetOverride = false; // Flag for manual daily budget override
+        let todaySpent = 0;             // Today's total spending amount
+        // Historical tracking for insights
+        let dailySpendingHistory = {};  // Map of date strings to daily spending amounts
+        let healthScoreHistory = {};    // Map of date strings to health scores
+        
+        // Pagination state for large data sets
         window.expensesCurrentPage = 1;
-        window.expensesItemsPerPage = 25; // Default pagination for expenses
+        window.expensesItemsPerPage = 25;     // Items per page for expense list
         window.recurringCurrentPage = 1;
-        window.recurringItemsPerPage = 25;
+        window.recurringItemsPerPage = 25;    // Items per page for recurring list
+        // Currency configuration for multi-currency support
         let currencyConfig = {
             'AUD': { symbol: 'A$', locale: 'en-AU' },
             'CAD': { symbol: 'C$', locale: 'en-CA' },
@@ -7198,22 +7243,30 @@ button, .btn, input[type="button"], input[type="submit"] {
             'JPY': { symbol: '¥', locale: 'ja-JP' },
             'USD': { symbol: '$', locale: 'en-US' }
         };
-        let currentCurrencyCode = 'GBP';
-        let activeTab = 'overview';
-        let currentInsightsView = 'daily';
-        let spendingTrendChart = null;
-        let categorySpendingChart = null;
-        let monthlySavingsChart = null;
-        let dailySpendingInsightsChart = null;
-        let sevenDayTrendChart = null;
-        let currentInsightsPeriod = '7days';
-        let chartPeriod = 30;
-        let aiSavingsCache = null;
-        let aiSpendingCache = null;
-        let lastAiUpdate = 0;
-        // === GOAL SYSTEM ===
-let userGoals = [];
-let goalTemplates = {
+        // UI state management
+        let currentCurrencyCode = 'GBP';       // Active currency for display
+        let activeTab = 'overview';             // Current active tab in navigation
+        let currentInsightsView = 'daily';      // Current view in insights tab
+        
+        // Chart.js instance references for updates and cleanup
+        let spendingTrendChart = null;         // Main spending trend chart
+        let categorySpendingChart = null;       // Category breakdown chart
+        let monthlySavingsChart = null;         // Monthly savings progression
+        let dailySpendingInsightsChart = null;  // Daily spending insights chart
+        let sevenDayTrendChart = null;          // 7-day spending trend
+        
+        // Chart configuration and caching
+        let currentInsightsPeriod = '7days';    // Period for insights display
+        let chartPeriod = 30;                   // Default chart period in days
+        let aiSavingsCache = null;              // Cached AI-generated savings insights
+        let aiSpendingCache = null;             // Cached AI-generated spending insights
+        let lastAiUpdate = 0;                   // Timestamp of last AI insight update
+        /**
+         * Goal System Configuration
+         * Pre-defined goal templates for different financial personalities
+         */
+        let userGoals = [];  // Array of active user goals
+        let goalTemplates = {
     'savings_builder': {
         name: 'Savings Builder',
         icon: '💰',
@@ -7256,14 +7309,22 @@ let goalTemplates = {
     }
 };
 
+        /**
+         * Utility function to extract date portion from ISO datetime string
+         * @param {string} dateStr - ISO datetime string (e.g., '2024-01-15T10:30:00')
+         * @returns {string} Date portion only (e.g., '2024-01-15')
+         */
         function stripISO(dateStr) {
             return (dateStr || '').split('T')[0];
         }
 
+        // Pre-defined expense categories for consistent classification
         const expenseCategories = ["Housing", "Utilities", "Transport", "Food/Drink", "Entertainment", "Shopping", "Health", "Personal Care", "Education", "Debt", "Subscriptions", "Other"];
+        
+        // Income categories for revenue tracking
         const incomeCategories = ["Salary", "Bonus", "Investment", "Gift", "Other Income"];
 
-        // Keyword mapping for auto-categorization and essential status
+        // Keyword mapping for intelligent auto-categorization of transactions
         const categoryKeywords = {
             'Housing': ['rent', 'mortgage', 'property tax', 'home insurance'],
             'Utilities': ['gas', 'electricity', 'water', 'internet', 'phone', 'council tax'],
@@ -7358,15 +7419,18 @@ let goalTemplates = {
             };
         }
         
-        // --- Initialization ---
+        /**
+         * Main Application Initialization
+         * Sets up the app when DOM is ready, following proper initialization order
+         */
         document.addEventListener('DOMContentLoaded', async function() {
-            // Cache DOM elements first
+            // Cache DOM elements for performance
             cacheDOMElements();
             
-            // Apply theme early to prevent flash
+            // Apply saved theme to prevent flash of unstyled content
             applyTheme();
             
-            // Initialize authentication first
+            // Initialize authentication and load user data
             await initializeApp();
         });
         
@@ -7874,11 +7938,15 @@ function validateCleanStep() {
     }
 }
 
+/**
+ * Complete the onboarding process and initialize the application
+ * Transfers onboarding data to main app state and creates initial goals
+ */
 function finishCleanOnboarding() {
     try {
         const data = cleanOnboardingData.data;
         
-        // Update main app variables with safe defaults
+        // Transfer onboarding data to main application state
         monthlyIncome = data.monthlyIncome || 0;
         monthlyBudget = data.monthlyBudget || 0;
         monthlyExpenses = data.monthlyExpenses || data.monthlyBudget || 0;
@@ -9380,9 +9448,12 @@ function activateGoalSafely() {
     }
 }
 
-// Skip onboarding function
+/**
+ * Skip onboarding process and set up app with default values
+ * Provides a quick start option for users who want to explore the app
+ */
 function skipOnboarding() {
-    // Set default values
+    // Initialize with sensible default values
     cleanOnboardingData.data.monthlyIncome = 10000;
     cleanOnboardingData.data.monthlyBudget = 4000;
     cleanOnboardingData.data.primaryGoal = 'emergency';
@@ -9394,11 +9465,15 @@ function skipOnboarding() {
     cleanOnboardingData.data.debts = [];
     cleanOnboardingData.data.totalSavings = 0;
     
-    // Complete onboarding with defaults
+    // Process defaults through normal onboarding completion
     finishCleanOnboarding();
 }
 
-// 2. ADD missing validateCleanGoalDetails function
+/**
+ * Validate goal detail inputs during onboarding
+ * Ensures all required fields are filled and values are valid
+ * @returns {boolean} True if all validation passes
+ */
 function validateCleanGoalDetails() {
     const inputs = document.querySelectorAll('#clean-goal-details-content input, #clean-goal-details-content select');
     let valid = true;
@@ -10617,8 +10692,15 @@ function removeGoal(index) {
 }
 
 
-// === GOAL PROGRESS TRACKING ===
+/**
+ * Goal Progress Tracking System
+ * Automatically calculates and updates progress for various goal types
+ */
 
+/**
+ * Main function to calculate progress for all active user goals
+ * Updates progress based on actual transaction data
+ */
 function calculateGoalProgress() {
     if (!userGoals || userGoals.length === 0) return;
     
@@ -10627,9 +10709,10 @@ function calculateGoalProgress() {
     const currentYear = now.getFullYear();
     
     userGoals.forEach(goal => {
-        // Skip automatic calculation for manually edited goals
+        // Skip goals that have been manually adjusted by user
         if (goal.manuallyEdited) return;
         
+        // Calculate progress based on goal type
         switch(goal.type) {
             case 'savings_rate':
                 goal.currentProgress = calculateSavingsRateProgress(currentMonth, currentYear);
@@ -12190,12 +12273,18 @@ function showGoalSelection() {
     }
 }
 
+/**
+ * Calculate goal completion percentage based on goal type and unit
+ * @param {Object} goal - Goal object with progress and target values
+ * @returns {number} Percentage of goal completion (0-100)
+ */
 function calculateGoalProgressPercent(goal) {
     if (goal.unit === 'percent') {
         return goal.target > 0 ? (goal.currentProgress / goal.target) * 100 : 0;
     } else if (goal.unit === 'currency') {
+        // Category limits are already percentage-based
         if (goal.type === 'category_limit' || goal.type === 'coffee_budget') {
-            return goal.currentProgress; // Already calculated as percentage
+            return goal.currentProgress;
         }
         if (goal.target === 0) {
             console.warn('Goal has 0 target:', goal);
@@ -12208,6 +12297,11 @@ function calculateGoalProgressPercent(goal) {
     return 0;
 }
 
+/**
+ * Format goal progress for display based on goal type and unit
+ * @param {Object} goal - Goal object to format
+ * @returns {string} Formatted progress string for UI display
+ */
 function formatGoalProgress(goal) {
     if (goal.unit === 'currency') {
         if (goal.type === 'category_limit' || goal.type === 'coffee_budget') {
@@ -12932,6 +13026,10 @@ function closeGoalSelection() {
         }
 
         // --- Data Load/Save ---
+        /**
+         * Load application data from localStorage/authentication system
+         * Restores all user data including expenses, goals, and settings
+         */
         function loadData() {
             const data = authManager.getUserData('lensAppData');
             if (data) {
@@ -12939,6 +13037,8 @@ function closeGoalSelection() {
                 console.log('loadData - raw data from localStorage:', data);
                 console.log('loadData - parsedData.userGoals:', parsedData.userGoals);
                 console.log('loadData - userGoals before assignment:', userGoals);
+                
+                // Restore core financial data
                 expenses = parsedData.expenses || [];
                 recurringItems = parsedData.recurringItems || [];
                 monthlyBudget = parsedData.monthlyBudget || 0;
@@ -12947,12 +13047,15 @@ function closeGoalSelection() {
                 
                 // Initialize simplified income system
                 migrateIncomeToRecurringOnly();
+                
+                // Restore user preferences and state
                 totalSavings = parsedData.totalSavings || 0;
                 totalDebt = parsedData.totalDebt || 0;
                 healthScoreHistory = parsedData.healthScoreHistory || {};
                 currentCurrencyCode = parsedData.currentCurrencyCode || 'GBP';
                 activeTab = parsedData.activeTab || 'overview';
                 userGoals = parsedData.userGoals || [];
+                
                 console.log('loadData - userGoals after assignment:', userGoals);
                 console.log('🎯 loadData - userGoals length:', userGoals.length);
                 console.log('🔥 loadData - expenses loaded:', expenses.length);
@@ -12960,10 +13063,10 @@ function closeGoalSelection() {
                 console.log('⚠️ loadData - no data found in localStorage');
             }
             
-            // CRITICAL FIX: Clean any contaminated health score data after loading
+            // Clean any corrupted health score data
             cleanHealthScoreData();
             
-            // Force render recent expenses after data is loaded
+            // Refresh UI components after data load
             console.log('🔄 loadData - forcing renderRecentExpenses');
             setTimeout(() => {
                 if (typeof renderRecentExpenses === 'function') {
@@ -12972,17 +13075,22 @@ function closeGoalSelection() {
             }, 100);
         }
 
+        /**
+         * Save application data to localStorage and authentication system
+         * Persists all user data including expenses, goals, and settings
+         */
         function saveData() {
             try {
                 console.log('🔥 SAVING CURRENT GLOBAL VARIABLES');
                 console.log('Saving:', { monthlyIncome, monthlyBudget, monthlyExpenses });
                 
+                // Package all application state for persistence
                 const dataToSave = {
                     expenses,
                     recurringItems,
-                    monthlyBudget,        // ✅ Current global variable
-                    monthlyIncome,        // ✅ Current global variable
-                    monthlyExpenses,      // ✅ Current global variable
+                    monthlyBudget,        // Current spending limit
+                    monthlyIncome,        // Current income amount
+                    monthlyExpenses,      // Calculated monthly expenses
                     dailyBudget,
                     dailyBudgetOverride,
                     currentCurrencyCode,
@@ -12992,11 +13100,11 @@ function closeGoalSelection() {
                     lastSaved: new Date().toISOString()
                 };
 
-                // Always use localStorage as fallback
+                // Primary storage: localStorage (always available)
                 localStorage.setItem('lensAppData', JSON.stringify(dataToSave));
                 console.log('✅ Saved to localStorage');
                 
-                // Try authManager only if it exists and user is authenticated
+                // Secondary storage: authManager (if user authenticated)
                 if (typeof authManager !== 'undefined' && authManager.saveUserData) {
                     try {
                         authManager.saveUserData('lensAppData', dataToSave);
@@ -15392,10 +15500,20 @@ function closeGoalSelection() {
         }
 
         const chartColors = ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316', '#06b6d4', '#d946ef', '#84cc16'];
+        /**
+         * Generate array of chart colors for multiple data series
+         * @param {number} count - Number of colors needed
+         * @returns {string[]} Array of color strings cycling through predefined colors
+         */
         function getChartColors(count) {
             return Array.from({length: count}, (_, i) => chartColors[i % chartColors.length]);
         }
 
+        /**
+         * Generate Chart.js options with theme-aware styling
+         * @param {boolean} isDarkMode - Whether dark mode is active
+         * @returns {Object} Chart.js configuration options
+         */
         function getChartOptions(isDarkMode) {
             const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)';
             const textColor = isDarkMode ? '#cbd5e1' : '#64748b';
@@ -15408,24 +15526,42 @@ function closeGoalSelection() {
                 },
                 plugins: {
                     legend: { labels: { color: textColor } },
-                    tooltip: { titleFont: { weight: 'bold' }, bodyFont: {}, backgroundColor: isDarkMode ? '#334155' : '#ffffff', titleColor: isDarkMode ? '#f1f5f9' : '#1e293b', bodyColor: isDarkMode ? '#f1f5f9' : '#1e293b', borderColor: isDarkMode ? '#475569' : '#e2e8f0', borderWidth: 1 }
+                    tooltip: { 
+                        titleFont: { weight: 'bold' }, 
+                        bodyFont: {}, 
+                        backgroundColor: isDarkMode ? '#334155' : '#ffffff', 
+                        titleColor: isDarkMode ? '#f1f5f9' : '#1e293b', 
+                        bodyColor: isDarkMode ? '#f1f5f9' : '#1e293b', 
+                        borderColor: isDarkMode ? '#475569' : '#e2e8f0', 
+                        borderWidth: 1 
+                    }
                 }
             };
         }
 
+        /**
+         * Render spending trend chart showing monthly spending over time
+         * Creates a line chart with 12 months of spending data
+         */
         function renderSpendingTrendChart() {
             const ctx = DOMElements.spendingTrendCanvas?.getContext('2d');
             if (!ctx) return;
+            
+            // Get 12 months of spending data
             const monthlyData = getMonthlyIncomeAndExpenses(12);
             const labels = monthlyData.map(m => new Date(m.year, m.month).toLocaleString('default', {month: 'short', year: '2-digit'}));
             const data = monthlyData.map(m => m.expenses);
 
+            // Destroy existing chart to prevent memory leaks
             if (spendingTrendChart) spendingTrendChart.destroy();
+            
+            // Configure chart with theme-aware styling
             const isDarkMode = DOMElements.html.classList.contains('dark');
             const options = getChartOptions(isDarkMode);
             options.plugins.tooltip.callbacks = { label: (context) => ` Spending: ${formatCurrency(context.parsed.y)}` };
             options.plugins.legend = { display: false };
 
+            // Create new Chart.js instance
             spendingTrendChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -15441,6 +15577,10 @@ function closeGoalSelection() {
             });
         }
 
+        /**
+         * Render category spending chart showing expense breakdown by category
+         * Creates a doughnut chart for visual spending distribution
+         */
         function renderCategorySpendingChart() {
             const ctx = DOMElements.categorySpendingCanvas?.getContext('2d');
             if (!ctx) return;
@@ -18482,7 +18622,10 @@ function showInsightsError() {
           }
       }
 
-      // Listen for window resize with debounce
+      /**
+       * Window resize handler with debouncing
+       * Optimizes performance by limiting resize event frequency
+       */
       let resizeTimeout;
       window.addEventListener('resize', function() {
           clearTimeout(resizeTimeout);
@@ -18705,18 +18848,21 @@ function renderMobileExpenseList(expArr) {
 }
 
 /* ---------- Hook into existing flow ---------- */
-// Mobile rendering integration - do this after DOM loads when functions are defined
+/**
+ * Mobile rendering integration
+ * Enhances desktop table rendering with mobile-optimized cards
+ */
 document.addEventListener('DOMContentLoaded', () => {
-    // Store the original render function before wrapping
+    // Store the original desktop render function
     const originalRenderExpensesTable = window.renderExpensesTable;
     
     if (originalRenderExpensesTable) {
-        // Wrap the renderExpensesTable function to add mobile rendering
+        // Wrap the function to add mobile rendering capability
         window.renderExpensesTable = function() {
-            // Call the original function first
+            // Execute original desktop rendering first
             originalRenderExpensesTable.apply(this, arguments);
             
-            // Then add mobile rendering with filtered and paginated data
+            // Add mobile card rendering with same data
             if (typeof getFilteredExpenses === 'function') {
                 const filteredExpenses = getFilteredExpenses();
                 const currentPage = window.expensesCurrentPage || 1;
@@ -19036,11 +19182,14 @@ window.showTab = function(tabName) {
     closeMobileDropdown();
 };
 
-// Initialize Trezor navigation on page load
+/**
+ * Initialize Trezor-style navigation system
+ * Sets up sidebar navigation and handles initial tab selection
+ */
 document.addEventListener('DOMContentLoaded', function() {
     updateTrezorNavigation('overview');
     
-    // Bypass login for design testing
+    // Development helper: bypass login for testing
     setTimeout(() => {
         const loginModal = document.querySelector('[data-modal="auth"]');
         if (loginModal && loginModal.classList.contains('flex')) {
@@ -19104,12 +19253,16 @@ function updateCurrentStatus() {
 
 }
 
-// Add event listeners for real-time updates
+/**
+ * Set up real-time budget calculation updates
+ * Automatically recalculates budgets when user changes settings
+ */
 document.addEventListener('DOMContentLoaded', function() {
     const incomeInput = document.getElementById('settings-monthly-income');
     const budgetInput = document.getElementById('settings-monthly-budget');
     const dailyInput = document.getElementById('settings-daily-budget');
     
+    // Attach input listeners for live updates
     if (incomeInput) incomeInput.addEventListener('input', updateBudgetCalculations);
     if (budgetInput) budgetInput.addEventListener('input', updateBudgetCalculations);
     if (dailyInput) dailyInput.addEventListener('input', updateBudgetCalculations);
