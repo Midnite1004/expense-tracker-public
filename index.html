@@ -3664,26 +3664,10 @@
             .projection-container,
             .budget-progress,
             .spending-projection,
-            #budget-progress-bar,
             .bg-blue-50,
             .chart-container,
             .insights-container,
-            .seven-day-trend-chart,
-            /* CRITICAL: Target the actual progress bar CONTAINER not the fill */
-            .card .relative.w-full,
-            .card .w-full.bg-gray-200,
-            .card .bg-gray-200.rounded-full,
-            .card .h-3.bg-gray-200,
-            .card .relative.bg-gray-200,
-            /* Target progress bar wrapper/container elements */
-            .progress-bar-container,
-            .budget-progress-container,
-            .w-full.h-3,
-            .relative.h-3,
-            /* Target the specific Budget Progress bar container */
-            .card .flex.items-center.mb-2,
-            .card .relative.w-full.h-3,
-            .card .w-full.h-3.bg-gray-200.rounded-full {
+            .seven-day-trend-chart {
                 width: 100% !important;
                 max-width: 100% !important;
                 margin-left: 0 !important;
@@ -3693,16 +3677,10 @@
                 box-sizing: border-box !important;
             }
             
-            /* CRITICAL: Ensure progress FILL respects JavaScript width */
-            #budget-progress-bar,
-            .card .bg-green-500,
-            .card .bg-green-600,
-            .card .bg-red-600,
-            .card .bg-orange-500,
-            [id*="progress-bar"] {
-                width: auto !important;
-                max-width: none !important;
-                /* Let JavaScript control the width */
+            /* ONLY target the progress bar BACKGROUND container */
+            .w-full.bg-gray-200.rounded-full.h-4.border {
+                width: 100% !important;
+                max-width: 100% !important;
             }
             
             /* Target projection box specifically */
