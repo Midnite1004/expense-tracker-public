@@ -45,6 +45,40 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
+        /* MOBILE FAB - FORCE HIDE REDUNDANT ELEMENTS */
+        @media (max-width: 640px) {
+            /* NUCLEAR OPTION - FORCE HIDE QUICK ACTIONS */
+            .card:has(h3:contains("Quick Actions")),
+            .card:has(h2:contains("Quick Actions")),
+            div:has(> h3:contains("Quick Actions")),
+            div:has(> h2:contains("Quick Actions")),
+            section:has(h3:contains("Quick Actions")),
+            
+            /* Hide cards with specific content markers added by JavaScript */
+            .hide-mobile-quick-add,
+            .hide-mobile-quick-actions,
+            .hide-mobile-add-income,
+            .hide-mobile-add-recurring {
+                display: none !important;
+            }
+            
+            /* Hide quick action buttons and their containers (but NOT in FAB) */
+            button[onclick*="quickAddExpense"]:not(.fab-quick-item):not(.fab-action-button),
+            button[onclick*="showAddForm"]:not(.fab-action-button) {
+                display: none !important;
+            }
+            
+            /* FORCE HIDE BY STRUCTURE - target the exact Quick Actions card */
+            #overview-tab > div > div:has(h3:contains("Quick Actions")),
+            .tab-content > div > div:has(h3:contains("Quick Actions")),
+            
+            /* Hide cards by position (fallback) */
+            #overview-tab .card.p-4.mb-4:nth-of-type(3):not(.fab-menu),
+            #overview-tab .card.p-4.mb-4:nth-of-type(4):not(.fab-menu) {
+                display: none !important;
+            }
+        }
+        
         /* CSS Custom Properties for theme colors and consistent design system */
         :root {
             /* Light mode color palette */
@@ -1715,6 +1749,81 @@
         .mobile-safe {
             padding-left: max(1rem, env(safe-area-inset-left));
             padding-right: max(1rem, env(safe-area-inset-right));
+        }
+        
+        /* Mobile Dashboard - Hide specific components */
+        @media (max-width: 768px) {
+            /* Hide Add Income section on mobile - Target the specific card */
+            .card.p-4.mb-4:first-of-type {
+                display: none !important;
+            }
+            
+            /* Hide Quick Add component (all four buttons) on mobile */
+            .card.p-4.mb-4:has(.quick-add-grid) {
+                display: none !important;
+            }
+            
+            /* Hide Quick Actions (all three buttons) on mobile */
+            .card.p-4:has(.space-y-3:has(button[onclick*="showAddForm"])) {
+                display: none !important;
+            }
+            
+            /* Direct targeting for better compatibility */
+            .quick-add-grid {
+                display: none !important;
+            }
+            
+            /* Hide the specific cards by their content */
+            .card.p-4.mb-4:has(h3.text-lg.font-semibold:contains("Quick Add")) {
+                display: none !important;
+            }
+            
+            .card.p-4:has(h3.text-lg.font-semibold:contains("Quick Actions")) {
+                display: none !important;
+            }
+            
+            /* Force hide with multiple selectors */
+            .card.p-4.mb-4:has(button[onclick*="showAddIncomeForm"]) {
+                display: none !important;
+            }
+            
+            .card.p-4.mb-4:has(.quick-add-wrapper) {
+                display: none !important;
+            }
+            
+            .card.p-4:has(button[onclick*="showAddForm"]) {
+                display: none !important;
+            }
+            
+            .card.p-4:has(button[onclick*="showRecurringForm"]) {
+                display: none !important;
+            }
+            
+            /* Ultra aggressive hiding for mobile */
+            .trezor-content .card.p-4.mb-4:first-child {
+                display: none !important;
+            }
+            
+            .trezor-content .card.p-4.mb-4:has(.quick-add-grid) {
+                display: none !important;
+            }
+            
+            .trezor-content .card.p-4:has(button[onclick*="showAddForm"]) {
+                display: none !important;
+            }
+            
+            /* Hide by specific text content */
+            .trezor-content .card:has(h2:contains("Total Monthly Income")) {
+                display: none !important;
+            }
+            
+            .trezor-content .card:has(h3:contains("Quick Add")) {
+                display: none !important;
+            }
+            
+            .trezor-content .card:has(h3:contains("Quick Actions")) {
+                display: none !important;
+            }
         }
         /* Trezor Suite Button Styles */
         .btn-primary {
@@ -14431,7 +14540,10 @@ function closeGoalSelection() {
                        expenseDate.getFullYear() === currentYear;
             });
             
-            const totalSpent = allMonthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
+            const totalSpent = allMonthlyExpenses.reduce((sum, e) => {
+                const cost = parseFloat(e.cost) || 0;
+                return sum + (isNaN(cost) ? 0 : cost);
+            }, 0);
 
             // --- Update UI Tiles ---
             const budgetStr = formatCurrency(monthlyBudget);
@@ -16051,6 +16163,11 @@ function closeGoalSelection() {
         
         // --- Utility Functions ---
         function formatCurrency(amount, useDecimals = true) {
+            // Handle NaN, undefined, null, and invalid values
+            if (typeof amount !== 'number' || isNaN(amount) || !isFinite(amount)) {
+                amount = 0;
+            }
+            
             const { locale } = currencyConfig[currentCurrencyCode];
             const isInteger = !useDecimals || (amount % 1 === 0);
             const options = {
@@ -16059,7 +16176,7 @@ function closeGoalSelection() {
                 minimumFractionDigits: isInteger ? 0 : 2,
                 maximumFractionDigits: isInteger ? 0 : 2
             };
-            return new Intl.NumberFormat(locale, options).format(amount || 0);
+            return new Intl.NumberFormat(locale, options).format(amount);
         }
 
         function escapeHTML(str) {
@@ -17289,6 +17406,11 @@ function closeGoalSelection() {
 
 
         function formatCurrency(amount) {
+            // Handle NaN, undefined, null, and invalid values
+            if (typeof amount !== 'number' || isNaN(amount) || !isFinite(amount)) {
+                amount = 0;
+            }
+            
             const config = currencyConfig[currentCurrencyCode];
             const isInteger = amount % 1 === 0;
             const options = {
@@ -17297,7 +17419,7 @@ function closeGoalSelection() {
                 minimumFractionDigits: (currentCurrencyCode === 'JPY' || isInteger) ? 0 : 2,
                 maximumFractionDigits: (currentCurrencyCode === 'JPY' || isInteger) ? 0 : 2,
             };
-            return new Intl.NumberFormat(config.locale, options).format(amount || 0);
+            return new Intl.NumberFormat(config.locale, options).format(amount);
         }
 
 // SMART ANALYTICS CORE ENGINE
@@ -20208,10 +20330,13 @@ function generateBasicInsights() {
                expense.status === 'active';
     });
     
-    const totalSpent = monthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
-    const remaining = monthlyBudget - totalSpent;
+    const totalSpent = monthlyExpenses.reduce((sum, e) => {
+        const cost = parseFloat(e.cost) || 0;
+        return sum + (isNaN(cost) ? 0 : cost);
+    }, 0);
+    const remaining = (monthlyBudget || 0) - (totalSpent || 0);
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const daysElapsed = currentDate.getDate();
+    const daysElapsed = Math.max(1, currentDate.getDate());
     const dailyAverage = totalSpent / daysElapsed;
     const projectedSpending = dailyAverage * daysInMonth;
     
@@ -20248,7 +20373,7 @@ function generateBasicInsights() {
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-600">Budget usage:</span>
-                        <span class="font-semibold">${((totalSpent / monthlyBudget) * 100).toFixed(1)}%</span>
+                        <span class="font-semibold">${monthlyBudget > 0 ? ((totalSpent / monthlyBudget) * 100).toFixed(1) : '0.0'}%</span>
                     </div>
                 </div>
             </div>
@@ -20376,8 +20501,11 @@ function updateDashboardTiles() {
                expense.status === 'active';
     });
     
-    const totalSpent = monthlyExpenses.reduce((sum, e) => sum + e.cost, 0);
-    const remaining = monthlyBudget - totalSpent;
+    const totalSpent = monthlyExpenses.reduce((sum, e) => {
+        const cost = parseFloat(e.cost) || 0;
+        return sum + (isNaN(cost) ? 0 : cost);
+    }, 0);
+    const remaining = (monthlyBudget || 0) - (totalSpent || 0);
     
     console.log('Calculated values:', { totalSpent, remaining });
     
@@ -23535,6 +23663,91 @@ document.addEventListener('DOMContentLoaded', function() {
 console.log('✅ Fixed Daily Budget Line implementation loaded');
 console.log('🔍 Run debugDailyBudgetLine() in console to check status');
 console.log('🧪 Run getActualDailyBudget() to see current budget value');
+
+// Add classes to elements for CSS to hide on mobile
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        console.log('📱 Adding mobile hide classes...');
+        
+        // Find Quick Add card
+        document.querySelectorAll('.card').forEach(card => {
+            const h3 = card.querySelector('h3');
+            
+            if (h3 && h3.textContent === 'Quick Add') {
+                card.classList.add('hide-mobile-quick-add');
+                console.log('✅ Marked Quick Add card for mobile hiding');
+            }
+            
+            if (h3 && h3.textContent === 'Quick Actions') {
+                card.classList.add('hide-mobile-quick-actions');
+                console.log('✅ Marked Quick Actions card for mobile hiding');
+            }
+            
+            // Check for quick add buttons (but NOT in FAB)
+            if (card.querySelector('[onclick*="quickAddExpense"]') && !card.closest('.fab-menu')) {
+                card.classList.add('hide-mobile-quick-add');
+                console.log('✅ Marked card with quick add buttons for mobile hiding');
+            }
+            
+            // Check for quick actions buttons (but NOT in FAB)
+            if (card.querySelector('[onclick="showAddForm()"]') && !card.closest('.fab-menu')) {
+                card.classList.add('hide-mobile-quick-actions');
+                console.log('✅ Marked card with quick actions for mobile hiding');
+            }
+        });
+        
+        // Find Add Income button (but not in FAB)
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent.includes('Add Income')) {
+                // Skip if it's inside the FAB
+                const isInFab = button.closest('.fab-menu') || button.closest('#fabMenu');
+                if (!isInFab) {
+                    button.classList.add('hide-mobile-add-income');
+                    console.log('✅ Marked Add Income button for mobile hiding');
+                }
+            }
+        });
+        
+        // Find Add Recurring button (but not in FAB)
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent.includes('Add Recurring')) {
+                // Skip if it's inside the FAB
+                const isInFab = button.closest('.fab-menu') || button.closest('#fabMenu');
+                if (!isInFab) {
+                    button.classList.add('hide-mobile-add-recurring');
+                    console.log('✅ Marked Add Recurring button for mobile hiding');
+                }
+            }
+        });
+        
+        // FORCE HIDE Quick Actions section - NUCLEAR APPROACH (BUT NOT FAB)
+        document.querySelectorAll('*').forEach(element => {
+            if (element.textContent && element.textContent.includes('Quick Actions') && 
+                element.querySelector && element.querySelector('h3, h2') &&
+                !element.closest('.fab-menu') && !element.closest('#fabMenu')) {
+                const card = element.closest('.card') || element;
+                card.classList.add('hide-mobile-quick-actions');
+                console.log('💥 FORCE HIDDEN Quick Actions section (NOT FAB)');
+            }
+        });
+        
+        // Also target by exact text content (BUT NOT FAB)
+        document.querySelectorAll('h3, h2').forEach(heading => {
+            if (heading.textContent.trim() === 'Quick Actions' && 
+                !heading.closest('.fab-menu') && !heading.closest('#fabMenu')) {
+                const card = heading.closest('.card') || heading.closest('div');
+                if (card) {
+                    card.classList.add('hide-mobile-quick-actions');
+                    console.log('💥 FORCE HIDDEN Quick Actions by heading (NOT FAB)');
+                }
+            }
+        });
+        
+        console.log('✅ Mobile hide classes added');
+    }, 500);
+});
+            
+
 
 </script>
 
