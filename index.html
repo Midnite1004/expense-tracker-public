@@ -3753,7 +3753,277 @@ button, .btn, input[type="button"], input[type="submit"] {
     z-index: 1;
 }
 
-</style>
+/* ========== MOBILE FAB IMPLEMENTATION ========== */
+        /* Professional FAB that preserves all existing functionality */
+        
+        /* Hide FAB on desktop */
+        @media (min-width: 641px) {
+            .mobile-fab {
+                display: none !important;
+            }
+        }
+        
+        /* FAB Button - matches existing design system */
+        .mobile-fab {
+            position: fixed;
+            bottom: 85px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.4);
+            cursor: pointer;
+            z-index: 900;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            color: white;
+        }
+        
+        .mobile-fab:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+        }
+        
+        .mobile-fab svg {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mobile-fab.active svg {
+            transform: rotate(45deg);
+        }
+        
+        /* FAB Menu Overlay */
+        .fab-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 899;
+        }
+        
+        .fab-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* FAB Menu Container */
+        .fab-menu {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 901;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-bottom: env(safe-area-inset-bottom);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .fab-menu.active {
+            transform: translateY(0);
+        }
+        
+        /* Menu Handle */
+        .fab-menu-handle {
+            width: 36px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 12px auto 20px;
+        }
+        
+        /* Quick Actions Section */
+        .fab-quick-actions {
+            padding: 0 16px 16px;
+        }
+        
+        .fab-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+        
+        .fab-quick-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .fab-quick-item {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fab-quick-item:active {
+            transform: scale(0.98);
+            background: var(--bg-secondary);
+        }
+        
+        .fab-quick-item::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(0, 102, 204, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+        
+        .fab-quick-item:active::before {
+            width: 200px;
+            height: 200px;
+        }
+        
+        .fab-quick-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .fab-quick-icon.coffee {
+            background: rgba(254, 243, 199, 0.5);
+        }
+        
+        .fab-quick-icon.lunch {
+            background: rgba(209, 250, 229, 0.5);
+        }
+        
+        .fab-quick-icon.transport {
+            background: rgba(219, 234, 254, 0.5);
+        }
+        
+        .fab-quick-icon.groceries {
+            background: rgba(233, 213, 255, 0.5);
+        }
+        
+        .fab-quick-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .fab-quick-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .fab-quick-category {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        
+        .fab-quick-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* Main Actions */
+        .fab-main-actions {
+            padding: 0 16px 24px;
+        }
+        
+        .fab-action-button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fab-action-button:active {
+            transform: scale(0.98);
+        }
+        
+        .fab-action-button.primary {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+        
+        .fab-action-button.primary:active {
+            background: var(--accent-primary-hover);
+        }
+        
+        .fab-action-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Hide desktop add buttons on mobile without breaking existing functionality */
+        @media (max-width: 640px) {
+            /* Preserve header buttons (theme toggle, burger menu, upgrade) */
+            /* Only hide add/quick action buttons */
+            .header-actions button[onclick*="showExpenseForm"],
+            .header-actions button[onclick*="showAddForm"],
+            .page-header button[onclick*="add"]:not(#theme-toggle-btn):not(#mobile-menu-toggle),
+            .tab-content button[onclick*="add"]:not(.mobile-fab),
+            button.add-expense-btn:not(.mobile-fab),
+            button.add-income-btn:not(.mobile-fab),
+            button.add-recurring-btn:not(.mobile-fab),
+            .desktop-add-button,
+            /* Hide desktop quick actions but preserve navigation */
+            button:has(svg path[d*="M12 4v16m8-8H4"]):not(.mobile-fab):not(#mobile-menu-toggle):not(#theme-toggle-btn) {
+                display: none !important;
+            }
+        }
+    </style>
 
 </head>
 <body class="antialiased">
@@ -23436,6 +23706,295 @@ console.log('🧪 Run getActualDailyBudget() to see current budget value');
             });
             </script>        
 
+    <!-- Mobile FAB Implementation -->
+    <button class="mobile-fab" id="mobileFab" onclick="toggleFabMenu()" aria-label="Quick Actions">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+    </button>
+    
+    <!-- FAB Overlay -->
+    <div class="fab-overlay" id="fabOverlay" onclick="closeFabMenu()"></div>
+    
+    <!-- FAB Menu -->
+    <div class="fab-menu" id="fabMenu">
+        <div class="fab-menu-handle"></div>
+        
+        <!-- Quick Actions -->
+        <div class="fab-quick-actions">
+            <div class="fab-section-title">Quick Add</div>
+            <div class="fab-quick-grid">
+                <button class="fab-quick-item" onclick="quickAddExpense('Coffee', 5, 'Food/Drink')">
+                    <div class="fab-quick-icon coffee">☕</div>
+                    <div class="fab-quick-content">
+                        <div class="fab-quick-label">Coffee</div>
+                        <div class="fab-quick-category">Food/Drink</div>
+                    </div>
+                    <div class="fab-quick-amount">£5</div>
+                </button>
+                
+                <button class="fab-quick-item" onclick="quickAddExpense('Lunch', 15, 'Food/Drink')">
+                    <div class="fab-quick-icon lunch">🍽️</div>
+                    <div class="fab-quick-content">
+                        <div class="fab-quick-label">Lunch</div>
+                        <div class="fab-quick-category">Food/Drink</div>
+                    </div>
+                    <div class="fab-quick-amount">£15</div>
+                </button>
+                
+                <button class="fab-quick-item" onclick="quickAddExpense('Transport', 10, 'Transport')">
+                    <div class="fab-quick-icon transport">🚇</div>
+                    <div class="fab-quick-content">
+                        <div class="fab-quick-label">Transport</div>
+                        <div class="fab-quick-category">Essential</div>
+                    </div>
+                    <div class="fab-quick-amount">£10</div>
+                </button>
+                
+                <button class="fab-quick-item" onclick="quickAddExpense('Groceries', 50, 'Shopping')">
+                    <div class="fab-quick-icon groceries">🛒</div>
+                    <div class="fab-quick-content">
+                        <div class="fab-quick-label">Groceries</div>
+                        <div class="fab-quick-category">Essential</div>
+                    </div>
+                    <div class="fab-quick-amount">£50</div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Actions -->
+        <div class="fab-main-actions">
+            <button class="fab-action-button primary" onclick="openFabExpenseForm()">
+                <svg class="fab-action-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                <span>+ Add Expense</span>
+            </button>
+            
+            <button class="fab-action-button" onclick="openFabIncomeForm()">
+                <span style="margin-right: 4px;">💰</span>
+                Add Income
+            </button>
+            
+            <button class="fab-action-button" onclick="openFabRecurringForm()">
+                <svg class="fab-action-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>Add Recurring</span>
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // FAB Menu Controls
+        function toggleFabMenu() {
+            const fab = document.getElementById('mobileFab');
+            const overlay = document.getElementById('fabOverlay');
+            const menu = document.getElementById('fabMenu');
+            
+            const isActive = fab.classList.contains('active');
+            
+            if (isActive) {
+                closeFabMenu();
+            } else {
+                fab.classList.add('active');
+                overlay.classList.add('active');
+                menu.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        function closeFabMenu() {
+            const fab = document.getElementById('mobileFab');
+            const overlay = document.getElementById('fabOverlay');
+            const menu = document.getElementById('fabMenu');
+            
+            fab.classList.remove('active');
+            overlay.classList.remove('active');
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Quick Add Functions
+        function quickAddExpense(name, amount, category) {
+            closeFabMenu();
+            
+            // Create expense object
+            const expense = {
+                id: Date.now(),
+                name: name,
+                cost: amount,
+                category: category,
+                date: new Date().toISOString().split('T')[0],
+                paymentMethod: 'Cash',
+                type: 'Expense',
+                status: 'active'
+            };
+            
+            // Add to expenses array and save
+            expenses.push(expense);
+            saveData();
+            updateDisplay();
+            renderExpensesTable();
+            showToast(`Added ${name} - ${formatCurrency(amount)}`, 'success');
+        }
+        
+        // Form Opening Functions
+        function openFabExpenseForm() {
+            closeFabMenu();
+            
+            // Use the same approach as showAddForm
+            if (typeof showAddForm === 'function') {
+                showAddForm();
+            } else if (DOMElements && DOMElements.modal) {
+                // Direct approach if showAddForm is not available
+                editingExpense = null;
+                if (DOMElements.modalTitle) {
+                    DOMElements.modalTitle.textContent = 'Add New Expense';
+                }
+                if (DOMElements.expenseForm) {
+                    DOMElements.expenseForm.reset();
+                }
+                if (DOMElements.expenseDate) {
+                    DOMElements.expenseDate.value = new Date().toISOString().split('T')[0];
+                }
+                DOMElements.modal.classList.remove('hidden');
+            } else {
+                // Fallback to direct DOM manipulation
+                const modal = document.getElementById('modal');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    const form = modal.querySelector('form');
+                    if (form) form.reset();
+                    const dateInput = document.getElementById('expense-date');
+                    if (dateInput) {
+                        dateInput.value = new Date().toISOString().split('T')[0];
+                    }
+                }
+            }
+        }
+        
+        function openFabIncomeForm() {
+            closeFabMenu();
+            
+            // Open recurring modal directly - it's id="recurring-modal"
+            const modal = document.getElementById('recurring-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                
+                // Reset form
+                const form = modal.querySelector('form');
+                if (form) form.reset();
+                
+                // Set type to income, category to salary, date prefilled
+                const typeSelect = document.getElementById('recurring-type');
+                const categorySelect = document.getElementById('recurring-category');
+                const dateInput = document.getElementById('recurring-start-date');
+                
+                if (typeSelect) {
+                    typeSelect.value = 'income';
+                    // Trigger change event to update category options
+                    const event = new Event('change', { bubbles: true });
+                    typeSelect.dispatchEvent(event);
+                }
+                
+                setTimeout(() => {
+                    if (categorySelect) {
+                        categorySelect.value = 'Salary';
+                    }
+                    if (dateInput) {
+                        dateInput.value = new Date().toISOString().split('T')[0];
+                    }
+                }, 100);
+                
+                // Clear editing state
+                if (typeof editingRecurring !== 'undefined') {
+                    editingRecurring = null;
+                }
+            } else {
+                console.error('Recurring modal not found with id="recurring-modal"');
+            }
+        }
+        
+        function openFabRecurringForm() {
+            closeFabMenu();
+            
+            // Open recurring modal directly - it's id="recurring-modal"
+            const modal = document.getElementById('recurring-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                
+                // Reset form
+                const form = modal.querySelector('form');
+                if (form) form.reset();
+                
+                // Set type to expense, date prefilled
+                const typeSelect = document.getElementById('recurring-type');
+                const dateInput = document.getElementById('recurring-start-date');
+                
+                if (typeSelect) {
+                    typeSelect.value = 'expense';
+                    // Trigger change event to update category options
+                    const event = new Event('change', { bubbles: true });
+                    typeSelect.dispatchEvent(event);
+                }
+                
+                if (dateInput) {
+                    dateInput.value = new Date().toISOString().split('T')[0];
+                }
+                
+                // Clear editing state
+                if (typeof editingRecurring !== 'undefined') {
+                    editingRecurring = null;
+                }
+            } else {
+                console.error('Recurring modal not found with id="recurring-modal"');
+            }
+        }
+        
+        // Swipe to close support
+        (function() {
+            let startY = 0;
+            let currentY = 0;
+            let isDragging = false;
+            
+            const menu = document.getElementById('fabMenu');
+            
+            menu.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+                isDragging = true;
+                menu.style.transition = 'none';
+            }, { passive: true });
+            
+            menu.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                
+                currentY = e.touches[0].clientY;
+                const deltaY = currentY - startY;
+                
+                if (deltaY > 0) {
+                    menu.style.transform = `translateY(${deltaY}px)`;
+                }
+            }, { passive: true });
+            
+            menu.addEventListener('touchend', (e) => {
+                if (!isDragging) return;
+                
+                isDragging = false;
+                menu.style.transition = '';
+                
+                const deltaY = currentY - startY;
+                
+                if (deltaY > 100) {
+                    closeFabMenu();
+                } else {
+                    menu.style.transform = '';
+                }
+            }, { passive: true });
+        })();
+    </script>
+
 </body>
-</html>
 </html>
