@@ -3669,19 +3669,61 @@
             .chart-container,
             .insights-container,
             .seven-day-trend-chart,
-            /* Target the specific progress bar in Budget Progress & Health */
-            .card .bg-gray-200,
-            .card .bg-green-500,
-            .card .h-3,
-            .card .rounded-full,
-            .flex .bg-gray-200,
-            .relative .bg-gray-200 {
+            /* CRITICAL: Target the actual progress bar CONTAINER not the fill */
+            .card .relative.w-full,
+            .card .w-full.bg-gray-200,
+            .card .bg-gray-200.rounded-full,
+            .card .h-3.bg-gray-200,
+            .card .relative.bg-gray-200,
+            /* Target progress bar wrapper/container elements */
+            .progress-bar-container,
+            .budget-progress-container,
+            .w-full.h-3,
+            .relative.h-3,
+            /* Target the specific Budget Progress bar container */
+            .card .flex.items-center.mb-2,
+            .card .relative.w-full.h-3,
+            .card .w-full.h-3.bg-gray-200.rounded-full {
                 width: 100% !important;
                 max-width: 100% !important;
                 margin-left: 0 !important;
                 margin-right: 0 !important;
                 padding-left: 0 !important;
                 padding-right: 0 !important;
+                box-sizing: border-box !important;
+            }
+            
+            /* CRITICAL: Ensure progress FILL respects JavaScript width */
+            #budget-progress-bar,
+            .card .bg-green-500,
+            .card .bg-green-600,
+            .card .bg-red-600,
+            .card .bg-orange-500,
+            [id*="progress-bar"] {
+                width: auto !important;
+                max-width: none !important;
+                /* Let JavaScript control the width */
+            }
+            
+            /* Target projection box specifically */
+            .card .bg-blue-50,
+            .card .rounded-lg,
+            .card .border,
+            .card .border-blue-100,
+            .bg-blue-50.rounded-lg,
+            .border.border-blue-100,
+            /* Target any projection or insight containers */
+            div[class*="bg-blue"],
+            div[class*="border-blue"],
+            .ai-insight-container,
+            .projection-box {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                box-sizing: border-box !important;
             }
             
             /* 2. Better padding for right edge content */
@@ -3690,6 +3732,60 @@
                 padding-right: 16px !important;
                 max-width: 100vw !important;
                 overflow-x: hidden !important;
+            }
+            
+            /* CRITICAL: Budget Progress & Health card specific fixes */
+            .card:has(.bg-blue-50),
+            .card:has([id*="ai-insight"]),
+            .card:has(.rounded-lg.border) {
+                padding-left: 16px !important;
+                padding-right: 16px !important;
+            }
+            
+            /* CRITICAL: Fix Budget Progress bar layout to use full width */
+            .card:has([class*="progress"]) .flex.justify-between,
+            .card:has(.bg-gray-200) .flex.justify-between,
+            .card .flex.justify-between.items-start {
+                flex-direction: column !important;
+                gap: 16px !important;
+                align-items: stretch !important;
+            }
+            
+            /* Make progress bar section use full width */
+            .card .flex-1.mr-8,
+            .card .flex-1 {
+                margin-right: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            
+            /* Ensure the progress bar container itself uses full width */
+            .card .relative.w-full,
+            .card .w-full.bg-gray-200.rounded-full.h-3 {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 8px 0 !important;
+            }
+            
+            .card:has(.bg-blue-50) > *,
+            .card:has([id*="ai-insight"]) > *,
+            .card:has(.rounded-lg.border) > * {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            
+            /* Force any blue insight boxes to full width */
+            [class*="bg-blue-50"],
+            [class*="border-blue-100"],
+            .ai-insight,
+            .projection,
+            #ai-insight,
+            #ai-insight-status {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
             }
             
             /* 3. Enhanced bottom navigation */
