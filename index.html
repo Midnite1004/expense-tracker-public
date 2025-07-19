@@ -1950,6 +1950,40 @@
                 order: 1 !important;
             }
         }
+        
+        /* ─────────────────────────────────────────────────────────────────────────
+           Force the Recurring tab to display on small screens
+           ───────────────────────────────────────────────────────────────────────── */
+        @media (max-width: 768px) {
+            /* Make sure the tab container itself is visible */
+            #recurring-tab.hidden {
+                display: block !important;
+            }
+            /* And ensure its contents aren't being collapsed */
+            #recurring-tab.tab-content {
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            /* If you're using card‐view on mobile, show the cards container */
+            #recurring-tab .mobile-cards-container {
+                display: block !important;
+            }
+            /* Force the entire recurring tab to be visible */
+            #recurring-tab {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                position: relative !important;
+                z-index: 1 !important;
+            }
+            /* Ensure the card inside is visible */
+            #recurring-tab .card {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+        }
+        
         /* Trezor Suite Button Styles */
         .btn-primary {
             background-color: var(--accent-primary);
@@ -13476,6 +13510,65 @@ function closeGoalSelection() {
         }
 
         // --- Tab Management ---
+        
+        // Function to force recurring tab visibility on mobile
+        function forceRecurringTabVisibility() {
+            if (window.innerWidth <= 768) {
+                const recurringTab = document.getElementById('recurring-tab');
+                if (recurringTab) {
+                    recurringTab.classList.remove('hidden');
+                    recurringTab.style.setProperty('display', 'block', 'important');
+                    recurringTab.style.setProperty('opacity', '1', 'important');
+                    recurringTab.style.setProperty('visibility', 'visible', 'important');
+                    recurringTab.style.setProperty('position', 'relative', 'important');
+                    recurringTab.style.setProperty('z-index', '1', 'important');
+                    
+                    // Also force the card to be visible
+                    const card = recurringTab.querySelector('.card');
+                    if (card) {
+                        card.style.setProperty('display', 'block', 'important');
+                        card.style.setProperty('opacity', '1', 'important');
+                        card.style.setProperty('visibility', 'visible', 'important');
+                    }
+                    
+                    // Use setTimeout to ensure the visibility is applied after DOM updates
+                    setTimeout(() => {
+                        if (recurringTab) {
+                            recurringTab.style.setProperty('display', 'block', 'important');
+                            recurringTab.style.setProperty('opacity', '1', 'important');
+                            recurringTab.style.setProperty('visibility', 'visible', 'important');
+                        }
+                    }, 100);
+                }
+            }
+        }
+        
+        // Global function for debugging recurring tab visibility
+        window.debugRecurringTab = function() {
+            console.log('🔍 Debugging recurring tab...');
+            console.log('Window width:', window.innerWidth);
+            console.log('Active tab:', activeTab);
+            
+            const recurringTab = document.getElementById('recurring-tab');
+            console.log('Recurring tab element:', recurringTab);
+            
+            if (recurringTab) {
+                console.log('Recurring tab classes:', recurringTab.className);
+                console.log('Recurring tab display:', getComputedStyle(recurringTab).display);
+                console.log('Recurring tab opacity:', getComputedStyle(recurringTab).opacity);
+                console.log('Recurring tab visibility:', getComputedStyle(recurringTab).visibility);
+                
+                const card = recurringTab.querySelector('.card');
+                console.log('Card element:', card);
+                if (card) {
+                    console.log('Card display:', getComputedStyle(card).display);
+                }
+            }
+            
+            // Force visibility
+            forceRecurringTabVisibility();
+        };
+        
         function showTab(tabName) {
             // Hide all tab content
             document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
@@ -13495,6 +13588,11 @@ function closeGoalSelection() {
             const newTabContent = document.getElementById(`${tabName}-tab`);
             if (newTabContent) {
                 newTabContent.classList.remove('hidden');
+                
+                // Force visibility on mobile for recurring tab
+                if (tabName === 'recurring') {
+                    forceRecurringTabVisibility();
+                }
             }
             
                 activeTab = tabName;
@@ -13519,6 +13617,8 @@ function closeGoalSelection() {
                 } else if (activeTab === 'expenses') {
                     renderExpensesTable();
                 } else if (activeTab === 'recurring') {
+                    // Force recurring tab visibility on mobile
+                    forceRecurringTabVisibility();
                     renderRecurringTable();
                 } else if (activeTab === 'settings') {
                     populateSettingsForm();
@@ -16290,7 +16390,7 @@ function closeGoalSelection() {
             const tableBody = DOMElements.expensesTableBody;
             
             // Check if mobile
-            const isMobile = window.innerWidth < 769;
+            const isMobile = window.innerWidth <= 768;
 
             if (filteredExpenses.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</td></tr>`;
@@ -16584,7 +16684,7 @@ function closeGoalSelection() {
                 if (frequency && item.frequency !== frequency) return false;
                 return true;
             });
-
+            
             // Sort chronologically by start date (latest first)
             filtered.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
@@ -16611,11 +16711,12 @@ function closeGoalSelection() {
             updateRecurringPagination(totalItems, totalPages);
 
             // MOBILE CARD RENDERING
-            let isMobile = window.innerWidth < 769;
+            let isMobile = window.innerWidth <= 768;
             
             if (isMobile) {
                 // Create or get mobile container
                 let mobileContainer = document.querySelector('#recurring-tab .mobile-cards-container');
+                
                 if (!mobileContainer) {
                     mobileContainer = document.createElement('div');
                     mobileContainer.className = 'mobile-cards-container';
@@ -16624,8 +16725,10 @@ function closeGoalSelection() {
                     mobileContainer.style.marginBottom = '120px';
                     
                     const recurringTab = document.getElementById('recurring-tab');
+                    
                     if (recurringTab) {
                         const cardElement = recurringTab.querySelector('.card');
+                        
                         if (cardElement) {
                             cardElement.appendChild(mobileContainer);
                         } else {
@@ -16636,6 +16739,7 @@ function closeGoalSelection() {
                 
                 // Hide desktop table and show mobile cards
                 const tableContainer = DOMElements.recurringTableBody.closest('table');
+                
                 if (tableContainer) {
                     tableContainer.style.display = 'none';
                 }
@@ -19726,7 +19830,7 @@ function showInsightsError() {
             }
 
             // Check if we're on mobile (using more reliable detection)
-            const isMobile = window.innerWidth < 769 || /Mobi|Android/i.test(navigator.userAgent);
+            const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
             
             if (isMobile) {
                 // Hide the desktop table structure for mobile
@@ -20066,6 +20170,15 @@ function showInsightsError() {
       window.addEventListener('resize', function() {
           clearTimeout(resizeTimeout);
           resizeTimeout = setTimeout(handleResize, 250);
+          
+          // Force recurring tab visibility on mobile resize
+          if (window.innerWidth <= 768) {
+              forceRecurringTabVisibility();
+              // Re-render mobile view if we're on the recurring tab
+              if (activeTab === 'recurring') {
+                  renderRecurringTable();
+              }
+          }
       });
 
         // Enhanced updateTableLabels function for better mobile support
