@@ -57,7 +57,7 @@
             /* Hide cards with specific content markers added by JavaScript */
             .hide-mobile-quick-add,
             .hide-mobile-quick-actions,
-            .hide-mobile-add-income,
+            /* REMOVED: .hide-mobile-add-income, - Monthly income should be visible */
             .hide-mobile-add-recurring {
                 display: none !important;
             }
@@ -1758,7 +1758,15 @@
         /* Mobile Dashboard - Hide specific components */
         @media (max-width: 768px) {
             /* Hide Add Income section on mobile - Target the specific card */
-            .card.p-4.mb-4:first-of-type {
+            /* REMOVED: Monthly income card should be visible on mobile */
+            
+            /* Hide Add Income button next to Monthly Income on mobile only */
+            .card.p-4.mb-4:has(h2:contains("Total Monthly Income")) button[onclick*="showAddIncomeForm"] {
+                display: none !important;
+            }
+            
+            /* Alternative selector for better compatibility */
+            .flex-shrink-0 button[onclick*="showAddIncomeForm"] {
                 display: none !important;
             }
             
@@ -1787,9 +1795,7 @@
             }
             
             /* Force hide with multiple selectors */
-            .card.p-4.mb-4:has(button[onclick*="showAddIncomeForm"]) {
-                display: none !important;
-            }
+            /* REMOVED: Monthly income card should be visible on mobile */
             
             .card.p-4.mb-4:has(.quick-add-wrapper) {
                 display: none !important;
@@ -1804,9 +1810,7 @@
             }
             
             /* Ultra aggressive hiding for mobile */
-            .trezor-content .card.p-4.mb-4:first-child {
-                display: none !important;
-            }
+            /* REMOVED: Monthly income card should be visible on mobile */
             
             .trezor-content .card.p-4.mb-4:has(.quick-add-grid) {
                 display: none !important;
@@ -1817,9 +1821,7 @@
             }
             
             /* Hide by specific text content */
-            .trezor-content .card:has(h2:contains("Total Monthly Income")) {
-                display: none !important;
-            }
+            /* REMOVED: Monthly income card should be visible on mobile */
             
             .trezor-content .card:has(h3:contains("Quick Add")) {
                 display: none !important;
@@ -4985,7 +4987,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <svg class="w-5 h-5 text-gray-500 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        <div class="absolute left-1/2 transform -translate-x-1/2 top-8 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                                        <div class="absolute left-1/2 transform -translate-x-1/2 top-8 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10" style="display: inline-block !important; width: max-content !important; padding: 0.5rem 0.75rem !important; white-space: nowrap !important; max-width: none !important;">
                                             <div id="income-breakdown-tooltip">
                                                 <!-- Dynamic content goes here -->
                                             </div>
