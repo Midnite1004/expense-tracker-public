@@ -2191,8 +2191,10 @@
         }
         .stat-card-value.text-green-600 { color: var(--accent-green); }
         .stat-card-value.text-red-600 { color: var(--accent-red); }
-        .dark .stat-card-value.text-green-600 { color: #34d399; } /* Lighter green */
-        .dark .stat-card-value.text-red-600 { color: #f87171; } /* Lighter red */
+        .stat-card-value.text-blue-600 { color: var(--accent-blue); }
+        .dark .stat-card-value.text-green-600 { color: #34d399; }
+        .dark .stat-card-value.text-red-600 { color: #f87171; }
+        .dark .stat-card-value.text-blue-600 { color: #60a5fa; }
         
         /* Google Sign-In Button Styling */
         #googleSignInButton {
@@ -2860,10 +2862,35 @@
         }
         .metric-card {
             background-color: var(--color-bg-tertiary);
-            padding: 1rem;
-            border-radius: 6px;
+            padding: 0.75rem 0.5rem; /* Match stat-card padding */
+            border-radius: var(--border-radius-sm);
             text-align: center;
             border: 1px solid var(--color-border);
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        @media (min-width: 480px) {
+            .metric-card {
+                padding: 1rem 0.75rem;
+                min-height: 80px;
+            }
+        }
+        
+        @media (min-width: 640px) {
+            .metric-card {
+                padding: 1.25rem 1rem;
+                min-height: 90px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .metric-card {
+                padding: 1.5rem 1.25rem;
+                min-height: 100px;
+            }
         }
         .ai-loading {
             width: 24px;
@@ -4145,17 +4172,7 @@
             border-radius: 6px;
             border: 1px solid var(--color-border);
         }
-        .metric-card {
-            background: var(--color-primary);
-            color: white;
-            border-radius: 6px;
-            padding: 1rem;
-            text-align: center;
-            transition: background-color 0.3s ease;
-        }
-        .metric-card:hover {
-            background: var(--color-primary-hover);
-        }
+        /* Second metric-card definition removed - using the first one */
         .spending-indicator {
             height: 8px;
             border-radius: 2px;
@@ -4909,6 +4926,38 @@ button, .btn, input[type="button"], input[type="submit"] {
         }
         
 
+        
+        /* MOBILE ONLY: Blue gradient metric cards in Insights tab */
+        @media (max-width: 768px) {
+            #insights-tab .metric-card {
+                background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%) !important;
+                color: white !important;
+                border: none !important;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+                /* Inherit padding from base metric-card styles */
+                text-align: center !important;
+                border-radius: var(--border-radius-sm) !important;
+                transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+            }
+            
+            #insights-tab .metric-card:hover {
+                transform: translateY(-2px) !important;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+                background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%) !important;
+            }
+            
+            #insights-tab .metric-card * {
+                color: white !important;
+            }
+            
+            #insights-tab .metric-card .text-sm {
+                color: rgba(255, 255, 255, 0.9) !important;
+            }
+            
+            #insights-tab .metric-card .text-xs {
+                color: rgba(255, 255, 255, 0.8) !important;
+            }
+        }
     </style>
 
 </head>
@@ -5066,17 +5115,17 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="stat-card">
                             <div class="stat-card-title">Monthly Budget</div>
                             <div class="stat-card-value text-blue-600" id="monthly-budget">£0.00</div>
-                            <div class="text-xs text-green-600 mt-1" id="budget-change-indicator">+2.3%</div>
+                            <div class="text-xs text-green-600 mt-1" id="budget-change-indicator">30.6% of income</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-card-title">Spent This Month</div>
                             <div class="stat-card-value text-red-600" id="total-expenses">£0.00</div>
-                            <div class="text-xs text-red-600 mt-1" id="spent-change-indicator">+15%</div>
+                            <div class="text-xs text-red-600 mt-1" id="spent-change-indicator">+16.8% ahead of pace</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-card-title">Budget Remaining</div>
                             <div class="stat-card-value text-green-600" id="remaining-amount">£0.00</div>
-                            <div class="text-xs text-gray-600 mt-1" id="remaining-change-indicator">-5%</div>
+                            <div class="text-xs text-gray-600 mt-1" id="remaining-change-indicator">18.7% remaining</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-card-title">Monthly Savings</div>
@@ -5632,7 +5681,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
 
         <!-- Key Metrics -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div class="metric-card">
                 <div class="text-sm opacity-90">Monthly Budget</div>
                 <div class="text-2xl font-bold" id="monthly-budget-display">£0</div>
