@@ -5363,6 +5363,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                         </div>
                         
+                        <!-- Search Field -->
+                        <div class="relative mb-4">
+                            <input type="text" id="expense-search" placeholder="Search expenses..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeyup="renderExpensesTable()">
+                            <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        
                         <!-- Filter Panel -->
                         <div id="expense-filter-panel" class="hidden p-4 border-b border-gray-200 dark:border-gray-700">
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -5482,6 +5490,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <span>🔁</span> Add Recurring
                                 </button>
                             </div>
+                        </div>
+                        
+                        <!-- Search Field -->
+                        <div class="relative mb-4">
+                            <input type="text" id="recurring-search" placeholder="Search recurring items..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeyup="renderRecurringTable()">
+                            <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
                         </div>
                 
                         <div id="recurring-filter-panel" class="hidden p-4 border-b border-gray-200 dark:border-gray-700">
@@ -16291,23 +16307,9 @@ function closeGoalSelection() {
         function renderExpensesTable() {
             console.log('🔄 renderExpensesTable called');
             
-            let allExpenses = [...expenses];
-            console.log('Total expenses:', allExpenses.length);
-
-            // Apply filters
-            const dateFrom = document.getElementById('expense-filter-date-from')?.value || '';
-            const dateTo = document.getElementById('expense-filter-date-to')?.value || '';
-            const categoryFilter = document.getElementById('expense-filter-category')?.value || '';
-            const typeFilter = document.getElementById('expense-filter-type')?.value || '';
-
-            const filteredExpenses = allExpenses.filter(e => {
-                let passes = true;
-                if (dateFrom && e.date < dateFrom) passes = false;
-                if (dateTo && e.date > dateTo) passes = false;
-                if (categoryFilter && e.category !== categoryFilter) passes = false;
-                if (typeFilter && e.type !== typeFilter && !(typeFilter === 'Recurring' && e.recurringSourceId)) passes = false;
-                return passes;
-            });
+            // Use the centralized filtering function that includes search
+            const filteredExpenses = getFilteredExpenses();
+            console.log('Total expenses:', expenses.length, 'Filtered:', filteredExpenses.length);
 
             // Sort filtered expenses
             filteredExpenses.sort((a, b) => {
@@ -16605,11 +16607,20 @@ function closeGoalSelection() {
             const type = document.getElementById('recurring-filter-type').value;
             const category = document.getElementById('recurring-filter-category').value;
             const frequency = document.getElementById('recurring-filter-frequency').value;
+            const searchTerm = document.getElementById('recurring-search')?.value?.toLowerCase() || '';
 
             let filtered = recurringItems.filter(item => {
                 if (type && item.type !== type) return false;
                 if (category && item.category !== category) return false;
                 if (frequency && item.frequency !== frequency) return false;
+                
+                // Search filter
+                if (searchTerm) {
+                    const matchesName = item.name?.toLowerCase().includes(searchTerm);
+                    const matchesCategory = item.category?.toLowerCase().includes(searchTerm);
+                    if (!matchesName && !matchesCategory) return false;
+                }
+                
                 return true;
             });
 
@@ -16879,9 +16890,17 @@ function closeGoalSelection() {
             const dateTo = document.getElementById('expense-filter-date-to').value;
             const categoryFilter = document.getElementById('expense-filter-category').value;
             const typeFilter = document.getElementById('expense-filter-type').value;
+            const searchTerm = document.getElementById('expense-search')?.value?.toLowerCase() || '';
 
             return allExpenses.filter(e => {
                 let passes = true;
+                
+                // Search filter
+                if (searchTerm) {
+                    const matchesName = e.name?.toLowerCase().includes(searchTerm);
+                    const matchesCategory = e.category?.toLowerCase().includes(searchTerm);
+                    passes = passes && (matchesName || matchesCategory);
+                }
                 if (dateFrom && e.date < dateFrom) passes = false;
                 if (dateTo && e.date > dateTo) passes = false;
                 if (categoryFilter && e.category !== categoryFilter) passes = false;
@@ -25093,8 +25112,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('✅ Marked card with quick add buttons for mobile hiding');
             }
             
-            // Check for quick actions buttons (but NOT in FAB)
-            if (card.querySelector('[onclick="showAddForm()"]') && !card.closest('.fab-menu')) {
+            // Check for quick actions buttons (but NOT in FAB) - SKIP expenses tab button
+            if (card.querySelector('[onclick="showAddForm()"]') && !card.closest('.fab-menu') && !card.closest('#expenses-tab')) {
                 card.classList.add('hide-mobile-quick-actions');
                 console.log('✅ Marked card with quick actions for mobile hiding');
             }
