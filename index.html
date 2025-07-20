@@ -457,7 +457,7 @@
         
         .trezor-content {
             flex: 1;
-            padding: 2rem;
+            padding: 0.25rem;
             background-color: var(--bg-secondary);
             overflow-y: auto;
         }
@@ -755,7 +755,7 @@
             }
             
             .trezor-content {
-                padding: 1rem !important;
+                padding: 0.25rem !important;
                 margin: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
@@ -1363,10 +1363,15 @@
 
         /* Hide desktop tables on mobile, show card view */
         @media (max-width: 768px) {
-            /* Hide the actual table structure on mobile */
+            /* Hide the actual table structure on mobile - but only when mobile cards exist */
             #expenses-table,
-            #recurring-table,
             .overflow-x-auto table {
+                display: none !important;
+            }
+            
+            /* Only hide recurring table when mobile cards are present */
+            #recurring-tab .mobile-cards-container + #recurring-table,
+            #recurring-tab .mobile-cards-container ~ #recurring-table {
                 display: none !important;
             }
             
@@ -1376,16 +1381,13 @@
             }
         }
 
-        /* Mobile card container */
+        /* Mobile card container - STREAMLINED */
         .mobile-cards-container {
             display: none;
-            padding: 1rem;
+            padding: 0;
             width: 100%;
             min-height: 200px;
             margin-bottom: 120px; /* Extra space for bottom nav */
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
             margin-top: 1rem;
         }
         
@@ -1396,26 +1398,7 @@
             }
         }
 
-        /* Individual expense card styling */
-        .expense-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
 
-        .expense-card:active {
-            transform: scale(0.98);
-            background: var(--bg-tertiary);
-        }
 
         /* Card checkbox */
         .expense-card-checkbox {
@@ -1514,22 +1497,7 @@
             color: var(--text-tertiary);
         }
 
-        /* Recurring item card styling */
-        .recurring-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
 
-        .recurring-card:active {
-            transform: scale(0.98);
-            background: var(--bg-tertiary);
-        }
 
         .recurring-card-header {
             display: flex;
@@ -1853,7 +1821,7 @@
             
             /* 2. Fix information too close to right edge */
             .trezor-content {
-                padding: 1rem !important;
+                padding: 0.25rem !important;
                 max-width: 100vw !important;
                 overflow-x: hidden !important;
             }
@@ -1968,21 +1936,9 @@
             #recurring-tab .mobile-cards-container {
                 display: block !important;
             }
-            /* Force the entire recurring tab to be visible */
-            #recurring-tab {
-                display: block !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-                position: relative !important;
-                z-index: 1 !important;
-            }
-            /* Ensure the card inside is visible */
-            #recurring-tab .card {
-                display: block !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-            }
         }
+        
+
         
         /* Trezor Suite Button Styles */
         .btn-primary {
@@ -3629,8 +3585,8 @@
             .insights-grid,
             .trezor-content,
             .page-content {
-                padding-left: 16px !important;
-                padding-right: 16px !important;
+                padding-left: 4px !important;
+                padding-right: 4px !important;
                 margin-left: 0 !important;
                 margin-right: 0 !important;
                 box-sizing: border-box !important;
@@ -3772,8 +3728,8 @@
             
             /* 2. Better padding for right edge content */
             .trezor-content {
-                padding-left: 16px !important;
-                padding-right: 16px !important;
+                padding-left: 4px !important;
+                padding-right: 4px !important;
                 max-width: 100vw !important;
                 overflow-x: hidden !important;
             }
@@ -4890,6 +4846,50 @@ button, .btn, input[type="button"], input[type="submit"] {
                 display: none !important;
             }
         }
+        
+        /* ─────────────────────────────────────────────────────────────────────────
+           Force the Recurring tab to display on small screens
+           ───────────────────────────────────────────────────────────────────────── */
+        @media (max-width: 768px) {
+            /* Make sure the tab container itself is visible */
+            #recurring-tab.hidden {
+                display: block !important;
+            }
+            /* And ensure its contents aren't being collapsed */
+            #recurring-tab.tab-content {
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            /* If you're using card‐view on mobile, show the cards container */
+            #recurring-tab .mobile-cards-container {
+                display: block !important;
+            }
+        }
+        
+        /* Force the recurring tab to show on mobile - FINAL FIX */
+        @media (max-width: 768px) {
+            /* Only force visibility when recurring tab is active */
+            #recurring-tab:not(.hidden) {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                position: relative !important;
+                z-index: 1 !important;
+            }
+            /* Ensure the card inside is visible when tab is active */
+            #recurring-tab:not(.hidden) .card {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            /* Force mobile cards to show if they exist when tab is active */
+            #recurring-tab:not(.hidden) .mobile-cards-container {
+                display: block !important;
+                visibility: visible !important;
+            }
+        }
+        
+
     </style>
 
 </head>
@@ -5343,59 +5343,57 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <!-- Expenses Tab -->
                 <div id="expenses-tab" class="tab-content hidden fade-in">
                     <div class="card">
-                        <div class="p-4 md:p-6 border-b border-gray-200 dark:border-gray-700 flex flex-wrap justify-between items-center gap-4">
-                            <h2 class="text-xl font-semibold">All Expenses</h2>
-                            <div class="flex flex-wrap gap-2 sm:gap-3">
-                                <button onclick="toggleFilterPanel('expense-filter-panel')" class="modern-button modern-button-secondary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-                                    </svg>
-                                    Filters
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 gap-4">
+                            <div>
+                                <h2 class="text-xl font-bold">All Expenses</h2>
+                                <p class="text-sm text-gray-500 dark:text-gray-300">Track and manage your daily spending and purchases.</p>
+                            </div>
+                            <div class="flex-shrink-0 flex flex-wrap items-center gap-2 sm:space-x-2 sm:gap-0">
+                                <button onclick="toggleFilterPanel('expense-filter-panel')" class="modern-button modern-button-secondary" style="min-width: 90px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" /></svg>
+                                    Filter
                                 </button>
                                 <button id="delete-selected-btn" onclick="deleteSelectedExpenses()" class="modern-button modern-button-danger hidden">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
                                     <span>Delete Selected</span>
                                 </button>
-                                <button onclick="showAddForm()" class="modern-button modern-button-primary">
-                                     <span>➕</span> Add Expense
-                                 </button>
-                             </div>
+                                <button onclick="showAddForm()" class="modern-button modern-button-primary" style="display: block !important; visibility: visible !important;">
+                                    <span>➕</span> Add Expense
+                                </button>
+                            </div>
                         </div>
                         
                         <!-- Filter Panel -->
-                        <div id="expense-filter-panel" class="p-4 border-b border-gray-200 dark:border-gray-700 hidden">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <!-- Date Range -->
+                        <div id="expense-filter-panel" class="hidden p-4 border-b border-gray-200 dark:border-gray-700">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div>
-                                    <label class="text-sm font-medium mb-1 block">Date Range</label>
-                                    <div class="flex gap-2">
-                                        <input type="date" id="expense-filter-date-from" class="modern-input">
-                                        <input type="date" id="expense-filter-date-to" class="modern-input">
-                                    </div>
-                                </div>
-                                <!-- Category -->
-                                <div>
-                                    <label class="text-sm font-medium mb-1 block">Category</label>
-                                    <select id="expense-filter-category" class="modern-select">
+                                    <label for="expense-filter-category" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Category</label>
+                                    <select id="expense-filter-category" class="modern-select mt-1">
                                         <option value="">All Categories</option>
                                         <!-- Populated dynamically -->
                                     </select>
                                 </div>
-                                <!-- Type -->
                                 <div>
-                                    <label class="text-sm font-medium mb-1 block">Type</label>
-                                    <select id="expense-filter-type" class="modern-select">
+                                    <label for="expense-filter-type" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Type</label>
+                                    <select id="expense-filter-type" class="modern-select mt-1">
                                         <option value="">All Types</option>
                                         <option value="Essential">Essential</option>
                                         <option value="Non-Essential">Non-Essential</option>
                                         <option value="Recurring">Recurring</option>
                                     </select>
-                            </div>
-                            <!-- Clear Filters -->
-                                <div class="md:col-span-3 flex justify-end gap-2">
-                                <button onclick="applyExpenseFilters()" class="modern-button modern-button-primary">Apply Filters</button>
-                                <button onclick="clearExpenseFilters()" class="modern-button modern-button-secondary">Clear Filters</button>
                                 </div>
+                                <div>
+                                    <label for="expense-filter-date-from" class="block text-sm font-medium text-gray-700 dark:text-gray-200">From Date</label>
+                                    <input type="date" id="expense-filter-date-from" class="modern-input mt-1">
+                                </div>
+                                <div>
+                                    <label for="expense-filter-date-to" class="block text-sm font-medium text-gray-700 dark:text-gray-200">To Date</label>
+                                    <input type="date" id="expense-filter-date-to" class="modern-input mt-1">
+                                </div>
+                            </div>
+                            <div class="flex justify-end space-x-2 mt-4">
+                                <button onclick="clearExpenseFilters()" class="modern-button modern-button-secondary">Clear</button>
+                                <button onclick="applyExpenseFilters()" class="modern-button modern-button-primary">Apply</button>
                             </div>
                         </div>
                         
@@ -5424,7 +5422,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                         
                         <!-- Expenses Pagination -->
-                        <div id="expenses-pagination" class="pagination-container">
+                        <div id="expenses-pagination" class="pagination-container" style="display: none !important;">
                             <div class="pagination-info">
                                 <span>Show</span>
                                 <select id="expenses-per-page" onchange="changeExpensesPerPage(this.value)">
@@ -5472,7 +5470,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Regular income and expenses like salaries or subscriptions.</p>
                             </div>
                             <div class="flex-shrink-0 flex flex-wrap items-center gap-2 sm:space-x-2 sm:gap-0">
-                                <button onclick="toggleFilterPanel('recurring-filter-panel')" class="modern-button modern-button-secondary">
+                                <button onclick="toggleFilterPanel('recurring-filter-panel')" class="modern-button modern-button-secondary" style="min-width: 90px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" /></svg>
                                     Filter
                                 </button>
@@ -5545,7 +5543,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                         
                         <!-- Recurring Pagination -->
-                        <div id="recurring-pagination" class="pagination-container">
+                        <div id="recurring-pagination" class="pagination-container" style="display: none !important;">
                             <div class="pagination-info">
                                 <span>Show</span>
                                 <select id="recurring-per-page" onchange="changeRecurringPerPage(this.value)">
@@ -13510,65 +13508,6 @@ function closeGoalSelection() {
         }
 
         // --- Tab Management ---
-        
-        // Function to force recurring tab visibility on mobile
-        function forceRecurringTabVisibility() {
-            if (window.innerWidth <= 768) {
-                const recurringTab = document.getElementById('recurring-tab');
-                if (recurringTab) {
-                    recurringTab.classList.remove('hidden');
-                    recurringTab.style.setProperty('display', 'block', 'important');
-                    recurringTab.style.setProperty('opacity', '1', 'important');
-                    recurringTab.style.setProperty('visibility', 'visible', 'important');
-                    recurringTab.style.setProperty('position', 'relative', 'important');
-                    recurringTab.style.setProperty('z-index', '1', 'important');
-                    
-                    // Also force the card to be visible
-                    const card = recurringTab.querySelector('.card');
-                    if (card) {
-                        card.style.setProperty('display', 'block', 'important');
-                        card.style.setProperty('opacity', '1', 'important');
-                        card.style.setProperty('visibility', 'visible', 'important');
-                    }
-                    
-                    // Use setTimeout to ensure the visibility is applied after DOM updates
-                    setTimeout(() => {
-                        if (recurringTab) {
-                            recurringTab.style.setProperty('display', 'block', 'important');
-                            recurringTab.style.setProperty('opacity', '1', 'important');
-                            recurringTab.style.setProperty('visibility', 'visible', 'important');
-                        }
-                    }, 100);
-                }
-            }
-        }
-        
-        // Global function for debugging recurring tab visibility
-        window.debugRecurringTab = function() {
-            console.log('🔍 Debugging recurring tab...');
-            console.log('Window width:', window.innerWidth);
-            console.log('Active tab:', activeTab);
-            
-            const recurringTab = document.getElementById('recurring-tab');
-            console.log('Recurring tab element:', recurringTab);
-            
-            if (recurringTab) {
-                console.log('Recurring tab classes:', recurringTab.className);
-                console.log('Recurring tab display:', getComputedStyle(recurringTab).display);
-                console.log('Recurring tab opacity:', getComputedStyle(recurringTab).opacity);
-                console.log('Recurring tab visibility:', getComputedStyle(recurringTab).visibility);
-                
-                const card = recurringTab.querySelector('.card');
-                console.log('Card element:', card);
-                if (card) {
-                    console.log('Card display:', getComputedStyle(card).display);
-                }
-            }
-            
-            // Force visibility
-            forceRecurringTabVisibility();
-        };
-        
         function showTab(tabName) {
             // Hide all tab content
             document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
@@ -13586,6 +13525,7 @@ function closeGoalSelection() {
 
             // Show the content panel
             const newTabContent = document.getElementById(`${tabName}-tab`);
+            
             if (newTabContent) {
                 newTabContent.classList.remove('hidden');
                 
@@ -13617,8 +13557,6 @@ function closeGoalSelection() {
                 } else if (activeTab === 'expenses') {
                     renderExpensesTable();
                 } else if (activeTab === 'recurring') {
-                    // Force recurring tab visibility on mobile
-                    forceRecurringTabVisibility();
                     renderRecurringTable();
                 } else if (activeTab === 'settings') {
                     populateSettingsForm();
@@ -16404,44 +16342,28 @@ function closeGoalSelection() {
                 return;
             }
 
-            // Pagination
-            const currentPage = window.expensesCurrentPage || 1;
-            const itemsPerPage = window.expensesItemsPerPage || 25;
-            const totalItems = filteredExpenses.length;
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-            const pageItems = filteredExpenses.slice(startIndex, endIndex);
-
+            // Show all items (no pagination for app-like experience)
             if (isMobile) {
-                renderMobileExpenses(pageItems);
+                renderMobileExpenses(filteredExpenses);
             } else {
-                renderDesktopExpensesTable(pageItems, tableBody);
+                renderDesktopExpensesTable(filteredExpenses, tableBody);
             }
-
-            // Update pagination display
-            updateExpensesPagination(currentPage, totalPages, startIndex, endIndex, totalItems);
         }
 
         // Mobile expenses rendering function
         function renderMobileExpenses(expenses) {
             
-            // Create or get mobile container
+            // Get or create mobile container
             let mobileContainer = document.querySelector('#expenses-tab .mobile-cards-container');
             if (!mobileContainer) {
                 console.log('📱 Creating new mobile container');
                 mobileContainer = document.createElement('div');
                 mobileContainer.className = 'mobile-cards-container';
-                mobileContainer.style.cssText = `
-                    display: block;
-                    padding: 1rem;
-                    margin-bottom: 120px;
-                    background-color: var(--bg-secondary);
-                `;
+                mobileContainer.style.display = 'block';
+                mobileContainer.style.marginBottom = '120px';
                 
                 const expensesTab = document.getElementById('expenses-tab');
                 if (expensesTab) {
-                    // Insert after the card content
                     const cardElement = expensesTab.querySelector('.card');
                     if (cardElement) {
                         cardElement.appendChild(mobileContainer);
@@ -16477,26 +16399,28 @@ function closeGoalSelection() {
                     const dayTotal = dayExpenses.reduce((sum, exp) => sum + exp.cost, 0);
 
                     html += `
-                        <div class="date-section mb-6">
-                            <div class="flex items-center justify-between mb-3 px-1">
-                                <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">${formatDate(date)}</h4>
-                                <span class="text-sm font-semibold text-gray-500 dark:text-gray-500">${formatCurrency(dayTotal)}</span>
+                        <div class="mb-8">
+                            <div class="flex justify-between items-center mb-3 px-4 pb-2 border-b-2 border-gray-200 dark:border-gray-700">
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                    ${new Date(date).toLocaleDateString('en-GB', { 
+                                        weekday: 'long', 
+                                        day: 'numeric', 
+                                        month: 'long', 
+                                        year: 'numeric' 
+                                    })}
+                                </h3>
+                                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    -${formatCurrency(dayTotal)}
+                                </span>
                             </div>
                             <div class="space-y-3">
                                 ${dayExpenses.map(expense => `
-                                    <div class="expense-item bg-white dark:bg-gray-800 rounded-xl p-4 flex items-center gap-3 shadow-sm border border-gray-100 dark:border-gray-700">
-                                        <div class="expense-icon w-12 h-12 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-2xl flex-shrink-0">
-                                            ${getCategoryIcon(expense.category)}
+                                    <div onclick="editExpense('${expense.id}')" class="flex justify-between items-center border-b border-gray-200 py-3 last:border-b-0">
+                                        <div>
+                                            <p class="font-medium text-sm">${escapeHTML(expense.name)}</p>
+                                            <p class="text-xs text-gray-500">${escapeHTML(expense.category)}</p>
                                         </div>
-                                        <div class="expense-details flex-1 min-w-0">
-                                            <p class="expense-title font-semibold text-gray-900 dark:text-white text-base mb-1 truncate">${expense.name}</p>
-                                            <span class="category-badge inline-block px-2 py-1 rounded-md text-xs font-medium" style="background-color: ${getCategoryColor(expense.category)}20; color: ${getCategoryColor(expense.category)}">
-                                                ${expense.category}
-                                            </span>
-                                        </div>
-                                        <div class="expense-amount font-bold text-gray-900 dark:text-white text-lg flex-shrink-0">
-                                            ${formatCurrency(expense.cost)}
-                                        </div>
+                                        <p class="font-medium text-sm text-red-600">-${formatCurrency(expense.cost)}</p>
                                     </div>
                                 `).join('')}
                             </div>
@@ -16673,6 +16597,10 @@ function closeGoalSelection() {
 
 
         window.renderRecurringTable = function renderRecurringTable() {
+            console.log('🔄 renderRecurringTable called');
+            console.log('📊 Total recurring items:', recurringItems.length);
+            console.log('📊 Recurring items data:', recurringItems);
+            
             DOMElements.recurringTableBody.innerHTML = '';
             const type = document.getElementById('recurring-filter-type').value;
             const category = document.getElementById('recurring-filter-category').value;
@@ -16684,7 +16612,7 @@ function closeGoalSelection() {
                 if (frequency && item.frequency !== frequency) return false;
                 return true;
             });
-            
+
             // Sort chronologically by start date (latest first)
             filtered.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
@@ -16700,39 +16628,34 @@ function closeGoalSelection() {
                 return;
             }
 
-            // Calculate pagination
-            const totalItems = filtered.length;
-            const totalPages = Math.ceil(totalItems / window.recurringItemsPerPage);
-            const startIndex = (window.recurringCurrentPage - 1) * window.recurringItemsPerPage;
-            const endIndex = startIndex + window.recurringItemsPerPage;
-            const pageItems = filtered.slice(startIndex, endIndex);
-
-            // Update pagination controls
-            updateRecurringPagination(totalItems, totalPages);
-
-            // MOBILE CARD RENDERING
+            // MOBILE CARD RENDERING (show all items - no pagination)
             let isMobile = window.innerWidth <= 768;
+            console.log('📱 Mobile detection:', { isMobile, windowWidth: window.innerWidth, totalItems: filtered.length });
             
             if (isMobile) {
+                // Force visibility first
+                forceRecurringTabVisibility();
+                
                 // Create or get mobile container
                 let mobileContainer = document.querySelector('#recurring-tab .mobile-cards-container');
+                console.log('📱 Mobile container found:', !!mobileContainer);
                 
                 if (!mobileContainer) {
+                    console.log('📱 Creating new mobile container');
                     mobileContainer = document.createElement('div');
                     mobileContainer.className = 'mobile-cards-container';
                     mobileContainer.style.display = 'block';
-                    mobileContainer.style.padding = '1rem';
                     mobileContainer.style.marginBottom = '120px';
                     
                     const recurringTab = document.getElementById('recurring-tab');
-                    
                     if (recurringTab) {
                         const cardElement = recurringTab.querySelector('.card');
-                        
                         if (cardElement) {
                             cardElement.appendChild(mobileContainer);
+                            console.log('📱 Mobile container appended to card');
                         } else {
                             recurringTab.appendChild(mobileContainer);
+                            console.log('📱 Mobile container appended to tab');
                         }
                     }
                 }
@@ -16742,11 +16665,14 @@ function closeGoalSelection() {
                 
                 if (tableContainer) {
                     tableContainer.style.display = 'none';
+                    console.log('📱 Desktop table hidden');
                 }
                 
-                // Render mobile cards
-                renderMobileRecurringCards(pageItems, mobileContainer);
-            } else {
+                // Render mobile cards - show ALL items
+                console.log('📱 Calling renderMobileRecurringCards with', filtered.length, 'items');
+                renderMobileRecurringCards(filtered, mobileContainer);
+                return; // Exit early for mobile - don't render desktop table
+            }
                 console.log('🖥️ Rendering recurring desktop table...');
                 // Show desktop table
                 const tableContainer = DOMElements.recurringTableBody.closest('table');
@@ -16759,12 +16685,11 @@ function closeGoalSelection() {
                 if (mobileContainer) {
                     mobileContainer.style.display = 'none';
                 }
-            }
+                
+                // Clear table first
+                DOMElements.recurringTableBody.innerHTML = '';
 
-            // Clear table first
-            DOMElements.recurringTableBody.innerHTML = '';
-
-            pageItems.forEach(item => {
+                filtered.forEach(item => {
                 const tr = document.createElement('tr');
                 const isSelected = selectedRecurringIds.has(item.id);
                 tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
@@ -19912,12 +19837,13 @@ function showInsightsError() {
                 }
 
                 html += `
-                    <div class="mobile-date-header" style="padding: 16px 8px 4px 8px; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span>${dateLabel}</span>
-                            <span>-${formatCurrency(dayTotal, false)}</span>
-                        </div>
-                    </div>`;
+                    <div class="mobile-date-group" style="margin-bottom: 20px;">
+                        <div class="mobile-date-header" style="padding: 16px 8px 8px 8px; margin-top: 16px; border-bottom: 1px solid var(--border-color); font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>${dateLabel}</span>
+                                <span style="color: var(--text-danger); font-weight: 600;">-${formatCurrency(dayTotal, false)}</span>
+                            </div>
+                        </div>`;
 
                 dayExpenses.forEach(expense => {
                     const categoryIcon = window.categoryIcons[expense.category] || window.categoryIcons['Other'];
@@ -19925,17 +19851,23 @@ function showInsightsError() {
                     const originalRecurringItem = isRecurringInstance ? recurringItems.find(r => r.id === expense.recurringSourceId) : null;
                     const editAction = isRecurringInstance && originalRecurringItem ? `editRecurring(${originalRecurringItem.id})` : `editExpense(${expense.id})`;
 
-                    html += `
-                        <div onclick="${editAction}" class="mobile-card">
-                            <div class="mobile-card-icon">${categoryIcon}</div>
-                            <div class="mobile-card-main">
-                                <div class="mobile-card-title">${escapeHTML(expense.name)}</div>
-                                <div class="mobile-card-subtitle">${escapeHTML(expense.category)}</div>
+                                    html += `
+                    <div onclick="${editAction}" class="expense-list-item">
+                        <div class="expense-item-icon">${categoryIcon}</div>
+                        <div class="expense-item-content">
+                            <div class="expense-item-title">${escapeHTML(expense.name)}</div>
+                            <div class="expense-item-subtitle">
+                                <span class="expense-item-category">${escapeHTML(expense.category)}</span>
                             </div>
-                            <div class="mobile-card-amount">-${formatCurrency(expense.cost)}</div>
                         </div>
-                    `;
+                        <div class="expense-item-amount">
+                            <div class="expense-item-amount-value">-${formatCurrency(expense.cost)}</div>
+                        </div>
+                    </div>
+                `;
                 });
+                
+                html += `</div>`; // Close mobile-date-group
             });
 
             container.innerHTML = html;
@@ -20045,30 +19977,76 @@ function showInsightsError() {
         }
 
         function renderMobileRecurringCards(items, container) {
+            console.log('🔧 renderMobileRecurringCards called with:', items?.length || 0, 'items');
+            console.log('🔧 Container:', container);
+            
             if (!items || items.length === 0) {
+                console.log('🔧 No items to render, showing empty message');
                 container.innerHTML = `<div class="text-center py-8 text-gray-500 dark:text-gray-400">No recurring items found.</div>`;
                 return;
             }
 
-            let html = '';
+            // Group by start date
+            const groupedItems = {};
             items.forEach(item => {
-                const categoryIcon = window.categoryIcons[item.category] || window.categoryIcons['Other'];
-                const isCancelled = item.status === 'cancelled';
-                const typeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+                const dateKey = item.startDate;
+                if (!groupedItems[dateKey]) {
+                    groupedItems[dateKey] = [];
+                }
+                groupedItems[dateKey].push(item);
+            });
 
-                html += `
-                    <div onclick="editRecurring(${item.id})" class="mobile-card ${isCancelled ? 'opacity-60' : ''}">
-                        <div class="mobile-card-icon">${categoryIcon}</div>
-                        <div class="mobile-card-main">
-                            <p class="mobile-card-title">${escapeHTML(item.name)}</p>
-                            <div class="mobile-card-subtitle">
-                                <span class="capitalize">${item.type}</span> • ${item.frequency}
+            let html = '';
+            Object.keys(groupedItems)
+                .sort((a, b) => new Date(b) - new Date(a))
+                .forEach(date => {
+                    const dayItems = groupedItems[date];
+                    const dayTotal = dayItems.reduce((sum, item) => sum + (item.type === 'income' ? item.amount : -item.amount), 0);
+                    const dayTotalClass = dayTotal >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+
+                    html += `
+                        <div class="mb-8">
+                            <div class="flex justify-between items-center mb-3 px-4 pb-2 border-b-2 border-gray-200 dark:border-gray-700">
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                    ${new Date(date).toLocaleDateString('en-GB', { 
+                                        weekday: 'long', 
+                                        day: 'numeric', 
+                                        month: 'long', 
+                                        year: 'numeric' 
+                                    })}
+                                </h3>
+                                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    ${dayTotal >= 0 ? '+' : ''}${formatCurrency(Math.abs(dayTotal))}
+                                </span>
+                            </div>
+                            <div class="space-y-3">
+                                ${dayItems.map(item => {
+                                    const categoryIcon = window.categoryIcons?.[item.category] || window.categoryIcons?.['Other'] || '💰';
+                                    const isCancelled = item.status === 'cancelled';
+                                    const typeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+
+                                    return `
+                                        <div onclick="editRecurring(${item.id})" class="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0 ${isCancelled ? 'opacity-60' : ''}">
+                                            <div class="flex items-center gap-3">
+                                                <div class="text-lg">${categoryIcon}</div>
+                                                <div class="min-w-0 flex-1">
+                                                    <div class="font-medium text-sm">${escapeHTML(item.name)}</div>
+                                                    <div class="text-xs text-gray-500">
+                                                        <span class="capitalize">${item.type}</span> • ${item.frequency}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-right flex-shrink-0">
+                                                <div class="font-medium text-sm ${typeClass}">${formatCurrency(item.amount)}</div>
+                                                <div class="text-xs text-gray-500">${item.status === 'active' ? 'Active' : 'Cancelled'}</div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
                             </div>
                         </div>
-                        <p class="mobile-card-amount ${typeClass}">${formatCurrency(item.amount)}</p>
-                    </div>
-                `;
-            });
+                    `;
+                });
 
             container.innerHTML = html;
         }
@@ -20173,8 +20151,26 @@ function showInsightsError() {
           
           // Force recurring tab visibility on mobile resize
           if (window.innerWidth <= 768) {
-              forceRecurringTabVisibility();
-              // Re-render mobile view if we're on the recurring tab
+              const recurringTab = document.getElementById('recurring-tab');
+              if (recurringTab) {
+                  recurringTab.classList.remove('hidden');
+                  // Re-render mobile view if we're on the recurring tab
+                  if (activeTab === 'recurring') {
+                      renderRecurringTable();
+                  }
+              }
+          }
+      });
+      
+      // Additional resize listener specifically for recurring tab
+      window.addEventListener('resize', () => {
+          if (window.innerWidth <= 768) {
+              // ensure hidden class is gone
+              const recurringTab = document.getElementById('recurring-tab');
+              if (recurringTab) {
+                  recurringTab.classList.remove('hidden');
+              }
+              // re-render mobile view if on recurring tab
               if (activeTab === 'recurring') {
                   renderRecurringTable();
               }
@@ -20780,8 +20776,78 @@ document.addEventListener('DOMContentLoaded', function() {
             renderExpensesTable();
         } else if (activeTab === 'recurring') {
             renderRecurringTable();
+            // Force visibility on mobile resize
+            if (window.innerWidth <= 768) {
+                forceRecurringTabVisibility();
+            }
         }
     });
+    
+            // Debug function to check recurring tab state
+        window.testRecurringTab = function() {
+            const tab = document.getElementById('recurring-tab');
+            if (!tab) {
+                console.log('❌ Recurring tab element not found!');
+                return;
+            }
+            
+            const computedStyle = window.getComputedStyle(tab);
+            console.log('🔍 Recurring tab element:', tab);
+            console.log('📱 Window width:', window.innerWidth);
+            console.log('🎯 Active tab:', activeTab);
+            console.log('👁️ Display:', computedStyle.display);
+            console.log('👁️ Opacity:', computedStyle.opacity);
+            console.log('👁️ Visibility:', computedStyle.visibility);
+            console.log('👁️ Classes:', tab.className);
+            console.log('👁️ Hidden class:', tab.classList.contains('hidden'));
+            
+            // Check if mobile cards container exists
+            const mobileCards = tab.querySelector('.mobile-cards-container');
+            console.log('📱 Mobile cards container:', mobileCards);
+            if (mobileCards) {
+                console.log('📱 Mobile cards display:', window.getComputedStyle(mobileCards).display);
+            }
+            
+            // Check if recurring table exists
+            const recurringTable = document.getElementById('recurring-table');
+            console.log('📊 Recurring table:', recurringTable);
+            if (recurringTable) {
+                console.log('📊 Recurring table display:', window.getComputedStyle(recurringTable).display);
+            }
+        };
+        
+        // CRITICAL: Force recurring tab visibility function (from working version)
+        window.forceRecurringTabVisibility = function() {
+            // Only force visibility if we're currently on the recurring tab
+            if (window.innerWidth <= 768 && window.activeTab === 'recurring') {
+                const recurringTab = document.getElementById('recurring-tab');
+                if (recurringTab) {
+                    recurringTab.classList.remove('hidden');
+                    recurringTab.style.setProperty('display', 'block', 'important');
+                    recurringTab.style.setProperty('opacity', '1', 'important');
+                    recurringTab.style.setProperty('visibility', 'visible', 'important');
+                    recurringTab.style.setProperty('position', 'relative', 'important');
+                    recurringTab.style.setProperty('z-index', '1', 'important');
+                    
+                    // Also force the card to be visible
+                    const card = recurringTab.querySelector('.card');
+                    if (card) {
+                        card.style.setProperty('display', 'block', 'important');
+                        card.style.setProperty('opacity', '1', 'important');
+                        card.style.setProperty('visibility', 'visible', 'important');
+                    }
+                    
+                    // Use setTimeout to ensure the visibility is applied after DOM updates
+                    setTimeout(() => {
+                        if (recurringTab) {
+                            recurringTab.style.setProperty('display', 'block', 'important');
+                            recurringTab.style.setProperty('opacity', '1', 'important');
+                            recurringTab.style.setProperty('visibility', 'visible', 'important');
+                        }
+                    }, 100);
+                }
+            }
+        };
 });
 
 function updateBudgetCalculations() {
@@ -25555,6 +25621,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Simple Mobile Rendering Implementation
         // Based on the working mobile expense tracker code
+        
+        // Debug function to test recurring tab
+        window.testRecurringTab = function() {
+            console.log('🧪 Testing recurring tab...');
+            const recurringTab = document.getElementById('recurring-tab');
+            console.log('🔍 Recurring tab element:', recurringTab);
+            if (recurringTab) {
+                console.log('📋 Classes:', recurringTab.className);
+                console.log('👁️ Computed display:', window.getComputedStyle(recurringTab).display);
+                console.log('👁️ Computed visibility:', window.getComputedStyle(recurringTab).visibility);
+                console.log('👁️ Computed opacity:', window.getComputedStyle(recurringTab).opacity);
+            } else {
+                console.log('❌ Recurring tab not found!');
+            }
+        };
         
 
         
