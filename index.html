@@ -47,12 +47,12 @@
         
         /* MOBILE FAB - FORCE HIDE REDUNDANT ELEMENTS */
         @media (max-width: 640px) {
-            /* NUCLEAR OPTION - FORCE HIDE QUICK ACTIONS */
-            .card:has(h3:contains("Quick Actions")),
-            .card:has(h2:contains("Quick Actions")),
-            div:has(> h3:contains("Quick Actions")),
-            div:has(> h2:contains("Quick Actions")),
-            section:has(h3:contains("Quick Actions")),
+            /* NUCLEAR OPTION - FORCE HIDE QUICK ACTIONS (but NOT in settings) */
+            .card:has(h3:contains("Quick Actions")):not(.trezor-card),
+            .card:has(h2:contains("Quick Actions")):not(.trezor-card),
+            div:has(> h3:contains("Quick Actions")):not(.trezor-card),
+            div:has(> h2:contains("Quick Actions")):not(.trezor-card),
+            section:has(h3:contains("Quick Actions")):not(.trezor-card),
             
             /* Hide cards with specific content markers added by JavaScript */
             .hide-mobile-quick-add,
@@ -4306,6 +4306,46 @@
             border-radius: 8px;
         }
 
+        /* ========== COLLAPSED STATE HEIGHT OPTIMIZATION ========== */
+        /* Reduce card height when content is collapsed */
+        .card:has(.hidden) {
+            min-height: auto !important;
+            padding-bottom: 1rem !important;
+        }
+
+        /* Specific optimization for insights cards when collapsed */
+        .card:has(#smart-insights-content.hidden),
+        .card:has(#spending-breakdown-content.hidden),
+        .card:has(#todays-budget-content.hidden),
+        .card:has(#category-analysis-content.hidden),
+        .card:has(#budget-performance-content.hidden) {
+            padding: 1rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        /* Help section optimization when collapsed */
+        .help-section:has(.help-section-content.hidden) {
+            margin-bottom: 0.5rem !important;
+        }
+
+        .help-section:has(.help-section-content.hidden) .help-section-header {
+            padding: 0.75rem 1rem !important;
+        }
+
+        /* Mobile-specific collapsed optimization */
+        @media (max-width: 768px) {
+            .card:has(.hidden) {
+                padding: 0.75rem !important;
+                margin-bottom: 0.5rem !important;
+                min-height: 60px !important;
+            }
+            
+            .insights-section-toggle {
+                padding: 8px 12px !important;
+                margin-bottom: 8px !important;
+            }
+        }
+
         .insights-section-toggle:hover {
             background: var(--color-bg-secondary);
         }
@@ -6245,10 +6285,12 @@ button, .btn, input[type="button"], input[type="submit"] {
 
 <!-- Help & Documentation Tab -->
 <div id="help-tab" class="tab-content hidden fade-in">
-    <div class="p-6">
-        <div class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">Help & Documentation</h2>
-            <p class="text-secondary">Learn how to make the most of your personal finance tracker</p>
+    <div class="card">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 gap-4">
+            <div>
+                <h2 class="text-xl font-bold">Help & Documentation</h2>
+                <p class="text-sm text-gray-500 dark:text-gray-300">Learn how to make the most of your personal finance tracker</p>
+            </div>
         </div>
         
         <div class="help-accordion space-y-4">
@@ -13864,12 +13906,12 @@ function closeGoalSelection() {
             const container = document.getElementById('alerts-section');
             const alerts = [];
 
-            if (insights.projectedMonthly > financialData.monthlyBudget) {
+            if (insights.projectedMonthly > monthlyBudget) {
                 alerts.push({
                     type: 'warning',
                     icon: '⚠️',
                     title: 'Budget Alert',
-                    message: `You're projected to exceed your budget by £${(insights.projectedMonthly - financialData.monthlyBudget).toFixed(2)}`,
+                    message: `You're projected to exceed your budget by £${(insights.projectedMonthly - monthlyBudget).toFixed(2)}`,
                     action: 'Reduce daily spending by £5-10'
                 });
             }
@@ -13929,9 +13971,11 @@ function closeGoalSelection() {
                     status: 'neutral'
                 },
                 {
-                    title: 'Budget Remaining',
-                    value: `£${insights.remainingBudget.toFixed(2)}`,
-                    subtitle: `${((insights.remainingBudget / financialData.monthlyBudget) * 100).toFixed(0)}% left`,
+                    title: insights.remainingBudget > 0 ? 'Budget Remaining' : 'Over Budget',
+                    value: `£${Math.abs(insights.remainingBudget).toFixed(2)}`,
+                    subtitle: insights.remainingBudget > 0 
+                        ? `${((insights.remainingBudget / monthlyBudget) * 100).toFixed(0)}% left`
+                        : `${((Math.abs(insights.remainingBudget) / monthlyBudget) * 100).toFixed(0)}% over`,
                     status: insights.remainingBudget > 0 ? 'success' : 'warning'
                 }
             ];
@@ -13951,9 +13995,9 @@ function closeGoalSelection() {
             document.getElementById('goal-impact').textContent = insights.goalImpact > 0 ? `+${insights.goalImpact} weeks` : 'On track';
             document.getElementById('monthly-forecast').textContent = `£${insights.projectedMonthly.toFixed(0)}`;
             document.getElementById('forecast-status').textContent = 
-                insights.projectedMonthly > financialData.monthlyBudget ? 
-                `${(((insights.projectedMonthly - financialData.monthlyBudget) / financialData.monthlyBudget) * 100).toFixed(0)}% over budget` :
-                `${((1 - insights.projectedMonthly / financialData.monthlyBudget) * 100).toFixed(0)}% under budget`;
+                insights.projectedMonthly > monthlyBudget ? 
+                `${(((insights.projectedMonthly - monthlyBudget) / monthlyBudget) * 100).toFixed(0)}% over budget` :
+                `${((1 - insights.projectedMonthly / monthlyBudget) * 100).toFixed(0)}% under budget`;
         }
 
         // Generate category breakdown
@@ -14030,7 +14074,7 @@ function closeGoalSelection() {
                 },
                 {
                     label: 'Monthly Budget (Daily Average)',
-                    data: Array(labels.length).fill(financialData.monthlyBudget / 30),
+                    data: Array(labels.length).fill(monthlyBudget / 30),
                     borderColor: '#f59e0b',
                     backgroundColor: 'rgba(245, 158, 11, 0.1)',
                     borderWidth: 3,
@@ -14554,6 +14598,50 @@ function closeGoalSelection() {
             };
             reader.readAsText(file);
             event.target.value = null;
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ WARNING: This will permanently delete ALL your data including expenses, recurring items, budget settings, and financial history.\n\nThis action cannot be undone!\n\nAre you absolutely sure you want to continue?')) {
+                if (confirm('🚨 FINAL WARNING: All your financial data will be lost forever!\n\nClick OK to proceed with deletion, or Cancel to keep your data.')) {
+                    try {
+                        // Clear all data arrays
+                        expenses = [];
+                        recurringItems = [];
+                        userGoals = [];
+                        
+                        // Reset settings
+                        monthlyBudget = 0;
+                        monthlyIncome = 0;
+                        currentCurrencyCode = 'GBP';
+                        healthScoreHistory = {};
+                        
+                        // Clear localStorage
+                        localStorage.removeItem('lensAppData');
+                        localStorage.removeItem('expandedInsightsSections');
+                        localStorage.removeItem('expandedHelpSections');
+                        localStorage.removeItem('dailyBudgetEnabled');
+                        
+                        // Reset UI
+                        if (DOMElements.currencySelect) {
+                            DOMElements.currencySelect.value = currentCurrencyCode;
+                        }
+                        
+                        // Refresh all displays
+                        updateCurrencyUI();
+                        updateDisplay();
+                        showTab('overview');
+                        
+                        showToast('All data cleared successfully!', 'success');
+                        
+                        // Close settings
+                        closeSettings();
+                        
+                    } catch (error) {
+                        console.error('Error clearing data:', error);
+                        showToast('Error clearing data. Please try again.', 'error');
+                    }
+                }
+            }
         }
 
         // --- Budget & Income ---
