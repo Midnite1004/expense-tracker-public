@@ -1703,29 +1703,61 @@
                 border-color: rgba(239, 68, 68, 0.5) !important;
             }
             
-            /* Settings icon in mobile header - ensure it's clickable */
-            .header-actions .btn-icon,
-            .header-actions button[onclick*="settings"],
-            .header-actions .settings-button {
+            /* Settings icon in mobile header - MATCH HELP ALIGNMENT EXACTLY */
+            .header-actions {
                 display: flex !important;
-                min-height: 44px !important;
-                min-width: 44px !important;
+                align-items: center !important;
+                gap: 0.75rem !important;
+            }
+            
+            .header-actions .btn-icon {
+                display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
                 padding: 0.5rem !important;
-                margin: 0 0.25rem !important;
-                border-radius: 0.5rem !important;
+                margin: 0 !important;
                 background: transparent !important;
-                border: 1px solid transparent !important;
+                border: none !important;
                 color: var(--color-text-secondary) !important;
             }
             
-            .header-actions .btn-icon:hover,
-            .header-actions button[onclick*="settings"]:hover,
-            .header-actions .settings-button:hover {
-                background: var(--color-bg-tertiary) !important;
-                border-color: var(--color-border) !important;
-                color: var(--color-text-primary) !important;
+            /* RESTART TOUR HEIGHT FIX - Reduce height */
+            button[onclick*="restartTour"],
+            .restart-tour-button,
+            #restart-tour {
+                min-height: 32px !important;
+                height: 32px !important;
+                padding: 0.25rem 0.75rem !important;
+                font-size: 0.75rem !important;
+                line-height: 1.2 !important;
+            }
+            
+            /* CLEAR ALL DATA MOBILE POSITION FIX - Make it visible above restart tour */
+            .settings-modal .clear-data-section,
+            #settings-modal .clear-data-section,
+            .settings-content .clear-data-section {
+                order: -2 !important;
+                margin-top: 0.5rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            /* Clear All Data button itself - mobile accessible */
+            button[onclick*="clearAllData"],
+            .clear-data-button {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                width: 100% !important;
+                min-height: 48px !important;
+                padding: 0.75rem 1rem !important;
+                font-size: 0.9375rem !important;
+                background: rgba(239, 68, 68, 0.1) !important;
+                border: 1px solid rgba(239, 68, 68, 0.3) !important;
+                color: var(--color-error) !important;
+                border-radius: 0.5rem !important;
+                margin: 0.5rem 0 !important;
+                text-align: center !important;
+                cursor: pointer !important;
             }
         }
         
@@ -2022,6 +2054,24 @@
            CLEAR ALL DATA MOBILE ACCESSIBILITY FIXES
            ───────────────────────────────────────────────────────────────────────── */
         @media (max-width: 768px) {
+            /* Settings Modal - Reduce spacing between elements */
+            #settings-modal .space-y-6 > * + * {
+                margin-top: 1rem !important;
+            }
+            
+            /* Restart Tour Height Fix */
+            #settings-modal button[onclick*="restartTour"] {
+                min-height: 36px !important;
+                height: 36px !important;
+                padding: 0.375rem 0.875rem !important;
+                font-size: 0.8125rem !important;
+            }
+            
+            /* Clear All Data - Move above restart tour */
+            #settings-modal .clear-data-section {
+                order: -1 !important;
+            }
+            
             /* Make Clear All Data button accessible on mobile */
             button[onclick*="clearAllData"],
             button[onclick*="resetData"],
@@ -2037,7 +2087,7 @@
                 max-width: 100% !important;
                 position: relative !important;
                 z-index: 10 !important;
-                margin: 0.5rem 0 !important;
+                margin: 0.25rem 0 !important;
             }
             
             /* Clear data in settings dropdown - mobile friendly */
@@ -2050,6 +2100,7 @@
                 min-height: 48px !important;
                 width: 100% !important;
                 box-sizing: border-box !important;
+                order: -10 !important;
             }
             
             /* Settings modal clear data options - mobile optimized */
@@ -2057,7 +2108,7 @@
             #settings-modal .reset-data-section {
                 display: block !important;
                 padding: 1rem !important;
-                margin: 1rem 0 !important;
+                margin: 0.5rem 0 !important;
                 border: 1px solid var(--color-border) !important;
                 border-radius: 0.5rem !important;
                 background: var(--color-bg-secondary) !important;
@@ -2067,10 +2118,10 @@
             #settings-modal button[onclick*="clearAllData"],
             #settings-modal button[onclick*="resetData"] {
                 width: 100% !important;
-                min-height: 48px !important;
-                font-size: 1rem !important;
+                min-height: 44px !important;
+                font-size: 0.9375rem !important;
                 padding: 0.75rem 1rem !important;
-                margin: 0.5rem 0 !important;
+                margin: 0.25rem 0 !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
