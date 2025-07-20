@@ -47,12 +47,12 @@
         
         /* MOBILE FAB - FORCE HIDE REDUNDANT ELEMENTS */
         @media (max-width: 640px) {
-            /* NUCLEAR OPTION - FORCE HIDE QUICK ACTIONS (but NOT in settings) */
-            .card:has(h3:contains("Quick Actions")):not(.trezor-card),
-            .card:has(h2:contains("Quick Actions")):not(.trezor-card),
-            div:has(> h3:contains("Quick Actions")):not(.trezor-card),
-            div:has(> h2:contains("Quick Actions")):not(.trezor-card),
-            section:has(h3:contains("Quick Actions")):not(.trezor-card),
+            /* NUCLEAR OPTION - FORCE HIDE QUICK ACTIONS */
+            .card:has(h3:contains("Quick Actions")),
+            .card:has(h2:contains("Quick Actions")),
+            div:has(> h3:contains("Quick Actions")),
+            div:has(> h2:contains("Quick Actions")),
+            section:has(h3:contains("Quick Actions")),
             
             /* Hide cards with specific content markers added by JavaScript */
             .hide-mobile-quick-add,
@@ -1668,6 +1668,67 @@
             }
         }
         
+        /* ─────────────────────────────────────────────────────────────────────────
+           MOBILE FAB CLEAR DATA ACTION
+           ───────────────────────────────────────────────────────────────────────── */
+        @media (max-width: 768px) {
+            /* Add Clear Data option to mobile FAB menu */
+            .fab-settings-actions {
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid var(--color-border);
+            }
+            
+            .fab-clear-data-button {
+                width: 100% !important;
+                min-height: 48px !important;
+                padding: 0.75rem 1rem !important;
+                background: rgba(239, 68, 68, 0.1) !important;
+                border: 1px solid rgba(239, 68, 68, 0.3) !important;
+                color: var(--color-error) !important;
+                border-radius: 0.5rem !important;
+                font-size: 0.875rem !important;
+                font-weight: 500 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 0.5rem !important;
+                margin: 0.5rem 0 !important;
+                transition: background-color 0.2s ease !important;
+            }
+            
+            .fab-clear-data-button:hover,
+            .fab-clear-data-button:active {
+                background: rgba(239, 68, 68, 0.2) !important;
+                border-color: rgba(239, 68, 68, 0.5) !important;
+            }
+            
+            /* Settings icon in mobile header - ensure it's clickable */
+            .header-actions .btn-icon,
+            .header-actions button[onclick*="settings"],
+            .header-actions .settings-button {
+                display: flex !important;
+                min-height: 44px !important;
+                min-width: 44px !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 0.5rem !important;
+                margin: 0 0.25rem !important;
+                border-radius: 0.5rem !important;
+                background: transparent !important;
+                border: 1px solid transparent !important;
+                color: var(--color-text-secondary) !important;
+            }
+            
+            .header-actions .btn-icon:hover,
+            .header-actions button[onclick*="settings"]:hover,
+            .header-actions .settings-button:hover {
+                background: var(--color-bg-tertiary) !important;
+                border-color: var(--color-border) !important;
+                color: var(--color-text-primary) !important;
+            }
+        }
+        
         /* Enhanced hover effects for all screen sizes */
         @media (min-width: 769px) {
             /* More noticeable Quick Add button hover effects on desktop */
@@ -1953,6 +2014,217 @@
             }
             /* If you're using card‐view on mobile, show the cards container */
             #recurring-tab .mobile-cards-container {
+                display: block !important;
+            }
+        }
+        
+        /* ─────────────────────────────────────────────────────────────────────────
+           CLEAR ALL DATA MOBILE ACCESSIBILITY FIXES
+           ───────────────────────────────────────────────────────────────────────── */
+        @media (max-width: 768px) {
+            /* Make Clear All Data button accessible on mobile */
+            button[onclick*="clearAllData"],
+            button[onclick*="resetData"],
+            .clear-data-button,
+            .reset-data-button {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                min-height: 44px !important;
+                padding: 0.75rem 1rem !important;
+                font-size: 0.875rem !important;
+                width: auto !important;
+                max-width: 100% !important;
+                position: relative !important;
+                z-index: 10 !important;
+                margin: 0.5rem 0 !important;
+            }
+            
+            /* Clear data in settings dropdown - mobile friendly */
+            .mobile-dropdown-item[onclick*="clearAllData"],
+            .mobile-dropdown-item[onclick*="resetData"] {
+                display: flex !important;
+                align-items: center !important;
+                padding: 1rem !important;
+                font-size: 1rem !important;
+                min-height: 48px !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            
+            /* Settings modal clear data options - mobile optimized */
+            #settings-modal .clear-data-section,
+            #settings-modal .reset-data-section {
+                display: block !important;
+                padding: 1rem !important;
+                margin: 1rem 0 !important;
+                border: 1px solid var(--color-border) !important;
+                border-radius: 0.5rem !important;
+                background: var(--color-bg-secondary) !important;
+            }
+            
+            /* Ensure clear data buttons in settings are mobile friendly */
+            #settings-modal button[onclick*="clearAllData"],
+            #settings-modal button[onclick*="resetData"] {
+                width: 100% !important;
+                min-height: 48px !important;
+                font-size: 1rem !important;
+                padding: 0.75rem 1rem !important;
+                margin: 0.5rem 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 0.5rem !important;
+            }
+        }
+        
+        /* ─────────────────────────────────────────────────────────────────────────
+           BUDGET PERFORMANCE & OVER BUDGET SECTION FIXES
+           ───────────────────────────────────────────────────────────────────────── */
+        
+        /* Ensure Budget Performance sections are always visible */
+        #budget-performance,
+        .budget-performance,
+        #coaching-panel,
+        .coaching-panel,
+        .over-budget-section,
+        #over-budget-section {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* Mobile fixes for Budget Performance */
+        @media (max-width: 768px) {
+            /* Budget Performance container mobile fixes */
+            #budget-performance,
+            .budget-performance,
+            #coaching-panel,
+            .coaching-panel {
+                display: block !important;
+                width: 100% !important;
+                padding: 1rem !important;
+                margin: 1rem 0 !important;
+                box-sizing: border-box !important;
+                background: var(--color-bg-primary) !important;
+                border: 1px solid var(--color-border) !important;
+                border-radius: 0.5rem !important;
+            }
+            
+            /* Over Budget warning section - mobile responsive */
+            .over-budget-section,
+            #over-budget-section,
+            .budget-warning,
+            .budget-alert {
+                display: block !important;
+                width: 100% !important;
+                padding: 1rem !important;
+                margin: 1rem 0 !important;
+                box-sizing: border-box !important;
+                background: rgba(239, 68, 68, 0.1) !important;
+                border: 1px solid rgba(239, 68, 68, 0.3) !important;
+                border-radius: 0.5rem !important;
+                color: var(--color-error) !important;
+            }
+            
+            /* Budget Performance text and elements - mobile friendly */
+            #budget-performance h3,
+            .budget-performance h3,
+            #coaching-panel h3,
+            .coaching-panel h3 {
+                font-size: 1.125rem !important;
+                line-height: 1.4 !important;
+                margin-bottom: 0.75rem !important;
+                color: var(--color-text-primary) !important;
+            }
+            
+            /* Budget status indicators - mobile responsive */
+            .budget-status,
+            .performance-indicator,
+            .budget-health-indicator {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 0.5rem !important;
+                padding: 0.75rem !important;
+                font-size: 0.875rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            /* Budget charts and graphs - mobile optimized */
+            #budget-performance .chart-container,
+            .budget-performance .chart-container,
+            #coaching-panel .chart-container,
+            .coaching-panel .chart-container {
+                width: 100% !important;
+                height: 200px !important;
+                margin: 1rem 0 !important;
+                overflow: hidden !important;
+            }
+            
+            /* Budget action buttons - mobile friendly */
+            #budget-performance .action-button,
+            .budget-performance .action-button,
+            #coaching-panel .action-button,
+            .coaching-panel .action-button {
+                width: 100% !important;
+                min-height: 48px !important;
+                font-size: 1rem !important;
+                padding: 0.75rem 1rem !important;
+                margin: 0.5rem 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+        }
+        
+        /* Desktop - ensure Budget Performance is always visible */
+        @media (min-width: 769px) {
+            #budget-performance,
+            .budget-performance,
+            #coaching-panel,
+            .coaching-panel,
+            .over-budget-section,
+            #over-budget-section {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+        }
+        
+        /* Force Budget Performance visibility across all screen sizes */
+        #budget-performance.hidden,
+        .budget-performance.hidden,
+        #coaching-panel.hidden,
+        .coaching-panel.hidden {
+            display: block !important;
+        }
+        
+        /* Specific fixes for budget progress bars and health scores */
+        @media (max-width: 768px) {
+            /* Budget progress elements - ensure visibility */
+            .budget-progress-container,
+            .health-score-container,
+            .budget-insights-container {
+                display: block !important;
+                width: 100% !important;
+                margin: 1rem 0 !important;
+            }
+            
+            /* Budget progress bars - mobile responsive */
+            .budget-progress-bar,
+            #budget-progress-bar {
+                width: 100% !important;
+                height: 0.75rem !important;
+                margin: 0.5rem 0 !important;
+                display: block !important;
+            }
+            
+            /* Health score display - mobile optimized */
+            .health-score-display,
+            #health-score-display {
+                text-align: center !important;
+                padding: 1rem !important;
+                font-size: 1.125rem !important;
                 display: block !important;
             }
         }
@@ -13906,12 +14178,12 @@ function closeGoalSelection() {
             const container = document.getElementById('alerts-section');
             const alerts = [];
 
-            if (insights.projectedMonthly > monthlyBudget) {
+            if (insights.projectedMonthly > financialData.monthlyBudget) {
                 alerts.push({
                     type: 'warning',
                     icon: '⚠️',
                     title: 'Budget Alert',
-                    message: `You're projected to exceed your budget by £${(insights.projectedMonthly - monthlyBudget).toFixed(2)}`,
+                    message: `You're projected to exceed your budget by £${(insights.projectedMonthly - financialData.monthlyBudget).toFixed(2)}`,
                     action: 'Reduce daily spending by £5-10'
                 });
             }
@@ -13971,11 +14243,9 @@ function closeGoalSelection() {
                     status: 'neutral'
                 },
                 {
-                    title: insights.remainingBudget > 0 ? 'Budget Remaining' : 'Over Budget',
-                    value: `£${Math.abs(insights.remainingBudget).toFixed(2)}`,
-                    subtitle: insights.remainingBudget > 0 
-                        ? `${((insights.remainingBudget / monthlyBudget) * 100).toFixed(0)}% left`
-                        : `${((Math.abs(insights.remainingBudget) / monthlyBudget) * 100).toFixed(0)}% over`,
+                    title: 'Budget Remaining',
+                    value: `£${insights.remainingBudget.toFixed(2)}`,
+                    subtitle: `${((insights.remainingBudget / financialData.monthlyBudget) * 100).toFixed(0)}% left`,
                     status: insights.remainingBudget > 0 ? 'success' : 'warning'
                 }
             ];
@@ -13995,9 +14265,9 @@ function closeGoalSelection() {
             document.getElementById('goal-impact').textContent = insights.goalImpact > 0 ? `+${insights.goalImpact} weeks` : 'On track';
             document.getElementById('monthly-forecast').textContent = `£${insights.projectedMonthly.toFixed(0)}`;
             document.getElementById('forecast-status').textContent = 
-                insights.projectedMonthly > monthlyBudget ? 
-                `${(((insights.projectedMonthly - monthlyBudget) / monthlyBudget) * 100).toFixed(0)}% over budget` :
-                `${((1 - insights.projectedMonthly / monthlyBudget) * 100).toFixed(0)}% under budget`;
+                insights.projectedMonthly > financialData.monthlyBudget ? 
+                `${(((insights.projectedMonthly - financialData.monthlyBudget) / financialData.monthlyBudget) * 100).toFixed(0)}% over budget` :
+                `${((1 - insights.projectedMonthly / financialData.monthlyBudget) * 100).toFixed(0)}% under budget`;
         }
 
         // Generate category breakdown
@@ -14074,7 +14344,7 @@ function closeGoalSelection() {
                 },
                 {
                     label: 'Monthly Budget (Daily Average)',
-                    data: Array(labels.length).fill(monthlyBudget / 30),
+                    data: Array(labels.length).fill(financialData.monthlyBudget / 30),
                     borderColor: '#f59e0b',
                     backgroundColor: 'rgba(245, 158, 11, 0.1)',
                     borderWidth: 3,
@@ -14598,50 +14868,6 @@ function closeGoalSelection() {
             };
             reader.readAsText(file);
             event.target.value = null;
-        }
-
-        function clearAllData() {
-            if (confirm('⚠️ WARNING: This will permanently delete ALL your data including expenses, recurring items, budget settings, and financial history.\n\nThis action cannot be undone!\n\nAre you absolutely sure you want to continue?')) {
-                if (confirm('🚨 FINAL WARNING: All your financial data will be lost forever!\n\nClick OK to proceed with deletion, or Cancel to keep your data.')) {
-                    try {
-                        // Clear all data arrays
-                        expenses = [];
-                        recurringItems = [];
-                        userGoals = [];
-                        
-                        // Reset settings
-                        monthlyBudget = 0;
-                        monthlyIncome = 0;
-                        currentCurrencyCode = 'GBP';
-                        healthScoreHistory = {};
-                        
-                        // Clear localStorage
-                        localStorage.removeItem('lensAppData');
-                        localStorage.removeItem('expandedInsightsSections');
-                        localStorage.removeItem('expandedHelpSections');
-                        localStorage.removeItem('dailyBudgetEnabled');
-                        
-                        // Reset UI
-                        if (DOMElements.currencySelect) {
-                            DOMElements.currencySelect.value = currentCurrencyCode;
-                        }
-                        
-                        // Refresh all displays
-                        updateCurrencyUI();
-                        updateDisplay();
-                        showTab('overview');
-                        
-                        showToast('All data cleared successfully!', 'success');
-                        
-                        // Close settings
-                        closeSettings();
-                        
-                    } catch (error) {
-                        console.error('Error clearing data:', error);
-                        showToast('Error clearing data. Please try again.', 'error');
-                    }
-                }
-            }
         }
 
         // --- Budget & Income ---
