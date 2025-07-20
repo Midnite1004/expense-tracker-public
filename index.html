@@ -4268,6 +4268,9 @@
             transition: transform 0.2s ease;
             color: var(--color-text-secondary);
             font-family: monospace;
+            flex-shrink: 0;
+            min-width: 20px;
+            white-space: nowrap;
         }
 
         .help-section-content {
@@ -4288,6 +4291,107 @@
 
         .help-component:last-child {
             margin-bottom: 0;
+        }
+
+        /* ========== STANDARDIZED COLLAPSIBLE SECTIONS ========== */
+        /* Unified styling for all collapsible section toggles */
+        .insights-section-toggle {
+            width: 100%;
+            background: transparent;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-radius: 8px;
+        }
+
+        .insights-section-toggle:hover {
+            background: var(--color-bg-secondary);
+        }
+
+        /* Standardize all toggle icons - prevent wrapping and ensure consistent positioning */
+        .insights-section-toggle span[id*="toggle"],
+        .help-toggle,
+        span[id*="toggle"] {
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+            color: var(--color-text-secondary);
+            font-family: monospace;
+            flex-shrink: 0;
+            min-width: 20px;
+            white-space: nowrap;
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* Ensure flex containers prevent icon wrapping */
+        .insights-section-toggle,
+        .help-section-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+        }
+
+        /* Prevent title text from wrapping into icon space */
+        .insights-section-toggle h3,
+        .help-section-title {
+            flex: 1;
+            margin-right: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Mobile-specific adjustments - FORCE CONSISTENCY */
+        @media (max-width: 768px) {
+            /* Force all collapsible toggles to be consistent on mobile */
+            .insights-section-toggle,
+            .help-section-header,
+            button[onclick*="category-analysis"] {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+                background: transparent !important;
+                border: none !important;
+                padding: 12px 16px !important;
+                border-radius: 8px !important;
+                margin-bottom: 16px !important;
+                cursor: pointer !important;
+                flex-wrap: nowrap !important;
+            }
+            
+            .insights-section-toggle:hover,
+            .help-section-header:hover {
+                background: var(--color-bg-secondary) !important;
+            }
+            
+            .insights-section-toggle span[id*="toggle"],
+            .help-toggle,
+            #category-analysis-toggle {
+                min-width: 24px !important;
+                font-size: 1.2rem !important;
+                color: var(--color-text-secondary) !important;
+                flex-shrink: 0 !important;
+                text-align: center !important;
+                line-height: 1 !important;
+                font-family: monospace !important;
+                position: absolute !important;
+                right: 16px !important;
+            }
+            
+            .insights-section-toggle h3,
+            .help-section-title {
+                font-size: 1rem !important;
+                margin-right: 12px !important;
+                flex: 1 !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                white-space: nowrap !important;
+                font-weight: 600 !important;
+            }
         }
 
         .help-component-title {
@@ -5784,10 +5888,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Real-Time Daily Coaching -->
         <div class="card p-4 mb-4">
             <button onclick="toggleInsightsSection('budget-coach')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
-                <div class="flex items-center gap-2">
-                    <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">🎯 Daily Budget Coach</h3>
-                    <div class="text-sm" style="color: var(--color-text-secondary);">Real-time guidance</div>
-                </div>
+                <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">🎯 Daily Budget Coach</h3>
                 <span id="budget-coach-toggle" class="text-lg" style="color: var(--color-text-primary);">▼</span>
             </button>
             <div id="budget-coach-content" class="">
@@ -5822,8 +5923,8 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
 
         <!-- Today's Budget Section -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
-            <button onclick="toggleInsightsSection('todays-budget')" class="flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors mb-4">
+        <div class="card p-4 mb-4">
+            <button onclick="toggleInsightsSection('todays-budget')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
                 <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">Today's Budget</h3>
                 <span id="todays-budget-toggle" class="text-lg">▶</span>
             </button>
@@ -5831,14 +5932,14 @@ button, .btn, input[type="button"], input[type="submit"] {
             
             <div class="text-center mb-4">
                 <div class="text-3xl font-bold" style="color: var(--color-text-primary);" id="todays-remaining">£0</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Remaining Today</div>
+                <div class="text-sm" style="color: var(--color-text-secondary);">Remaining Today</div>
             </div>
             
-            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-2">
+            <div class="w-full rounded-full h-3 mb-2" style="background-color: var(--color-bg-tertiary);">
                 <div class="bg-blue-500 h-3 rounded-full transition-all duration-300" id="todays-budget-bar" style="width: 0%"></div>
             </div>
             
-                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                <div class="flex justify-between text-sm" style="color: var(--color-text-secondary);">
                     <span id="todays-spent">Spent: £0</span>
                     <span id="todays-budget-total">Budget: £0</span>
                 </div>
@@ -5848,9 +5949,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Category Spending Analysis -->
         <div class="card p-4 mb-4">
             <button onclick="toggleInsightsSection('category-analysis')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
-                <h3 class="text-lg font-semibold flex items-center gap-2" style="color: var(--color-text-primary);">
-                    📊 Category Spending Analysis
-                </h3>
+                <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">📊 Category Spending Analysis</h3>
                 <span id="category-analysis-toggle" class="text-lg" style="color: var(--color-text-primary);">▶</span>
             </button>
             <div id="category-analysis-content" class="hidden">
