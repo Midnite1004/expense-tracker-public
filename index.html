@@ -738,6 +738,24 @@
         
         /* CRITICAL MOBILE FIXES - OVERRIDE ALL LAYOUT ISSUES */
         @media (max-width: 768px) {
+            /* Ensure body can scroll on mobile */
+            html, body {
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                touch-action: manipulation !important;
+                -webkit-overflow-scrolling: touch !important;
+                height: auto !important;
+                min-height: 100vh !important;
+            }
+            
+            /* Force scrollable content areas */
+            .trezor-main, .trezor-content {
+                overflow-y: auto !important;
+                height: auto !important;
+                min-height: auto !important;
+                touch-action: manipulation !important;
+            }
+            
             /* Hide desktop sidebar completely on mobile */
             .trezor-sidebar {
                 display: none !important;
@@ -1045,8 +1063,8 @@
             
             /* Progress bar mobile styling */
             #budget-progress-bar {
-                height: 0.75rem !important;
-                border-radius: 0.375rem !important;
+                height: 1rem !important;
+                border-radius: 0.5rem !important;
             }
             
             /* Budget insight box mobile */
@@ -1377,6 +1395,69 @@
         }
         
         /* =============================================
+           PROGRESS BAR MOBILE FIX
+           ============================================= */
+        
+        /* Fix progress bar height on mobile - ensure full container height */
+        @media (max-width: 768px) {
+            /* Progress bar containers */
+            .w-full.bg-gray-200,
+            .w-full.bg-gray-300,
+            .bg-gray-200.rounded-full,
+            .bg-gray-300.rounded-full,
+            [id*="progress-bar"],
+            [class*="progress"] {
+                height: 12px !important;
+                display: flex !important;
+                align-items: center !important;
+                position: relative !important;
+                overflow: hidden !important;
+            }
+            
+                         /* Progress bar fill elements - just fix height */
+             #budget-progress-bar {
+                 height: 100% !important;
+                 display: block !important;
+                 border-radius: inherit !important;
+                 position: relative !important;
+                 top: 0 !important;
+                 bottom: 0 !important;
+             }
+            
+            /* Specific fix for budget and health progress bars */
+            #budget-progress-bar,
+            #health-progress-bar,
+            .progress-bar-container {
+                height: 12px !important;
+                border-radius: 6px !important;
+                background-color: var(--bg-tertiary) !important;
+                position: relative !important;
+                overflow: hidden !important;
+                display: flex !important;
+                align-items: stretch !important;
+            }
+            
+            #budget-progress-bar > div,
+            #health-progress-bar > div,
+            .progress-bar-container > div {
+                height: 100% !important;
+                border-radius: inherit !important;
+                position: relative !important;
+                display: block !important;
+                align-self: stretch !important;
+            }
+            
+            /* Additional progress bar fixes for any rounded elements */
+            .rounded-full {
+                border-radius: 6px !important;
+            }
+            
+            .rounded {
+                border-radius: 4px !important;
+            }
+        }
+        
+        /* ============================================= 
            MOBILE-FIRST TABLE TO CARD TRANSFORMATION
            ============================================= */
 
@@ -2317,10 +2398,22 @@
             /* Budget progress bars - mobile responsive */
             .budget-progress-bar,
             #budget-progress-bar {
-                width: 100% !important;
                 height: 0.75rem !important;
                 margin: 0.5rem 0 !important;
                 display: block !important;
+                max-width: 100% !important;
+                overflow: hidden !important;
+                border-radius: inherit !important;
+                box-sizing: border-box !important;
+                position: relative !important;
+            }
+            
+            /* Force the progress bar fill to stay within bounds */
+            #budget-progress-bar {
+                width: var(--progress-width, 0%) !important;
+                max-width: 100% !important;
+                overflow: hidden !important;
+                border-radius: 0.5rem !important;
             }
             
             /* Health score display - mobile optimized */
@@ -3816,8 +3909,8 @@
         
         /* === Lens Mobile Card Layout END === */
 
-        /* No-scroll CSS - Prevent horizontal scrolling */
-        html,body{max-width:100%;overflow-x:hidden;}
+        /* No-scroll CSS - Prevent horizontal scrolling only */
+        html,body{max-width:100%;overflow-x:hidden;overflow-y:auto;}
         .table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;}
         
         /* Enhanced Pagination Styling */
@@ -5933,8 +6026,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <!-- Progress bar with labels -->
                                         <div class="w-full mb-4">
                                             <!-- Progress bar container with border -->
-                                            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-4 border border-gray-300 dark:border-gray-500 relative overflow-hidden">
-                                                <div id="budget-progress-bar" class="bg-green-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                                            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-4 border border-gray-300 dark:border-gray-500 relative overflow-hidden" style="overflow: hidden !important;">
+                                                <div id="budget-progress-bar" class="bg-green-500 h-full rounded-full transition-all duration-500" style="width: 0%; max-width: 100% !important; overflow: hidden !important; border-radius: inherit !important; height: 100% !important;"></div>
                                                 <!-- Optional: Add tick marks -->
                                                 <div class="absolute top-0 left-1/4 w-px h-full bg-gray-400 opacity-30"></div>
                                                 <div class="absolute top-0 left-1/2 w-px h-full bg-gray-400 opacity-50"></div>
@@ -15724,18 +15817,61 @@ function closeGoalSelection() {
             } else {
                 selectedExpenseIds.delete(id);
             }
-            const allCheckboxes = [...DOMElements.expensesTableBody.querySelectorAll('.expense-checkbox:not(:disabled)')];
-            DOMElements.selectAllExpensesCheckbox.checked = allCheckboxes.length > 0 && selectedExpenseIds.size === allCheckboxes.length;
+            // Look for checkboxes in both desktop table and mobile container
+            const desktopCheckboxes = [...(DOMElements.expensesTableBody?.querySelectorAll('.expense-checkbox:not(:disabled)') || [])];
+            const mobileCheckboxes = [...document.querySelectorAll('.mobile-cards-container .expense-checkbox:not(:disabled)')];
+            const allCheckboxes = [...desktopCheckboxes, ...mobileCheckboxes];
+            
+            if (DOMElements.selectAllExpensesCheckbox) {
+                DOMElements.selectAllExpensesCheckbox.checked = allCheckboxes.length > 0 && selectedExpenseIds.size === allCheckboxes.length;
+            }
             updateDeleteSelectedButton();
         }
 
         function updateDeleteSelectedButton() {
+            const deleteBtn = document.getElementById('delete-selected-btn');
             if (selectedExpenseIds.size > 0) {
-                DOMElements.deleteSelectedBtn.classList.remove('hidden');
-                DOMElements.deleteSelectedBtn.querySelector('span').textContent = `Delete Selected (${selectedExpenseIds.size})`;
+                if (deleteBtn) {
+                    deleteBtn.classList.remove('hidden');
+                    const span = deleteBtn.querySelector('span');
+                    if (span) span.textContent = `Delete Selected (${selectedExpenseIds.size})`;
+                }
+                // Also try the old reference
+                if (DOMElements.deleteSelectedBtn) {
+                    DOMElements.deleteSelectedBtn.classList.remove('hidden');
+                    const span = DOMElements.deleteSelectedBtn.querySelector('span');
+                    if (span) span.textContent = `Delete Selected (${selectedExpenseIds.size})`;
+                }
             } else {
-                DOMElements.deleteSelectedBtn.classList.add('hidden');
+                if (deleteBtn) deleteBtn.classList.add('hidden');
+                if (DOMElements.deleteSelectedBtn) DOMElements.deleteSelectedBtn.classList.add('hidden');
             }
+        }
+
+        // Helper function to select/deselect all expenses for a specific date (mobile)
+        function toggleSelectAllForDate(date) {
+            const dateExpenses = expenses.filter(e => e.date === date && !e.recurringSourceId);
+            const allSelected = dateExpenses.every(e => selectedExpenseIds.has(e.id.toString()));
+            
+            if (allSelected) {
+                // Deselect all for this date
+                dateExpenses.forEach(e => selectedExpenseIds.delete(e.id.toString()));
+            } else {
+                // Select all for this date
+                dateExpenses.forEach(e => selectedExpenseIds.add(e.id.toString()));
+            }
+            
+            // Update all checkboxes for this date
+            const checkboxes = document.querySelectorAll(`input[data-id]:checked, input[data-id]:not(:checked)`);
+            checkboxes.forEach(checkbox => {
+                const expenseId = checkbox.dataset.id;
+                const expense = expenses.find(e => e.id.toString() === expenseId);
+                if (expense && expense.date === date && !expense.recurringSourceId) {
+                    checkbox.checked = selectedExpenseIds.has(expenseId);
+                }
+            });
+            
+            updateDeleteSelectedButton();
         }
 
         function deleteSelectedExpenses() {
@@ -15775,18 +15911,34 @@ function closeGoalSelection() {
             } else {
                 selectedRecurringIds.delete(numId);
             }
-            const allCheckboxes = [...DOMElements.recurringTableBody.querySelectorAll('.recurring-checkbox')];
-            DOMElements.selectAllRecurringCheckbox.checked = allCheckboxes.length > 0 && selectedRecurringIds.size === allCheckboxes.length;
+            // Look for checkboxes in both desktop table and mobile container
+            const desktopCheckboxes = [...(DOMElements.recurringTableBody?.querySelectorAll('.recurring-checkbox') || [])];
+            const mobileCheckboxes = [...document.querySelectorAll('.mobile-cards-container .recurring-checkbox, .mobile-card .recurring-checkbox')];
+            const allCheckboxes = [...desktopCheckboxes, ...mobileCheckboxes];
+            
+            if (DOMElements.selectAllRecurringCheckbox) {
+                DOMElements.selectAllRecurringCheckbox.checked = allCheckboxes.length > 0 && selectedRecurringIds.size === allCheckboxes.length;
+            }
             updateDeleteSelectedRecurringButton();
         }
 
         function updateDeleteSelectedRecurringButton() {
-            const btn = DOMElements.deleteSelectedRecurringBtn;
+            const deleteBtn = document.getElementById('delete-selected-recurring-btn');
             if (selectedRecurringIds.size > 0) {
-                btn.classList.remove('hidden');
-                btn.querySelector('span').textContent = `Delete Selected (${selectedRecurringIds.size})`;
+                if (deleteBtn) {
+                    deleteBtn.classList.remove('hidden');
+                    const span = deleteBtn.querySelector('span');
+                    if (span) span.textContent = `Delete Selected (${selectedRecurringIds.size})`;
+                }
+                // Also try the old reference
+                if (DOMElements.deleteSelectedRecurringBtn) {
+                    DOMElements.deleteSelectedRecurringBtn.classList.remove('hidden');
+                    const span = DOMElements.deleteSelectedRecurringBtn.querySelector('span');
+                    if (span) span.textContent = `Delete Selected (${selectedRecurringIds.size})`;
+                }
             } else {
-                btn.classList.add('hidden');
+                if (deleteBtn) deleteBtn.classList.add('hidden');
+                if (DOMElements.deleteSelectedRecurringBtn) DOMElements.deleteSelectedRecurringBtn.classList.add('hidden');
             }
         }
 
@@ -16153,16 +16305,21 @@ function closeGoalSelection() {
             const budgetProgressBar = document.getElementById('budget-progress-bar');
             if (budgetProgressBar) {
                 const progressWidth = Math.min(budgetProgress, 100);
+                budgetProgressBar.style.setProperty('--progress-width', `${progressWidth}%`);
                 budgetProgressBar.style.width = `${progressWidth}%`;
+                budgetProgressBar.style.maxWidth = '100%';
+                budgetProgressBar.style.overflow = 'hidden';
+                budgetProgressBar.style.borderRadius = 'inherit';
+                budgetProgressBar.style.height = '100%';
                 console.log('📊 Budget progress bar updated:', progressWidth + '%');
                 
                 // Color based on progress
                 if (budgetProgress >= 90) {
-                    budgetProgressBar.className = 'bg-red-600 h-4 rounded-full transition-all duration-500';
+                    budgetProgressBar.className = 'bg-red-600 h-full rounded-full transition-all duration-500';
                 } else if (budgetProgress >= 75) {
-                    budgetProgressBar.className = 'bg-orange-500 h-4 rounded-full transition-all duration-500';
+                    budgetProgressBar.className = 'bg-orange-500 h-full rounded-full transition-all duration-500';
                 } else {
-                    budgetProgressBar.className = 'bg-green-600 h-4 rounded-full transition-all duration-500';
+                    budgetProgressBar.className = 'bg-green-600 h-full rounded-full transition-all duration-500';
                 }
             }
             
@@ -17148,20 +17305,49 @@ function closeGoalSelection() {
                                         year: 'numeric' 
                                     })}
                                 </h3>
-                                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                    -${formatCurrency(dayTotal)}
-                                </span>
+                                <div class="flex items-center gap-3">
+                                    <button onclick="toggleSelectAllForDate('${date}')" 
+                                            class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded" title="Select all expenses for this date">
+                                        Select All
+                                    </button>
+                                    <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                        -${formatCurrency(dayTotal)}
+                                    </span>
+                                </div>
                             </div>
                             <div class="space-y-3">
-                                ${dayExpenses.map(expense => `
-                                    <div onclick="editExpense('${expense.id}')" class="flex justify-between items-center border-b border-gray-200 py-3 last:border-b-0">
-                                        <div>
-                                            <p class="font-medium text-sm">${escapeHTML(expense.name)}</p>
-                                            <p class="text-xs text-gray-500">${escapeHTML(expense.category)}</p>
+                                ${dayExpenses.map(expense => {
+                                    const isRecurringInstance = !!expense.recurringSourceId;
+                                    return `
+                                    <div class="flex items-center border-b border-gray-200 py-3 last:border-b-0">
+                                        <input type="checkbox" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
+                                               class="mr-3 table-checkbox expense-checkbox" ${isRecurringInstance ? 'disabled' : ''}>
+                                        <div class="flex-1 flex justify-between items-center cursor-pointer" onclick="editExpense(${expense.id})">
+                                            <div>
+                                                <p class="font-medium text-sm">${escapeHTML(expense.name)}</p>
+                                                <p class="text-xs text-gray-500">${escapeHTML(expense.category)}</p>
+                                            </div>
+                                            <p class="font-medium text-sm text-red-600">-${formatCurrency(expense.cost)}</p>
                                         </div>
-                                        <p class="font-medium text-sm text-red-600">-${formatCurrency(expense.cost)}</p>
+                                        <div class="ml-3 flex gap-2 items-center">
+                                            <button onclick="event.stopPropagation(); editExpense(${expense.id})" 
+                                                    class="p-2 text-blue-600 hover:bg-blue-50 rounded" title="Edit">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                            ${!isRecurringInstance ? `
+                                            <button onclick="event.stopPropagation(); deleteExpense(${expense.id})" 
+                                                    class="p-2 text-red-600 hover:bg-red-50 rounded" title="Delete">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                            ` : ''}
+                                        </div>
                                     </div>
-                                `).join('')}
+                                `}).join('')}
                             </div>
                         </div>
                     `;
@@ -20782,19 +20968,45 @@ function showInsightsError() {
                                     const typeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
 
                                     return `
-                                        <div onclick="editRecurring(${item.id})" class="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0 ${isCancelled ? 'opacity-60' : ''}">
-                                            <div class="flex items-center gap-3">
-                                                <div class="text-lg">${categoryIcon}</div>
-                                                <div class="min-w-0 flex-1">
-                                                    <div class="font-medium text-sm">${escapeHTML(item.name)}</div>
-                                                    <div class="text-xs text-gray-500">
-                                                        <span class="capitalize">${item.type}</span> • ${item.frequency}
+                                        <div class="flex items-center py-3 border-b border-gray-200 last:border-b-0 ${isCancelled ? 'opacity-60' : ''}">
+                                            <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" 
+                                                   class="mr-3 table-checkbox recurring-checkbox">
+                                            <div class="flex-1 flex items-center justify-between cursor-pointer" onclick="editRecurring(${item.id})">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="text-lg">${categoryIcon}</div>
+                                                    <div class="min-w-0 flex-1">
+                                                        <div class="font-medium text-sm">${escapeHTML(item.name)}</div>
+                                                        <div class="text-xs text-gray-500">
+                                                            <span class="capitalize">${item.type}</span> • ${item.frequency}
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <div class="text-right flex-shrink-0">
+                                                    <div class="font-medium text-sm ${typeClass}">${formatCurrency(item.amount)}</div>
+                                                    <div class="text-xs text-gray-500">${item.status === 'active' ? 'Active' : 'Cancelled'}</div>
+                                                </div>
                                             </div>
-                                            <div class="text-right flex-shrink-0">
-                                                <div class="font-medium text-sm ${typeClass}">${formatCurrency(item.amount)}</div>
-                                                <div class="text-xs text-gray-500">${item.status === 'active' ? 'Active' : 'Cancelled'}</div>
+                                            <div class="ml-3 flex gap-2">
+                                                <button onclick="event.stopPropagation(); editRecurring(${item.id})" 
+                                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded" title="Edit">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                                        <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                                <button onclick="event.stopPropagation(); toggleRecurringStatus(${item.id})" 
+                                                        class="p-2 text-yellow-600 hover:bg-yellow-50 rounded" title="${item.status === 'active' ? 'Pause' : 'Resume'}">
+                                                    ${item.status === 'active' ? 
+                                                        '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : 
+                                                        '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+                                                    }
+                                                </button>
+                                                <button onclick="event.stopPropagation(); deleteRecurring(${item.id})" 
+                                                        class="p-2 text-red-600 hover:bg-red-50 rounded" title="Delete">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
                                             </div>
                                         </div>
                                     `;
@@ -20817,20 +21029,46 @@ function showInsightsError() {
                 const isCancelled = item.status === 'cancelled';
                 const typeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
                  html += `
-                    <div onclick="editRecurring(${item.id})" class="mobile-card ${isCancelled ? 'opacity-60' : ''}">
-                         <div class="mobile-card-icon">${window.categoryIcons[item.category] || window.categoryIcons['Other']}</div>
-                         <div class="mobile-card-main">
-                            <p class="mobile-card-title">${escapeHTML(item.name)}</p>
-                            <div class="mobile-card-subtitle">
-                                <span>${item.type === 'income' ? 'Income' : 'Expense'}</span>
-                                &middot;
-                                <span>${item.frequency}</span>
-                            </div>
-                         </div>
-                         <div class="text-right">
-                            <p class="mobile-card-amount ${typeClass}">${formatCurrency(item.amount)}</p>
-                            <p class="text-xs text-gray-400">${item.status === 'active' ? 'Active' : 'Cancelled'}</p>
-                         </div>
+                    <div class="mobile-card ${isCancelled ? 'opacity-60' : ''} flex items-center p-3 border-b">
+                        <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" 
+                               class="mr-3 table-checkbox recurring-checkbox">
+                        <div class="flex-1 flex items-center cursor-pointer" onclick="editRecurring(${item.id})">
+                             <div class="mobile-card-icon">${window.categoryIcons[item.category] || window.categoryIcons['Other']}</div>
+                             <div class="mobile-card-main flex-1">
+                                <p class="mobile-card-title">${escapeHTML(item.name)}</p>
+                                <div class="mobile-card-subtitle">
+                                    <span>${item.type === 'income' ? 'Income' : 'Expense'}</span>
+                                    &middot;
+                                    <span>${item.frequency}</span>
+                                </div>
+                             </div>
+                             <div class="text-right">
+                                <p class="mobile-card-amount ${typeClass}">${formatCurrency(item.amount)}</p>
+                                <p class="text-xs text-gray-400">${item.status === 'active' ? 'Active' : 'Cancelled'}</p>
+                             </div>
+                        </div>
+                        <div class="ml-2 flex gap-2">
+                            <button onclick="event.stopPropagation(); editRecurring(${item.id})" 
+                                    class="p-2 text-blue-600 hover:bg-blue-50 rounded" title="Edit">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <button onclick="event.stopPropagation(); toggleRecurringStatus(${item.id})" 
+                                    class="p-2 text-yellow-600 hover:bg-yellow-50 rounded" title="${item.status === 'active' ? 'Pause' : 'Resume'}">
+                                ${item.status === 'active' ? 
+                                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : 
+                                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+                                }
+                            </button>
+                            <button onclick="event.stopPropagation(); deleteRecurring(${item.id})" 
+                                    class="p-2 text-red-600 hover:bg-red-50 rounded" title="Delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 `;
             });
@@ -21524,6 +21762,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ensure body overflow is never hidden for modals
     document.body.style.overflow = '';
     document.body.classList.remove('overflow-hidden');
+    
+    // Mobile scroll fix - ensure scrolling works on mobile
+    if (window.innerWidth <= 768) {
+        document.body.style.touchAction = 'manipulation';
+        document.body.style.webkitOverflowScrolling = 'touch';
+        document.body.style.overflowY = 'auto';
+        
+        // Force scroll on main content areas
+        const trezorMain = document.querySelector('.trezor-main');
+        const trezorContent = document.querySelector('.trezor-content');
+        
+        if (trezorMain) {
+            trezorMain.style.overflowY = 'auto';
+            trezorMain.style.touchAction = 'manipulation';
+        }
+        
+        if (trezorContent) {
+            trezorContent.style.overflowY = 'auto';
+            trezorContent.style.touchAction = 'manipulation';
+        }
+    }
     
     // Handle window resize for mobile/desktop switching
     window.addEventListener('resize', function() {
@@ -23785,7 +24044,7 @@ function initializeDailySpendingInsightsChart() {
                     }
                 },
                 legend: {
-                    display: chartType === 'scatter', // Only show legend for scatter charts (7/30/90 days), hide for bar charts (month/12months)
+                    display: chartType === 'scatter' || currentInsightsPeriod === '12months', // Show legend for scatter charts and 12 months comparison
                     position: 'top',
                     align: 'center',
                     labels: {
@@ -23796,6 +24055,22 @@ function initializeDailySpendingInsightsChart() {
                             weight: '500'
                         },
                         generateLabels: function(chart) {
+                            // For 12 months view, show the dataset labels
+                            if (currentInsightsPeriod === '12months') {
+                                const datasets = chart.data.datasets;
+                                const isDarkMode = document.documentElement.classList.contains('dark');
+                                const textColor = isDarkMode ? '#cbd5e1' : '#64748b';
+                                
+                                return datasets.map((dataset, i) => ({
+                                    text: dataset.label,
+                                    fillStyle: dataset.backgroundColor,
+                                    strokeStyle: dataset.backgroundColor,
+                                    fontColor: textColor,
+                                    lineWidth: 0,
+                                    pointStyle: 'rect',
+                                    hidden: false
+                                }));
+                            }
                             // Get current state of toggles
                             const dailyEnabled = localStorage.getItem('dailyBudgetLineEnabled') !== 'false';
                             const monthlyEnabled = localStorage.getItem('monthlyBudgetLineEnabled') !== 'false';
@@ -24079,11 +24354,19 @@ function get12MonthsComparisonData() {
             }
         });
         
+        // Always use the actual monthlyBudget value, not just spent
         budgetData.push(monthlyBudget || 4500); // Use fallback
         spentData.push(monthlySpent);
     }
     
-    console.log('12 months data:', { months, budgetData, spentData, expenses: expenses.length });
+    console.log('12 months data:', { 
+        months, 
+        budgetData, 
+        spentData, 
+        expenses: expenses.length,
+        monthlyBudget,
+        sample: `First month - Budget: ${budgetData[0]}, Spent: ${spentData[0]}`
+    });
     
     return {
         labels: months,
@@ -24384,6 +24667,11 @@ function applyAdvancedTooltipSystem() {
             title: function(context) {
                 if (context.length === 0) return '';
                 
+                // For bar charts (month/12months), use the label directly
+                if (currentInsightsPeriod === 'month' || currentInsightsPeriod === '12months') {
+                    return context[0].label;
+                }
+                
                 const dataIndex = context[0].dataIndex;
                 // CRITICAL FIX: Get current chart data
                 const chartData = dailySpendingInsightsChart.data.datasets[0].data;
@@ -24403,6 +24691,15 @@ function applyAdvancedTooltipSystem() {
                 });
             },
             label: function(context) {
+                // For bar charts (12 months), show the dataset label and value
+                if (currentInsightsPeriod === '12months') {
+                    return `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
+                }
+                
+                // For month view, show the category
+                if (currentInsightsPeriod === 'month') {
+                    return `${context.label}: ${formatCurrency(context.parsed.y)}`;
+                }
                 const dataIndex = context.dataIndex;
                 const amount = context.parsed.y;
                 
@@ -24602,6 +24899,42 @@ function debugChartData() {
     console.log('Non-zero days:', chartData.filter(d => d.y > 0));
     console.log('========================');
 }
+
+// Debug 12 months chart specifically
+window.debug12MonthsChart = function() {
+    console.log('=== 12 MONTHS CHART DEBUG ===');
+    console.log('Monthly Budget:', monthlyBudget);
+    console.log('Current Period:', currentInsightsPeriod);
+    
+    const data = get12MonthsComparisonData();
+    console.log('Chart Data:', data);
+    console.log('Datasets:', data.datasets.length);
+    
+    if (data.datasets.length === 2) {
+        console.log('✅ Budget Dataset:', {
+            label: data.datasets[0].label,
+            color: data.datasets[0].backgroundColor,
+            firstValue: data.datasets[0].data[0],
+            lastValue: data.datasets[0].data[data.datasets[0].data.length - 1]
+        });
+        console.log('✅ Spent Dataset:', {
+            label: data.datasets[1].label,
+            color: data.datasets[1].backgroundColor,
+            firstValue: data.datasets[1].data[0],
+            lastValue: data.datasets[1].data[data.datasets[1].data.length - 1]
+        });
+    }
+    
+    if (dailySpendingInsightsChart) {
+        console.log('Chart Type:', dailySpendingInsightsChart.config.type);
+        console.log('Legend Display:', dailySpendingInsightsChart.options.plugins.legend.display);
+        console.log('Current Datasets:', dailySpendingInsightsChart.data.datasets.map(d => ({
+            label: d.label,
+            color: d.backgroundColor
+        })));
+    }
+    console.log('============================');
+};
 
 // Daily spending chart fix confirmation
 console.log('🎯 Daily Spending Chart fixes loaded! Your chart should now show correct data.');
