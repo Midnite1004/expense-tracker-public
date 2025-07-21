@@ -16442,10 +16442,8 @@ function closeGoalSelection() {
             renderRecentExpenses();
             renderExpensesTable();
             
-            // Only render recurring table when on recurring tab to prevent mobile UI issues
-            // Also check that the recurring tab is actually visible to prevent initial load issues
-            const recurringTabElement = document.getElementById('recurring-tab');
-            if (activeTab === 'recurring' && recurringTabElement && !recurringTabElement.classList.contains('hidden')) {
+            // Only render recurring table when on recurring tab
+            if (activeTab === 'recurring') {
                 renderRecurringTable();
             }
             
