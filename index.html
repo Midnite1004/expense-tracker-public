@@ -2922,6 +2922,74 @@
         input:checked + .toggle-slider:before {
             transform: translateX(20px);
         }
+        
+        /* Mobile Toggle Accessibility Fixes */
+        @media (max-width: 768px) {
+            /* Ensure toggles have proper touch targets and spacing */
+            .flex.items-center.justify-between {
+                padding-right: 1rem !important;
+                margin-right: 0.5rem !important;
+            }
+            
+            /* Make toggle switches larger and more accessible on mobile */
+            .w-11.h-6 {
+                width: 3rem !important;
+                height: 1.75rem !important;
+                min-width: 3rem !important;
+                min-height: 1.75rem !important;
+            }
+            
+            /* Increase the toggle circle size */
+            .w-11.h-6.after\\:h-5.after\\:w-5::after {
+                height: 1.25rem !important;
+                width: 1.25rem !important;
+                top: 0.25rem !important;
+                left: 0.25rem !important;
+            }
+            
+            /* Ensure proper spacing for toggle labels */
+            label.relative.inline-flex.items-center.cursor-pointer {
+                margin-left: 0.5rem !important;
+                padding: 0.5rem !important;
+                min-width: 3.5rem !important;
+                min-height: 2.25rem !important;
+            }
+            
+            /* Add touch-friendly padding around toggles */
+            .flex.items-center.justify-between > label {
+                padding: 0.75rem !important;
+                margin: 0.25rem 0 !important;
+            }
+            
+            /* Force proper spacing from right edge for all toggle containers */
+            .trezor-card .card-content .flex.items-center.justify-between {
+                padding-right: 1.5rem !important;
+                margin-right: 0.75rem !important;
+                position: relative !important;
+            }
+            
+            /* Ensure toggle switches are not cut off by screen edge */
+            .trezor-card .card-content label.relative.inline-flex.items-center.cursor-pointer {
+                position: relative !important;
+                z-index: 10 !important;
+                margin-right: 0.5rem !important;
+            }
+            
+            /* Add extra touch area around toggle switches */
+            .trezor-card .card-content .w-11.h-6 {
+                position: relative !important;
+            }
+            
+            .trezor-card .card-content .w-11.h-6::before {
+                content: '' !important;
+                position: absolute !important;
+                top: -0.5rem !important;
+                left: -0.5rem !important;
+                right: -0.5rem !important;
+                bottom: -0.5rem !important;
+                z-index: 5 !important;
+            }
+        }
         /* Help Tab Contrast */
         #help-tab p, #help-tab li {
             color: var(--help-text-color);
