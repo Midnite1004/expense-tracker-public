@@ -736,6 +736,384 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
         }
         
+        /* Lens Goals Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .goals-modal {
+            background: var(--color-surface);
+            border-radius: var(--border-radius-lg, 12px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 520px;
+            max-height: calc(100vh - 32px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .goals-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid var(--color-border);
+            position: relative;
+        }
+
+        .goals-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin: 0 0 8px 0;
+        }
+
+        .goals-header .subtitle {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .close-button:hover {
+            background: var(--color-bg-tertiary);
+            color: var(--color-text-primary);
+        }
+
+        .goals-body {
+            padding: 24px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .goal-categories {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .goal-category {
+            padding: 16px;
+            border: 2px solid var(--color-border);
+            border-radius: var(--border-radius-lg, 12px);
+            background: var(--color-bg-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 88px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .goal-category:hover {
+            border-color: var(--color-primary);
+            background: rgba(0, 102, 204, 0.05);
+        }
+
+        .goal-category.selected {
+            border-color: var(--color-primary);
+            background: rgba(0, 102, 204, 0.1);
+        }
+
+        .goal-category-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .goal-category-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--color-text-primary);
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-section h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin: 0 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            color: var(--color-text-primary);
+            margin-bottom: 6px;
+            font-size: 0.875rem;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--color-border-focus);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .progress-section {
+            background: var(--color-bg-secondary);
+            border-radius: var(--border-radius-lg, 12px);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-amount {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .progress-percentage {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-success);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: var(--color-bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-success), var(--color-primary));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-target {
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+            text-align: right;
+        }
+
+        .milestones {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .milestone {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease;
+        }
+
+        .milestone:hover {
+            border-color: var(--color-primary);
+        }
+
+        .milestone.completed {
+            border-color: var(--color-success);
+            background: rgba(0, 166, 81, 0.05);
+        }
+
+        .milestone-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .milestone.completed .milestone-icon {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .milestone-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .milestone-title {
+            font-weight: 600;
+            color: var(--color-text-primary);
+            font-size: 0.875rem;
+            margin-bottom: 2px;
+        }
+
+        .milestone-target {
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+
+        .milestone-amount {
+            font-weight: 700;
+            color: var(--color-text-primary);
+            font-size: 0.875rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            padding: 20px 24px 24px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .quick-action {
+            padding: 16px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .quick-action:hover {
+            border-color: var(--color-primary);
+            background: rgba(0, 102, 204, 0.05);
+        }
+
+        .quick-action-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .quick-action-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--color-text-primary);
+        }
+
+        /* Mobile Optimizations for Goals Modal */
+        @media (max-width: 768px) {
+            .modal-overlay {
+                padding: 8px;
+                align-items: flex-end;
+            }
+
+            .goals-modal {
+                border-radius: var(--border-radius-lg, 12px) var(--border-radius-lg, 12px) 0 0;
+                max-height: calc(100vh - 16px);
+            }
+
+            .goals-header {
+                padding: 20px 20px 16px;
+            }
+
+            .goals-header h2 {
+                font-size: 1.25rem;
+                padding-right: 40px;
+            }
+
+            .goals-body {
+                padding: 20px;
+            }
+
+            .goal-categories {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .action-buttons {
+                padding: 16px 20px 20px;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         /* CRITICAL MOBILE FIXES - OVERRIDE ALL LAYOUT ISSUES */
         @media (max-width: 768px) {
             /* Ensure body can scroll on mobile */
@@ -2267,9 +2645,7 @@
         #budget-performance,
         .budget-performance,
         #coaching-panel,
-        .coaching-panel,
-        .over-budget-section,
-        #over-budget-section {
+        .coaching-panel {
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
@@ -2292,21 +2668,6 @@
                 border-radius: 0.5rem !important;
             }
             
-            /* Over Budget warning section - mobile responsive */
-            .over-budget-section,
-            #over-budget-section,
-            .budget-warning,
-            .budget-alert {
-                display: block !important;
-                width: 100% !important;
-                padding: 1rem !important;
-                margin: 1rem 0 !important;
-                box-sizing: border-box !important;
-                background: rgba(239, 68, 68, 0.1) !important;
-                border: 1px solid rgba(239, 68, 68, 0.3) !important;
-                border-radius: 0.5rem !important;
-                color: var(--color-error) !important;
-            }
             
             /* Budget Performance text and elements - mobile friendly */
             #budget-performance h3,
@@ -2363,9 +2724,7 @@
             #budget-performance,
             .budget-performance,
             #coaching-panel,
-            .coaching-panel,
-            .over-budget-section,
-            #over-budget-section {
+            .coaching-panel {
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
@@ -4749,9 +5108,6 @@
             border-radius: 2px;
             margin: 0.5rem 0;
         }
-        .over-budget {
-            background: var(--color-error);
-        }
         .under-budget {
             background: var(--color-success);
         }
@@ -5735,6 +6091,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <span class="nav-text">Expenses</span>
                 </button>
                 
+                <button onclick="showTab('goals')" id="nav-goals" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="nav-text">Goals</span>
+                </button>
+                
                 <button onclick="showTab('recurring')" id="nav-recurring" class="nav-item">
                     <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
@@ -6073,11 +6436,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             
                             <!-- Goals Progress -->
-                            <div class="card p-4">
+                            <div class="card p-4" data-tour="goals-section">
                                 <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-xl font-semibold">Goals Progress</h3>
-                                    <button onclick="openGoalsModal()" class="text-sm text-blue-600 dark:text-blue-400 opacity-70 hover:opacity-100 hover:underline">
-                                        Manage
+                                    <button onclick="showTab('goals')" class="text-sm text-blue-600 dark:text-blue-400 opacity-70 hover:opacity-100 hover:underline">
+                                        Manage Goals
                                     </button>
                                 </div>
                                 <div id="dashboard-goals-container" class="space-y-4">
@@ -6270,6 +6633,58 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Goals Tab -->
+                <div id="goals-tab" class="tab-content hidden fade-in">
+                    <div class="max-w-4xl mx-auto">
+                        <!-- Header -->
+                        <div class="card p-6 mb-6">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                                <div>
+                                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Financial Goals</h2>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-1">Track your progress toward financial milestones</p>
+                                </div>
+                                <button onclick="showGoalTypeSelector()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                    </svg>
+                                    Add Goal
+                                </button>
+                            </div>
+                            
+                            <!-- Quick Stats -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                                <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                                    <div class="text-sm text-blue-600 dark:text-blue-400">Active Goals</div>
+                                    <div class="text-2xl font-bold text-blue-700 dark:text-blue-300" id="active-goals-count">0</div>
+                                </div>
+                                <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                                    <div class="text-sm text-green-600 dark:text-green-400">Completed</div>
+                                    <div class="text-2xl font-bold text-green-700 dark:text-green-300" id="completed-goals-count">0</div>
+                                </div>
+                                <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                                    <div class="text-sm text-purple-600 dark:text-purple-400">Total Progress</div>
+                                    <div class="text-2xl font-bold text-purple-700 dark:text-purple-300" id="total-progress">0%</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Goals List -->
+                        <div id="goals-list-container">
+                            <!-- Goals will be populated here -->
+                        </div>
+                        
+                        <!-- Empty State -->
+                        <div id="goals-empty-state" class="card p-8 text-center">
+                            <div class="text-6xl mb-4">🎯</div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Goals Yet</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-6">Start by creating your first financial goal. Whether it's saving for a house, building an emergency fund, or paying off debt - every financial journey begins with a goal.</p>
+                            <button onclick="showGoalTypeSelector()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors">
+                                Create Your First Goal
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -7975,19 +8390,22 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
     </div>
 
-    <!-- Goals Modal -->
-<div id="goals-modal" onclick="closeGoalsModal()" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
-    <div onclick="event.stopPropagation()" class="onboarding-modal w-full overflow-y-auto">
-        <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-xl font-semibold">Your Goals</h3>
-            <button onclick="closeGoalsModal()" class="icon-button text-2xl leading-none">&times;</button>
+    <!-- Simple Goals Modal -->
+<div id="goals-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold">Financial Goals</h3>
+            <button onclick="closeGoalsModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
         </div>
-        <div id="goals-content" class="p-6">
-            <!-- Goals will be populated here -->
+        
+        <div id="goals-list" class="space-y-3 mb-4">
+            <!-- Goals will be shown here -->
         </div>
-        <div class="flex justify-start p-4 gap-3">
-            <button onclick="showGoalSelection()" class="modern-button modern-button-secondary">Add Goals</button>
-            <button onclick="closeGoalsModal()" class="modern-button modern-button-primary">Close</button>
+        
+        <div class="border-t pt-4">
+            <button onclick="addSimpleGoal()" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
+                + Add Goal
+            </button>
         </div>
     </div>
 </div>
@@ -9421,7 +9839,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 initializeGoalMarkers();
                 // Restore the last active tab, or default to overview
                 const savedTab = localStorage.getItem('currentTab');
-                const tabToShow = savedTab && ['overview', 'expenses', 'recurring', 'insights', 'settings', 'help'].includes(savedTab) ? savedTab : 'overview';
+                const tabToShow = savedTab && ['overview', 'expenses', 'goals', 'recurring', 'insights', 'settings', 'help'].includes(savedTab) ? savedTab : 'overview';
                 showTab(tabToShow);
                 
                 // Call updateDisplay AFTER tabs are properly shown/hidden to prevent recurring content on wrong pages
@@ -12476,7 +12894,7 @@ document.addEventListener('click', function(e) {
                     element: '[data-tour="goals-section"]',
                     popover: { 
                         title: 'Financial Goals Hub 🎯', 
-                        description: 'This is where the magic happens! Click here to set up financial goals like saving for a house, vacation, emergency fund, or paying off debt. Track your progress and stay motivated.',
+                        description: 'This is where the magic happens! Click the "Manage Goals" button to set up financial goals like saving for a house, vacation, emergency fund, or paying off debt. Track your progress and stay motivated.',
                         side: "top", 
                         align: 'center'
                     }
@@ -12506,17 +12924,10 @@ document.addEventListener('click', function(e) {
                     element: '[data-tour="goals-section"]',
                     popover: { 
                         title: 'Set Financial Goals 🎯', 
-                        description: 'Tap here to create goals like saving for vacation, emergency fund, house deposit, or debt payoff. Track your progress and stay motivated!',
+                        description: 'Tap the "Manage Goals" button here to create goals like saving for vacation, emergency fund, house deposit, or debt payoff. Track your progress and stay motivated!',
                         side: "top", 
-                        align: 'center',
-                        onNextClick: () => {
-                            openGoalsModal();
-                        }
+                        align: 'center'
                     }
-                },
-                {
-                    element: '[data-tour="first-goal"]',
-                    popover: { title: 'Add Your First Goal 🚀', description: 'Start here! Choose from goal templates or create a custom financial target. Set amount, timeline, and track progress.', side: "bottom", align: 'center' }
                 },
                 {
                     element: '[data-tour="add-expense"]',
@@ -12557,12 +12968,15 @@ document.addEventListener('click', function(e) {
             // Close settings modal first
             closeSettings();
             
+            // Navigate back to overview page
+            showTab('overview');
+            
             localStorage.removeItem('tourComplete');
             
-            // Add slight delay to ensure modal closes
+            // Add delay to ensure modal closes and overview page loads
             setTimeout(() => {
                 launchOnboardingTour();
-            }, 300);
+            }, 500);
         }
 
         // Enhanced goal-focused tour for first-time users
@@ -12583,17 +12997,8 @@ document.addEventListener('click', function(e) {
                     element: '[data-tour="goals-section"]',
                     popover: { 
                         title: 'Goal Setting Made Easy 🎯', 
-                        description: hasGoals ? 'Let\'s explore your goal management system! Here you can see your goal progress and make adjustments.' : 'Let\'s set up your first financial goal! This is the key to staying motivated and tracking progress.',
-                        side: "top",
-                        onNextClick: () => showGoalEditingInterface()
-                    }
-                },
-                {
-                    element: hasGoals ? '[data-tour="add-new-goal"]' : '[data-tour="first-goal"]',
-                    popover: { 
-                        title: hasGoals ? 'Add More Goals 🚀' : 'Choose Your Goal Type 🚀', 
-                        description: hasGoals ? 'You can add additional goals here. Choose from popular templates like house deposit, vacation fund, emergency savings, or create your own custom goal.' : 'Select from popular templates like house deposit, vacation fund, emergency savings, or create your own custom goal.',
-                        side: "bottom"
+                        description: hasGoals ? 'Here you can see your goal progress and make adjustments using the "Manage Goals" button.' : 'Click the "Manage Goals" button to set up your first financial goal! This is the key to staying motivated and tracking progress.',
+                        side: "top"
                     }
                 }
             ];
@@ -12892,7 +13297,7 @@ function updateDashboardGoals() {
         const color = colors[goal.type] || colors['custom'];
         
         return `
-            <div class="border rounded-lg p-4 hover:border-blue-300 dark:hover:border-blue-700 transition-colors cursor-pointer" onclick="openGoalsModal()">
+            <div class="border rounded-lg p-4 hover:border-blue-300 dark:hover:border-blue-700 transition-colors cursor-pointer" onclick="showTab('goals')">
                 <div class="flex justify-between items-center mb-2">
                     <h4 class="font-semibold text-gray-900 dark:text-gray-100">${goal.name}</h4>
                     <span class="text-sm text-gray-600 dark:text-gray-400">${Math.round(progressPercentage)}%</span>
@@ -12964,7 +13369,7 @@ function updateGoalProgressDisplay() {
         
         // Make it clickable to create goals
         goalDisplay.className = goalDisplay.className + ' cursor-pointer hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors rounded-lg';
-        goalDisplay.onclick = () => openGoalsModal();
+        goalDisplay.onclick = () => showTab('goals');
         return;
     }
     
@@ -13029,7 +13434,7 @@ function updateGoalProgressDisplay() {
         
         // Make it clickable for details
         goalDisplay.className = goalDisplay.className.replace(/cursor-pointer.*?rounded-lg/g, '') + ' cursor-pointer hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors rounded-lg';
-        goalDisplay.onclick = () => openGoalsModal();
+        goalDisplay.onclick = () => showTab('goals');
     } else {
         console.log('🎯 No primary goal found, showing completion status');
         
@@ -13053,17 +13458,35 @@ function updateGoalProgressDisplay() {
         
         // Make it clickable for details
         goalDisplay.className = goalDisplay.className.replace(/cursor-pointer.*?rounded-lg/g, '') + ' cursor-pointer hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors rounded-lg';
-        goalDisplay.onclick = () => openGoalsModal();
+        goalDisplay.onclick = () => showTab('goals');
     }
 }
 
 function openGoalsModal() {
-    renderGoalsModal();
-    document.getElementById('goals-modal').classList.remove('hidden');
+    console.log('🎯 openGoalsModal called');
+    try {
+        renderGoalsModal();
+        const modal = document.getElementById('goals-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            console.log('✅ Goals modal opened successfully');
+        } else {
+            console.error('❌ Goals modal element not found');
+        }
+    } catch (error) {
+        console.error('❌ Error opening goals modal:', error);
+    }
 }
 
+// Ensure function is available globally
+window.openGoalsModal = openGoalsModal;
+
 function closeGoalsModal() {
-    document.getElementById('goals-modal').classList.add('hidden');
+    const modal = document.getElementById('goals-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        console.log('✅ Goals modal closed');
+    }
 }
 
 function closeUpgradeModal() {
@@ -13892,145 +14315,439 @@ function saveGoalEdits() {
 }
 
 function renderGoalsModal() {
-    const container = document.getElementById('goals-content');
+    console.log('🎯 Simple goals modal rendering');
+    const container = document.getElementById('goals-list');
     
+    if (!container) {
+        console.error('❌ Goals list container not found');
+        return;
+    }
+    
+    // Simple goals display
     if (!userGoals || userGoals.length === 0) {
         container.innerHTML = `
-            <div class="text-center py-8">
-                <div class="text-4xl mb-4">🎯</div>
-                <p class="text-gray-600 dark:text-gray-400">No goals set yet.</p>
-                <button onclick="showGoalSelection()" class="modern-button modern-button-primary mt-4">Choose Your Goals</button>
+            <div class="text-center py-4 text-gray-500">
+                <p>No goals yet. Click "Add Goal" to create your first financial goal!</p>
             </div>
         `;
         return;
     }
     
+    // Show existing goals in simple format
     container.innerHTML = userGoals.map(goal => {
-        const progressPercent = calculateGoalProgressPercent(goal);
-        const isCompleted = progressPercent >= 100;
-        const remaining = goal.target - goal.currentProgress;
-        
-        // Create detailed info for the modal
-        let detailedInfo = '';
-        if (goal.unit === 'currency') {
-            if (goal.type === 'debt_payoff') {
-                // Special handling for debt payoff goals
-                detailedInfo = `
-                    <div class="text-sm space-y-2 mt-3 p-3 bg-red-50 dark:bg-red-900/20 rounded">
-                        <div class="flex justify-between">
-                            <span>Total Debt:</span>
-                            <span class="font-medium text-red-600 dark:text-red-400">${formatCurrency(goal.target)}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Amount Paid Off:</span>
-                            <span class="font-medium text-green-600 dark:text-green-400">${formatCurrency(goal.currentProgress)}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Remaining Debt:</span>
-                            <span class="font-medium text-red-600 dark:text-red-400">${formatCurrency(remaining)}</span>
-                        </div>
-                        ${goal.strategy ? `
-                        <div class="flex justify-between text-xs pt-2 border-t border-red-200 dark:border-red-800">
-                            <span>Strategy:</span>
-                            <span>${goal.strategy}</span>
-                        </div>
-                        ` : ''}
-                        ${goal.extraPayment > 0 ? `
-                        <div class="flex justify-between text-xs">
-                            <span>Extra Monthly Payment:</span>
-                            <span>${formatCurrency(goal.extraPayment)}</span>
-                        </div>
-                        ` : ''}
-                        ${totalSavings > 0 ? `
-                        <div class="flex justify-between text-xs border-t border-red-200 dark:border-red-800 pt-2">
-                            <span>Net Worth After Payoff:</span>
-                            <span class="text-green-600 dark:text-green-400">${formatCurrency(totalSavings - remaining)}</span>
-                        </div>
-                        ` : ''}
-                    </div>
-                `;
-            } else {
-                // Regular savings goals
-                detailedInfo = `
-                    <div class="text-sm space-y-2 mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded">
-                        <div class="flex justify-between">
-                            <span>Goal target:</span>
-                            <span class="font-medium">${formatCurrency(goal.target)}</span>
-                        </div>
-                        ${totalSavings > 0 ? `
-                        <div class="flex justify-between">
-                            <span>Total savings:</span>
-                            <span class="font-medium text-green-600 dark:text-green-400">${formatCurrency(totalSavings)}</span>
-                        </div>
-                        ` : ''}
-                        <div class="flex justify-between">
-                            <span>Allocated to goal:</span>
-                            <span class="font-medium text-green-600 dark:text-green-400">${formatCurrency(goal.currentProgress)}</span>
-                        </div>
-                        ${totalSavings > 0 ? `
-                        <div class="flex justify-between">
-                            <span>Unallocated:</span>
-                            <span class="font-medium text-green-600 dark:text-green-400">${formatCurrency(totalSavings - goal.currentProgress)}</span>
-                        </div>
-                        ` : ''}
-                        <div class="flex justify-between pb-2 border-b border-gray-200 dark:border-gray-600">
-                            <span>Still needed:</span>
-                            <span class="font-medium text-purple-600">${formatCurrency(remaining)}</span>
-                        </div>
-                        ${totalDebt > 0 ? `
-                        <div class="flex justify-between text-xs pt-2">
-                            <span>Total debt:</span>
-                            <span class="text-red-500">-${formatCurrency(totalDebt)}</span>
-                        </div>
-                        <div class="flex justify-between text-xs">
-                            <span class="flex items-center gap-1">
-                                Net worth:
-                                <span class="tooltip-trigger cursor-help text-gray-400 hover:text-gray-600" title="Net worth = Total savings (${formatCurrency(totalSavings)}) - Total debt (${formatCurrency(totalDebt)}) = ${formatCurrency(totalSavings - totalDebt)}">ⓘ</span>
-                            </span>
-                            <span class="${totalSavings - totalDebt >= 0 ? 'text-green-600' : 'text-red-500'}">${formatCurrency(totalSavings - totalDebt)}</span>
-                        </div>
-                        ` : ''}
-                    </div>
-                `;
-            }
-        }
+        const progress = goal.currentProgress || 0;
+        const target = goal.target || 1;
+        const percentage = Math.round((progress / target) * 100);
         
         return `
-            <div class="p-4 border border-gray-200 dark:border-gray-600 rounded-lg mb-4 ${isCompleted ? 'bg-green-50 dark:bg-green-900/20 border-green-500' : ''}">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-medium">${goal.name}</h4>
-                    <div class="flex items-center gap-2">
-                        ${isCompleted ? '<span class="text-green-600 text-xl">✅</span>' : ''}
-                        <button onclick="editGoal(${userGoals.indexOf(goal)})" class="text-blue-600 hover:text-blue-800 text-sm px-2 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" title="Edit goal">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
-                        </button>
-                        <button onclick="deleteGoal(${userGoals.indexOf(goal)})" class="text-red-600 hover:text-red-800 text-sm px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Delete goal">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                        </button>
+            <div class="border rounded p-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="font-medium">${goal.name}</h4>
+                        <p class="text-sm text-gray-600">${formatCurrency(progress)} / ${formatCurrency(target)}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-sm font-medium">${percentage}%</span>
+                        <button onclick="deleteSimpleGoal('${goal.id}')" class="ml-2 text-red-500 hover:text-red-700 text-sm">×</button>
                     </div>
                 </div>
-                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-4 border border-gray-300 dark:border-gray-500 relative overflow-hidden mb-2">
-                    <div class="bg-purple-600 h-full rounded-full transition-all duration-500" style="width: ${Math.min(Math.round(progressPercent), 100)}%"></div>
-                    <!-- 50% midpoint reference marker -->
-                    <div class="absolute top-0 left-1/2 w-px h-full bg-gray-400 opacity-50"></div>
-                    <!-- 71% actual progress marker -->
-                    <div class="absolute top-0 w-0.5 h-full bg-white border-l border-r border-gray-800" style="left: ${Math.min(Math.round(progressPercent), 100)}%"></div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                    <div class="bg-blue-600 h-2 rounded-full" style="width: ${Math.min(percentage, 100)}%"></div>
                 </div>
-                <div class="flex justify-between text-sm mb-2">
-                    <span class="text-gray-600 dark:text-gray-400">${formatGoalProgress(goal)}</span>
-                    <span class="font-medium">${Math.round(progressPercent)}%</span>
-                </div>
-                ${detailedInfo}
             </div>
         `;
     }).join('');
 }
 
-// Edit and Delete Goal Functions
+// Simple goal management functions
+function addSimpleGoal() {
+    const name = prompt('Goal name (e.g., "Emergency Fund"):');
+    if (!name) return;
+    
+    const targetStr = prompt('Target amount (e.g., "5000"):');
+    const target = parseFloat(targetStr);
+    if (!target || target <= 0) {
+        alert('Please enter a valid target amount');
+        return;
+    }
+    
+    const currentStr = prompt('Current progress amount (e.g., "1000") or press Cancel for 0:') || '0';
+    const current = Math.max(0, parseFloat(currentStr) || 0);
+    
+    if (!userGoals) userGoals = [];
+    
+    const newGoal = {
+        id: Date.now().toString(),
+        name: name,
+        target: target,
+        currentProgress: current,
+        type: 'custom',
+        unit: 'currency',
+        created: new Date().toISOString()
+    };
+    
+    userGoals.push(newGoal);
+    saveData();
+    renderGoalsModal();
+    updateGoalProgressDisplay();
+    showToast(`Goal "${name}" added!`, 'success');
+}
+
+function deleteSimpleGoal(goalId) {
+    if (!confirm('Delete this goal?')) return;
+    
+    userGoals = userGoals.filter(g => g.id !== goalId);
+    saveData();
+    renderGoalsModal();
+    updateGoalProgressDisplay();
+    showToast('Goal deleted', 'info');
+}
+
+// ===== NEW CLEAN GOALS SYSTEM =====
+
+function renderGoalsPage() {
+    console.log('🎯 Rendering goals page');
+    
+    if (!userGoals) userGoals = [];
+    
+    const activeGoals = userGoals.filter(g => !g.completed);
+    const completedGoals = userGoals.filter(g => g.completed);
+    const totalProgress = userGoals.length > 0 ? 
+        Math.round(userGoals.reduce((sum, g) => sum + ((g.currentProgress || 0) / (g.target || 1) * 100), 0) / userGoals.length) : 0;
+    
+    // Update stats
+    document.getElementById('active-goals-count').textContent = activeGoals.length;
+    document.getElementById('completed-goals-count').textContent = completedGoals.length;
+    document.getElementById('total-progress').textContent = totalProgress + '%';
+    
+    // Show/hide empty state
+    const emptyState = document.getElementById('goals-empty-state');
+    const listContainer = document.getElementById('goals-list-container');
+    
+    if (userGoals.length === 0) {
+        emptyState.style.display = 'block';
+        listContainer.style.display = 'none';
+        return;
+    }
+    
+    emptyState.style.display = 'none';
+    listContainer.style.display = 'block';
+    
+    // Render goals list
+    listContainer.innerHTML = userGoals.map(goal => {
+        const progress = ((goal.currentProgress || 0) / (goal.target || 1)) * 100;
+        const isCompleted = progress >= 100;
+        
+        return `
+            <div class="card p-6 mb-4 ${isCompleted ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : ''}">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            ${getGoalIcon(goal.type)} ${goal.name}
+                            ${isCompleted ? '<span class="text-green-600 text-lg">✅</span>' : ''}
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">${getGoalDescription(goal.type)}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="editGoalNew('${goal.id}')" class="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                        </button>
+                        <button onclick="deleteGoalNew('${goal.id}')" class="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-600 dark:text-gray-400">Progress</span>
+                        <span class="font-semibold">${Math.round(progress)}%</span>
+                    </div>
+                    
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                        <div class="h-3 rounded-full transition-all duration-300 ${getGoalColor(goal.type)}" style="width: ${Math.min(progress, 100)}%"></div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-600 dark:text-gray-400">${formatCurrency(goal.currentProgress || 0)}</span>
+                        <span class="text-gray-900 dark:text-white font-medium">${formatCurrency(goal.target)}</span>
+                    </div>
+                    
+                    ${!isCompleted ? `
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                            <strong>${formatCurrency(goal.target - (goal.currentProgress || 0))}</strong> remaining to reach your goal
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function showGoalTypeSelector() {
+    // Create clean goal type selector modal
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50';
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-gray-800 rounded-xl max-w-2xl w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Choose Your Goal Type</h3>
+                <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                ${getGoalTypes().map(type => `
+                    <button onclick="startGoalCreation('${type.id}'); this.closest('.fixed').remove();" 
+                            class="p-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all text-left">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-2xl">${type.icon}</span>
+                            <h4 class="font-semibold text-gray-900 dark:text-white">${type.name}</h4>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">${type.description}</p>
+                    </button>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function getGoalTypes() {
+    return [
+        { id: 'house', name: 'House Deposit', icon: '🏠', description: 'Save for your dream home deposit' },
+        { id: 'emergency', name: 'Emergency Fund', icon: '🛡️', description: 'Build a safety net for unexpected expenses' },
+        { id: 'vacation', name: 'Vacation', icon: '✈️', description: 'Save for your next adventure' },
+        { id: 'debt', name: 'Debt Payoff', icon: '💳', description: 'Pay off credit cards and loans' },
+        { id: 'investment', name: 'Investment', icon: '📈', description: 'Build your investment portfolio' },
+        { id: 'custom', name: 'Custom Goal', icon: '🎯', description: 'Create your own personalized goal' }
+    ];
+}
+
+function getGoalIcon(type) {
+    const icons = {
+        house: '🏠', emergency: '🛡️', vacation: '✈️', 
+        debt: '💳', investment: '📈', custom: '🎯'
+    };
+    return icons[type] || '🎯';
+}
+
+function getGoalDescription(type) {
+    const descriptions = {
+        house: 'Building toward homeownership',
+        emergency: 'Creating financial security',
+        vacation: 'Planning your next adventure',
+        debt: 'Reducing financial burden',
+        investment: 'Growing wealth for the future',
+        custom: 'Working toward your personal goal'
+    };
+    return descriptions[type] || 'Working toward your financial goal';
+}
+
+function getGoalColor(type) {
+    const colors = {
+        house: 'bg-green-500', emergency: 'bg-blue-500', vacation: 'bg-purple-500',
+        debt: 'bg-red-500', investment: 'bg-yellow-500', custom: 'bg-gray-500'
+    };
+    return colors[type] || 'bg-blue-500';
+}
+
+function startGoalCreation(type) {
+    const goalType = getGoalTypes().find(t => t.id === type);
+    if (!goalType) return;
+    
+    // Create goal creation form
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50';
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                    ${goalType.icon} Create ${goalType.name}
+                </h3>
+                <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            
+            <form onsubmit="createNewGoal(event, '${type}'); return false;" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Goal Name</label>
+                    <input type="text" name="name" value="${goalType.name}" required 
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Target Amount</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">£</span>
+                        <input type="number" name="target" required min="1" step="0.01"
+                               class="w-full pl-8 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                               placeholder="5000">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Progress</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">£</span>
+                        <input type="number" name="current" min="0" step="0.01" value="0"
+                               class="w-full pl-8 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                               placeholder="0">
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="this.closest('.fixed').remove()" 
+                            class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        Create Goal
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function createNewGoal(event, type) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    const newGoal = {
+        id: Date.now().toString(),
+        type: type,
+        name: formData.get('name'),
+        target: parseFloat(formData.get('target')),
+        currentProgress: parseFloat(formData.get('current')) || 0,
+        created: new Date().toISOString(),
+        unit: 'currency'
+    };
+    
+    if (!userGoals) userGoals = [];
+    userGoals.push(newGoal);
+    
+    saveData();
+    renderGoalsPage();
+    updateGoalProgressDisplay(); // Update overview section
+    
+    // Close modal
+    form.closest('.fixed').remove();
+    showToast(`Goal "${newGoal.name}" created!`, 'success');
+}
+
+function editGoalNew(goalId) {
+    const goal = userGoals.find(g => g.id === goalId);
+    if (!goal) {
+        showToast('Goal not found', 'error');
+        return;
+    }
+    
+    const goalType = getGoalTypes().find(t => t.id === goal.type) || { icon: '🎯', name: 'Custom Goal' };
+    
+    // Create edit form
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50';
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                    ${goalType.icon} Edit Goal
+                </h3>
+                <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            
+            <form onsubmit="updateGoalNew(event, '${goalId}'); return false;" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Goal Name</label>
+                    <input type="text" name="name" value="${goal.name}" required 
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Target Amount</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">£</span>
+                        <input type="number" name="target" value="${goal.target}" required min="1" step="0.01"
+                               class="w-full pl-8 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Progress</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">£</span>
+                        <input type="number" name="current" value="${goal.currentProgress || 0}" min="0" step="0.01"
+                               class="w-full pl-8 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="this.closest('.fixed').remove()" 
+                            class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        Update Goal
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function updateGoalNew(event, goalId) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    const goalIndex = userGoals.findIndex(g => g.id === goalId);
+    if (goalIndex === -1) {
+        showToast('Goal not found', 'error');
+        return;
+    }
+    
+    userGoals[goalIndex].name = formData.get('name');
+    userGoals[goalIndex].target = parseFloat(formData.get('target'));
+    userGoals[goalIndex].currentProgress = parseFloat(formData.get('current')) || 0;
+    
+    saveData();
+    renderGoalsPage();
+    updateGoalProgressDisplay(); // Update overview section
+    
+    // Close modal
+    form.closest('.fixed').remove();
+    showToast(`Goal updated!`, 'success');
+}
+
+function deleteGoalNew(goalId) {
+    const goal = userGoals.find(g => g.id === goalId);
+    if (!goal) return;
+    
+    if (confirm(`Delete "${goal.name}"? This action cannot be undone.`)) {
+        userGoals = userGoals.filter(g => g.id !== goalId);
+        saveData();
+        renderGoalsPage();
+        updateGoalProgressDisplay(); // Update overview section
+        showToast('Goal deleted', 'info');
+    }
+}
+
+// Legacy function redirects for compatibility
+function showGoalSelection() {
+    showGoalTypeSelector();
+}
+
+function selectNewGoalType(goalType) {
+    startGoalCreation(goalType);
+}
 function editGoal(goalIndex) {
     if (!userGoals || !userGoals[goalIndex]) {
         showToast('Goal not found', 'error');
@@ -14370,6 +15087,8 @@ function closeGoalSelection() {
                     initializeInsightsSectionStates();
                 } else if (activeTab === 'expenses') {
                     renderExpensesTable();
+                } else if (activeTab === 'goals') {
+                    renderGoalsPage();
                 } else if (activeTab === 'recurring') {
                     renderRecurringTable();
                 } else if (activeTab === 'settings') {
@@ -14441,15 +15160,6 @@ function closeGoalSelection() {
             const container = document.getElementById('alerts-section');
             const alerts = [];
 
-            if (insights.projectedMonthly > financialData.monthlyBudget) {
-                alerts.push({
-                    type: 'warning',
-                    icon: '⚠️',
-                    title: 'Budget Alert',
-                    message: `You're projected to exceed your budget by £${(insights.projectedMonthly - financialData.monthlyBudget).toFixed(2)}`,
-                    action: 'Reduce daily spending by £5-10'
-                });
-            }
 
             if (insights.goalImpact > 0) {
                 alerts.push({
@@ -14527,10 +15237,12 @@ function closeGoalSelection() {
             const insights = calculateInsights();
             document.getElementById('goal-impact').textContent = insights.goalImpact > 0 ? `+${insights.goalImpact} weeks` : 'On track';
             document.getElementById('monthly-forecast').textContent = `£${insights.projectedMonthly.toFixed(0)}`;
+            const projectedSpend = Number(insights.projectedMonthly);
+            const allocatedBudget = Number(financialData.monthlyBudget);
             document.getElementById('forecast-status').textContent = 
-                insights.projectedMonthly > financialData.monthlyBudget ? 
-                `${(((insights.projectedMonthly - financialData.monthlyBudget) / financialData.monthlyBudget) * 100).toFixed(0)}% over budget` :
-                `${((1 - insights.projectedMonthly / financialData.monthlyBudget) * 100).toFixed(0)}% under budget`;
+                projectedSpend >= allocatedBudget ? 
+                `${(((projectedSpend - allocatedBudget) / allocatedBudget) * 100).toFixed(0)}% over budget` :
+                `${((1 - projectedSpend / allocatedBudget) * 100).toFixed(0)}% under budget`;
         }
 
         // Generate category breakdown
@@ -17314,13 +18026,13 @@ function closeGoalSelection() {
                                     })}
                                 </h3>
                                 <div class="flex items-center gap-3">
+                                    <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                        -${formatCurrency(dayTotal)}
+                                    </span>
                                     <button onclick="toggleSelectAllForDate('${date}')" 
                                             class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded" title="Select all expenses for this date">
                                         Select All
                                     </button>
-                                    <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                        -${formatCurrency(dayTotal)}
-                                    </span>
                                 </div>
                             </div>
                             <div class="space-y-3">
@@ -19029,7 +19741,7 @@ function closeGoalSelection() {
                     <div class="text-center py-6">
                         <div class="text-3xl mb-2">🎯</div>
                         <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">No goals set yet</p>
-                        <button onclick="openGoalsModal()" class="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium">
+                        <button onclick="showTab('goals')" class="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium">
                             Choose your goals →
                         </button>
                     </div>
@@ -19070,7 +19782,7 @@ function closeGoalSelection() {
                 }
                 
                 return `
-                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-700 transition-all duration-200 cursor-pointer" onclick="openGoalsModal()">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-700 transition-all duration-200 cursor-pointer" onclick="showTab('goals')">
                         <!-- Goal Header -->
                         <div class="flex justify-between items-start mb-3">
                             <div class="flex-1">
@@ -19136,7 +19848,7 @@ function closeGoalSelection() {
                     ${goalsHTML}
                     
                     <div class="text-center pt-2">
-                        <button onclick="openGoalsModal()" class="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium transition-colors">
+                        <button onclick="showTab('goals')" class="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium transition-colors">
                             View details & edit goals →
                         </button>
                     </div>
@@ -21259,6 +21971,12 @@ function showInsightsError() {
             </svg>
             <span>Expenses</span>
         </button>
+        <button id="mobile-tab-goals" onclick="showTab('goals')" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+            <span>Goals</span>
+        </button>
         <button id="mobile-tab-recurring" onclick="showTab('recurring')" class="bottom-nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
@@ -22001,7 +22719,6 @@ function calculateRealInsights() {
         budgetVariancePercent,
         daysElapsed,
         daysInMonth,
-        isOverBudget: projectedMonthly > monthlyBudget,
         dailyBudgetTarget: realDailyBudget
     };
 }
@@ -22167,23 +22884,26 @@ function generateRealInsights() {
     const spendingData = getRealSpendingData();
     const container = document.getElementById('insights-container');
     
-    if (!container) return;
+    console.log('generateRealInsights called:', { insights, monthlyBudget, hasContainer: !!container });
+    
+    if (!container) {
+        console.warn('insights-container not found');
+        return;
+    }
     
     const insightsList = [
         {
             icon: '🎯',
             title: 'Month-End Projection',
             description: `Based on your current spending of £${insights.totalSpent.toFixed(2)} over ${insights.daysElapsed} days, you're projected to spend £${insights.projectedMonthly.toFixed(2)} this month.`,
-            status: insights.isOverBudget ? 'warning' : 'success',
-            action: insights.isOverBudget 
-                ? `Reduce daily spending by £${(insights.budgetVariance / (insights.daysInMonth - insights.daysElapsed)).toFixed(2)} to stay within budget`
-                : `You're on track! You have £${(monthlyBudget - insights.projectedMonthly).toFixed(2)} buffer remaining.`
+            status: 'info',
+            action: `You have £${Math.abs(monthlyBudget - insights.projectedMonthly).toFixed(2)} ${insights.projectedMonthly > monthlyBudget ? 'over' : 'under'} projected budget.`
         },
         {
             icon: '📊',
             title: 'Daily Budget Performance',
             description: `You've exceeded your daily budget of £${insights.dailyBudgetTarget.toFixed(2)} on ${insights.daysOverBudget} out of ${insights.daysElapsed} days.`,
-            status: insights.daysOverBudget > insights.daysElapsed * 0.3 ? 'warning' : 'success',
+            status: 'info',
             action: insights.daysOverBudget > insights.daysElapsed * 0.3 
                 ? 'Try to stick to your daily budget more consistently'
                 : 'Great job maintaining daily spending discipline!'
@@ -22194,10 +22914,8 @@ function generateRealInsights() {
             description: monthlyIncome > 0 
                 ? `Your projected monthly spending (£${insights.projectedMonthly.toFixed(2)}) is ${insights.projectedMonthly > monthlyIncome ? 'exceeding' : 'within'} your income of £${monthlyIncome.toFixed(2)}.`
                 : 'Set your monthly income in Settings to get income-based insights.',
-            status: monthlyIncome > 0 && insights.projectedMonthly > monthlyIncome ? 'warning' : 'info',
-            action: monthlyIncome > 0 && insights.projectedMonthly > monthlyIncome 
-                ? 'Review your spending categories and cut non-essential expenses'
-                : monthlyIncome > 0 ? 'You\'re living within your means!' : 'Go to Settings → Budget & Income to set your monthly income'
+            status: 'info',
+            action: monthlyIncome > 0 ? 'You\'re living within your means!' : 'Go to Settings → Budget & Income to set your monthly income'
         },
         {
             icon: '📈',
@@ -22255,9 +22973,6 @@ function getSpendingTrendAction(spendingData, insights) {
         return 'Focus on staying within your daily budget. Try the envelope method for discretionary spending.';
     }
     
-    if (insights.isOverBudget) {
-        return 'Review your largest expense categories and identify areas to reduce spending.';
-    }
     
     return 'Your spending is well-controlled. Consider increasing your savings rate if possible.';
 }
@@ -26997,6 +27712,257 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         };
+        
+        // Goals Modal Functions - Redesigned with Lens Design System
+        function showGoalsModal() {
+            const modal = document.getElementById('goals-modal');
+            if (modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                
+                // Load existing goal data if available
+                loadGoalData();
+                
+                // Initialize event listeners
+                initializeGoalEventListeners();
+            }
+        }
+        
+        function closeGoalsModal() {
+            const modal = document.getElementById('goals-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        function initializeGoalEventListeners() {
+            // Goal category selection
+            const categories = document.querySelectorAll('.goal-category');
+            const goalTitle = document.getElementById('goalTitle');
+            
+            categories.forEach(category => {
+                category.addEventListener('click', function() {
+                    // Remove selected from all categories
+                    categories.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected to clicked category
+                    this.classList.add('selected');
+                    
+                    // Update goal title based on selection
+                    const title = this.querySelector('.goal-category-title').textContent;
+                    if (goalTitle) {
+                        goalTitle.value = title;
+                    }
+                });
+            });
+            
+            // Real-time progress calculation
+            const targetAmount = document.getElementById('targetAmount');
+            const currentAmount = document.getElementById('currentAmount');
+            
+            if (targetAmount && currentAmount) {
+                targetAmount.addEventListener('input', updateProgress);
+                currentAmount.addEventListener('input', updateProgress);
+                
+                // Set default target date to 1 year from now
+                const targetDate = document.getElementById('targetDate');
+                if (targetDate && !targetDate.value) {
+                    const nextYear = new Date();
+                    nextYear.setFullYear(nextYear.getFullYear() + 1);
+                    targetDate.value = nextYear.toISOString().split('T')[0];
+                }
+            }
+        }
+        
+        function updateProgress() {
+            const targetAmount = document.getElementById('targetAmount');
+            const currentAmount = document.getElementById('currentAmount');
+            
+            if (!targetAmount || !currentAmount) return;
+            
+            const target = parseFloat(targetAmount.value) || 0;
+            const current = parseFloat(currentAmount.value) || 0;
+            const percentage = target > 0 ? Math.min((current / target) * 100, 100) : 0;
+            
+            // Update progress display elements
+            const progressBar = document.getElementById('progressBar');
+            const progressAmount = document.getElementById('progressAmount');
+            const progressPercentage = document.getElementById('progressPercentage');
+            const progressTarget = document.getElementById('progressTarget');
+            
+            if (progressBar) progressBar.style.width = percentage + '%';
+            if (progressAmount) progressAmount.textContent = `£${current.toLocaleString()} saved`;
+            if (progressPercentage) progressPercentage.textContent = Math.round(percentage) + '%';
+            if (progressTarget) progressTarget.textContent = `Target: £${target.toLocaleString()}`;
+            
+            // Update milestones
+            updateMilestones(target, current);
+        }
+        
+        function updateMilestones(target, current) {
+            const milestonesContainer = document.getElementById('milestonesContainer');
+            if (!milestonesContainer || target <= 0) return;
+            
+            const milestones = [
+                { percentage: 25, title: '25% Complete', subtitle: 'First quarter milestone' },
+                { percentage: 50, title: '50% Complete', subtitle: 'Halfway point' },
+                { percentage: 75, title: '75% Complete', subtitle: 'Three quarters complete' },
+                { percentage: 100, title: 'Goal Complete', subtitle: 'Congratulations!' }
+            ];
+            
+            const currentPercentage = (current / target) * 100;
+            
+            milestonesContainer.innerHTML = milestones.map(milestone => {
+                const amount = (target * milestone.percentage) / 100;
+                const isCompleted = currentPercentage >= milestone.percentage;
+                
+                return `
+                    <div class="milestone ${isCompleted ? 'completed' : ''}">
+                        <div class="milestone-icon">
+                            ${isCompleted ? 
+                                '<svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M9 3L5 7L3 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' : 
+                                ''
+                            }
+                        </div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">${milestone.title}</div>
+                            <div class="milestone-target">${milestone.subtitle}</div>
+                        </div>
+                        <div class="milestone-amount">£${amount.toLocaleString()}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function addContribution() {
+            const currentInput = document.getElementById('currentAmount');
+            if (!currentInput) return;
+            
+            const current = parseFloat(currentInput.value) || 0;
+            const contribution = prompt('Enter contribution amount:');
+            
+            if (contribution && !isNaN(parseFloat(contribution))) {
+                currentInput.value = current + parseFloat(contribution);
+                updateProgress();
+            }
+        }
+        
+        function adjustTarget() {
+            const targetInput = document.getElementById('targetAmount');
+            if (!targetInput) return;
+            
+            const newTarget = prompt('Enter new target amount:', targetInput.value);
+            
+            if (newTarget && !isNaN(parseFloat(newTarget))) {
+                targetInput.value = parseFloat(newTarget);
+                updateProgress();
+            }
+        }
+        
+        function saveGoal() {
+            const goalData = {
+                id: Date.now().toString(),
+                type: document.querySelector('.goal-category.selected')?.dataset.type || 'custom',
+                title: document.getElementById('goalTitle')?.value || '',
+                targetAmount: parseFloat(document.getElementById('targetAmount')?.value) || 0,
+                currentAmount: parseFloat(document.getElementById('currentAmount')?.value) || 0,
+                targetDate: document.getElementById('targetDate')?.value || '',
+                createdDate: new Date().toISOString()
+            };
+            
+            // Validation
+            if (!goalData.title.trim()) {
+                alert('Please enter a goal title');
+                return;
+            }
+            
+            if (goalData.targetAmount <= 0) {
+                alert('Please enter a valid target amount');
+                return;
+            }
+            
+            // Save to existing goals system
+            const existingGoals = JSON.parse(localStorage.getItem('userGoals') || '[]');
+            
+            // Check if we're updating an existing goal
+            const existingIndex = existingGoals.findIndex(g => g.type === goalData.type);
+            
+            if (existingIndex >= 0) {
+                // Update existing goal
+                existingGoals[existingIndex] = { ...existingGoals[existingIndex], ...goalData };
+            } else {
+                // Add new goal
+                existingGoals.push(goalData);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('userGoals', JSON.stringify(existingGoals));
+            
+            // Update global userGoals variable if it exists
+            if (typeof window.userGoals !== 'undefined') {
+                window.userGoals = existingGoals;
+            }
+            
+            // Show success message
+            showToast('Goal saved successfully!', 'success');
+            
+            // Close modal
+            closeGoalsModal();
+            
+            // Refresh goals display if function exists
+            if (typeof refreshGoalsDisplay === 'function') {
+                refreshGoalsDisplay();
+            }
+        }
+        
+        function loadGoalData() {
+            // Load existing goals from localStorage
+            const existingGoals = JSON.parse(localStorage.getItem('userGoals') || '[]');
+            
+            if (existingGoals.length > 0) {
+                const latestGoal = existingGoals[existingGoals.length - 1];
+                
+                // Populate form with latest goal data
+                const goalTitle = document.getElementById('goalTitle');
+                const targetAmount = document.getElementById('targetAmount');
+                const currentAmount = document.getElementById('currentAmount');
+                const targetDate = document.getElementById('targetDate');
+                
+                if (goalTitle) goalTitle.value = latestGoal.title || '';
+                if (targetAmount) targetAmount.value = latestGoal.targetAmount || '';
+                if (currentAmount) currentAmount.value = latestGoal.currentAmount || '';
+                if (targetDate) targetDate.value = latestGoal.targetDate || '';
+                
+                // Select appropriate category
+                const categories = document.querySelectorAll('.goal-category');
+                categories.forEach(category => {
+                    category.classList.remove('selected');
+                    if (category.dataset.type === latestGoal.type) {
+                        category.classList.add('selected');
+                    }
+                });
+                
+                // Update progress display
+                setTimeout(updateProgress, 100);
+            }
+        }
+        
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeGoalsModal();
+            }
+        });
+        
+        // Close modal on overlay click
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'goals-modal') {
+                closeGoalsModal();
+            }
+        });
+        
+        // Remove conflicting function override - keep original openGoalsModal
         
         // Clear All Data function
         function clearAllData() {
