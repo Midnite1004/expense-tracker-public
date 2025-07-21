@@ -2990,6 +2990,44 @@
                 z-index: 5 !important;
             }
         }
+        
+        /* Light Mode Toggle Visibility Fixes */
+        /* Make toggles more visible in light mode */
+        .w-11.h-6.bg-gray-200 {
+            background-color: #d1d5db !important; /* darker gray */
+            border: 2px solid #9ca3af !important; /* visible border */
+        }
+        
+        /* Dark mode toggles - keep existing styling */
+        .dark .w-11.h-6.bg-gray-200 {
+            background-color: #374151 !important; /* dark gray for dark mode */
+            border: 2px solid #4b5563 !important;
+        }
+        
+        /* Toggle circle visibility in light mode */
+        .w-11.h-6 .after\\:bg-white::after {
+            background-color: #ffffff !important;
+            border: 2px solid #9ca3af !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        /* Dark mode toggle circle */
+        .dark .w-11.h-6 .after\\:bg-white::after {
+            background-color: #ffffff !important;
+            border: 2px solid #4b5563 !important;
+        }
+        
+        /* Checked state visibility in light mode */
+        .w-11.h-6.peer-checked\\:bg-blue-600 {
+            background-color: #2563eb !important; /* bright blue when checked */
+            border: 2px solid #1d4ed8 !important;
+        }
+        
+        /* Dark mode checked state */
+        .dark .w-11.h-6.peer-checked\\:bg-blue-600 {
+            background-color: #2563eb !important;
+            border: 2px solid #1d4ed8 !important;
+        }
         /* Help Tab Contrast */
         #help-tab p, #help-tab li {
             color: var(--help-text-color);
@@ -6583,17 +6621,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                     </div>
                     
-                    <!-- Save/Cancel Buttons for Budget Settings -->
-                    <div class="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <button onclick="cancelSettings()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium">
-                            Cancel
-                        </button>
-                        <button onclick="saveSettingsWithInsightsUpdate()" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Save Settings
-                        </button>
+                    <!-- Auto-save notice -->
+                    <div class="text-xs text-gray-500 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg mt-4">
+                        <strong>💾 Auto-save enabled:</strong> All changes are automatically saved as you type.
                     </div>
                 </div>
             </div>
