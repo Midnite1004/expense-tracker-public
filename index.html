@@ -842,11 +842,6 @@
                 text-align: center !important;
             }
             
-            /* Fix recurring tab empty state */
-            #recurring-tab .tab-content {
-                display: block !important;
-                padding: 1rem !important;
-            }
             
             /* Show mobile navigation */
             .mobile-bottom-nav {
@@ -2114,24 +2109,6 @@
             }
         }
         
-        /* ─────────────────────────────────────────────────────────────────────────
-           Force the Recurring tab to display on small screens
-           ───────────────────────────────────────────────────────────────────────── */
-        @media (max-width: 768px) {
-            /* Make sure the tab container itself is visible */
-            #recurring-tab.hidden {
-                display: block !important;
-            }
-            /* And ensure its contents aren't being collapsed */
-            #recurring-tab.tab-content {
-                opacity: 1 !important;
-                visibility: visible !important;
-            }
-            /* If you're using card‐view on mobile, show the cards container */
-            #recurring-tab .mobile-cards-container {
-                display: block !important;
-            }
-        }
         
         /* ─────────────────────────────────────────────────────────────────────────
            CLEAR ALL DATA MOBILE ACCESSIBILITY FIXES
@@ -5602,47 +5579,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             }
         }
         
-        /* ─────────────────────────────────────────────────────────────────────────
-           Force the Recurring tab to display on small screens
-           ───────────────────────────────────────────────────────────────────────── */
-        @media (max-width: 768px) {
-            /* Make sure the tab container itself is visible */
-            #recurring-tab.hidden {
-                display: block !important;
-            }
-            /* And ensure its contents aren't being collapsed */
-            #recurring-tab.tab-content {
-                opacity: 1 !important;
-                visibility: visible !important;
-            }
-            /* If you're using card‐view on mobile, show the cards container */
-            #recurring-tab .mobile-cards-container {
-                display: block !important;
-            }
-        }
         
-        /* Force the recurring tab to show on mobile - FINAL FIX */
-        @media (max-width: 768px) {
-            /* Only force visibility when recurring tab is active */
-            #recurring-tab:not(.hidden) {
-                display: block !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-                position: relative !important;
-                z-index: 1 !important;
-            }
-            /* Ensure the card inside is visible when tab is active */
-            #recurring-tab:not(.hidden) .card {
-                display: block !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-            }
-            /* Force mobile cards to show if they exist when tab is active */
-            #recurring-tab:not(.hidden) .mobile-cards-container {
-                display: block !important;
-                visibility: visible !important;
-            }
-        }
         
 
         
@@ -9447,7 +9384,6 @@ button, .btn, input[type="button"], input[type="submit"] {
                 populateCategoryDropdowns();
                 applyTheme();
                 updateCurrencyUI();
-                updateDisplay();
                 restoreSidebarState();
                 updateInsightsTiles();
                 loadInsightsSettings();
@@ -9458,6 +9394,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                 const savedTab = localStorage.getItem('currentTab');
                 const tabToShow = savedTab && ['overview', 'expenses', 'recurring', 'insights', 'settings', 'help'].includes(savedTab) ? savedTab : 'overview';
                 showTab(tabToShow);
+                
+                // Call updateDisplay AFTER tabs are properly shown/hidden to prevent recurring content on wrong pages
+                updateDisplay();
                 DOMElements.expenseDate.value = getLocalDateString();
                 DOMElements.recurringStartDate.value = getLocalDateString();
 
@@ -14375,10 +14314,6 @@ function closeGoalSelection() {
             if (newTabContent) {
                 newTabContent.classList.remove('hidden');
                 
-                // Force visibility on mobile for recurring tab
-                if (tabName === 'recurring') {
-                    forceRecurringTabVisibility();
-                }
             }
             
                 activeTab = tabName;
@@ -15830,7 +15765,10 @@ function closeGoalSelection() {
 
         function updateDeleteSelectedButton() {
             const deleteBtn = document.getElementById('delete-selected-btn');
+            const mobileDeleteBtn = document.getElementById('mobile-delete-selected-expenses');
+            
             if (selectedExpenseIds.size > 0) {
+                // Desktop button
                 if (deleteBtn) {
                     deleteBtn.classList.remove('hidden');
                     const span = deleteBtn.querySelector('span');
@@ -15842,9 +15780,18 @@ function closeGoalSelection() {
                     const span = DOMElements.deleteSelectedBtn.querySelector('span');
                     if (span) span.textContent = `Delete Selected (${selectedExpenseIds.size})`;
                 }
+                
+                // Mobile button
+                if (mobileDeleteBtn) {
+                    mobileDeleteBtn.classList.remove('hidden');
+                    const span = mobileDeleteBtn.querySelector('span');
+                    if (span) span.textContent = `Delete Selected (${selectedExpenseIds.size})`;
+                }
             } else {
+                // Hide both desktop and mobile buttons
                 if (deleteBtn) deleteBtn.classList.add('hidden');
                 if (DOMElements.deleteSelectedBtn) DOMElements.deleteSelectedBtn.classList.add('hidden');
+                if (mobileDeleteBtn) mobileDeleteBtn.classList.add('hidden');
             }
         }
 
@@ -15924,7 +15871,10 @@ function closeGoalSelection() {
 
         function updateDeleteSelectedRecurringButton() {
             const deleteBtn = document.getElementById('delete-selected-recurring-btn');
+            const mobileDeleteBtn = document.getElementById('mobile-delete-selected-recurring');
+            
             if (selectedRecurringIds.size > 0) {
+                // Desktop button
                 if (deleteBtn) {
                     deleteBtn.classList.remove('hidden');
                     const span = deleteBtn.querySelector('span');
@@ -15936,9 +15886,18 @@ function closeGoalSelection() {
                     const span = DOMElements.deleteSelectedRecurringBtn.querySelector('span');
                     if (span) span.textContent = `Delete Selected (${selectedRecurringIds.size})`;
                 }
+                
+                // Mobile button
+                if (mobileDeleteBtn) {
+                    mobileDeleteBtn.classList.remove('hidden');
+                    const span = mobileDeleteBtn.querySelector('span');
+                    if (span) span.textContent = `Delete Selected (${selectedRecurringIds.size})`;
+                }
             } else {
+                // Hide all buttons
                 if (deleteBtn) deleteBtn.classList.add('hidden');
                 if (DOMElements.deleteSelectedRecurringBtn) DOMElements.deleteSelectedRecurringBtn.classList.add('hidden');
+                if (mobileDeleteBtn) mobileDeleteBtn.classList.add('hidden');
             }
         }
 
@@ -16477,7 +16436,13 @@ function closeGoalSelection() {
             // ✅ These functions should now work properly
             renderRecentExpenses();
             renderExpensesTable();
-            renderRecurringTable();
+            
+            // Only render recurring table when on recurring tab to prevent mobile UI issues
+            // Also check that the recurring tab is actually visible to prevent initial load issues
+            const recurringTabElement = document.getElementById('recurring-tab');
+            if (activeTab === 'recurring' && recurringTabElement && !recurringTabElement.classList.contains('hidden')) {
+                renderRecurringTable();
+            }
             
             if (activeTab === 'insights') {
                 updateChartsAndInsights();
@@ -17287,7 +17252,19 @@ function closeGoalSelection() {
                 groupedExpenses[dateKey].push(expense);
             });
 
-            let html = '';
+            // Add mobile delete button at the top, outside the loop
+            let html = `
+                <!-- Mobile Delete Selected Button -->
+                <div id="mobile-delete-selected-expenses" class="hidden px-4 mb-3">
+                    <button onclick="deleteSelectedExpenses()" class="w-full py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Delete Selected (0)</span>
+                    </button>
+                </div>
+            `;
+            
             Object.keys(groupedExpenses)
                 .sort((a, b) => new Date(b) - new Date(a))
                 .forEach(date => {
@@ -17569,8 +17546,6 @@ function closeGoalSelection() {
             console.log('📱 Mobile detection:', { isMobile, windowWidth: window.innerWidth, totalItems: filtered.length });
             
             if (isMobile) {
-                // Force visibility first
-                forceRecurringTabVisibility();
                 
                 // Create or get mobile container
                 let mobileContainer = document.querySelector('#recurring-tab .mobile-cards-container');
@@ -17582,6 +17557,19 @@ function closeGoalSelection() {
                     mobileContainer.className = 'mobile-cards-container';
                     mobileContainer.style.display = 'block';
                     mobileContainer.style.marginBottom = '120px';
+                    
+                    // Add mobile delete button for recurring items
+                    const mobileDeleteBtn = document.createElement('div');
+                    mobileDeleteBtn.id = 'mobile-delete-selected-recurring';
+                    mobileDeleteBtn.className = 'hidden px-4 mb-3';
+                    mobileDeleteBtn.innerHTML = `
+                        <button onclick="deleteSelectedRecurring()" class="w-full py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Delete Selected (0)</span>
+                        </button>
+                    `;
                     
                     const recurringTab = document.getElementById('recurring-tab');
                     if (recurringTab) {
@@ -21026,7 +21014,19 @@ function showInsightsError() {
                 container.innerHTML = `<tr><td colspan="8" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
                 return;
             }
-            let html = '';
+            // Add mobile delete button at the top
+            let html = `
+                <!-- Mobile Delete Selected Button -->
+                <div id="mobile-delete-selected-recurring" class="hidden px-4 mb-3">
+                    <button onclick="deleteSelectedRecurring()" class="w-full py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Delete Selected (0)</span>
+                    </button>
+                </div>
+            `;
+            
             items.forEach(item => {
                 const isCancelled = item.status === 'cancelled';
                 const typeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
@@ -21145,33 +21145,8 @@ function showInsightsError() {
           clearTimeout(resizeTimeout);
           resizeTimeout = setTimeout(handleResize, 250);
           
-          // Force recurring tab visibility on mobile resize
-          if (window.innerWidth <= 768) {
-              const recurringTab = document.getElementById('recurring-tab');
-              if (recurringTab) {
-                  recurringTab.classList.remove('hidden');
-                  // Re-render mobile view if we're on the recurring tab
-                  if (activeTab === 'recurring') {
-                      renderRecurringTable();
-                  }
-              }
-          }
       });
       
-      // Additional resize listener specifically for recurring tab
-      window.addEventListener('resize', () => {
-          if (window.innerWidth <= 768) {
-              // ensure hidden class is gone
-              const recurringTab = document.getElementById('recurring-tab');
-              if (recurringTab) {
-                  recurringTab.classList.remove('hidden');
-              }
-              // re-render mobile view if on recurring tab
-              if (activeTab === 'recurring') {
-                  renderRecurringTable();
-              }
-          }
-      });
 
         // Enhanced updateTableLabels function for better mobile support
         function updateTableLabels_NEW() {
@@ -21793,10 +21768,6 @@ document.addEventListener('DOMContentLoaded', function() {
             renderExpensesTable();
         } else if (activeTab === 'recurring') {
             renderRecurringTable();
-            // Force visibility on mobile resize
-            if (window.innerWidth <= 768) {
-                forceRecurringTabVisibility();
-            }
         }
     });
     
@@ -21833,38 +21804,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
         
-        // CRITICAL: Force recurring tab visibility function (from working version)
-        window.forceRecurringTabVisibility = function() {
-            // Only force visibility if we're currently on the recurring tab
-            if (window.innerWidth <= 768 && window.activeTab === 'recurring') {
-                const recurringTab = document.getElementById('recurring-tab');
-                if (recurringTab) {
-                    recurringTab.classList.remove('hidden');
-                    recurringTab.style.setProperty('display', 'block', 'important');
-                    recurringTab.style.setProperty('opacity', '1', 'important');
-                    recurringTab.style.setProperty('visibility', 'visible', 'important');
-                    recurringTab.style.setProperty('position', 'relative', 'important');
-                    recurringTab.style.setProperty('z-index', '1', 'important');
-                    
-                    // Also force the card to be visible
-                    const card = recurringTab.querySelector('.card');
-                    if (card) {
-                        card.style.setProperty('display', 'block', 'important');
-                        card.style.setProperty('opacity', '1', 'important');
-                        card.style.setProperty('visibility', 'visible', 'important');
-                    }
-                    
-                    // Use setTimeout to ensure the visibility is applied after DOM updates
-                    setTimeout(() => {
-                        if (recurringTab) {
-                            recurringTab.style.setProperty('display', 'block', 'important');
-                            recurringTab.style.setProperty('opacity', '1', 'important');
-                            recurringTab.style.setProperty('visibility', 'visible', 'important');
-                        }
-                    }, 100);
-                }
-            }
-        };
 });
 
 function updateBudgetCalculations() {
