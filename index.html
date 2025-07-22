@@ -219,6 +219,12 @@
             color: var(--text-secondary) !important;
         }
         
+        /* Reduce padding on Description column in expenses table */
+        #expenses-table td[data-label="Description"] {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        
         /* Uniform mid-tone logic for desktop tables */
         /* 1. Keep desktop column headers at full contrast */
         #expenses-table th,
@@ -6189,6 +6195,34 @@ button, .btn, input[type="button"], input[type="submit"] {
                 color: var(--text-primary) !important;
             }
         }
+        
+        /* Reduce padding on Description column in expenses table */
+        #expenses-table td[data-label="Description"] {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        
+        /* Prevent date wrapping in expenses table */
+        #expenses-table td[data-label="Date"] {
+            white-space: nowrap !important;
+        }
+        
+        /* More specific rule for Description padding - override Tailwind */
+        td.px-6[data-label="Description"] {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        
+        /* Prevent date wrapping and reduce Description padding */
+        td[data-label="Date"] {
+            white-space: nowrap !important;
+        }
+        
+        /* Override Tailwind px-6 for Description columns */
+        td.px-6[data-label="Description"] {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
     </style>
 
 </head>
@@ -6723,19 +6757,19 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                         
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left">
+                            <table class="w-full text-sm text-left table-fixed">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                                     <tr>
                                         <th scope="col" class="px-4 py-3 w-1">
                                             <input type="checkbox" id="select-all-expenses" onchange="toggleSelectAllExpenses(this.checked)" class="table-checkbox">
                                         </th>
-                                        <th scope="col" class="px-6 py-3">Date</th>
-                                        <th scope="col" class="px-6 py-3">Description</th>
-                                        <th scope="col" class="px-6 py-3">Category</th>
-                                        <th scope="col" class="px-6 py-3">Amount</th>
-                                        <th scope="col" class="px-6 py-3">Payment Method</th>
-                                        <th scope="col" class="px-6 py-3">Type</th>
-                                        <th scope="col" class="px-6 py-3 text-right">Actions</th>
+                                        <th scope="col" class="px-4 py-3" style="width: 10%">Date</th>
+                                        <th scope="col" class="px-4 py-3" style="width: 25%">Description</th>
+                                        <th scope="col" class="px-4 py-3" style="width: 15%">Category</th>
+                                        <th scope="col" class="px-4 py-3" style="width: 10%">Amount</th>
+                                        <th scope="col" class="px-4 py-3" style="width: 15%">Payment Method</th>
+                                        <th scope="col" class="px-4 py-3" style="width: 15%">Type</th>
+                                        <th scope="col" class="px-4 py-3 text-right" style="width: 10%">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="expenses-table">
@@ -6831,7 +6865,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="text-6xl mb-4">🎯</div>
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Goals Yet</h3>
                             <p class="text-gray-600 dark:text-gray-400 mb-6">Start by creating your first financial goal. Whether it's saving for a house, building an emergency fund, or paying off debt - every financial journey begins with a goal.</p>
-                            <button onclick="showGoalTypeSelector()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors">
+                            <button onclick="showGoalTypeSelector()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition-colors">
                                 Create Your First Goal
                             </button>
                         </div>
@@ -6911,14 +6945,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <th scope="col" class="px-4 py-3 w-1">
                                             <input type="checkbox" id="select-all-recurring" onchange="toggleSelectAllRecurring(this.checked)" class="table-checkbox">
                                         </th>
-                                        <th scope="col" class="px-6 py-3">Description</th>
-                                        <th scope="col" class="px-6 py-3">Type</th>
-                                        <th scope="col" class="px-6 py-3">Category</th>
-                                        <th scope="col" class="px-6 py-3">Amount</th>
-                                        <th scope="col" class="px-6 py-3">Frequency</th>
-                                        <th scope="col" class="px-6 py-3" style="white-space: nowrap;">Date</th>
-                                        <th scope="col" class="px-6 py-3">Status</th>
-                                        <th scope="col" class="px-6 py-3 text-right">Actions</th>
+                                        <th scope="col" class="px-4 py-3">Description</th>
+                                        <th scope="col" class="px-4 py-3">Type</th>
+                                        <th scope="col" class="px-4 py-3">Category</th>
+                                        <th scope="col" class="px-4 py-3">Amount</th>
+                                        <th scope="col" class="px-4 py-3">Frequency</th>
+                                        <th scope="col" class="px-4 py-3" style="white-space: nowrap;">Date</th>
+                                        <th scope="col" class="px-4 py-3">Status</th>
+                                        <th scope="col" class="px-4 py-3 text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="recurring-table">
@@ -18431,15 +18465,15 @@ function closeGoalSelection() {
                             <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
                             class="table-checkbox expense-checkbox" ${isRecurringInstance ? 'disabled' : ''} ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
-                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Date">${formattedDate}</td>
-                        <td class="px-6 py-3 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
+                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Date">${formattedDate}</td>
+                        <td class="px-4 py-3 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
                             <span class="text-black dark:text-white">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
                         </td>
-                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Category">${escapeHTML(expense.category)}</td>
-                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Amount">${formatCurrency(expense.cost)}</td>
-                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
-                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Type">${escapeHTML(expense.type)}</td>
-                        <td class="px-6 py-3 text-right" data-label="Actions">
+                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Category">${escapeHTML(expense.category)}</td>
+                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Amount">${formatCurrency(expense.cost)}</td>
+                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Type">${escapeHTML(expense.type)}</td>
+                        <td class="px-4 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
@@ -21884,15 +21918,15 @@ function showInsightsError() {
                                    ${isRecurringInstance ? 'disabled' : ''} 
                                    ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
-                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Date">${formattedDate}</td>
-                        <td class="px-6 py-3 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
+                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Date">${formattedDate}</td>
+                        <td class="px-4 py-3 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
                             <span class="text-black dark:text-white">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
                         </td>
-                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Category">${escapeHTML(expense.category)}</td>
-                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Amount">${formatCurrency(expense.cost)}</td>
-                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
-                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Type">${escapeHTML(expense.type)}</td>
-                        <td class="px-6 py-3 text-right" data-label="Actions">
+                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Category">${escapeHTML(expense.category)}</td>
+                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Amount">${formatCurrency(expense.cost)}</td>
+                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Type">${escapeHTML(expense.type)}</td>
+                        <td class="px-4 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" 
                                         ${isCancelled ? 'disabled' : ''}>
