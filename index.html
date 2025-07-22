@@ -778,47 +778,6 @@
         .settings-toggle.rotated {
             transform: rotate(180deg);
         }
-
-        /* Help Subsection Styles */
-        .help-subsection {
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .help-subsection-header {
-            width: 100%;
-            padding: 16px;
-            background: var(--bg-secondary);
-            border: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.2s ease;
-        }
-
-        .help-subsection-header:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .help-subsection-header h4 {
-            margin: 0;
-            font-size: 1rem;
-        }
-
-        .help-subsection-content {
-            padding: 0 16px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-        }
-
-        .help-subsection-content:not(.hidden) {
-            padding: 16px;
-            max-height: 1000px;
-        }
         
         /* Lens Goals Modal Styles */
         .modal-overlay {
@@ -7390,65 +7349,53 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
         
         <div class="help-accordion space-y-4">
-            <!-- Getting Started -->
+            <!-- Quick Start Guide -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('getting-started')">
-                    <span class="help-section-title">🚀 Getting Started</span>
-                    <span id="getting-started-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header" onclick="toggleHelpSection('quick-start')">
+                    <span class="help-section-title">🚀 Quick Start Guide</span>
+                    <span id="quick-start-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="getting-started-content" class="help-section-content hidden">
+                <div id="quick-start-content" class="help-section-content">
                     <div class="help-component">
                         <h4 class="help-component-title">👋 Welcome to Lens</h4>
                         <p class="help-component-description">
-                            Lens is your personal finance tracker that helps you manage expenses, budgets, and financial goals. All your data stays private on your device.
+                            Lens is your personal expense tracking and budgeting companion. This Progressive Web App helps you track expenses, manage recurring items, and monitor your financial health with real-time insights.
                         </p>
                         <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">Quick Setup (3 minutes):</h5>
-                            <ol class="list-decimal list-inside space-y-2">
-                                <li><strong>Set Your Budget:</strong> Go to <button onclick="showTab('settings')" class="text-blue-600 hover:underline">Settings</button> → Budget & Income</li>
-                                <li><strong>Add First Expense:</strong> Use the floating "+" button or Quick Add section</li>
-                                <li><strong>Track Recurring Bills:</strong> Add subscriptions in the Recurring tab</li>
-                                <li><strong>Set Financial Goals:</strong> Visit the Goals tab to start saving</li>
-                                <li><strong>Review Insights:</strong> Check your spending patterns in Insights</li>
+                            <h5 class="font-medium mb-2">Quick Setup Steps:</h5>
+                            <ol class="list-decimal list-inside space-y-1">
+                                <li>Visit <button onclick="showTab('settings')" class="text-blue-600 hover:underline">Settings</button> to configure your monthly budget and income</li>
+                                <li>Add your first expense using the "Add Expense" button</li>
+                                <li>Set up recurring items for bills and subscriptions</li>
+                                <li>Monitor your spending and budget health on the Dashboard</li>
                             </ol>
                         </div>
-                    </div>
-                    
-                    <div class="help-component">
-                        <h4 class="help-component-title">📱 Mobile Navigation</h4>
-                        <p class="help-component-description">
-                            The app uses a bottom navigation bar on mobile with four main sections:
-                        </p>
-                        <ul class="list-disc list-inside space-y-1 text-sm">
-                            <li><strong>Overview:</strong> Your financial dashboard</li>
-                            <li><strong>Expenses:</strong> View and manage all expenses</li>
-                            <li><strong>Goals:</strong> Track savings and financial goals</li>
-                            <li><strong>Insights:</strong> Analyze spending patterns</li>
-                        </ul>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                            Additional features (Recurring, Settings, Help) are in the menu (☰) at the top right.
-                        </p>
+                        <div class="help-component-tips">
+                            <h5 class="font-medium mb-2">💡 Key Features:</h5>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Expense tracking with smart categorization</li>
+                                <li>Budget monitoring and health scoring</li>
+                                <li>Recurring items automation</li>
+                                <li>Interactive spending insights</li>
+                                <li>Essential vs Non-Essential analysis</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Understanding Your Dashboard -->
+            <!-- Dashboard Overview Section -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('dashboard')">
-                    <span class="help-section-title">📊 Understanding Your Dashboard</span>
-                    <span id="dashboard-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header" onclick="toggleHelpSection('dashboard-overview')">
+                    <span class="help-section-title">📊 Dashboard Overview</span>
+                    <span id="dashboard-overview-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="dashboard-content" class="help-section-content hidden">
-                    <!-- Budget Summary Cards Subsection -->
-                    <div class="help-subsection">
-                        <button class="help-subsection-header" onclick="toggleHelpSubsection('budget-cards')">
-                            <h4 class="help-component-title">📊 Budget Summary Cards</h4>
-                            <span id="budget-cards-toggle" class="help-toggle">▼</span>
-                        </button>
-                        <div id="budget-cards-content" class="help-subsection-content hidden">
-                            <p class="help-component-description">
-                                The main dashboard displays four key budget cards showing your financial overview: Monthly Budget, Spent This Month, Budget Remaining, and Monthly Savings.
-                            </p>
+                <div id="dashboard-overview-content" class="help-section-content">
+                    <div class="help-component">
+                        <h4 class="help-component-title">📊 Budget Summary Cards</h4>
+                        <p class="help-component-description">
+                            The main dashboard displays four key budget cards showing your financial overview: Monthly Budget, Spent This Month, Budget Remaining, and Monthly Savings.
+                        </p>
                         <div class="help-component-steps">
                             <h5 class="font-medium mb-2">Understanding the percentages:</h5>
                             <ol class="list-decimal list-inside space-y-2">
@@ -7476,15 +7423,28 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </p>
                         </div>
                     </div>
-                </div>
+                        </p>
+                        <div class="help-component-steps">
+                            <h5 class="font-medium mb-2">How to read the cards:</h5>
+                            <ol class="list-decimal list-inside space-y-1">
+                                <li>Monthly Budget shows your total spending limit</li>
+                                <li>Total Spent displays current month's expenses</li>
+                                <li>Daily Budget shows recommended daily spending</li>
+                                <li>Today's Spending tracks real-time daily expenses</li>
+                            </ol>
+                        </div>
+                        <div class="help-component-tips">
+                            <h5 class="font-medium mb-2">💡 Tips:</h5>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Green cards indicate healthy spending patterns</li>
+                                <li>Red cards warn of budget concerns</li>
+                                <li>Click cards for detailed breakdowns</li>
+                            </ul>
+                        </div>
+                    </div>
 
-                <!-- Budget Health Score Subsection -->
-                <div class="help-subsection">
-                    <button class="help-subsection-header" onclick="toggleHelpSubsection('health-score')">
+                    <div class="help-component">
                         <h4 class="help-component-title">🎯 Budget Health Score</h4>
-                        <span id="health-score-toggle" class="help-toggle">▼</span>
-                    </button>
-                    <div id="health-score-content" class="help-subsection-content hidden">
                         <p class="help-component-description">
                             A 0-100 score that evaluates your financial wellness based on spending patterns, budget adherence, and expense distribution.
                         </p>
@@ -7507,15 +7467,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </ul>
                         </div>
                     </div>
-                </div>
 
-                <!-- Upcoming Bills Subsection -->
-                <div class="help-subsection">
-                    <button class="help-subsection-header" onclick="toggleHelpSubsection('upcoming-bills')">
+                    <div class="help-component">
                         <h4 class="help-component-title">↻ Upcoming Bills</h4>
-                        <span id="upcoming-bills-toggle" class="help-toggle">▼</span>
-                    </button>
-                    <div id="upcoming-bills-content" class="help-subsection-content hidden">
                         <p class="help-component-description">
                             Shows the next 3 upcoming recurring items with due dates and amounts to help you plan your spending.
                         </p>
@@ -7536,15 +7490,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </ul>
                         </div>
                     </div>
-                </div>
 
-                <!-- Quick Actions Subsection -->
-                <div class="help-subsection">
-                    <button class="help-subsection-header" onclick="toggleHelpSubsection('quick-actions')">
+                    <div class="help-component">
                         <h4 class="help-component-title">⚡ Quick Actions</h4>
-                        <span id="quick-actions-toggle" class="help-toggle">▼</span>
-                    </button>
-                    <div id="quick-actions-content" class="help-subsection-content hidden">
                         <p class="help-component-description">
                             Fast access buttons for adding expenses and recurring items directly from the dashboard.
                         </p>
@@ -7560,13 +7508,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
             </div>
             
-            <!-- Managing Expenses -->
+            <!-- Financial Management Section -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('expenses')">
-                    <span class="help-section-title">💰 Managing Expenses</span>
-                    <span id="expenses-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header" onclick="toggleHelpSection('financial-management')">
+                    <span class="help-section-title">💰 Financial Management</span>
+                    <span id="financial-management-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="expenses-content" class="help-section-content hidden">
+                <div id="financial-management-content" class="help-section-content">
                     <div class="help-component">
                         <h4 class="help-component-title">💸 Adding Expenses</h4>
                         <p class="help-component-description">
@@ -7671,13 +7619,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
             </div>
             
-            <!-- Analytics & Insights -->
+            <!-- Analytics & Insights Section -->
             <div class="help-section">
                 <button class="help-section-header" onclick="toggleHelpSection('analytics-insights')">
                     <span class="help-section-title">📈 Analytics & Insights</span>
                     <span id="analytics-insights-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="analytics-insights-content" class="help-section-content hidden">
+                <div id="analytics-insights-content" class="help-section-content">
                     <div class="help-component">
                         <h4 class="help-component-title">📊 Interactive Charts</h4>
                         <p class="help-component-description">
@@ -7753,37 +7701,33 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
             </div>
             
-            <!-- Goals & Financial Planning -->
+            <!-- Settings & Configuration Section -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('goals-planning')">
-                    <span class="help-section-title">🎯 Goals & Financial Planning</span>
-                    <span id="goals-planning-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header" onclick="toggleHelpSection('settings-configuration')">
+                    <span class="help-section-title">⚙ Settings & Configuration</span>
+                    <span id="settings-configuration-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="goals-planning-content" class="help-section-content hidden">
+                <div id="settings-configuration-content" class="help-section-content">
                     <div class="help-component">
-                        <h4 class="help-component-title">🎯 Creating Financial Goals</h4>
+                        <h4 class="help-component-title">💰 Budget Settings</h4>
                         <p class="help-component-description">
-                            Set and track financial goals like saving for a house, building an emergency fund, or planning a vacation.
+                            Configure your monthly budget and income to enable accurate tracking and budget health calculations.
                         </p>
                         <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">Goal Types Available:</h5>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li><strong>🏠 House Deposit:</strong> Save for your dream home</li>
-                                <li><strong>🛡️ Emergency Fund:</strong> Build a safety net</li>
-                                <li><strong>✈️ Vacation:</strong> Plan your next adventure</li>
-                                <li><strong>💳 Debt Payoff:</strong> Eliminate credit card or loan debt</li>
-                                <li><strong>📈 Investment:</strong> Build your portfolio</li>
-                                <li><strong>🎯 Custom:</strong> Create your own goal</li>
-                            </ul>
+                            <h5 class="font-medium mb-2">Setup steps:</h5>
+                            <ol class="list-decimal list-inside space-y-1">
+                                <li>Open Settings from the navigation menu</li>
+                                <li>Enter your monthly budget (total spending limit)</li>
+                                <li>Set monthly income (for savings calculation)</li>
+                                <li>Choose your preferred currency</li>
+                            </ol>
                         </div>
                         <div class="help-component-tips">
-                            <h5 class="font-medium mb-2">💡 Goal Management:</h5>
+                            <h5 class="font-medium mb-2">💡 Budget tips:</h5>
                             <ul class="list-disc list-inside space-y-1">
-                                <li>Track progress with visual progress bars</li>
-                                <li>Edit target amounts and current progress anytime</li>
-                                <li>Delete completed or unwanted goals</li>
-                                <li>View one goal summary on Overview dashboard</li>
-                                <li>See all goals in the dedicated Goals tab</li>
+                                <li>Set realistic budgets based on past spending</li>
+                                <li>Include all expenses except savings/investments</li>
+                                <li>Review and adjust monthly based on performance</li>
                             </ul>
                         </div>
                     </div>
@@ -7829,13 +7773,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
             </div>
             
-            <!-- Settings & Troubleshooting -->
+            <!-- Troubleshooting Section -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('settings-troubleshooting')">
-                    <span class="help-section-title">⚙️ Settings & Troubleshooting</span>
-                    <span id="settings-troubleshooting-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header" onclick="toggleHelpSection('troubleshooting')">
+                    <span class="help-section-title">🔧 Troubleshooting</span>
+                    <span id="troubleshooting-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="settings-troubleshooting-content" class="help-section-content hidden">
+                <div id="troubleshooting-content" class="help-section-content">
                     <div class="help-component">
                         <h4 class="help-component-title">🐛 Common Issues</h4>
                         <p class="help-component-description">
@@ -7881,50 +7825,6 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <li>Export data weekly or monthly</li>
                                 <li>Store backups in multiple locations</li>
                                 <li>Test recovery process periodically</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Features & Tips -->
-            <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('features-tips')">
-                    <span class="help-section-title">✨ Features & Tips</span>
-                    <span id="features-tips-toggle" class="help-toggle">▼</span>
-                </button>
-                <div id="features-tips-content" class="help-section-content hidden">
-                    <div class="help-component">
-                        <h4 class="help-component-title">💡 Pro Tips</h4>
-                        <p class="help-component-description">
-                            Make the most of Lens with these power user tips and hidden features.
-                        </p>
-                        <div class="help-component-tips">
-                            <ul class="list-disc list-inside space-y-2">
-                                <li><strong>Quick Add:</strong> Use the floating "+" button for fast expense entry</li>
-                                <li><strong>Keyboard Shortcuts:</strong> Press Tab to move between form fields</li>
-                                <li><strong>Mobile Gestures:</strong> Swipe between tabs on mobile devices</li>
-                                <li><strong>Smart Categories:</strong> The app learns your favorite categories over time</li>
-                                <li><strong>Bulk Edit:</strong> Select multiple expenses to delete or categorize at once</li>
-                                <li><strong>Chart Zoom:</strong> Click and drag on charts to zoom into specific periods</li>
-                                <li><strong>Export Formats:</strong> Data exports as JSON for easy backup and analysis</li>
-                                <li><strong>Offline Mode:</strong> The app works offline and syncs when connected</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="help-component">
-                        <h4 class="help-component-title">🔐 Privacy & Security</h4>
-                        <p class="help-component-description">
-                            Your financial data privacy is our top priority.
-                        </p>
-                        <div class="help-component-tips">
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>All data stored locally on your device only</li>
-                                <li>No cloud sync or external servers</li>
-                                <li>Bank connections use secure OAuth (when enabled)</li>
-                                <li>Export data regularly for backups</li>
-                                <li>Clear data option for complete removal</li>
                             </ul>
                         </div>
                     </div>
@@ -15231,22 +15131,6 @@ function closeGoalSelection() {
             const expandedSections = JSON.parse(localStorage.getItem('expandedHelpSections') || '{}');
             expandedSections[sectionId] = !content.classList.contains('hidden');
             localStorage.setItem('expandedHelpSections', JSON.stringify(expandedSections));
-        }
-
-        // Toggle Help Subsections
-        function toggleHelpSubsection(subsectionId) {
-            const content = document.getElementById(`${subsectionId}-content`);
-            const toggle = document.getElementById(`${subsectionId}-toggle`);
-            
-            if (content && toggle) {
-                if (content.classList.contains('hidden')) {
-                    content.classList.remove('hidden');
-                    toggle.textContent = '▲';
-                } else {
-                    content.classList.add('hidden');
-                    toggle.textContent = '▼';
-                }
-            }
         }
 
         function initializeHelpSectionStates() {
