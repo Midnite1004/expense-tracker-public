@@ -735,6 +735,49 @@
         .dark .mobile-dropdown {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
         }
+
+        /* Settings Accordion Styles */
+        .settings-accordion {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+
+        .settings-section-header {
+            padding: 20px;
+            background: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid transparent;
+        }
+
+        .settings-section-header:hover {
+            background: var(--bg-secondary);
+        }
+
+        .settings-section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .settings-section-content.show {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .settings-toggle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .settings-toggle.rotated {
+            transform: rotate(180deg);
+        }
         
         /* Lens Goals Modal Styles */
         .modal-overlay {
@@ -7016,20 +7059,33 @@ button, .btn, input[type="button"], input[type="submit"] {
 
 <!-- Settings Tab -->
 <div id="settings-tab" class="tab-content hidden fade-in">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Left Column: Core Settings -->
-        <div class="space-y-6">
-            <!-- Budget & Income Settings -->
-            <div class="trezor-card">
-                <div class="card-header">
-                    <h3 class="card-title">💰 Budget & Income</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Set your financial targets for accurate insights</p>
-                </div>
-                <div class="card-content space-y-4">
-                    <div>
-                        <label for="settings-monthly-income" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Monthly Income
-                        </label>
+    <div class="max-w-4xl mx-auto">
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Settings</h2>
+            <p class="text-gray-600 dark:text-gray-400">Customize your experience and manage your data</p>
+        </div>
+
+        <div class="space-y-4">
+            <!-- Essential Settings -->
+            <div class="settings-accordion">
+                <button class="settings-section-header w-full" onclick="toggleSettingsSection('essential')">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl">💰</span>
+                            <div class="text-left">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Budget & Income</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Essential financial settings</p>
+                            </div>
+                        </div>
+                        <span id="essential-toggle" class="settings-toggle">▼</span>
+                    </div>
+                </button>
+                <div id="essential-content" class="settings-section-content show">
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <label for="settings-monthly-income" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Monthly Income
+                            </label>
                         <div class="relative">
                             <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
                             <input type="number" 
@@ -7037,42 +7093,128 @@ button, .btn, input[type="button"], input[type="submit"] {
                                    placeholder="Enter your monthly income" 
                                    class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg"
                                    onchange="updateIncome(this.value)" oninput="updateIncome(this.value)">
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Your total monthly income before taxes</p>
                         </div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Your total monthly income before taxes</p>
-                    </div>
-                    
-                    <div>
-                        <label for="settings-monthly-budget" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Monthly Budget
-                        </label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
-                            <input type="number" 
-                                   id="settings-monthly-budget" 
-                                   placeholder="Enter your monthly budget" 
-                                   class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg"
-                                   onchange="updateBudget(this.value)" oninput="updateBudget(this.value)">
-                        </div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">How much you plan to spend each month</p>
-                    </div>
-                    
-                    <div>
-                        <label for="settings-daily-budget" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Daily Budget (Optional)
-                        </label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
-                            <input type="number" 
-                                   id="settings-daily-budget" 
-                                   placeholder="Auto-calculated from monthly" 
-                                   class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg">
-                        </div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            <span id="daily-budget-calculation">Leave empty to auto-calculate (Monthly ÷ 30)</span>
-                        </p>
                         
-                        <!-- Daily Budget Coaching Toggle -->
-                        <div class="flex items-center justify-between mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div>
+                            <label for="settings-monthly-budget" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Monthly Budget
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
+                                <input type="number" 
+                                       id="settings-monthly-budget" 
+                                       placeholder="Enter your monthly budget" 
+                                       class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg"
+                                       onchange="updateBudget(this.value)" oninput="updateBudget(this.value)">
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">How much you plan to spend each month</p>
+                        </div>
+
+                        <!-- Budget Helper -->
+                        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                            <h4 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">💡 Budget Helper</h4>
+                            <div class="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                                <div id="budget-surplus-display">• Monthly Surplus: <span class="font-semibold">£0</span> (Income - Budget)</div>
+                                <div id="daily-budget-display">• Daily Budget: <span class="font-semibold">£0</span></div>
+                                <div id="savings-rate-display">• Savings Rate: <span class="font-semibold">0%</span> of income</div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-xs text-gray-500 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+                            <strong>💾 Auto-save enabled:</strong> Changes save automatically as you type.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Display & Preferences -->
+            <div class="settings-accordion">
+                <button class="settings-section-header w-full" onclick="toggleSettingsSection('display')">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl">🎨</span>
+                            <div class="text-left">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Display & Preferences</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Theme, currency, and chart options</p>
+                            </div>
+                        </div>
+                        <span id="display-toggle" class="settings-toggle">▼</span>
+                    </div>
+                </button>
+                <div id="display-content" class="settings-section-content">
+                    <div class="p-6 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Dark Mode</label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Toggle between light and dark themes</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="dark-mode-toggle" class="sr-only peer" onchange="toggleTheme(this.checked)">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                        
+                        <div>
+                            <label for="currency-selector" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency</label>
+                            <select id="currency-selector" onchange="changeCurrency(this.value)" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                <option value="AUD">AUD - Australian Dollar (A$)</option>
+                                <option value="CAD">CAD - Canadian Dollar (C$)</option>
+                                <option value="EUR">EUR - Euro (€)</option>
+                                <option value="GBP">GBP - British Pound (£)</option>
+                                <option value="JPY">JPY - Japanese Yen (¥)</option>
+                                <option value="USD">USD - US Dollar ($)</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Show Income Line on Charts</label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Display monthly income reference on spending charts</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="income-display-enabled" class="sr-only peer" onchange="toggleIncomeDisplay()">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div class="settings-accordion">
+                <button class="settings-section-header w-full" onclick="toggleSettingsSection('advanced')">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl">⚙️</span>
+                            <div class="text-left">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Advanced Features</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Daily budgets, coaching, and chart options</p>
+                            </div>
+                        </div>
+                        <span id="advanced-toggle" class="settings-toggle">▼</span>
+                    </div>
+                </button>
+                <div id="advanced-content" class="settings-section-content">
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <label for="settings-daily-budget" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Daily Budget (Optional)
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
+                                <input type="number" 
+                                       id="settings-daily-budget" 
+                                       placeholder="Auto-calculated from monthly" 
+                                       class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg">
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span id="daily-budget-calculation">Leave empty to auto-calculate (Monthly ÷ 30)</span>
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                             <div>
                                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Enable Daily Budget Coaching</label>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Get real-time spending guidance in Insights tab</p>
@@ -7083,11 +7225,10 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </label>
                         </div>
                         
-                        <!-- Daily Budget Line Visibility Toggle -->
-                        <div class="flex items-center justify-between mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                             <div>
-                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Show Daily Budget Line</label>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Display daily budget reference line on 7-day and 30-day charts</p>
+                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Show Daily Budget Line on Charts</label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Display reference line on 7-day and 30-day charts</p>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="daily-budget-line-enabled" class="sr-only peer" onchange="toggleDailyBudgetLine()" checked>
@@ -7095,146 +7236,101 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </label>
                         </div>
                     </div>
-                    
-                    <!-- Quick Budget Calculation Helper -->
-                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-                        <h4 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">💡 Budget Helper</h4>
-                        <div class="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                            <div id="budget-surplus-display">• Monthly Surplus: <span class="font-semibold">£0</span> (Income - Budget)</div>
-                            <div id="daily-budget-display">• Calculated Daily Budget: <span class="font-semibold">£0</span></div>
-                            <div id="savings-rate-display">• Savings Rate: <span class="font-semibold">0%</span> of income</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Auto-save notice -->
-                    <div class="text-xs text-gray-500 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg mt-4">
-                        <strong>💾 Auto-save enabled:</strong> All changes are automatically saved as you type.
-                    </div>
                 </div>
             </div>
 
-            <!-- General Settings -->
-            <div class="trezor-card">
-                <div class="card-header">
-                    <h3 class="card-title">⚙️ General Settings</h3>
-                </div>
-                <div class="card-content space-y-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Dark Mode</label>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Toggle between light and dark themes</p>
-                        </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="dark-mode-toggle" class="sr-only peer" onchange="toggleTheme(this.checked)">
-                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        </label>
-                    </div>
-                    
-                    <div>
-                        <label for="currency-selector" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency</label>
-                        <select id="currency-selector" onchange="changeCurrency(this.value)" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                            <option value="AUD">AUD - Australian Dollar (A$)</option>
-                            <option value="CAD">CAD - Canadian Dollar (C$)</option>
-                            <option value="EUR">EUR - Euro (€)</option>
-                            <option value="GBP">GBP - British Pound (£)</option>
-                            <option value="JPY">JPY - Japanese Yen (¥)</option>
-                            <option value="USD">USD - US Dollar ($)</option>
-                        </select>
-                    </div>
-
-                    <!-- Income Display Settings -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">Chart Display Options</h3>
-                        
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Show Income Line on Charts</label>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Display monthly income reference line on spending charts</p>
-                            </div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" id="income-display-enabled" class="sr-only peer" onchange="toggleIncomeDisplay()">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Right Column: Data Management & Actions -->
-        <div class="space-y-6">
             <!-- Data Management -->
-            <div class="trezor-card">
-                <div class="card-header">
-                    <h3 class="card-title">📊 Data Management</h3>
-                </div>
-                <div class="card-content space-y-4">
-                    <button onclick="exportData()" class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        Export Data (JSON)
-                    </button>
-                    
-                    <div class="relative">
-                        <input type="file" id="import-file" accept=".json" class="hidden" onchange="importData(event)">
-                        <button onclick="document.getElementById('import-file').click()" class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <div class="settings-accordion">
+                <button class="settings-section-header w-full" onclick="toggleSettingsSection('data')">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl">📊</span>
+                            <div class="text-left">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Data Management</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Import, export, and backup your data</p>
+                            </div>
+                        </div>
+                        <span id="data-toggle" class="settings-toggle">▼</span>
+                    </div>
+                </button>
+                <div id="data-content" class="settings-section-content">
+                    <div class="p-6 space-y-4">
+                        <button onclick="exportData()" class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
-                            Import Data (JSON)
+                            Export Data (JSON)
                         </button>
+                        
+                        <div class="relative">
+                            <input type="file" id="import-file" accept=".json" class="hidden" onchange="importData(event)">
+                            <button onclick="document.getElementById('import-file').click()" class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                </svg>
+                                Import Data (JSON)
+                            </button>
+                        </div>
+                        
+                        <div class="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                            <strong>Data Privacy:</strong> All your data is stored locally on your device. No information is sent to external servers.
+                        </div>
                     </div>
-                    
-                    <div class="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
-                        <strong>Data Privacy:</strong> All your data is stored locally on your device. No information is sent to external servers.
+                </div>
+            </div>
+
+            <!-- Banking Integration & Quick Actions -->
+            <div class="settings-accordion">
+                <button class="settings-section-header w-full" onclick="toggleSettingsSection('actions')">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl">⚡</span>
+                            <div class="text-left">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Banking & Actions</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Quick actions and banking features</p>
+                            </div>
+                        </div>
+                        <span id="actions-toggle" class="settings-toggle">▼</span>
+                    </div>
+                </button>
+                <div id="actions-content" class="settings-section-content">
+                    <div class="p-6 space-y-4">
+                        <!-- Banking Integration -->
+                        <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">🏦 Banking Integration</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Connect your bank account for automatic transaction import</p>
+                            <button onclick="connectBankAccount()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                                Connect Bank Account
+                            </button>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                                Secure connection via bank-grade encryption
+                            </p>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="space-y-3">
+                            <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Quick Actions</h4>
+                            
+                            <button onclick="restartTour()" class="w-full flex items-center justify-start gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                Restart Tour
+                            </button>
+                            
+                            <button onclick="clearAllData()" class="w-full flex items-center justify-start gap-2 px-4 py-3 border border-red-300 dark:border-red-600 rounded-lg text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                Clear All Data
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Banking Integration -->
-            <div class="trezor-card">
-                <div class="card-header">
-                    <h3 class="card-title">🏦 Banking Integration</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Connect your bank account for automatic transaction import</p>
-                </div>
-                <div class="card-content">
-                    <button onclick="connectBankAccount()" class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                        </svg>
-                        Connect Bank Account
-                    </button>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-                        Secure connection via bank-grade encryption
-                    </p>
-                </div>
-            </div>
-
-
-            <!-- Quick Actions -->
-            <div class="trezor-card">
-                <div class="card-header">
-                    <h3 class="card-title">⚡ Quick Actions</h3>
-                </div>
-                <div class="card-content space-y-3">
-                    <button onclick="restartTour()" class="w-full flex items-center justify-start gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                        </svg>
-                        Restart Tour
-                    </button>
-                    
-                    <button onclick="clearAllData()" class="w-full flex items-center justify-start gap-2 px-4 py-3 border border-red-300 dark:border-red-600 rounded-lg text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                        Clear All Data
-                    </button>
-                </div>
-            </div>
-
-
         </div>
     </div>
 
@@ -7253,13 +7349,13 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
         
         <div class="help-accordion space-y-4">
-            <!-- Getting Started Section -->
+            <!-- Quick Start Guide -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('getting-started')">
-                    <span class="help-section-title">🚀 Getting Started</span>
-                    <span id="getting-started-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header" onclick="toggleHelpSection('quick-start')">
+                    <span class="help-section-title">🚀 Quick Start Guide</span>
+                    <span id="quick-start-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="getting-started-content" class="help-section-content">
+                <div id="quick-start-content" class="help-section-content">
                     <div class="help-component">
                         <h4 class="help-component-title">👋 Welcome to Lens</h4>
                         <p class="help-component-description">
@@ -15003,6 +15099,20 @@ function closeGoalSelection() {
 }
 
         // --- Help Accordion Management ---
+        // Settings Accordion Toggle Function
+        function toggleSettingsSection(sectionId) {
+            const content = document.getElementById(`${sectionId}-content`);
+            const toggle = document.getElementById(`${sectionId}-toggle`);
+            
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                toggle.classList.remove('rotated');
+            } else {
+                content.classList.add('show');
+                toggle.classList.add('rotated');
+            }
+        }
+
         function toggleHelpSection(sectionId) {
             const content = document.getElementById(`${sectionId}-content`);
             const toggle = document.getElementById(`${sectionId}-toggle`);
