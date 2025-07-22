@@ -211,6 +211,29 @@
         #theme-toggle-btn:hover {
             transform: scale(1.05);
         }
+        
+        /* Ensure description text is always visible in both light and dark modes */
+        td[data-label="Description"] > span {
+            color: var(--text-primary) !important;
+            font-weight: 600;
+        }
+        
+        /* Uniform mid-tone logic for desktop tables */
+        /* 1. Keep desktop column headers at full contrast */
+        #expenses-table th,
+        #recurring-table th {
+            color: var(--text-primary) !important;  /* your darkest header color */
+            font-weight: 600 !important;
+        }
+
+        /* 2. Dim all non-amount cells to a consistent medium gray */
+        #expenses-table td:not(.text-red-600):not(.text-green-600),
+        #recurring-table td:not(.text-red-600):not(.text-green-600) {
+            color: var(--text-secondary) !important; /* e.g. #5F6368 */
+        }
+
+        /* 3. Let your amount cells keep their red/green utility classes */
+        
         /* Base body styles with theme-aware colors and smooth transitions */
         body {
             background-color: var(--bg-secondary);
@@ -5302,6 +5325,51 @@
             padding: 0.75rem 1rem !important;
         }
 
+        /* Help Subsection Styles */
+        .help-subsection {
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .help-subsection-header {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--color-bg-secondary);
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--color-text-primary);
+            transition: background-color 0.2s ease;
+            text-align: left;
+        }
+
+        .help-subsection-header:hover {
+            background: var(--color-bg-tertiary);
+        }
+
+        .help-subsection-header h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .help-subsection-content {
+            padding: 1rem 1.5rem;
+            background: var(--color-bg);
+            border: none !important;
+        }
+
+        .help-subsection-content:not(.hidden) {
+            border-top: 1px solid var(--color-border);
+        }
+
         /* Mobile-specific collapsed optimization */
         @media (max-width: 768px) {
             .card:has(.hidden) {
@@ -6628,7 +6696,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                         
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-300">
+                            <table class="w-full text-sm text-left">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                                     <tr>
                                         <th scope="col" class="px-4 py-3 w-1">
@@ -6810,7 +6878,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                 
                         <div class="overflow-x-auto">
-                            <table class="min-w-full text-sm text-left text-gray-500 dark:text-gray-300">
+                            <table class="min-w-full text-sm text-left">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                                     <tr>
                                         <th scope="col" class="px-4 py-3 w-1">
@@ -7349,172 +7417,184 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
         
         <div class="help-accordion space-y-4">
-            <!-- Quick Start Guide -->
+            <!-- Getting Started -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('quick-start')">
-                    <span class="help-section-title">🚀 Quick Start Guide</span>
-                    <span id="quick-start-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header" onclick="toggleHelpSection('getting-started')">
+                    <span class="help-section-title">🚀 Getting Started</span>
+                    <span id="getting-started-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="quick-start-content" class="help-section-content">
+                <div id="getting-started-content" class="help-section-content hidden">
                     <div class="help-component">
                         <h4 class="help-component-title">👋 Welcome to Lens</h4>
                         <p class="help-component-description">
-                            Lens is your personal expense tracking and budgeting companion. This Progressive Web App helps you track expenses, manage recurring items, and monitor your financial health with real-time insights.
+                            Lens is your personal finance tracker that helps you manage expenses, budgets, and financial goals. All your data stays private on your device.
                         </p>
                         <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">Quick Setup Steps:</h5>
-                            <ol class="list-decimal list-inside space-y-1">
-                                <li>Visit <button onclick="showTab('settings')" class="text-blue-600 hover:underline">Settings</button> to configure your monthly budget and income</li>
-                                <li>Add your first expense using the "Add Expense" button</li>
-                                <li>Set up recurring items for bills and subscriptions</li>
-                                <li>Monitor your spending and budget health on the Dashboard</li>
-                            </ol>
-                        </div>
-                        <div class="help-component-tips">
-                            <h5 class="font-medium mb-2">💡 Key Features:</h5>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>Expense tracking with smart categorization</li>
-                                <li>Budget monitoring and health scoring</li>
-                                <li>Recurring items automation</li>
-                                <li>Interactive spending insights</li>
-                                <li>Essential vs Non-Essential analysis</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Dashboard Overview Section -->
-            <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('dashboard-overview')">
-                    <span class="help-section-title">📊 Dashboard Overview</span>
-                    <span id="dashboard-overview-toggle" class="help-toggle">▼</span>
-                </button>
-                <div id="dashboard-overview-content" class="help-section-content">
-                    <div class="help-component">
-                        <h4 class="help-component-title">📊 Budget Summary Cards</h4>
-                        <p class="help-component-description">
-                            The main dashboard displays four key budget cards showing your financial overview: Monthly Budget, Spent This Month, Budget Remaining, and Monthly Savings.
-                        </p>
-                        <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">Understanding the percentages:</h5>
+                            <h5 class="font-medium mb-2">Quick Setup (3 minutes):</h5>
                             <ol class="list-decimal list-inside space-y-2">
-                                <li><strong>Monthly Budget:</strong> Shows "X% of income" - how much of your income you've allocated to spending</li>
-                                <li><strong>Spent This Month:</strong> Shows spending pace indicators:
-                                    <ul class="list-disc list-inside ml-4 mt-1 space-y-1">
-                                        <li>"On pace ✓" = Spending matches expected progress through the month</li>
-                                        <li>"+X% ahead" = Spending faster than expected for this point in the month</li>
-                                        <li>"X% under" = Spending slower than expected</li>
-                                    </ul>
-                                </li>
-                                <li><strong>Budget Remaining:</strong> Shows budget status:
-                                    <ul class="list-disc list-inside ml-4 mt-1 space-y-1">
-                                        <li>"X% remaining" = Portion of budget still available</li>
-                                        <li>"X% over budget" = Amount you've exceeded your budget</li>
-                                        <li>🟢 Green (>50%): Plenty left • 🟡 Yellow (10-50%): Running low • 🔴 Red (<10%): Nearly exhausted</li>
-                                    </ul>
-                                </li>
+                                <li><strong>Set Your Budget:</strong> Go to <button onclick="showTab('settings')" class="text-blue-600 hover:underline">Settings</button> → Budget & Income</li>
+                                <li><strong>Add First Expense:</strong> Use the floating "+" button or Quick Add section</li>
+                                <li><strong>Track Recurring Bills:</strong> Add subscriptions in the Recurring tab</li>
+                                <li><strong>Set Financial Goals:</strong> Visit the Goals tab to start saving</li>
+                                <li><strong>Review Insights:</strong> Check your spending patterns in Insights</li>
                             </ol>
                         </div>
-                        <div class="help-component-tips">
-                            <h5 class="font-medium mb-2">💡 Example:</h5>
-                            <p class="text-sm bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
-                                If it's day 15 of a 30-day month, you should have spent ~50% of your budget. If you've spent 65%, you're "15% ahead of pace" and should slow down spending to stay on track.
+                    </div>
+                    
+                    <div class="help-component">
+                        <h4 class="help-component-title">📱 Mobile Navigation</h4>
+                        <p class="help-component-description">
+                            The app uses a bottom navigation bar on mobile with four main sections:
+                        </p>
+                        <ul class="list-disc list-inside space-y-1 text-sm">
+                            <li><strong>Overview:</strong> Your financial dashboard</li>
+                            <li><strong>Expenses:</strong> View and manage all expenses</li>
+                            <li><strong>Goals:</strong> Track savings and financial goals</li>
+                            <li><strong>Insights:</strong> Analyze spending patterns</li>
+                        </ul>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                            Additional features (Recurring, Settings, Help) are in the menu (☰) at the top right.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Understanding Your Dashboard -->
+            <div class="help-section">
+                <button class="help-section-header" onclick="toggleHelpSection('dashboard')">
+                    <span class="help-section-title">📊 Understanding Your Dashboard</span>
+                    <span id="dashboard-toggle" class="help-toggle">▼</span>
+                </button>
+                <div id="dashboard-content" class="help-section-content hidden">
+                    <!-- Budget Summary Cards Subsection -->
+                    <div class="help-subsection">
+                        <button class="help-subsection-header" onclick="toggleHelpSubsection('budget-cards')">
+                            <h4 class="help-component-title">📊 Budget Summary Cards</h4>
+                            <span id="budget-cards-toggle" class="help-toggle">▼</span>
+                        </button>
+                        <div id="budget-cards-content" class="help-subsection-content hidden">
+                            <p class="help-component-description">
+                                The main dashboard displays four key budget cards showing your financial overview: Monthly Budget, Spent This Month, Budget Remaining, and Monthly Savings.
                             </p>
-                        </div>
-                    </div>
-                        </p>
-                        <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">How to read the cards:</h5>
-                            <ol class="list-decimal list-inside space-y-1">
-                                <li>Monthly Budget shows your total spending limit</li>
-                                <li>Total Spent displays current month's expenses</li>
-                                <li>Daily Budget shows recommended daily spending</li>
-                                <li>Today's Spending tracks real-time daily expenses</li>
-                            </ol>
-                        </div>
-                        <div class="help-component-tips">
-                            <h5 class="font-medium mb-2">💡 Tips:</h5>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>Green cards indicate healthy spending patterns</li>
-                                <li>Red cards warn of budget concerns</li>
-                                <li>Click cards for detailed breakdowns</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="help-component">
-                        <h4 class="help-component-title">🎯 Budget Health Score</h4>
-                        <p class="help-component-description">
-                            A 0-100 score that evaluates your financial wellness based on spending patterns, budget adherence, and expense distribution.
-                        </p>
-                        <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">Score calculation:</h5>
-                            <ol class="list-decimal list-inside space-y-1">
-                                <li>Budget adherence (40% weight)</li>
-                                <li>Essential vs Non-Essential ratio (30% weight)</li>
-                                <li>Spending consistency (20% weight)</li>
-                                <li>Upcoming bills coverage (10% weight)</li>
-                            </ol>
-                        </div>
-                        <div class="help-component-tips">
-                            <h5 class="font-medium mb-2">💡 Score ranges:</h5>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>80-100: Excellent financial health</li>
-                                <li>60-79: Good with room for improvement</li>
-                                <li>40-59: Needs attention</li>
-                                <li>Below 40: Requires immediate action</li>
-                            </ul>
+                            <div class="help-component-steps">
+                                <h5 class="font-medium mb-2">Understanding the percentages:</h5>
+                                <ol class="list-decimal list-inside space-y-2">
+                                    <li><strong>Monthly Budget:</strong> Shows "X% of income" - how much of your income you've allocated to spending</li>
+                                    <li><strong>Spent This Month:</strong> Shows spending pace indicators:
+                                        <ul class="list-disc list-inside ml-4 mt-1 space-y-1">
+                                            <li>"On pace ✓" = Spending matches expected progress through the month</li>
+                                            <li>"+X% ahead" = Spending faster than expected for this point in the month</li>
+                                            <li>"X% under" = Spending slower than expected</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Budget Remaining:</strong> Shows budget status:
+                                        <ul class="list-disc list-inside ml-4 mt-1 space-y-1">
+                                            <li>"X% remaining" = Portion of budget still available</li>
+                                            <li>"X% over budget" = Amount you've exceeded your budget</li>
+                                            <li>🟢 Green (>50%): Plenty left • 🟡 Yellow (10-50%): Running low • 🔴 Red (<10%): Nearly exhausted</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div class="help-component-tips">
+                                <h5 class="font-medium mb-2">💡 Example:</h5>
+                                <p class="text-sm bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                                    If it's day 15 of a 30-day month, you should have spent ~50% of your budget. If you've spent 65%, you're "15% ahead of pace" and should slow down spending to stay on track.
+                                </p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="help-component">
-                        <h4 class="help-component-title">↻ Upcoming Bills</h4>
-                        <p class="help-component-description">
-                            Shows the next 3 upcoming recurring items with due dates and amounts to help you plan your spending.
-                        </p>
-                        <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">How it works:</h5>
-                            <ol class="list-decimal list-inside space-y-1">
-                                <li>Automatically calculated from active recurring items</li>
-                                <li>Shows items due within the next 30 days</li>
-                                <li>Click to view or edit recurring item details</li>
-                            </ol>
-                        </div>
-                        <div class="help-component-tips">
-                            <h5 class="font-medium mb-2">💡 Tips:</h5>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>Set up recurring items for all regular bills</li>
-                                <li>Check daily to avoid missing payments</li>
-                                <li>Use this to plan large purchases</li>
-                            </ul>
+                    <!-- Budget Health Score Subsection -->
+                    <div class="help-subsection">
+                        <button class="help-subsection-header" onclick="toggleHelpSubsection('health-score')">
+                            <h4 class="help-component-title">🎯 Budget Health Score</h4>
+                            <span id="health-score-toggle" class="help-toggle">▼</span>
+                        </button>
+                        <div id="health-score-content" class="help-subsection-content hidden">
+                            <p class="help-component-description">
+                                A 0-100 score that evaluates your financial wellness based on spending patterns, budget adherence, and expense distribution.
+                            </p>
+                            <div class="help-component-steps">
+                                <h5 class="font-medium mb-2">Score calculation:</h5>
+                                <ol class="list-decimal list-inside space-y-1">
+                                    <li>Budget adherence (40% weight)</li>
+                                    <li>Essential vs Non-Essential ratio (30% weight)</li>
+                                    <li>Spending consistency (20% weight)</li>
+                                    <li>Upcoming bills coverage (10% weight)</li>
+                                </ol>
+                            </div>
+                            <div class="help-component-tips">
+                                <h5 class="font-medium mb-2">💡 Score ranges:</h5>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>80-100: Excellent financial health</li>
+                                    <li>60-79: Good with room for improvement</li>
+                                    <li>40-59: Needs attention</li>
+                                    <li>Below 40: Requires immediate action</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="help-component">
-                        <h4 class="help-component-title">⚡ Quick Actions</h4>
-                        <p class="help-component-description">
-                            Fast access buttons for adding expenses and recurring items directly from the dashboard.
-                        </p>
-                        <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">Available actions:</h5>
-                            <ol class="list-decimal list-inside space-y-1">
-                                <li>Add Expense: Record new spending immediately</li>
-                                <li>Add Recurring: Set up new subscription or bill</li>
-                                <li>Quick categorization with smart defaults</li>
-                            </ol>
+                    <!-- Upcoming Bills Subsection -->
+                    <div class="help-subsection">
+                        <button class="help-subsection-header" onclick="toggleHelpSubsection('upcoming-bills')">
+                            <h4 class="help-component-title">↻ Upcoming Bills</h4>
+                            <span id="upcoming-bills-toggle" class="help-toggle">▼</span>
+                        </button>
+                        <div id="upcoming-bills-content" class="help-subsection-content hidden">
+                            <p class="help-component-description">
+                                Shows the next 3 upcoming recurring items with due dates and amounts to help you plan your spending.
+                            </p>
+                            <div class="help-component-steps">
+                                <h5 class="font-medium mb-2">How it works:</h5>
+                                <ol class="list-decimal list-inside space-y-1">
+                                    <li>Automatically calculated from active recurring items</li>
+                                    <li>Shows items due within the next 30 days</li>
+                                    <li>Click to view or edit recurring item details</li>
+                                </ol>
+                            </div>
+                            <div class="help-component-tips">
+                                <h5 class="font-medium mb-2">💡 Tips:</h5>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Set up recurring items for all regular bills</li>
+                                    <li>Check daily to avoid missing payments</li>
+                                    <li>Use this to plan large purchases</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions Subsection -->
+                    <div class="help-subsection">
+                        <button class="help-subsection-header" onclick="toggleHelpSubsection('quick-actions')">
+                            <h4 class="help-component-title">⚡ Quick Actions</h4>
+                            <span id="quick-actions-toggle" class="help-toggle">▼</span>
+                        </button>
+                        <div id="quick-actions-content" class="help-subsection-content hidden">
+                            <p class="help-component-description">
+                                Fast access buttons for adding expenses and recurring items directly from the dashboard.
+                            </p>
+                            <div class="help-component-steps">
+                                <h5 class="font-medium mb-2">Available actions:</h5>
+                                <ol class="list-decimal list-inside space-y-1">
+                                    <li>Add Expense: Record new spending immediately</li>
+                                    <li>Add Recurring: Set up new subscription or bill</li>
+                                    <li>Quick categorization with smart defaults</li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Financial Management Section -->
+            <!-- Managing Expenses -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('financial-management')">
-                    <span class="help-section-title">💰 Financial Management</span>
-                    <span id="financial-management-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header" onclick="toggleHelpSection('expenses')">
+                    <span class="help-section-title">💰 Managing Expenses</span>
+                    <span id="expenses-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="financial-management-content" class="help-section-content">
+                <div id="expenses-content" class="help-section-content hidden">
                     <div class="help-component">
                         <h4 class="help-component-title">💸 Adding Expenses</h4>
                         <p class="help-component-description">
@@ -7619,13 +7699,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
             </div>
             
-            <!-- Analytics & Insights Section -->
+            <!-- Analytics & Insights -->
             <div class="help-section">
                 <button class="help-section-header" onclick="toggleHelpSection('analytics-insights')">
                     <span class="help-section-title">📈 Analytics & Insights</span>
                     <span id="analytics-insights-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="analytics-insights-content" class="help-section-content">
+                <div id="analytics-insights-content" class="help-section-content hidden">
                     <div class="help-component">
                         <h4 class="help-component-title">📊 Interactive Charts</h4>
                         <p class="help-component-description">
@@ -7701,33 +7781,37 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
             </div>
             
-            <!-- Settings & Configuration Section -->
+            <!-- Goals & Financial Planning -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('settings-configuration')">
-                    <span class="help-section-title">⚙ Settings & Configuration</span>
-                    <span id="settings-configuration-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header" onclick="toggleHelpSection('goals-planning')">
+                    <span class="help-section-title">🎯 Goals & Financial Planning</span>
+                    <span id="goals-planning-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="settings-configuration-content" class="help-section-content">
+                <div id="goals-planning-content" class="help-section-content hidden">
                     <div class="help-component">
-                        <h4 class="help-component-title">💰 Budget Settings</h4>
+                        <h4 class="help-component-title">🎯 Creating Financial Goals</h4>
                         <p class="help-component-description">
-                            Configure your monthly budget and income to enable accurate tracking and budget health calculations.
+                            Set and track financial goals like saving for a house, building an emergency fund, or planning a vacation.
                         </p>
                         <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">Setup steps:</h5>
-                            <ol class="list-decimal list-inside space-y-1">
-                                <li>Open Settings from the navigation menu</li>
-                                <li>Enter your monthly budget (total spending limit)</li>
-                                <li>Set monthly income (for savings calculation)</li>
-                                <li>Choose your preferred currency</li>
-                            </ol>
+                            <h5 class="font-medium mb-2">Goal Types Available:</h5>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li><strong>🏠 House Deposit:</strong> Save for your dream home</li>
+                                <li><strong>🛡️ Emergency Fund:</strong> Build a safety net</li>
+                                <li><strong>✈️ Vacation:</strong> Plan your next adventure</li>
+                                <li><strong>💳 Debt Payoff:</strong> Eliminate credit card or loan debt</li>
+                                <li><strong>📈 Investment:</strong> Build your portfolio</li>
+                                <li><strong>🎯 Custom:</strong> Create your own goal</li>
+                            </ul>
                         </div>
                         <div class="help-component-tips">
-                            <h5 class="font-medium mb-2">💡 Budget tips:</h5>
+                            <h5 class="font-medium mb-2">💡 Goal Management:</h5>
                             <ul class="list-disc list-inside space-y-1">
-                                <li>Set realistic budgets based on past spending</li>
-                                <li>Include all expenses except savings/investments</li>
-                                <li>Review and adjust monthly based on performance</li>
+                                <li>Track progress with visual progress bars</li>
+                                <li>Edit target amounts and current progress anytime</li>
+                                <li>Delete completed or unwanted goals</li>
+                                <li>View one goal summary on Overview dashboard</li>
+                                <li>See all goals in the dedicated Goals tab</li>
                             </ul>
                         </div>
                     </div>
@@ -7773,13 +7857,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
             </div>
             
-            <!-- Troubleshooting Section -->
+            <!-- Settings & Troubleshooting -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('troubleshooting')">
-                    <span class="help-section-title">🔧 Troubleshooting</span>
-                    <span id="troubleshooting-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header" onclick="toggleHelpSection('settings-troubleshooting')">
+                    <span class="help-section-title">⚙️ Settings & Troubleshooting</span>
+                    <span id="settings-troubleshooting-toggle" class="help-toggle">▼</span>
                 </button>
-                <div id="troubleshooting-content" class="help-section-content">
+                <div id="settings-troubleshooting-content" class="help-section-content hidden">
                     <div class="help-component">
                         <h4 class="help-component-title">🐛 Common Issues</h4>
                         <p class="help-component-description">
@@ -7825,6 +7909,50 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <li>Export data weekly or monthly</li>
                                 <li>Store backups in multiple locations</li>
                                 <li>Test recovery process periodically</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features & Tips -->
+            <div class="help-section">
+                <button class="help-section-header" onclick="toggleHelpSection('features-tips')">
+                    <span class="help-section-title">✨ Features & Tips</span>
+                    <span id="features-tips-toggle" class="help-toggle">▼</span>
+                </button>
+                <div id="features-tips-content" class="help-section-content hidden">
+                    <div class="help-component">
+                        <h4 class="help-component-title">💡 Pro Tips</h4>
+                        <p class="help-component-description">
+                            Make the most of Lens with these power user tips and hidden features.
+                        </p>
+                        <div class="help-component-tips">
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><strong>Quick Add:</strong> Use the floating "+" button for fast expense entry</li>
+                                <li><strong>Keyboard Shortcuts:</strong> Press Tab to move between form fields</li>
+                                <li><strong>Mobile Gestures:</strong> Swipe between tabs on mobile devices</li>
+                                <li><strong>Smart Categories:</strong> The app learns your favorite categories over time</li>
+                                <li><strong>Bulk Edit:</strong> Select multiple expenses to delete or categorize at once</li>
+                                <li><strong>Chart Zoom:</strong> Click and drag on charts to zoom into specific periods</li>
+                                <li><strong>Export Formats:</strong> Data exports as JSON for easy backup and analysis</li>
+                                <li><strong>Offline Mode:</strong> The app works offline and syncs when connected</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-component">
+                        <h4 class="help-component-title">🔐 Privacy & Security</h4>
+                        <p class="help-component-description">
+                            Your financial data privacy is our top priority.
+                        </p>
+                        <div class="help-component-tips">
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>All data stored locally on your device only</li>
+                                <li>No cloud sync or external servers</li>
+                                <li>Bank connections use secure OAuth (when enabled)</li>
+                                <li>Export data regularly for backups</li>
+                                <li>Clear data option for complete removal</li>
                             </ul>
                         </div>
                     </div>
@@ -15133,11 +15261,27 @@ function closeGoalSelection() {
             localStorage.setItem('expandedHelpSections', JSON.stringify(expandedSections));
         }
 
+        // Toggle Help Subsections
+        function toggleHelpSubsection(subsectionId) {
+            const content = document.getElementById(`${subsectionId}-content`);
+            const toggle = document.getElementById(`${subsectionId}-toggle`);
+            
+            if (content && toggle) {
+                if (content.classList.contains('hidden')) {
+                    content.classList.remove('hidden');
+                    toggle.textContent = '▲';
+                } else {
+                    content.classList.add('hidden');
+                    toggle.textContent = '▼';
+                }
+            }
+        }
+
         function initializeHelpSectionStates() {
             const expandedSections = JSON.parse(localStorage.getItem('expandedHelpSections') || '{}');
             
             // Default: expand "Getting Started" section only
-            const sections = ['getting-started', 'dashboard-overview', 'financial-management', 'analytics-insights', 'settings-configuration', 'troubleshooting'];
+            const sections = ['getting-started', 'dashboard', 'expenses', 'analytics-insights', 'goals-planning', 'settings-troubleshooting', 'features-tips'];
             
             sections.forEach(sectionId => {
                 const content = document.getElementById(`${sectionId}-content`);
@@ -15806,7 +15950,14 @@ function closeGoalSelection() {
                 DOMElements.themeToggleBtn.title = darkMode ? 'Switch to light mode' : 'Switch to dark mode';
             }
             
-            // The CSS will automatically handle the icon visibility based on .dark class
+            // Update theme toggle icons visibility
+            const themeIconLight = document.querySelector('.theme-icon-light');
+            const themeIconDark = document.querySelector('.theme-icon-dark');
+            
+            if (themeIconLight && themeIconDark) {
+                themeIconLight.style.display = darkMode ? 'none' : 'block';
+                themeIconDark.style.display = darkMode ? 'block' : 'none';
+            }
             
             if (activeTab === 'insights') {
                 updateChartsAndInsights(); 
@@ -18253,14 +18404,14 @@ function closeGoalSelection() {
                             <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
                             class="table-checkbox expense-checkbox" ${isRecurringInstance ? 'disabled' : ''} ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
-                        <td class="px-6 py-3" data-label="Date">${formattedDate}</td>
-                        <td class="px-6 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Description">
-                            <span>${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-400 ml-1">(R)</span>' : ''}
+                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Date">${formattedDate}</td>
+                        <td class="px-6 py-3 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
+                            <span class="text-black dark:text-white" style="color: #000000 !important;">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
                         </td>
-                        <td class="px-6 py-3" data-label="Category">${escapeHTML(expense.category)}</td>
-                        <td class="px-6 py-3" data-label="Amount">${formatCurrency(expense.cost)}</td>
-                        <td class="px-6 py-3" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
-                        <td class="px-6 py-3" data-label="Type">${escapeHTML(expense.type)}</td>
+                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Category">${escapeHTML(expense.category)}</td>
+                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Amount">${formatCurrency(expense.cost)}</td>
+                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Type">${escapeHTML(expense.type)}</td>
                         <td class="px-6 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
@@ -18494,12 +18645,14 @@ function closeGoalSelection() {
 
                 tr.innerHTML = `
                     <td class="px-4 py-4 w-1" data-label=""><input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}></td>
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" data-label="Description">${escapeHTML(item.name)}</td>
-                    <td class="px-6 py-4 capitalize" data-label="Type">${item.type}</td>
-                    <td class="px-6 py-4" data-label="Category">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
+                        <span class="text-black dark:text-white" style="color: #000000 !important;">${escapeHTML(item.name)}</span>
+                    </td>
+                    <td class="px-6 py-4 capitalize text-black dark:text-gray-300" data-label="Type">${item.type}</td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Category">${escapeHTML(item.category)}</td>
                     <td class="px-6 py-4 font-medium ${itemTypeClass}" data-label="Amount">${formatCurrency(item.amount)}</td>
-                    <td class="px-6 py-4" data-label="Frequency">${item.frequency}</td>
-                    <td class="px-6 py-4" data-label="Date">${formattedStartDate}</td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Frequency">${item.frequency}</td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Date">${formattedStartDate}</td>
                     <td class="px-6 py-4" data-label="Status"><span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span></td>
                     <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap" data-label="Actions">
                         <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
@@ -21704,14 +21857,14 @@ function showInsightsError() {
                                    ${isRecurringInstance ? 'disabled' : ''} 
                                    ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
-                        <td class="px-6 py-3" data-label="Date">${formattedDate}</td>
-                        <td class="px-6 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Description">
-                            <span>${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-400 ml-1">(R)</span>' : ''}
+                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Date">${formattedDate}</td>
+                        <td class="px-6 py-3 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
+                            <span class="text-black dark:text-white" style="color: #000000 !important;">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
                         </td>
-                        <td class="px-6 py-3" data-label="Category">${escapeHTML(expense.category)}</td>
-                        <td class="px-6 py-3" data-label="Amount">${formatCurrency(expense.cost)}</td>
-                        <td class="px-6 py-3" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
-                        <td class="px-6 py-3" data-label="Type">${escapeHTML(expense.type)}</td>
+                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Category">${escapeHTML(expense.category)}</td>
+                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Amount">${formatCurrency(expense.cost)}</td>
+                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Type">${escapeHTML(expense.type)}</td>
                         <td class="px-6 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" 
@@ -21961,12 +22114,14 @@ function showInsightsError() {
                     <td class="px-4 py-4 w-1" data-label="">
                         <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}>
                     </td>
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" data-label="Description">${escapeHTML(item.name)}</td>
-                    <td class="px-6 py-4 capitalize" data-label="Type">${item.type}</td>
-                    <td class="px-6 py-4" data-label="Category">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
+                        <span class="text-black dark:text-white" style="color: #000000 !important;">${escapeHTML(item.name)}</span>
+                    </td>
+                    <td class="px-6 py-4 capitalize text-black dark:text-gray-300" data-label="Type">${item.type}</td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Category">${escapeHTML(item.category)}</td>
                     <td class="px-6 py-4 font-medium ${itemTypeClass}" data-label="Amount">${formatCurrency(item.amount)}</td>
-                    <td class="px-6 py-4" data-label="Frequency">${item.frequency}</td>
-                    <td class="px-6 py-4" data-label="Date">${formattedStartDate}</td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Frequency">${item.frequency}</td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Date">${formattedStartDate}</td>
                     <td class="px-6 py-4" data-label="Status">
                         <span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span>
                     </td>
