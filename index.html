@@ -6675,12 +6675,12 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <th scope="col" class="px-4 py-3 w-1">
                                             <input type="checkbox" id="select-all-expenses" onchange="toggleSelectAllExpenses(this.checked)" class="table-checkbox">
                                         </th>
-                                        <th scope="col" class="px-6 py-3">Name</th>
+                                        <th scope="col" class="px-6 py-3">Date</th>
+                                        <th scope="col" class="px-6 py-3">Description</th>
+                                        <th scope="col" class="px-6 py-3">Category</th>
                                         <th scope="col" class="px-6 py-3">Amount</th>
-                                        <th scope="col" class="px-6 py-3 hidden md:table-cell">Date</th>
-                                        <th scope="col" class="px-6 py-3 hidden md:table-cell">Category</th>
-                                        <th scope="col" class="px-6 py-3 hidden lg:table-cell">Payment Method</th>
-                                        <th scope="col" class="px-6 py-3 hidden lg:table-cell">Type</th>
+                                        <th scope="col" class="px-6 py-3">Payment Method</th>
+                                        <th scope="col" class="px-6 py-3">Type</th>
                                         <th scope="col" class="px-6 py-3 text-right">Actions</th>
                                     </tr>
                                 </thead>
@@ -6857,12 +6857,12 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <th scope="col" class="px-4 py-3 w-1">
                                             <input type="checkbox" id="select-all-recurring" onchange="toggleSelectAllRecurring(this.checked)" class="table-checkbox">
                                         </th>
-                                        <th scope="col" class="px-6 py-3">Name</th>
+                                        <th scope="col" class="px-6 py-3">Description</th>
                                         <th scope="col" class="px-6 py-3">Type</th>
+                                        <th scope="col" class="px-6 py-3">Category</th>
                                         <th scope="col" class="px-6 py-3">Amount</th>
-                                        <th scope="col" class="px-6 py-3 hidden md:table-cell">Frequency</th>
-                                        <th scope="col" class="px-6 py-3 hidden md:table-cell" style="white-space: nowrap;">Date</th>
-                                        <th scope="col" class="px-6 py-3 hidden lg:table-cell">Category</th>
+                                        <th scope="col" class="px-6 py-3">Frequency</th>
+                                        <th scope="col" class="px-6 py-3" style="white-space: nowrap;">Date</th>
                                         <th scope="col" class="px-6 py-3">Status</th>
                                         <th scope="col" class="px-6 py-3 text-right">Actions</th>
                                     </tr>
@@ -18369,14 +18369,14 @@ function closeGoalSelection() {
                             <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
                             class="table-checkbox expense-checkbox" ${isRecurringInstance ? 'disabled' : ''} ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
-                        <td class="px-6 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Name">
+                        <td class="px-6 py-3" data-label="Date">${formattedDate}</td>
+                        <td class="px-6 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Description">
                             <span>${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-400 ml-1">(R)</span>' : ''}
                         </td>
+                        <td class="px-6 py-3" data-label="Category">${escapeHTML(expense.category)}</td>
                         <td class="px-6 py-3" data-label="Amount">${formatCurrency(expense.cost)}</td>
-                        <td class="px-6 py-3" data-label="Date">${formattedDate}</td>
-                        <td class="px-6 py-3 hidden md:table-cell" data-label="Category">${escapeHTML(expense.category)}</td>
-                        <td class="px-6 py-3 hidden lg:table-cell" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
-                        <td class="px-6 py-3 hidden lg:table-cell" data-label="Type">${escapeHTML(expense.type)}</td>
+                        <td class="px-6 py-3" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-6 py-3" data-label="Type">${escapeHTML(expense.type)}</td>
                         <td class="px-6 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
@@ -18610,12 +18610,12 @@ function closeGoalSelection() {
 
                 tr.innerHTML = `
                     <td class="px-4 py-4 w-1" data-label=""><input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}></td>
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" data-label="Name">${escapeHTML(item.name)}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" data-label="Description">${escapeHTML(item.name)}</td>
                     <td class="px-6 py-4 capitalize" data-label="Type">${item.type}</td>
+                    <td class="px-6 py-4" data-label="Category">${escapeHTML(item.category)}</td>
                     <td class="px-6 py-4 font-medium ${itemTypeClass}" data-label="Amount">${formatCurrency(item.amount)}</td>
                     <td class="px-6 py-4" data-label="Frequency">${item.frequency}</td>
-                    <td class="px-6 py-4" data-label="Start Date">${formattedStartDate}</td>
-                    <td class="px-6 py-4 hidden lg:table-cell" data-label="Category">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4" data-label="Date">${formattedStartDate}</td>
                     <td class="px-6 py-4" data-label="Status"><span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span></td>
                     <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap" data-label="Actions">
                         <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
@@ -21820,14 +21820,14 @@ function showInsightsError() {
                                    ${isRecurringInstance ? 'disabled' : ''} 
                                    ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
-                        <td class="px-6 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Name">
+                        <td class="px-6 py-3" data-label="Date">${formattedDate}</td>
+                        <td class="px-6 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Description">
                             <span>${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-400 ml-1">(R)</span>' : ''}
                         </td>
+                        <td class="px-6 py-3" data-label="Category">${escapeHTML(expense.category)}</td>
                         <td class="px-6 py-3" data-label="Amount">${formatCurrency(expense.cost)}</td>
-                        <td class="px-6 py-3" data-label="Date">${formattedDate}</td>
-                        <td class="px-6 py-3 hidden md:table-cell" data-label="Category">${escapeHTML(expense.category)}</td>
-                        <td class="px-6 py-3 hidden lg:table-cell" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
-                        <td class="px-6 py-3 hidden lg:table-cell" data-label="Type">${escapeHTML(expense.type)}</td>
+                        <td class="px-6 py-3" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-6 py-3" data-label="Type">${escapeHTML(expense.type)}</td>
                         <td class="px-6 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" 
@@ -22077,12 +22077,12 @@ function showInsightsError() {
                     <td class="px-4 py-4 w-1" data-label="">
                         <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}>
                     </td>
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" data-label="Name">${escapeHTML(item.name)}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" data-label="Description">${escapeHTML(item.name)}</td>
                     <td class="px-6 py-4 capitalize" data-label="Type">${item.type}</td>
+                    <td class="px-6 py-4" data-label="Category">${escapeHTML(item.category)}</td>
                     <td class="px-6 py-4 font-medium ${itemTypeClass}" data-label="Amount">${formatCurrency(item.amount)}</td>
                     <td class="px-6 py-4" data-label="Frequency">${item.frequency}</td>
-                    <td class="px-6 py-4" data-label="Start Date">${formattedStartDate}</td>
-                    <td class="px-6 py-4 hidden lg:table-cell" data-label="Category">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4" data-label="Date">${formattedStartDate}</td>
                     <td class="px-6 py-4" data-label="Status">
                         <span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span>
                     </td>
