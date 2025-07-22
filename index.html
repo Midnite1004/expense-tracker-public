@@ -77,6 +77,8 @@
             #overview-tab .card.p-4.mb-4:nth-of-type(4):not(.fab-menu) {
                 display: none !important;
             }
+            
+
         }
         
         /* CSS Custom Properties for theme colors and consistent design system */
@@ -214,8 +216,7 @@
         
         /* Ensure description text is always visible in both light and dark modes */
         td[data-label="Description"] > span {
-            color: var(--text-primary) !important;
-            font-weight: 600;
+            color: var(--text-secondary) !important;
         }
         
         /* Uniform mid-tone logic for desktop tables */
@@ -3988,14 +3989,14 @@
           }
           
           /* Date group headers - Revolut style */
-          .mobile-date-header td {
+          .mobile-date-header {
             display: flex !important;
             justify-content: space-between !important;
             align-items: center !important;
             padding: 0.75rem 1rem !important;
-            color: var(--text-secondary) !important;
-            font-size: 0.875rem !important;
-            font-weight: 600 !important;
+            color: var(--text-primary) !important;
+            font-size: 1.1em !important;
+            font-weight: 700 !important;
             border-bottom: 1px solid var(--border-color) !important;
             margin-bottom: 0.5rem !important;
             background: transparent !important;
@@ -6161,6 +6162,32 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         #insights-tab .metric-card .text-xs {
             color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        /* Desktop only: dial down "Description" */
+        @media (min-width: 769px) {
+            /* Make description cells uniform with other data cells */
+            td[data-label="Description"] > span {
+                color: var(--text-secondary) !important;
+            }
+            
+            /* Override inline styles on description spans */
+            td[data-label="Description"] > span[style*="color: #000000"] {
+                color: var(--text-secondary) !important;
+            }
+        }
+
+        /* Mobile only: bump up date-group headers */
+        @media (max-width: 768px) {
+            /* Make mobile date-group headers dark on mobile */
+            .mobile-date-header {
+                color: var(--text-primary) !important;  /* e.g. #202124 */
+            }
+            
+            /* Override inline styles on mobile date headers */
+            .mobile-date-header[style*="color: var(--text-secondary)"] {
+                color: var(--text-primary) !important;
+            }
         }
     </style>
 
@@ -18406,7 +18433,7 @@ function closeGoalSelection() {
                         </td>
                         <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Date">${formattedDate}</td>
                         <td class="px-6 py-3 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
-                            <span class="text-black dark:text-white" style="color: #000000 !important;">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
+                            <span class="text-black dark:text-white">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
                         </td>
                         <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Category">${escapeHTML(expense.category)}</td>
                         <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Amount">${formatCurrency(expense.cost)}</td>
@@ -18646,7 +18673,7 @@ function closeGoalSelection() {
                 tr.innerHTML = `
                     <td class="px-4 py-4 w-1" data-label=""><input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}></td>
                     <td class="px-6 py-4 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
-                        <span class="text-black dark:text-white" style="color: #000000 !important;">${escapeHTML(item.name)}</span>
+                        <span class="text-black dark:text-white">${escapeHTML(item.name)}</span>
                     </td>
                     <td class="px-6 py-4 capitalize text-black dark:text-gray-300" data-label="Type">${item.type}</td>
                     <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Category">${escapeHTML(item.category)}</td>
@@ -21789,7 +21816,7 @@ function showInsightsError() {
 
                 html += `
                     <div class="mobile-date-group" style="margin-bottom: 20px;">
-                        <div class="mobile-date-header" style="padding: 16px 8px 8px 8px; margin-top: 16px; border-bottom: 1px solid var(--border-color); font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">
+                        <div class="mobile-date-header" style="padding: 16px 8px 8px 8px; margin-top: 16px; border-bottom: 1px solid var(--border-color); font-size: 1.1em; color: var(--text-primary); font-weight: 700;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <span>${dateLabel}</span>
                                 <span style="color: var(--text-danger); font-weight: 600;">-${formatCurrency(dayTotal, false)}</span>
@@ -21859,7 +21886,7 @@ function showInsightsError() {
                         </td>
                         <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Date">${formattedDate}</td>
                         <td class="px-6 py-3 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
-                            <span class="text-black dark:text-white" style="color: #000000 !important;">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
+                            <span class="text-black dark:text-white">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
                         </td>
                         <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Category">${escapeHTML(expense.category)}</td>
                         <td class="px-6 py-3 text-black dark:text-gray-300" data-label="Amount">${formatCurrency(expense.cost)}</td>
@@ -22115,7 +22142,7 @@ function showInsightsError() {
                         <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}>
                     </td>
                     <td class="px-6 py-4 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
-                        <span class="text-black dark:text-white" style="color: #000000 !important;">${escapeHTML(item.name)}</span>
+                        <span class="text-black dark:text-white">${escapeHTML(item.name)}</span>
                     </td>
                     <td class="px-6 py-4 capitalize text-black dark:text-gray-300" data-label="Type">${item.type}</td>
                     <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Category">${escapeHTML(item.category)}</td>
