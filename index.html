@@ -755,6 +755,15 @@
             opacity: 0;
             transform: translateY(-10px);
             transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        /* Ensure dropdown appears above fixed header */
+        @media (max-width: 768px) {
+            .mobile-dropdown {
+                z-index: 1001 !important;
+            }
         }
         
         .mobile-dropdown.show {
@@ -792,6 +801,33 @@
         /* Dark mode styles */
         .dark .mobile-dropdown {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Enhanced sticky header for mobile */
+        @media (max-width: 768px) {
+            .trezor-header {
+                position: fixed !important;
+                top: 0 !important;
+                z-index: 100 !important;
+                background-color: var(--bg-primary) !important;
+                border-bottom: 1px solid var(--border-color) !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+                backdrop-filter: blur(10px) !important;
+                -webkit-backdrop-filter: blur(10px) !important;
+                transition: all 0.3s ease !important;
+            }
+            
+            /* Ensure header stays on top of all content */
+            .trezor-header::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: inherit;
+                z-index: -1;
+            }
         }
 
         /* Settings Accordion Styles */
@@ -1257,15 +1293,16 @@
                 width: 100% !important;
                 left: 0 !important;
                 padding: 1rem !important;
-                position: -webkit-sticky !important;
-                position: sticky !important;
+                position: fixed !important;
                 top: 0 !important;
-                z-index: 60 !important;
+                z-index: 100 !important;
                 background-color: #ffffff !important;
                 background-color: var(--bg-primary) !important;
                 border-bottom: 1px solid #e5e5e5 !important;
                 border-bottom: 1px solid var(--border-color) !important;
                 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+                backdrop-filter: blur(10px) !important;
+                -webkit-backdrop-filter: blur(10px) !important;
             }
             
             .trezor-content {
@@ -1275,6 +1312,7 @@
                 max-width: 100% !important;
                 overflow-x: hidden !important;
                 padding-bottom: 100px !important;
+                padding-top: 4rem !important;
             }
             
             /* Modal specific fixes */
@@ -10150,6 +10188,49 @@ button, .btn, input[type="button"], input[type="submit"] {
                     console.log('🌙 Theme icons initialized:', { darkMode });
                 }
             }, 100);
+            
+            // Enhanced fixed header behavior for mobile
+            const header = document.querySelector('.trezor-header');
+            if (header) {
+                let lastScrollTop = 0;
+                window.addEventListener('scroll', () => {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    // Add subtle shadow effect on scroll
+                    if (scrollTop > 10) {
+                        header.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
+                    } else {
+                        header.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+                    }
+                    
+                    lastScrollTop = scrollTop;
+                });
+                
+                // Ensure header is properly positioned on mobile
+                if (window.innerWidth <= 768) {
+                    header.style.position = 'fixed';
+                    header.style.top = '0';
+                    header.style.left = '0';
+                    header.style.right = '0';
+                    header.style.zIndex = '100';
+                }
+                
+                // Handle window resize and orientation changes
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth <= 768) {
+                        header.style.position = 'fixed';
+                        header.style.top = '0';
+                        header.style.left = '0';
+                        header.style.right = '0';
+                        header.style.zIndex = '100';
+                    } else {
+                        header.style.position = 'sticky';
+                        header.style.left = '';
+                        header.style.right = '';
+                        header.style.zIndex = '30';
+                    }
+                });
+            }
             
             // Initialize authentication and load user data
             await initializeApp();
