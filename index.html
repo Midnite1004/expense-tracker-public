@@ -219,6 +219,34 @@
             color: var(--text-secondary) !important;
         }
         
+        /* Dark mode select options - ensure they are visible */
+        html.dark select option {
+            color: white !important;
+            background-color: #374151 !important;
+        }
+        
+        /* Dark mode select options when dropdown is open */
+        html.dark select:focus option {
+            color: white !important;
+            background-color: #4B5563 !important;
+        }
+        
+        /* Dark mode select options on hover */
+        html.dark select option:hover {
+            background-color: #6B7280 !important;
+        }
+        
+        /* Fix all dark:text-gray-300 to dark:text-gray-100 for better visibility */
+        html.dark .dark\\:text-gray-300 {
+            color: #f3f4f6 !important; /* gray-100 */
+        }
+        
+        /* Ensure all secondary text is visible in dark mode */
+        html.dark .text-gray-500.dark\\:text-gray-300,
+        html.dark .text-gray-600.dark\\:text-gray-300 {
+            color: #f3f4f6 !important; /* gray-100 */
+        }
+        
         /* Reduce padding on Description column in expenses table */
         #expenses-table td[data-label="Description"] {
             padding-left: 1rem !important;
@@ -1200,7 +1228,15 @@
             }
             
             /* Force scrollable content areas */
-            .trezor-main, .trezor-content {
+            .trezor-main {
+                overflow-y: visible !important;
+                height: auto !important;
+                min-height: 100vh !important;
+                touch-action: manipulation !important;
+                position: relative !important;
+            }
+            
+            .trezor-content {
                 overflow-y: auto !important;
                 height: auto !important;
                 min-height: auto !important;
@@ -1221,6 +1257,15 @@
                 width: 100% !important;
                 left: 0 !important;
                 padding: 1rem !important;
+                position: -webkit-sticky !important;
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 60 !important;
+                background-color: #ffffff !important;
+                background-color: var(--bg-primary) !important;
+                border-bottom: 1px solid #e5e5e5 !important;
+                border-bottom: 1px solid var(--border-color) !important;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
             }
             
             .trezor-content {
@@ -3645,6 +3690,8 @@
         html.dark .card { background-color: var(--bg-primary); border-color: var(--border-color); }
         html.dark .stat-card { background-color: var(--bg-tertiary); border-color: var(--border-color); }
         html.dark .modern-input, html.dark .modern-select { background-color: var(--bg-tertiary); border-color: var(--border-color); color: var(--text-primary); }
+        select option { background-color: var(--color-surface); color: var(--text-primary); }
+        html.dark select option { background-color: var(--bg-tertiary); color: var(--text-primary); }
         html.dark .modern-button-secondary { background-color: var(--bg-tertiary); color: var(--text-primary); }
         html.dark .modern-button-secondary:hover { background-color: var(--border-color); }
         html.dark .tab-button { color: var(--text-secondary); }
@@ -6369,7 +6416,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <div class="flex items-center gap-2 mb-2">
                                     <h2 class="text-2xl font-bold">Total Monthly Income</h2>
                                     <div class="relative group">
-                                        <svg class="w-5 h-5 text-gray-500 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                         <div class="absolute left-1/2 transform -translate-x-1/2 top-8 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10" style="display: inline-block !important; width: max-content !important; padding: 0.5rem 0.75rem !important; white-space: nowrap !important; max-width: none !important;">
@@ -6380,7 +6427,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     </div>
                                 </div>
                                 <div class="text-4xl font-bold mb-2" id="total-monthly-income">£0.00</div>
-                                <div class="text-gray-600 font-medium" id="savings-rate-display">💰 Savings Rate: 25%</div>
+                                <div class="text-gray-600 dark:text-gray-300 font-medium" id="savings-rate-display">💰 Savings Rate: 25%</div>
                             </div>
                             <div class="flex-shrink-0">
                                 <button onclick="showAddIncomeForm()" class="btn-primary">
@@ -6408,7 +6455,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="stat-card">
                             <div class="stat-card-title">Budget Remaining</div>
                             <div class="stat-card-value text-green-600" id="remaining-amount">£0.00</div>
-                            <div class="text-xs text-gray-600 mt-1" id="remaining-change-indicator">18.7% remaining</div>
+                            <div class="text-xs text-gray-600 dark:text-gray-100 mt-1" id="remaining-change-indicator">18.7% remaining</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-card-title">Monthly Savings</div>
@@ -6420,7 +6467,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="card p-4 mb-4">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold">Quick Add</h3>
-                            <span class="text-sm text-gray-500">Add common expenses instantly</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-300">Add common expenses instantly</span>
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 quick-add-grid">
                             <div id="quick-add-coffee" class="quick-add-wrapper">
@@ -6436,8 +6483,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <div class="font-medium text-gray-900 dark:text-gray-100 quick-add-title">Coffee</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400 quick-add-category">Food/Drink</div>
+                                                                    <div class="font-medium text-gray-900 dark:text-white quick-add-title">Coffee</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-100 quick-add-category">Food/Drink</div>
                                         </div>
                                         <span class="font-medium text-amber-600 dark:text-amber-400 quick-add-price">£5</span>
                                     </div>
@@ -6452,8 +6499,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <div class="font-medium text-gray-900 dark:text-gray-100 quick-add-title">Transport</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400 quick-add-category">Essential</div>
+                                            <div class="font-medium text-gray-900 dark:text-white quick-add-title">Transport</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-300 quick-add-category">Essential</div>
                                         </div>
                                         <span class="font-medium text-blue-600 dark:text-blue-400 quick-add-price">£10</span>
                                     </div>
@@ -6468,8 +6515,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <div class="font-medium text-gray-900 dark:text-gray-100 quick-add-title">Lunch</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400 quick-add-category">Food/Drink</div>
+                                                                    <div class="font-medium text-gray-900 dark:text-white quick-add-title">Lunch</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-100 quick-add-category">Food/Drink</div>
                                         </div>
                                         <span class="font-medium text-green-600 dark:text-green-400 quick-add-price">£15</span>
                                     </div>
@@ -6484,8 +6531,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <div class="font-medium text-gray-900 dark:text-gray-100 quick-add-title">Groceries</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400 quick-add-category">Essential</div>
+                                            <div class="font-medium text-gray-900 dark:text-white quick-add-title">Groceries</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-300 quick-add-category">Essential</div>
                                         </div>
                                         <span class="font-medium text-purple-600 dark:text-purple-400 quick-add-price">£50</span>
                                     </div>
@@ -6504,7 +6551,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <div class="flex items-center gap-2">
                                         <h3 class="text-xl font-semibold">Budget Progress & Health</h3>
                                         <div class="relative">
-                                            <svg class="w-5 h-5 text-gray-500 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="toggleBudgetHealthTooltip()">
+                                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="toggleBudgetHealthTooltip()">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                             <div id="budget-health-tooltip-container" class="absolute left-1/2 transform -translate-x-1/2 top-8 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg px-3 py-2 opacity-0 transition-opacity whitespace-nowrap z-10 pointer-events-none">
@@ -6532,7 +6579,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <!-- Top row: Used % and Days left -->
                                         <div class="flex justify-between items-center mb-3">
                                             <span class="text-lg font-medium" id="budget-progress-used">0% Used</span>
-                                            <span class="text-sm text-gray-500" id="days-remaining">-- days left</span>
+                                            <span class="text-sm text-gray-500 dark:text-gray-100" id="days-remaining">-- days left</span>
                                         </div>
                                         
                                         <!-- Progress bar with labels -->
@@ -6546,7 +6593,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                                 <div class="absolute top-0 left-3/4 w-px h-full bg-gray-400 opacity-30"></div>
                                             </div>
                                             <!-- Progress bar labels -->
-                                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-300 mt-1">
                                                 <span>£0</span>
                                                 <span class="text-center">50%</span>
                                                 <span id="budget-limit-label">£0</span>
@@ -6555,7 +6602,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         
                                         <!-- Income percentage -->
                                         <div class="mb-4">
-                                            <span class="text-sm text-gray-500" id="budget-income-percentage">0% of total income</span>
+                                            <span class="text-sm text-gray-500 dark:text-gray-100" id="budget-income-percentage">0% of total income</span>
                                         </div>
                                         
                                         <!-- Budget insight box -->
@@ -6563,7 +6610,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm" id="ai-insight">📈 Projection: Set up your budget to get insights</span>
                                             </div>
-                                            <div class="text-xs text-gray-600 mt-1" id="ai-insight-status">No data</div>
+                                            <div class="text-xs text-gray-600 dark:text-gray-100 mt-1" id="ai-insight-status">No data</div>
                                         </div>
                                     </div>
                                     
@@ -6600,7 +6647,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="text-xs text-gray-500 mt-1" id="health-score-status">No data</div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-100 mt-1" id="health-score-status">No data</div>
                                     </div>
                                 </div>
                             </div>
@@ -6641,7 +6688,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <button onclick="showTab('recurring')" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">See all</button>
                                 </div>
                                 <div id="upcoming-events" class="space-y-3">
-                                    <p class="text-gray-500 dark:text-gray-400 text-sm">No upcoming bills.</p>
+                                    <p class="text-gray-500 dark:text-gray-300 text-sm">No upcoming bills.</p>
                                 </div>
                             </div>
                             
@@ -6726,14 +6773,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div id="expense-filter-panel" class="hidden p-4 border-b border-gray-200 dark:border-gray-700">
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div>
-                                    <label for="expense-filter-category" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Category</label>
+                                    <label for="expense-filter-category" class="block text-sm font-medium text-gray-900 dark:text-white">Category</label>
                                     <select id="expense-filter-category" class="modern-select mt-1">
                                         <option value="">All Categories</option>
                                         <!-- Populated dynamically -->
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="expense-filter-type" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Type</label>
+                                    <label for="expense-filter-type" class="block text-sm font-medium text-gray-900 dark:text-white">Type</label>
                                     <select id="expense-filter-type" class="modern-select mt-1">
                                         <option value="">All Types</option>
                                         <option value="Essential">Essential</option>
@@ -6742,11 +6789,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="expense-filter-date-from" class="block text-sm font-medium text-gray-700 dark:text-gray-200">From Date</label>
+                                    <label for="expense-filter-date-from" class="block text-sm font-medium text-gray-900 dark:text-white">From Date</label>
                                     <input type="date" id="expense-filter-date-from" class="modern-input mt-1">
                                 </div>
                                 <div>
-                                    <label for="expense-filter-date-to" class="block text-sm font-medium text-gray-700 dark:text-gray-200">To Date</label>
+                                    <label for="expense-filter-date-to" class="block text-sm font-medium text-gray-900 dark:text-white">To Date</label>
                                     <input type="date" id="expense-filter-date-to" class="modern-input mt-1">
                                 </div>
                             </div>
@@ -6758,7 +6805,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left table-fixed">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                                <thead class="text-xs text-gray-900 dark:text-white uppercase bg-gray-50 dark:bg-gray-700">
                                     <tr>
                                         <th scope="col" class="px-4 py-3 w-1">
                                             <input type="checkbox" id="select-all-expenses" onchange="toggleSelectAllExpenses(this.checked)" class="table-checkbox">
@@ -6804,7 +6851,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         Previous
                                     </button>
                                     <div class="pagination-page-input-container">
-                                        <span class="text-sm text-gray-500">Page</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-300">Page</span>
                                         <input type="number" id="expenses-page-input" min="1" onchange="goToExpensesPage(this.value)" class="pagination-page-input">
                                         <span id="expenses-total-pages" class="-page-total"></span>
                                     </div>
@@ -6828,7 +6875,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
                                 <div>
                                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Financial Goals</h2>
-                                    <p class="text-gray-600 dark:text-gray-400 mt-1">Track your progress toward financial milestones</p>
+                                    <p class="text-gray-600 dark:text-gray-300 mt-1">Track your progress toward financial milestones</p>
                                 </div>
                                 <button onclick="showGoalTypeSelector()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -6864,7 +6911,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div id="goals-empty-state" class="card p-8 text-center">
                             <div class="text-6xl mb-4">🎯</div>
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Goals Yet</h3>
-                            <p class="text-gray-600 dark:text-gray-400 mb-6">Start by creating your first financial goal. Whether it's saving for a house, building an emergency fund, or paying off debt - every financial journey begins with a goal.</p>
+                            <p class="text-gray-600 dark:text-gray-300 mb-6">Start by creating your first financial goal. Whether it's saving for a house, building an emergency fund, or paying off debt - every financial journey begins with a goal.</p>
                             <button onclick="showGoalTypeSelector()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition-colors">
                                 Create Your First Goal
                             </button>
@@ -6877,8 +6924,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="card p-4 md:p-6">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 gap-4">
                             <div>
-                                <h2 class="text-xl font-bold">Recurring Items</h2>
-                                <p class="text-sm text-gray-500 dark:text-gray-300">Regular income and expenses like salaries or subscriptions.</p>
+                                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Recurring Items</h2>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Regular income and expenses like salaries or subscriptions.</p>
                             </div>
                             <div class="flex-shrink-0 flex flex-wrap items-center gap-2 sm:space-x-2 sm:gap-0">
                                 <button onclick="toggleFilterPanel('recurring-filter-panel')" class="modern-button modern-button-secondary" style="min-width: 90px;">
@@ -6897,7 +6944,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         
                         <!-- Search Field -->
                         <div class="relative mb-4">
-                            <input type="text" id="recurring-search" placeholder="Search recurring items..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeyup="renderRecurringTable()">
+                            <input type="text" id="recurring-search" placeholder="Search recurring items..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeyup="renderRecurringTable()">
                             <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
@@ -6906,7 +6953,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div id="recurring-filter-panel" class="hidden p-4 border-b border-gray-200 dark:border-gray-700">
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 <div>
-                                    <label for="recurring-filter-type" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Type</label>
+                                    <label for="recurring-filter-type" class="block text-sm font-medium text-gray-900 dark:text-white">Type</label>
                                     <select id="recurring-filter-type" class="modern-select mt-1">
                                         <option value="">All Types</option>
                                         <option value="income">Income</option>
@@ -6914,13 +6961,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="recurring-filter-category" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Category</label>
+                                    <label for="recurring-filter-category" class="block text-sm font-medium text-gray-900 dark:text-white">Category</label>
                                     <select id="recurring-filter-category" class="modern-select mt-1">
                                         <option value="">All Categories</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="recurring-filter-frequency" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Frequency</label>
+                                    <label for="recurring-filter-frequency" class="block text-sm font-medium text-gray-900 dark:text-white">Frequency</label>
                                     <select id="recurring-filter-frequency" class="modern-select mt-1">
                                         <option value="">All Frequencies</option>
                                         <option value="Daily">Daily</option>
@@ -6940,7 +6987,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 
                         <div class="overflow-x-auto">
                             <table class="min-w-full text-sm text-left">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                                <thead class="text-xs text-gray-900 dark:text-white uppercase bg-gray-50 dark:bg-gray-700">
                                     <tr>
                                         <th scope="col" class="px-4 py-3 w-1">
                                             <input type="checkbox" id="select-all-recurring" onchange="toggleSelectAllRecurring(this.checked)" class="table-checkbox">
@@ -6984,7 +7031,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         Previous
                                     </button>
                                     <div class="pagination-page-input-container">
-                                        <span class="text-sm text-gray-500">Page</span>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300">Page</span>
                                         <input type="number" id="recurring-page-input" min="1" onchange="goToRecurringPage(this.value)" class="pagination-page-input">
                                         <span id="recurring-total-pages" class="pagination-page-total"></span>
                                     </div>
@@ -7006,8 +7053,8 @@ button, .btn, input[type="button"], input[type="submit"] {
     <div class="max-w-6xl mx-auto space-y-6 p-4">
         <!-- Header -->
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold mb-2" style="color: var(--color-text-primary);">Your Financial Insights</h1>
-            <p style="color: var(--color-text-secondary);">Smart analysis with real-time daily budget coaching</p>
+            <h1 class="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Your Financial Insights</h1>
+            <p class="text-gray-600 dark:text-gray-300">Smart analysis with real-time daily budget coaching</p>
         </div>
 
         <!-- Smart Alerts Section -->
@@ -7018,22 +7065,22 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Key Metrics -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div class="metric-card">
-                <div class="text-sm opacity-90">Monthly Budget</div>
+                <div class="text-sm text-gray-600 dark:text-gray-300">Monthly Budget</div>
                 <div class="text-2xl font-bold" id="monthly-budget-display">£0</div>
-                <div class="text-xs opacity-75 mt-1" id="budget-vs-income">0% of income</div>
+                <div class="text-xs text-gray-600 dark:text-gray-300 mt-1" id="budget-vs-income">0% of income</div>
             </div>
             <div class="metric-card">
-                <div class="text-sm opacity-90">Total Spent</div>
+                <div class="text-sm text-gray-600 dark:text-gray-300">Total Spent</div>
                 <div class="text-2xl font-bold" id="total-spent-display">£0</div>
-                <div class="text-xs opacity-75 mt-1" id="spent-vs-budget">0% of budget</div>
+                <div class="text-xs text-gray-600 dark:text-gray-300 mt-1" id="spent-vs-budget">0% of budget</div>
             </div>
             <div class="metric-card">
-                <div class="text-sm opacity-90">Daily Budget</div>
+                <div class="text-sm text-gray-600 dark:text-gray-300">Daily Budget</div>
                 <div class="text-2xl font-bold" id="daily-budget-display">£0</div>
-                <div class="text-xs opacity-75 mt-1" id="daily-budget-status">Auto-calculated</div>
+                <div class="text-xs text-gray-600 dark:text-gray-300 mt-1" id="daily-budget-status">Auto-calculated</div>
             </div>
             <div class="metric-card">
-                <div class="text-sm opacity-90">Today's Spending</div>
+                <div class="text-sm text-gray-600 dark:text-gray-300">Today's Spending</div>
                 <div class="text-2xl font-bold" id="today-spent-display">£0</div>
             </div>
         </div>
@@ -7044,17 +7091,17 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <div class="flex-1">
                     <div class="p-2">
                         <div>
-                            <h2 class="text-xl font-semibold mb-2">Daily Spending Visualization</h2>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">Track your daily spending patterns with budget alerts and reference lines</p>
+                            <h2 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Daily Spending Visualization</h2>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Track your daily spending patterns with budget alerts and reference lines</p>
                         </div>
                     </div>
                 </div>
                 <div class="flex gap-3 flex-wrap">
                     <button class="period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-blue-500 bg-blue-500 text-white hover:bg-blue-600 hover:border-blue-600 shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('7days')" data-period="7days">7 Days</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('30days')" data-period="30days">30 Days</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('90days')" data-period="90days">90 Days</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('month')" data-period="month" id="month-button">Month</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('12months')" data-period="12months">12 Months</button>
+                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('30days')" data-period="30days">30 Days</button>
+                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('90days')" data-period="90days">90 Days</button>
+                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('month')" data-period="month" id="month-button">Month</button>
+                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('12months')" data-period="12months">12 Months</button>
                 </div>
             </div>
 
@@ -7067,8 +7114,8 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Real-Time Daily Coaching -->
         <div class="card p-4 mb-4">
             <button onclick="toggleInsightsSection('budget-coach')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
-                <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">🎯 Daily Budget Coach</h3>
-                <span id="budget-coach-toggle" class="text-lg" style="color: var(--color-text-primary);">▼</span>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🎯 Daily Budget Coach</h3>
+                <span id="budget-coach-toggle" class="text-lg text-gray-900 dark:text-white">▼</span>
             </button>
             <div id="budget-coach-content" class="">
                 <div id="daily-coaching-container">
@@ -7080,17 +7127,17 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Essential vs Non-Essential -->
         <div class="card p-4 mb-4">
             <button onclick="toggleInsightsSection('spending-breakdown')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
-                <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">Spending Breakdown (Month)</h3>
-                <span id="spending-breakdown-toggle" class="text-lg" style="color: var(--color-text-primary);">▶</span>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Spending Breakdown (Month)</h3>
+                <span id="spending-breakdown-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="spending-breakdown-content" class="hidden">
             <div class="flex justify-around items-center text-center mb-4">
                 <div>
-                    <p class="text-sm" style="color: var(--color-text-secondary);">Essential</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Essential</p>
                     <p class="text-2xl font-semibold" style="color: var(--color-primary);" id="insights-essential-spending">£0.00</p>
                 </div>
                 <div>
-                    <p class="text-sm" style="color: var(--color-text-secondary);">Non-Essential</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Non-Essential</p>
                     <p class="text-2xl font-semibold" style="color: var(--color-warning);" id="insights-non-essential-spending">£0.00</p>
                 </div>
             </div>
@@ -7104,21 +7151,21 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Today's Budget Section -->
         <div class="card p-4 mb-4">
             <button onclick="toggleInsightsSection('todays-budget')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
-                <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">Today's Budget</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Today's Budget</h3>
                 <span id="todays-budget-toggle" class="text-lg">▶</span>
             </button>
             <div id="todays-budget-content" class="hidden">
             
             <div class="text-center mb-4">
-                <div class="text-3xl font-bold" style="color: var(--color-text-primary);" id="todays-remaining">£0</div>
-                <div class="text-sm" style="color: var(--color-text-secondary);">Remaining Today</div>
+                <div class="text-3xl font-bold text-gray-900 dark:text-white" id="todays-remaining">£0</div>
+                <div class="text-sm text-gray-600 dark:text-gray-300">Remaining Today</div>
             </div>
             
             <div class="w-full rounded-full h-3 mb-2" style="background-color: var(--color-bg-tertiary);">
                 <div class="bg-blue-500 h-3 rounded-full transition-all duration-300" id="todays-budget-bar" style="width: 0%"></div>
             </div>
             
-                <div class="flex justify-between text-sm" style="color: var(--color-text-secondary);">
+                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
                     <span id="todays-spent">Spent: £0</span>
                     <span id="todays-budget-total">Budget: £0</span>
                 </div>
@@ -7128,14 +7175,14 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Category Spending Analysis -->
         <div class="card p-4 mb-4">
             <button onclick="toggleInsightsSection('category-analysis')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
-                <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">📊 Category Spending Analysis</h3>
-                <span id="category-analysis-toggle" class="text-lg" style="color: var(--color-text-primary);">▶</span>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">📊 Category Spending Analysis</h3>
+                <span id="category-analysis-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="category-analysis-content" class="hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Top Categories This Month -->
                 <div>
-                    <h4 class="font-medium mb-4" style="color: var(--color-text-primary);">Top Categories This Month</h4>
+                    <h4 class="font-medium mb-4 text-gray-900 dark:text-white">Top Categories This Month</h4>
                     <div class="space-y-4" id="category-spending-breakdown">
                         <!-- Will be populated by JavaScript -->
                     </div>
@@ -7143,7 +7190,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 
                 <!-- Budget Impact by Category Chart -->
                 <div>
-                    <h4 class="font-medium mb-4" style="color: var(--color-text-primary);">Budget Impact by Category</h4>
+                    <h4 class="font-medium mb-4 text-gray-900 dark:text-white">Budget Impact by Category</h4>
                     <div class="relative">
                         <div class="h-80 flex items-center justify-center">
                             <canvas id="category-donut-chart" style="max-height: 300px;"></canvas>
@@ -7161,8 +7208,8 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Smart Insights -->
         <div class="card p-4 mb-4">
             <button onclick="toggleInsightsSection('smart-insights')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
-                <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">💡 Smart Insights</h3>
-                <span id="smart-insights-toggle" class="text-lg" style="color: var(--color-text-primary);">▶</span>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">💡 Smart Insights</h3>
+                <span id="smart-insights-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="smart-insights-content" class="hidden">
                 <div class="space-y-4" id="insights-container">
@@ -7174,8 +7221,8 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Budget Coach Recommendations -->
         <div class="card p-4 mb-4">
             <button onclick="toggleInsightsSection('budget-performance')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
-                <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">📊 Budget Performance</h3>
-                <span id="budget-performance-toggle" class="text-lg" style="color: var(--color-text-primary);">▶</span>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">📊 Budget Performance</h3>
+                <span id="budget-performance-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="budget-performance-content" class="hidden">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="coaching-panel">
@@ -7191,7 +7238,7 @@ button, .btn, input[type="button"], input[type="submit"] {
     <div class="max-w-4xl mx-auto">
         <div class="mb-6">
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Settings</h2>
-            <p class="text-gray-600 dark:text-gray-400">Customize your experience and manage your data</p>
+            <p class="text-gray-600 dark:text-gray-300">Customize your experience and manage your data</p>
         </div>
 
         <div class="space-y-4">
@@ -7203,7 +7250,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <span class="text-xl">💰</span>
                             <div class="text-left">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Budget & Income</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Essential financial settings</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300">Essential financial settings</p>
                             </div>
                         </div>
                         <span id="essential-toggle" class="settings-toggle">▼</span>
@@ -7216,14 +7263,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 Monthly Income
                             </label>
                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-300 font-medium pointer-events-none select-none">£</span>
                             <input type="number" 
                                    id="settings-monthly-income" 
                                    placeholder="Enter your monthly income" 
                                    class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg"
                                    onchange="updateIncome(this.value)" oninput="updateIncome(this.value)">
                             </div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Your total monthly income before taxes</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-300 mt-1">Your total monthly income before taxes</p>
                         </div>
                         
                         <div>
@@ -7231,14 +7278,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 Monthly Budget
                             </label>
                             <div class="relative">
-                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-300 font-medium pointer-events-none select-none">£</span>
                                 <input type="number" 
                                        id="settings-monthly-budget" 
                                        placeholder="Enter your monthly budget" 
                                        class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg"
                                        onchange="updateBudget(this.value)" oninput="updateBudget(this.value)">
                             </div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">How much you plan to spend each month</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-300 mt-1">How much you plan to spend each month</p>
                         </div>
 
                         <!-- Budget Helper -->
@@ -7251,7 +7298,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                         </div>
                         
-                        <div class="text-xs text-gray-500 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+                        <div class="text-xs text-gray-500 dark:text-gray-300 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
                             <strong>💾 Auto-save enabled:</strong> Changes save automatically as you type.
                         </div>
                     </div>
@@ -7266,7 +7313,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <span class="text-xl">🎨</span>
                             <div class="text-left">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Display & Preferences</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Theme, currency, and chart options</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300">Theme, currency, and chart options</p>
                             </div>
                         </div>
                         <span id="display-toggle" class="settings-toggle">▼</span>
@@ -7277,7 +7324,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="flex items-center justify-between">
                             <div>
                                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Dark Mode</label>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Toggle between light and dark themes</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-300">Toggle between light and dark themes</p>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="dark-mode-toggle" class="sr-only peer" onchange="toggleTheme(this.checked)">
@@ -7300,7 +7347,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="flex items-center justify-between">
                             <div>
                                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Show Income Line on Charts</label>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Display monthly income reference on spending charts</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-300">Display monthly income reference on spending charts</p>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="income-display-enabled" class="sr-only peer" onchange="toggleIncomeDisplay()">
@@ -7319,7 +7366,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <span class="text-xl">⚙️</span>
                             <div class="text-left">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Advanced Features</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Daily budgets, coaching, and chart options</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300">Daily budgets, coaching, and chart options</p>
                             </div>
                         </div>
                         <span id="advanced-toggle" class="settings-toggle">▼</span>
@@ -7332,13 +7379,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 Daily Budget (Optional)
                             </label>
                             <div class="relative">
-                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-300 font-medium pointer-events-none select-none">£</span>
                                 <input type="number" 
                                        id="settings-daily-budget" 
                                        placeholder="Auto-calculated from monthly" 
                                        class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg">
                             </div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-300 mt-1">
                                 <span id="daily-budget-calculation">Leave empty to auto-calculate (Monthly ÷ 30)</span>
                             </p>
                         </div>
@@ -7346,7 +7393,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                             <div>
                                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Enable Daily Budget Coaching</label>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Get real-time spending guidance in Insights tab</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-300">Get real-time spending guidance in Insights tab</p>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="daily-budget-enabled" class="sr-only peer" onchange="toggleDailyBudgetCoaching()">
@@ -7357,7 +7404,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                             <div>
                                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Show Daily Budget Line on Charts</label>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Display reference line on 7-day and 30-day charts</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-300">Display reference line on 7-day and 30-day charts</p>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="daily-budget-line-enabled" class="sr-only peer" onchange="toggleDailyBudgetLine()" checked>
@@ -7376,7 +7423,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <span class="text-xl">📊</span>
                             <div class="text-left">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Data Management</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Import, export, and backup your data</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300">Import, export, and backup your data</p>
                             </div>
                         </div>
                         <span id="data-toggle" class="settings-toggle">▼</span>
@@ -7401,7 +7448,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </button>
                         </div>
                         
-                        <div class="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                        <div class="text-xs text-gray-500 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
                             <strong>Data Privacy:</strong> All your data is stored locally on your device. No information is sent to external servers.
                         </div>
                     </div>
@@ -7416,7 +7463,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <span class="text-xl">⚡</span>
                             <div class="text-left">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Banking & Actions</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Quick actions and banking features</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300">Quick actions and banking features</p>
                             </div>
                         </div>
                         <span id="actions-toggle" class="settings-toggle">▼</span>
@@ -7427,14 +7474,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <!-- Banking Integration -->
                         <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
                             <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">🏦 Banking Integration</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Connect your bank account for automatic transaction import</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-300 mb-3">Connect your bank account for automatic transaction import</p>
                             <button onclick="connectBankAccount()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                 </svg>
                                 Connect Bank Account
                             </button>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                            <p class="text-xs text-gray-500 dark:text-gray-300 mt-2 text-center">
                                 Secure connection via bank-grade encryption
                             </p>
                         </div>
@@ -7473,7 +7520,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 gap-4">
             <div>
                 <h2 class="text-xl font-bold">Help & Documentation</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-300">Learn how to make the most of your personal finance tracker</p>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Learn how to make the most of your personal finance tracker</p>
             </div>
         </div>
         
@@ -7513,7 +7560,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <li><strong>Goals:</strong> Track savings and financial goals</li>
                             <li><strong>Insights:</strong> Analyze spending patterns</li>
                         </ul>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
                             Additional features (Recurring, Settings, Help) are in the menu (☰) at the top right.
                         </p>
                     </div>
@@ -8479,7 +8526,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <div>monthlyPayment = max(£50, paymentCapacity)</div>
                                         <div>monthsToCompletion = remainingDebt ÷ monthlyPayment</div>
                                     </div>
-                                    <p class="text-xs mt-2 text-gray-600 dark:text-gray-400">Allocates 20% of available income to debt payments with £50 minimum.</p>
+                                    <p class="text-xs mt-2 text-gray-600 dark:text-gray-300">Allocates 20% of available income to debt payments with £50 minimum.</p>
                                 </div>
 
                                 <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
@@ -8489,7 +8536,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <div>monthlySavings = max(£50, min(surplus × 0.5, monthlyIncome × 0.1))</div>
                                         <div>monthsToGoal = remainingAmount ÷ monthlySavings</div>
                                     </div>
-                                    <p class="text-xs mt-2 text-gray-600 dark:text-gray-400">Conservative approach using 50% of surplus or 10% of income, whichever is lower.</p>
+                                    <p class="text-xs mt-2 text-gray-600 dark:text-gray-300">Conservative approach using 50% of surplus or 10% of income, whichever is lower.</p>
                                 </div>
                             </div>
 
@@ -8501,7 +8548,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <div>optimizedTimeline = remainingAmount ÷ optimizedSavings</div>
                                     <div>timeSaved = originalTimeline - optimizedTimeline</div>
                                 </div>
-                                <p class="text-xs mt-2 text-gray-600 dark:text-gray-400">Shows how credit card optimization accelerates goal completion.</p>
+                                <p class="text-xs mt-2 text-gray-600 dark:text-gray-300">Shows how credit card optimization accelerates goal completion.</p>
                             </div>
 
                             <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
@@ -8715,7 +8762,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <div class="p-6 text-center">
                     <div class="text-4xl mb-4" id="confirmation-icon">⚠️</div>
                     <h3 class="text-lg font-semibold mb-2" id="confirmation-title">Confirm Action</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6" id="confirmation-message">Are you sure you want to proceed?</p>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6" id="confirmation-message">Are you sure you want to proceed?</p>
                     <div class="flex gap-3 justify-start">
                         <button onclick="cancelConfirmation()" class="modern-button modern-button-secondary px-6">Cancel</button>
                         <button id="confirmation-button" onclick="confirmAction()" class="modern-button px-6">Confirm</button>
@@ -8750,7 +8797,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             <div class="progress-bar mb-2">
                 <div id="clean-progress-fill" class="progress-fill" style="width: 20%"></div>
             </div>
-            <div class="text-center text-sm text-gray-600 dark:text-gray-400">
+            <div class="text-center text-sm text-gray-600 dark:text-gray-300">
                 <span id="clean-step-indicator">Step 1 of 5</span>
             </div>
         </div>
@@ -8758,7 +8805,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Step 1: Income & Budget -->
         <div id="clean-step-1" class="clean-onboarding-step p-6">
             <h2 class="text-xl font-semibold mb-2 text-center">Welcome to Lens</h2>
-            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Let's start with your monthly finances</p>
+            <p class="text-gray-600 dark:text-gray-300 text-center mb-6">Let's start with your monthly finances</p>
             
             <div class="space-y-4">
                 <div>
@@ -8784,7 +8831,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Step 2: Goal Selection -->
         <div id="clean-step-2" class="clean-onboarding-step p-6 hidden">
             <h2 class="text-xl font-semibold mb-2 text-center">What's Your Main Goal?</h2>
-            <p class="text-gray-600 dark:text-gray-400 text-center mb-6">Choose your primary financial focus</p>
+            <p class="text-gray-600 dark:text-gray-300 text-center mb-6">Choose your primary financial focus</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="house">
@@ -9223,14 +9270,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                         indicator?.classList.remove('border-gray-300');
                         indicator?.classList.add('border-green-500', 'bg-green-500');
                         checkIcon?.classList.remove('hidden');
-                        textSpan?.classList.remove('text-gray-500', 'dark:text-gray-400');
+                        textSpan?.classList.remove('text-gray-500', 'dark:text-gray-300');
                         textSpan?.classList.add('text-green-600', 'dark:text-green-400');
                     } else {
                         indicator?.classList.remove('border-green-500', 'bg-green-500');
                         indicator?.classList.add('border-gray-300');
                         checkIcon?.classList.add('hidden');
                         textSpan?.classList.remove('text-green-600', 'dark:text-green-400');
-                        textSpan?.classList.add('text-gray-500', 'dark:text-gray-400');
+                        textSpan?.classList.add('text-gray-500', 'dark:text-gray-300');
                     }
                 });
                 
@@ -9386,7 +9433,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="mb-6">
                                 <div class="text-center mb-4">
                                     <div class="text-3xl font-bold text-blue-600">£9.99</div>
-                                    <div class="text-gray-600 dark:text-gray-400">per month</div>
+                                    <div class="text-gray-600 dark:text-gray-300">per month</div>
                                 </div>
                                 
                                 <div class="space-y-3">
@@ -9602,7 +9649,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="font-semibold text-gray-800 dark:text-gray-200">Today's Budget</h3>
-                            <span class="text-sm text-gray-600 dark:text-gray-400">${today}</span>
+                            <span class="text-sm text-gray-600 dark:text-gray-300">${today}</span>
                         </div>
                         
                         <div class="mb-3">
@@ -9660,13 +9707,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="grid grid-cols-7 gap-1">
                                 ${weekPerformance.map(day => `
                                     <div class="text-center">
-                                        <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">${day.day}</div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-300 mb-1">${day.day}</div>
                                         <div class="w-full h-8 ${day.status === 'over' ? 'bg-red-100 dark:bg-red-900/30' : 
                                                                    day.status === 'good' ? 'bg-green-100 dark:bg-green-900/30' :
                                                                    'bg-gray-100 dark:bg-gray-700'} rounded flex items-center justify-center">
                                             <span class="text-xs font-medium ${day.status === 'over' ? 'text-red-600 dark:text-red-400' :
                                                                                 day.status === 'good' ? 'text-green-600 dark:text-green-400' :
-                                                                                'text-gray-600 dark:text-gray-400'}">
+                                                                                'text-gray-600 dark:text-gray-300'}">
                                                 ${day.status === 'future' ? '-' : '£' + day.spent.toFixed(0)}
                                             </span>
                                         </div>
@@ -10901,7 +10948,7 @@ function prepareCleanGoalDetails() {
     
     container.innerHTML = `
         <h2 class="text-xl font-semibold mb-2 text-center">${config.title}</h2>
-        <p class="text-gray-600 dark:text-gray-400 text-center mb-6">${config.subtitle}</p>
+        <p class="text-gray-600 dark:text-gray-300 text-center mb-6">${config.subtitle}</p>
         
         <div class="space-y-4">
             ${config.fields.map(field => {
@@ -10954,7 +11001,7 @@ function prepareGoalCommitment() {
             <div class="text-center py-8">
                 <div class="text-4xl mb-4">⚠️</div>
                 <h2 class="text-xl font-semibold mb-4 text-red-600">Budget Alert</h2>
-                <p class="text-gray-600 dark:text-gray-400 mb-4">Your budget exceeds your income. You'll need to adjust your budget before setting financial goals.</p>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Your budget exceeds your income. You'll need to adjust your budget before setting financial goals.</p>
                 <button onclick="goCleanBack()" class="modern-button modern-button-primary">Go Back & Adjust Budget</button>
             </div>
         `;
@@ -11026,7 +11073,7 @@ function prepareGoalCommitment() {
             <div class="text-center mb-6">
                 <div class="text-4xl mb-3">${config.icon}</div>
                 <h2 class="text-xl font-semibold mb-2">${config.title}</h2>
-                <p class="text-gray-600 dark:text-gray-400">${config.subtitle}</p>
+                <p class="text-gray-600 dark:text-gray-300">${config.subtitle}</p>
             </div>
             
             <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 mb-6">
@@ -11064,7 +11111,7 @@ function prepareGoalCommitment() {
                                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                                onchange="updateDebtCalculations()" oninput="updateDebtCalculations()">
                         
-                        <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                        <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
                             <span>£0/month extra</span>
                             <span>£${surplus.toLocaleString()}/month extra</span>
                         </div>
@@ -11104,7 +11151,7 @@ function prepareGoalCommitment() {
         <div class="text-center mb-6">
             <div class="text-4xl mb-3">${config.icon}</div>
             <h2 class="text-xl font-semibold mb-2">${config.title}</h2>
-            <p class="text-gray-600 dark:text-gray-400">${config.subtitle}</p>
+            <p class="text-gray-600 dark:text-gray-300">${config.subtitle}</p>
         </div>
         
         <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
@@ -11146,14 +11193,14 @@ function prepareGoalCommitment() {
                            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider monthly-commitment-main"
                            onchange="updateCommitmentCalculations()" oninput="updateCommitmentCalculations()">
                     
-                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
                         <span>£0/month</span>
                         <span>£${surplus.toLocaleString()}/month</span>
                     </div>
                     
                     <div class="text-center">
                         <div class="text-lg font-bold" id="commitment-amount">£0</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">per month toward your goal</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">per month toward your goal</div>
                     </div>
                 </div>
             </div>
@@ -11166,7 +11213,7 @@ function prepareGoalCommitment() {
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-2">
                     <div id="timeline-progress" class="bg-purple-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
                 </div>
-                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
                     <span id="timeline-current">£0 (current)</span>
                     <span id="timeline-target">£0 (target)</span>
                 </div>
@@ -11215,7 +11262,7 @@ function prepareCompleteGoalPlanning() {
             <div class="text-center py-8">
                 <div class="text-4xl mb-4">⚠️</div>
                 <h2 class="text-xl font-semibold mb-4 text-red-600">Budget Alert</h2>
-                <p class="text-gray-600 dark:text-gray-400 mb-4">Your budget exceeds your income. You'll need to adjust your budget before setting financial goals.</p>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Your budget exceeds your income. You'll need to adjust your budget before setting financial goals.</p>
                 <button onclick="goCleanBack()" class="modern-button modern-button-primary">Go Back & Adjust Budget</button>
             </div>
         `;
@@ -11229,7 +11276,7 @@ function prepareCompleteGoalPlanning() {
             <div class="text-center mb-6">
                 <div class="text-4xl mb-3">💳</div>
                 <h2 class="text-xl font-semibold mb-2">Debt Payoff Plan</h2>
-                <p class="text-gray-600 dark:text-gray-400">Add your debts and choose your payoff strategy</p>
+                <p class="text-gray-600 dark:text-gray-300">Add your debts and choose your payoff strategy</p>
             </div>
             
             <!-- Debt Entry Section -->
@@ -11274,7 +11321,7 @@ function prepareCompleteGoalPlanning() {
                                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                                onchange="updateDebtCalculations()" oninput="updateDebtCalculations()">
                         
-                        <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                        <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
                             <span>£0/month extra</span>
                             <span>£${surplus.toLocaleString()}/month extra</span>
                         </div>
@@ -11383,7 +11430,7 @@ function prepareCompleteGoalPlanning() {
         <div class="text-center mb-6">
             <div class="text-4xl mb-3">${config.icon}</div>
             <h2 class="text-xl font-semibold mb-2">${config.title}</h2>
-            <p class="text-gray-600 dark:text-gray-400">${config.subtitle}</p>
+            <p class="text-gray-600 dark:text-gray-300">${config.subtitle}</p>
         </div>
         
         <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
@@ -11430,14 +11477,14 @@ function prepareCompleteGoalPlanning() {
                            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider monthly-commitment-alt"
                            onchange="updateCommitmentCalculations()" oninput="updateCommitmentCalculations()">
                     
-                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
                         <span>£0/month</span>
                         <span>£${surplus.toLocaleString()}/month</span>
                     </div>
                     
                     <div class="text-center">
                         <div class="text-lg font-semibold">Monthly commitment: <span id="commitment-amount">£0</span></div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">per month toward your goal</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">per month toward your goal</div>
                     </div>
                 </div>
                 
@@ -11456,7 +11503,7 @@ function prepareCompleteGoalPlanning() {
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-2">
                     <div id="timeline-progress" class="bg-purple-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
                 </div>
-                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
                     <span id="timeline-current">£0 (current)</span>
                     <span id="timeline-target">£0 (target)</span>
                 </div>
@@ -11523,7 +11570,7 @@ function prepareGoalDetails() {
             <div class="text-center py-8">
                 <div class="text-4xl mb-4">⚠️</div>
                 <h2 class="text-xl font-semibold mb-4 text-red-600">Budget Alert</h2>
-                <p class="text-gray-600 dark:text-gray-400 mb-4">Your budget exceeds your income. You'll need to adjust your budget before setting financial goals.</p>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Your budget exceeds your income. You'll need to adjust your budget before setting financial goals.</p>
                 <button onclick="goCleanBack()" class="modern-button modern-button-primary">Go Back & Adjust Budget</button>
             </div>
         `;
@@ -11584,7 +11631,7 @@ function prepareGoalDetails() {
         <div class="text-center mb-6">
             <div class="text-4xl mb-3">${config.icon}</div>
             <h2 class="text-xl font-semibold mb-2">${config.title}</h2>
-            <p class="text-gray-600 dark:text-gray-400">${config.subtitle}</p>
+            <p class="text-gray-600 dark:text-gray-300">${config.subtitle}</p>
         </div>
         
         <div class="space-y-6">
@@ -11623,7 +11670,7 @@ function prepareFinancialPosition() {
             <div class="text-center mb-6">
                 <div class="text-4xl mb-3">💰</div>
                 <h2 class="text-xl font-semibold mb-2">Your Current Savings</h2>
-                <p class="text-gray-600 dark:text-gray-400">How much do you have saved across all accounts?</p>
+                <p class="text-gray-600 dark:text-gray-300">How much do you have saved across all accounts?</p>
             </div>
             
             <div class="space-y-6">
@@ -11654,7 +11701,7 @@ function prepareFinancialPosition() {
                             <span class="font-mono">${(data.debts || []).length}</span>
                         </div>
                     </div>
-                    <div class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                    <div class="text-xs text-gray-600 dark:text-gray-300 mt-2">
                         ✓ Debts already configured in previous step
                     </div>
                 </div>
@@ -11666,7 +11713,7 @@ function prepareFinancialPosition() {
             <div class="text-center mb-6">
                 <div class="text-4xl mb-3">💰</div>
                 <h2 class="text-xl font-semibold mb-2">Your Financial Position</h2>
-                <p class="text-gray-600 dark:text-gray-400">Tell us about your current savings and any debts</p>
+                <p class="text-gray-600 dark:text-gray-300">Tell us about your current savings and any debts</p>
             </div>
             
             <div class="space-y-6">
@@ -11688,7 +11735,7 @@ function prepareFinancialPosition() {
                 <!-- Debt Section -->
                 <div class="card p-4">
                     <h3 class="font-medium mb-4">Current Debts (Optional)</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Add any debts to get better goal recommendations and progress tracking</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Add any debts to get better goal recommendations and progress tracking</p>
                     
                     <div id="clean-debt-list" class="space-y-3 mb-4"></div>
                     
@@ -11794,7 +11841,7 @@ function prepareGoalReview() {
         <div class="text-center mb-6">
             <div class="text-4xl mb-3">📊</div>
             <h2 class="text-xl font-semibold mb-2">Your Goal Timeline</h2>
-            <p class="text-gray-600 dark:text-gray-400">Review your plan before proceeding</p>
+            <p class="text-gray-600 dark:text-gray-300">Review your plan before proceeding</p>
         </div>
         
         <div class="space-y-6">
@@ -11832,7 +11879,7 @@ function prepareGoalReview() {
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-2">
                     <div class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: ${Math.min(currentProgress, 100)}%"></div>
                 </div>
-                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
                     <span>${currentProgress.toFixed(1)}% complete</span>
                     <span>${target > 0 ? ((target - current) / target * 100).toFixed(1) : 0}% remaining</span>
                 </div>
@@ -11869,7 +11916,7 @@ function prepareGoalActivation() {
         <div class="text-center mb-6">
             <div class="text-4xl mb-3">🚀</div>
             <h2 class="text-xl font-semibold mb-2">Activate Your Goal</h2>
-            <p class="text-gray-600 dark:text-gray-400">Your personalized goal tracker is ready to go!</p>
+            <p class="text-gray-600 dark:text-gray-300">Your personalized goal tracker is ready to go!</p>
         </div>
 
         <!-- Plan Summary -->
@@ -11886,21 +11933,21 @@ function prepareGoalActivation() {
                     <div class="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-xs font-medium text-blue-600 dark:text-blue-400">1</div>
                     <div>
                         <div class="font-medium">Your goal will be activated</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">All goals and budgets will be set up in your account</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">All goals and budgets will be set up in your account</div>
                     </div>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-xs font-medium text-blue-600 dark:text-blue-400">2</div>
                     <div>
                         <div class="font-medium">Start tracking expenses</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">Log your spending to stay on track with your budget</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Log your spending to stay on track with your budget</div>
                     </div>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-xs font-medium text-blue-600 dark:text-blue-400">3</div>
                     <div>
                         <div class="font-medium">Monitor your progress</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">Watch your goals grow and adjust as needed</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">Watch your goals grow and adjust as needed</div>
                     </div>
                 </div>
             </div>
@@ -11920,7 +11967,7 @@ function prepareGoalActivation() {
 
         <!-- Ready to activate -->
         <div class="text-center">
-            <div class="text-gray-600 dark:text-gray-400">Click "Activate My Goal" below to complete setup</div>
+            <div class="text-gray-600 dark:text-gray-300">Click "Activate My Goal" below to complete setup</div>
         </div>
     `;
 
@@ -12301,7 +12348,7 @@ function generateCommitmentOptions() {
             <button onclick="setCommitmentAmount(${option.amount})" 
                     class="modern-button modern-button-secondary text-left p-3">
                 <div class="font-medium text-sm">${option.label}</div>
-                <div class="text-xs text-gray-600 dark:text-gray-400">${option.description}</div>
+                <div class="text-xs text-gray-600 dark:text-gray-300">${option.description}</div>
             </button>
         `).join('');
     } else {
@@ -12419,14 +12466,14 @@ function addDebtEntry() {
             <input type="text" placeholder="Debt name (e.g., Credit Card)" class="modern-input debt-name text-sm font-medium">
             <div class="grid grid-cols-2 gap-3">
                 <div>
-                    <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Balance</label>
+                    <label class="block text-xs text-gray-600 dark:text-gray-300 mb-1">Balance</label>
                     <div class="relative">
                         <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium text-sm">£</span>
                         <input type="number" placeholder="5,000" class="modern-input pl-8 debt-balance text-sm font-semibold" oninput="updateDebtSummary()">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Interest Rate (%)</label>
+                    <label class="block text-xs text-gray-600 dark:text-gray-300 mb-1">Interest Rate (%)</label>
                     <input type="number" placeholder="18.9" step="0.1" class="modern-input debt-interest text-sm font-semibold" oninput="updateDebtSummary()">
                 </div>
             </div>
@@ -13124,7 +13171,7 @@ function generateCleanSummary() {
                 <div class="text-lg flex-shrink-0">🎯</div>
                 <div class="flex-1 min-w-0">
                     <h3 class="font-semibold mb-2">What's Next</h3>
-                    <ul class="text-sm space-y-1 list-disc list-inside text-gray-600 dark:text-gray-400">
+                    <ul class="text-sm space-y-1 list-disc list-inside text-gray-600 dark:text-gray-300">
                         <li>Track expenses with real-time goal impact</li>
                         <li>Get personalized spending recommendations</li>
                         <li>Monitor progress toward your ${data.primaryGoal} goal</li>
@@ -13319,7 +13366,7 @@ function renderGoalTemplates() {
             <div class="text-center">
                 <div class="text-4xl mb-3">${template.icon}</div>
                 <h4 class="text-lg font-semibold mb-2">${template.name}</h4>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">${template.description}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">${template.description}</p>
                 <div class="text-xs text-left space-y-1">
                     ${template.goals.map(goal => `
                         <div class="flex items-center gap-2">
@@ -13566,8 +13613,8 @@ function updateDashboardGoals() {
     if (!userGoals || userGoals.length === 0) {
         container.innerHTML = `
             <div class="border border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center">
-                <div class="text-gray-500 dark:text-gray-400 mb-2">No Goals Set</div>
-                <div class="text-sm text-gray-400 dark:text-gray-500">Click "Manage" to create your first financial goal</div>
+                <div class="text-gray-500 dark:text-gray-300 mb-2">No Goals Set</div>
+                <div class="text-sm text-gray-400 dark:text-gray-300">Click "Manage" to create your first financial goal</div>
             </div>
         `;
         return;
@@ -13596,13 +13643,13 @@ function updateDashboardGoals() {
     const goalHTML = `
         <div class="border rounded-lg p-4 hover:border-blue-300 dark:hover:border-blue-700 transition-colors cursor-pointer" onclick="showTab('goals')">
             <div class="flex justify-between items-center mb-2">
-                <h4 class="font-semibold text-gray-900 dark:text-gray-100">${displayGoal.name}</h4>
-                <span class="text-sm text-gray-600 dark:text-gray-400">${Math.round(progressPercentage)}%</span>
+                <h4 class="font-semibold text-gray-900 dark:text-white">${displayGoal.name}</h4>
+                <span class="text-sm text-gray-600 dark:text-gray-100">${Math.round(progressPercentage)}%</span>
             </div>
             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-2">
                 <div class="${color} h-full rounded-full transition-all duration-300" style="width: ${progressPercentage}%"></div>
             </div>
-            <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400">
+            <div class="flex justify-between text-xs text-gray-600 dark:text-gray-100">
                 <span>${formatCurrency(currentAmount)}</span>
                 <span>${formatCurrency(targetAmount)}</span>
             </div>
@@ -13705,7 +13752,7 @@ function updateGoalProgressDisplay() {
         if (primaryGoal.unit === 'currency') {
             goalDisplay.innerHTML = `
                 <div class="text-sm font-medium truncate">${primaryGoal.name || 'Goal'}</div>
-                <div class="text-xs text-gray-600 dark:text-gray-400">
+                <div class="text-xs text-gray-600 dark:text-gray-300">
                     ${formatCurrency(currentProgress)} / ${formatCurrency(target)} (${Math.round(progressPercent)}%)
                 </div>
                 <div class="text-xs text-purple-500 mt-1 opacity-70">Click for details</div>
@@ -13713,7 +13760,7 @@ function updateGoalProgressDisplay() {
         } else if (primaryGoal.unit === 'percent') {
             goalDisplay.innerHTML = `
                 <div class="text-sm font-medium truncate">${primaryGoal.name || 'Goal'}</div>
-                <div class="text-xs text-gray-600 dark:text-gray-400">
+                <div class="text-xs text-gray-600 dark:text-gray-300">
                     ${currentProgress.toFixed(1)}% / ${target}%
                 </div>
                 <div class="text-xs text-purple-500 mt-1 opacity-70">Click for details</div>
@@ -13721,7 +13768,7 @@ function updateGoalProgressDisplay() {
         } else {
             goalDisplay.innerHTML = `
                 <div class="text-sm font-medium truncate">${primaryGoal.name || 'Goal'}</div>
-                <div class="text-xs text-gray-600 dark:text-gray-400">
+                <div class="text-xs text-gray-600 dark:text-gray-300">
                     ${Math.round(progressPercent)}% complete
                 </div>
                 <div class="text-xs text-purple-500 mt-1 opacity-70">Click for details</div>
@@ -13893,7 +13940,7 @@ function renderGoalEditingInterface() {
         container.innerHTML = `
             <div class="text-center py-8">
                 <div class="text-4xl mb-4">🎯</div>
-                <p class="text-gray-600 dark:text-gray-400 mb-4">No goals set yet.</p>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">No goals set yet.</p>
                 <button onclick="closeGoalEditingModal(); openGoalsModal(); showGoalSelection();" class="modern-button modern-button-primary" data-tour="first-goal">Choose Your Goals</button>
             </div>
         `;
@@ -13921,21 +13968,21 @@ function renderGoalEditingInterface() {
                         <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none select-none">£</span>
                         <input type="number" id="edit-total-savings-main" value="${totalSavings}" class="modern-input pl-6 pr-4 font-semibold" onchange="updateSavingsAllocation()">
                     </div>
-                    <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Total money across all accounts</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-300 mt-1">Total money across all accounts</div>
                 </div>
                 <div class="space-y-2">
                     <div class="text-sm">
                         <div class="flex justify-between">
-                            <span class="text-gray-600 dark:text-gray-400">Goal allocations:</span>
+                            <span class="text-gray-600 dark:text-gray-300">Goal allocations:</span>
                             <span class="font-medium">${formatCurrency(allocatedAmount)}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600 dark:text-gray-400">Unallocated:</span>
+                            <span class="text-gray-600 dark:text-gray-300">Unallocated:</span>
                             <span class="font-medium text-green-600" id="unallocated-display">${formatCurrency(unallocated)}</span>
                         </div>
                         ${totalDebt > 0 ? `
                         <div class="flex justify-between">
-                            <span class="text-gray-600 dark:text-gray-400">Total debt:</span>
+                            <span class="text-gray-600 dark:text-gray-300">Total debt:</span>
                             <span class="font-medium text-red-600">-${formatCurrency(totalDebt)}</span>
                         </div>
                         <div class="flex justify-between border-t pt-1 mt-1">
@@ -13964,7 +14011,7 @@ function renderGoalEditForm(goal, index) {
             <div class="flex justify-between items-start mb-4">
                 <div>
                     <h4 class="text-lg font-semibold">${goalTypeConfig.icon} ${goal.name}</h4>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">${goalTypeConfig.description}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">${goalTypeConfig.description}</p>
                 </div>
                 <button onclick="removeGoal(${index})" class="text-red-500 hover:text-red-700 font-medium text-sm">Remove</button>
             </div>
@@ -14091,7 +14138,7 @@ function addNewGoal() {
     container.innerHTML = `
         <div class="text-center mb-6">
             <h4 class="text-lg font-semibold mb-2">Add New Goal</h4>
-            <p class="text-gray-600 dark:text-gray-400">Choose the type of goal you want to add</p>
+            <p class="text-gray-600 dark:text-gray-300">Choose the type of goal you want to add</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -14100,7 +14147,7 @@ function addNewGoal() {
                     <div class="text-center">
                         <div class="text-2xl mb-2">${type.name.split(' ')[0]}</div>
                         <h5 class="font-semibold mb-1">${type.name.substring(2)}</h5>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">${type.description}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">${type.description}</p>
                     </div>
                 </div>
             `).join('')}
@@ -14163,7 +14210,7 @@ function showGoalConfiguration(goalType) {
         <div class="text-center mb-6">
             <div class="text-4xl mb-3">${goalConfig.icon}</div>
             <h4 class="text-xl font-semibold mb-2">${goalConfig.title}</h4>
-            <p class="text-gray-600 dark:text-gray-400">${goalConfig.subtitle}</p>
+            <p class="text-gray-600 dark:text-gray-300">${goalConfig.subtitle}</p>
         </div>
         
         <div class="space-y-6">
@@ -14742,7 +14789,7 @@ function renderGoalsPage() {
                             ${getGoalIcon(goal.type)} ${goal.name}
                             ${isCompleted ? '<span class="text-green-600 text-lg">✅</span>' : ''}
                         </h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">${getGoalDescription(goal.type)}</p>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">${getGoalDescription(goal.type)}</p>
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="editGoalNew('${goal.id}')" class="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors">
@@ -14760,7 +14807,7 @@ function renderGoalsPage() {
                 
                 <div class="space-y-3">
                     <div class="flex justify-between items-center text-sm">
-                        <span class="text-gray-600 dark:text-gray-400">Progress</span>
+                        <span class="text-gray-600 dark:text-gray-300">Progress</span>
                         <span class="font-semibold">${Math.round(progress)}%</span>
                     </div>
                     
@@ -14769,12 +14816,12 @@ function renderGoalsPage() {
                     </div>
                     
                     <div class="flex justify-between items-center text-sm">
-                        <span class="text-gray-600 dark:text-gray-400">${formatCurrency(goal.currentProgress || 0)}</span>
+                        <span class="text-gray-600 dark:text-gray-300">${formatCurrency(goal.currentProgress || 0)}</span>
                         <span class="text-gray-900 dark:text-white font-medium">${formatCurrency(goal.target)}</span>
                     </div>
                     
                     ${!isCompleted ? `
-                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                        <div class="text-sm text-gray-600 dark:text-gray-300">
                             <strong>${formatCurrency(goal.target - (goal.currentProgress || 0))}</strong> remaining to reach your goal
                         </div>
                     ` : ''}
@@ -14803,7 +14850,7 @@ function showGoalTypeSelector() {
                             <span class="text-2xl">${type.icon}</span>
                             <h4 class="font-semibold text-gray-900 dark:text-white">${type.name}</h4>
                         </div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">${type.description}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">${type.description}</p>
                     </button>
                 `).join('')}
             </div>
@@ -15057,7 +15104,7 @@ function editGoal(goalIndex) {
         <div class="max-w-md mx-auto">
             <div class="text-center mb-6">
                 <h4 class="text-xl font-semibold mb-2">Edit Goal: ${goal.name}</h4>
-                <p class="text-gray-600 dark:text-gray-400">Update your goal details</p>
+                <p class="text-gray-600 dark:text-gray-300">Update your goal details</p>
             </div>
             
             <div class="space-y-4">
@@ -15201,7 +15248,7 @@ function showGoalSelection() {
         <div class="text-center mb-6">
             <div class="text-4xl mb-3">🎯</div>
             <h4 class="text-xl font-semibold mb-2">Choose Your Goals</h4>
-            <p class="text-gray-600 dark:text-gray-400">Select the goals you want to work towards</p>
+            <p class="text-gray-600 dark:text-gray-300">Select the goals you want to work towards</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -15210,7 +15257,7 @@ function showGoalSelection() {
                     <div class="text-center">
                         <div class="text-3xl mb-3 group-hover:scale-110 transition-transform duration-200">${type.name.split(' ')[0]}</div>
                         <h5 class="font-semibold mb-2 text-gray-900 dark:text-white">${type.name.substring(2)}</h5>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">${type.description}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">${type.description}</p>
                     </div>
                 </div>
             `).join('')}
@@ -15606,7 +15653,7 @@ function closeGoalSelection() {
                                 <span class="text-lg font-bold text-gray-900">£${amount.toFixed(2)}</span>
                             </div>
                             <div class="category-bar" style="--start-color: ${startColor}; --end-color: ${endColor}; width: ${percentage}%;"></div>
-                            <div class="text-xs text-gray-500 mt-1">${percentage}% of total spending</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-300 mt-1">${percentage}% of total spending</div>
                         </div>
                     </div>
                 `;
@@ -16774,6 +16821,34 @@ function closeGoalSelection() {
                 renderRecurringTable();
                 
                 showToast(`Recurring item status updated.`);
+            }
+        }
+        
+        // Toggle recurring menu dropdown
+        function toggleRecurringMenu(id) {
+            const menu = document.getElementById(`recurring-menu-${id}`);
+            if (!menu) return;
+            
+            // Close all other menus first
+            document.querySelectorAll('[id^="recurring-menu-"]').forEach(m => {
+                if (m.id !== `recurring-menu-${id}`) {
+                    m.classList.add('hidden');
+                }
+            });
+            
+            // Toggle this menu
+            menu.classList.toggle('hidden');
+            
+            // Close menu when clicking outside
+            if (!menu.classList.contains('hidden')) {
+                setTimeout(() => {
+                    document.addEventListener('click', function closeMenu(e) {
+                        if (!menu.contains(e.target) && !e.target.closest('button[onclick*="toggleRecurringMenu"]')) {
+                            menu.classList.add('hidden');
+                            document.removeEventListener('click', closeMenu);
+                        }
+                    });
+                }, 0);
             }
         }
         
@@ -18210,7 +18285,7 @@ function closeGoalSelection() {
             console.log('📝 Recent expenses:', recent);
 
             if (recent.length === 0) {
-                DOMElements.recentExpensesContainer.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400">No recent expenses.</p>';
+                DOMElements.recentExpensesContainer.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-300">No recent expenses.</p>';
                 console.log('❌ No recent expenses found');
                 return;
             }
@@ -18268,13 +18343,13 @@ function closeGoalSelection() {
             const isMobile = window.innerWidth <= 768;
 
             if (filteredExpenses.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 dark:text-gray-300">No expenses match your filters.</td></tr>`;
                 document.getElementById('expenses-pagination').style.display = 'none';
                 
                 // Clear mobile container
                 const mobileContainer = document.querySelector('#expenses-tab .mobile-cards-container');
                 if (mobileContainer) {
-                    mobileContainer.innerHTML = `<div class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</div>`;
+                    mobileContainer.innerHTML = `<div class="text-center py-8 text-gray-500 dark:text-gray-300">No expenses match your filters.</div>`;
                 }
                 return;
             }
@@ -18350,7 +18425,7 @@ function closeGoalSelection() {
                     html += `
                         <div class="mb-8">
                             <div class="flex justify-between items-center mb-3 px-4 pb-2 border-b-2 border-gray-200 dark:border-gray-700">
-                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
                                     ${new Date(date).toLocaleDateString('en-GB', { 
                                         weekday: 'long', 
                                         day: 'numeric', 
@@ -18359,7 +18434,7 @@ function closeGoalSelection() {
                                     })}
                                 </h3>
                                 <div class="flex items-center gap-3">
-                                    <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white">
                                         -${formatCurrency(dayTotal)}
                                     </span>
                                     <button onclick="toggleSelectAllForDate('${date}')" 
@@ -18377,10 +18452,10 @@ function closeGoalSelection() {
                                                class="mr-3 table-checkbox expense-checkbox" ${isRecurringInstance ? 'disabled' : ''}>
                                         <div class="flex-1 flex justify-between items-center cursor-pointer" onclick="editExpense(${expense.id})">
                                             <div>
-                                                <p class="font-medium text-sm">${escapeHTML(expense.name)}</p>
-                                                <p class="text-xs text-gray-500">${escapeHTML(expense.category)}</p>
+                                                <p class="font-medium text-sm text-gray-900 dark:text-white">${escapeHTML(expense.name)}</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-300">${escapeHTML(expense.category)}</p>
                                             </div>
-                                            <p class="font-medium text-sm text-red-600">-${formatCurrency(expense.cost)}</p>
+                                            <p class="font-medium text-sm text-red-600 dark:text-red-400">-${formatCurrency(expense.cost)}</p>
                                         </div>
                                         <div class="ml-3 flex items-center" style="width: 80px; justify-content: flex-end;">
                                             <button onclick="event.stopPropagation(); editExpense(${expense.id})" 
@@ -18416,7 +18491,7 @@ function closeGoalSelection() {
                         </svg>
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">No expenses found</h3>
-                    <p class="text-gray-500 dark:text-gray-400">Start tracking your expenses by adding a new entry</p>
+                    <p class="text-gray-500 dark:text-gray-300">Start tracking your expenses by adding a new entry</p>
                 </div>
             `;
             
@@ -18465,14 +18540,14 @@ function closeGoalSelection() {
                             <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
                             class="table-checkbox expense-checkbox" ${isRecurringInstance ? 'disabled' : ''} ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
-                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Date">${formattedDate}</td>
-                        <td class="px-4 py-3 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
-                            <span class="text-black dark:text-white">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Date">${formattedDate}</td>
+                        <td class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Description">
+                            <span class="text-gray-900 dark:text-white">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
                         </td>
-                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Category">${escapeHTML(expense.category)}</td>
-                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Amount">${formatCurrency(expense.cost)}</td>
-                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
-                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Type">${escapeHTML(expense.type)}</td>
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Category">${escapeHTML(expense.category)}</td>
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Amount">${formatCurrency(expense.cost)}</td>
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Type">${escapeHTML(expense.type)}</td>
                         <td class="px-4 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
@@ -18606,13 +18681,13 @@ function closeGoalSelection() {
             filtered.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
             if (filtered.length === 0) {
-                DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="9" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
+                DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="9" class="px-6 py-4 text-center text-gray-500 dark:text-gray-100">No recurring items found.</td></tr>`;
                 updateRecurringPagination(0, 0);
                 
                 // Also clear mobile container
                 const mobileContainer = document.querySelector('#recurring-tab .mobile-cards-container');
                 if (mobileContainer) {
-                    mobileContainer.innerHTML = `<div class="text-center py-8 text-gray-500 dark:text-gray-400">No recurring items found.</div>`;
+                    mobileContainer.innerHTML = `<div class="text-center py-8 text-gray-500 dark:text-gray-300">No recurring items found.</div>`;
                 }
                 return;
             }
@@ -18706,14 +18781,14 @@ function closeGoalSelection() {
 
                 tr.innerHTML = `
                     <td class="px-4 py-4 w-1" data-label=""><input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}></td>
-                    <td class="px-6 py-4 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
-                        <span class="text-black dark:text-white">${escapeHTML(item.name)}</span>
+                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Description">
+                        <span class="text-gray-900 dark:text-white">${escapeHTML(item.name)}</span>
                     </td>
-                    <td class="px-6 py-4 capitalize text-black dark:text-gray-300" data-label="Type">${item.type}</td>
-                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Category">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4 capitalize text-gray-900 dark:text-white" data-label="Type">${item.type}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Category">${escapeHTML(item.category)}</td>
                     <td class="px-6 py-4 font-medium ${itemTypeClass}" data-label="Amount">${formatCurrency(item.amount)}</td>
-                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Frequency">${item.frequency}</td>
-                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Date">${formattedStartDate}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Frequency">${item.frequency}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Date">${formattedStartDate}</td>
                     <td class="px-6 py-4" data-label="Status"><span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span></td>
                     <td class="px-6 py-4 text-right space-x-1 whitespace-nowrap" data-label="Actions">
                         <button onclick="editRecurring(${item.id})" class="icon-button" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
@@ -19165,7 +19240,7 @@ function closeGoalSelection() {
             if (!container) return;
             
             if (upcomingEvents.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-sm">No upcoming bills.</p>';
+                container.innerHTML = '<p class="text-gray-500 dark:text-gray-300 text-sm">No upcoming bills.</p>';
                 return;
             }
             
@@ -19178,7 +19253,7 @@ function closeGoalSelection() {
                     month: 'short'
                 });
                 
-                let statusClass = 'text-gray-600 dark:text-gray-400';
+                let statusClass = 'text-gray-600 dark:text-gray-300';
                 let statusText = `${event.daysUntilDue}d`;
                 
                 if (event.isOverdue) {
@@ -19770,7 +19845,7 @@ function closeGoalSelection() {
                             <div class="text-2xl">💳</div>
                             <div>
                                 <h3 class="font-semibold text-gray-800 dark:text-gray-200">Points Optimization</h3>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">Based on your spending patterns</p>
+                                <p class="text-xs text-gray-600 dark:text-gray-300">Based on your spending patterns</p>
                             </div>
                         </div>
                         <div class="text-right">
@@ -19806,7 +19881,7 @@ function closeGoalSelection() {
                                     <div class="text-xs text-gray-500">${opp.potential_points} points</div>
                                 </div>
                             </div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">
+                            <div class="text-sm text-gray-600 dark:text-gray-300">
                                 💡 ${opp.message}
                             </div>
                         </div>
@@ -20075,7 +20150,7 @@ function closeGoalSelection() {
                 goalsContainer.innerHTML = `
                     <div class="text-center py-6">
                         <div class="text-3xl mb-2">🎯</div>
-                        <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">No goals set yet</p>
+                        <p class="text-gray-500 dark:text-gray-300 text-sm mb-3">No goals set yet</p>
                         <button onclick="showTab('goals')" class="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium">
                             Choose your goals →
                         </button>
@@ -20209,7 +20284,7 @@ function closeGoalSelection() {
                                     <p class="text-sm text-gray-500">£${impact.current.toLocaleString()} / £${impact.target.toLocaleString()}</p>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-sm font-medium text-gray-600 dark:text-gray-400">${impact.progressPercent.toFixed(1)}%</div>
+                                    <div class="text-sm font-medium text-gray-600 dark:text-gray-300">${impact.progressPercent.toFixed(1)}%</div>
                                     <div class="text-xs text-gray-500">complete</div>
                                 </div>
                             </div>
@@ -21251,7 +21326,7 @@ function renderSmart7DayForecast(forecast) {
     if (forecast.length === 0) {
         container.innerHTML = `
             <div class="text-center p-4">
-                <p class="text-sm text-gray-500 dark:text-gray-400">
+                <p class="text-sm text-gray-500 dark:text-gray-300">
                     Add more expenses to generate spending predictions
                 </p>
             </div>
@@ -21289,7 +21364,7 @@ function renderSmartRecommendations(recommendations) {
             <div class="text-center p-6">
                 <div class="text-4xl mb-3">🎉</div>
                 <div class="font-medium text-gray-800 dark:text-gray-200 mb-2">All looking good!</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">
+                <div class="text-sm text-gray-500 dark:text-gray-300">
                     No urgent recommendations right now. Keep up the great work!
                 </div>
             </div>
@@ -21324,7 +21399,7 @@ function renderSmartRecommendations(recommendations) {
                         ${rec.priority}
                     </span>
                 </div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3 leading-relaxed">${rec.description}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 leading-relaxed">${rec.description}</p>
              <div class="flex justify-between items-center">
                     <div class="text-xs text-gray-500">
                         ${rec.potentialSaving > 0 ? `💰 Potential saving: <strong>${formatCurrency(rec.potentialSaving)}</strong>` : '📊 Organization improvement'}
@@ -21353,17 +21428,17 @@ function renderSmartMonthlyStory(storyData) {
     if (metricsContainer && storyData.metrics) {
         metricsContainer.innerHTML = `
             <div class="metric-card">
-                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Savings Rate</p>
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-300">Savings Rate</p>
                 <p class="text-lg font-bold ${parseFloat(storyData.metrics.savingsRate) >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
                     ${storyData.metrics.savingsRate}%
                 </p>
             </div>
             <div class="metric-card">
-                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Top Category</p>
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-300">Top Category</p>
                 <p class="text-lg font-bold text-gray-800 dark:text-gray-200 truncate">${storyData.metrics.topCategory}</p>
             </div>
             <div class="metric-card">
-                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Active Days</p>
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-300">Active Days</p>
                 <p class="text-lg font-bold text-gray-800 dark:text-gray-200">${storyData.metrics.spendingDays}</p>
             </div>
         `;
@@ -21389,7 +21464,7 @@ function renderMonthEndProjectionSmart(budgetRisk) {
     container.innerHTML = `
         <div class="space-y-4">
             <div class="text-center p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Projected Monthly Spending</p>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Projected Monthly Spending</p>
                 <p class="text-2xl font-bold text-gray-800 dark:text-gray-200">${formatCurrency(budgetRisk.projectedSpend)}</p>
                 <p class="text-xs font-medium mt-1 ${riskColors[riskLevel]}">
                     ${riskLevel === 'high' ? '⚠️ Budget Risk' : riskLevel === 'medium' ? '⚡ Watch Closely' : '✅ On Track'}
@@ -21406,11 +21481,11 @@ function renderMonthEndProjectionSmart(budgetRisk) {
             ` : ''}
             
             <div class="text-center">
-                <p class="text-sm text-gray-600 dark:text-gray-400">Projected Savings</p>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Projected Savings</p>
                 <p class="text-xl font-bold ${projectedSavings >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
                     ${formatCurrency(projectedSavings)}
                 </p>
-                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                <p class="text-xs text-gray-500 dark:text-gray-300 mt-1">
                     Based on current spending velocity
                 </p>
             </div>
@@ -21461,7 +21536,7 @@ function handleRecommendationClick(category, recommendation) {
                     <div class="text-center p-6">
                         <div class="text-4xl mb-3">🎉</div>
                         <div class="font-medium text-gray-800 dark:text-gray-200 mb-2">All recommendations handled!</div>
-                        <div class="text-sm text-gray-500 dark:text-gray-400">
+                        <div class="text-sm text-gray-500 dark:text-gray-300">
                             Keep up the great work! New recommendations will appear as your spending patterns change.
                         </div>
                     </div>
@@ -21762,7 +21837,7 @@ function showInsightsError() {
             const tableBody = DOMElements.expensesTableBody;
             
             if (filteredExpenses.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses match your filters.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 dark:text-gray-100">No expenses match your filters.</td></tr>`;
                 return;
             }
 
@@ -21810,7 +21885,7 @@ function showInsightsError() {
             console.log('🔧 renderMobileExpenseCards called with:', expenses?.length || 0, 'expenses');
             
             if (!expenses || expenses.length === 0) {
-                container.innerHTML = `<div class="text-center py-8 text-gray-500 dark:text-gray-400">No expenses to display.</div>`;
+                container.innerHTML = `<div class="text-center py-8 text-gray-500 dark:text-gray-100">No expenses to display.</div>`;
                 console.log('❌ No expenses to display');
                 return;
             }
@@ -21918,14 +21993,14 @@ function showInsightsError() {
                                    ${isRecurringInstance ? 'disabled' : ''} 
                                    ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
-                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Date">${formattedDate}</td>
-                        <td class="px-4 py-3 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
-                            <span class="text-black dark:text-white">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Date">${formattedDate}</td>
+                        <td class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Description">
+                            <span class="text-gray-900 dark:text-white">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
                         </td>
-                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Category">${escapeHTML(expense.category)}</td>
-                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Amount">${formatCurrency(expense.cost)}</td>
-                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
-                        <td class="px-4 py-3 text-black dark:text-gray-300 whitespace-nowrap" data-label="Type">${escapeHTML(expense.type)}</td>
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Category">${escapeHTML(expense.category)}</td>
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Amount">${formatCurrency(expense.cost)}</td>
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Type">${escapeHTML(expense.type)}</td>
                         <td class="px-4 py-3 text-right" data-label="Actions">
                             <div class="flex items-center justify-end gap-1">
                                 <button onclick="${editAction}" title="Edit" class="icon-button" 
@@ -21975,7 +22050,7 @@ function showInsightsError() {
             filtered.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
             if (filtered.length === 0) {
-                DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="8" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
+                DOMElements.recurringTableBody.innerHTML = `<tr><td colspan="8" class="px-6 py-4 text-center text-gray-500 dark:text-gray-100">No recurring items found.</td></tr>`;
                 return;
             }
 
@@ -21994,10 +22069,9 @@ function showInsightsError() {
             
             if (!items || items.length === 0) {
                 console.log('🔧 No items to render, showing empty message');
-                container.innerHTML = `<div class="text-center py-8 text-gray-500 dark:text-gray-400">No recurring items found.</div>`;
+                container.innerHTML = `<div class="text-center py-8 text-gray-500 dark:text-gray-300">No recurring items found.</div>`;
                 return;
             }
-
             // Group by start date
             const groupedItems = {};
             items.forEach(item => {
@@ -22007,7 +22081,6 @@ function showInsightsError() {
                 }
                 groupedItems[dateKey].push(item);
             });
-
             let html = '';
             Object.keys(groupedItems)
                 .sort((a, b) => new Date(b) - new Date(a))
@@ -22015,11 +22088,10 @@ function showInsightsError() {
                     const dayItems = groupedItems[date];
                     const dayTotal = dayItems.reduce((sum, item) => sum + (item.type === 'income' ? item.amount : -item.amount), 0);
                     const dayTotalClass = dayTotal >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
-
                     html += `
                         <div class="mb-8">
                             <div class="flex justify-between items-center mb-3 px-4 pb-2 border-b-2 border-gray-200 dark:border-gray-700">
-                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
                                     ${new Date(date).toLocaleDateString('en-GB', { 
                                         weekday: 'long', 
                                         day: 'numeric', 
@@ -22027,7 +22099,7 @@ function showInsightsError() {
                                         year: 'numeric' 
                                     })}
                                 </h3>
-                                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                <span class="text-sm font-medium text-gray-900 dark:text-white">
                                     ${dayTotal >= 0 ? '+' : ''}${formatCurrency(Math.abs(dayTotal))}
                                 </span>
                             </div>
@@ -22036,7 +22108,6 @@ function showInsightsError() {
                                     const categoryIcon = window.categoryIcons?.[item.category] || window.categoryIcons?.['Other'] || '💰';
                                     const isCancelled = item.status === 'cancelled';
                                     const typeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
-
                                     return `
                                         <div class="flex items-center py-3 border-b border-gray-200 last:border-b-0 ${isCancelled ? 'opacity-60' : ''}">
                                             <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" 
@@ -22085,13 +22156,12 @@ function showInsightsError() {
                         </div>
                     `;
                 });
-
             container.innerHTML = html;
         }
 
         function renderMobileRecurringList(items, container) {
             if (items.length === 0) {
-                container.innerHTML = `<tr><td colspan="8" class="px-6 py-4 text-center">No recurring items found.</td></tr>`;
+                container.innerHTML = `<tr><td colspan="8" class="px-6 py-4 text-center text-gray-500 dark:text-gray-100">No recurring items found.</td></tr>`;
                 return;
             }
             // Add mobile delete button at the top
@@ -22175,14 +22245,14 @@ function showInsightsError() {
                     <td class="px-4 py-4 w-1" data-label="">
                         <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" class="table-checkbox recurring-checkbox" ${isSelected ? 'checked' : ''}>
                     </td>
-                    <td class="px-6 py-4 font-medium text-black dark:text-white whitespace-nowrap" data-label="Description">
-                        <span class="text-black dark:text-white">${escapeHTML(item.name)}</span>
+                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Description">
+                        <span class="text-gray-900 dark:text-white">${escapeHTML(item.name)}</span>
                     </td>
-                    <td class="px-6 py-4 capitalize text-black dark:text-gray-300" data-label="Type">${item.type}</td>
-                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Category">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4 capitalize text-gray-900 dark:text-white" data-label="Type">${item.type}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Category">${escapeHTML(item.category)}</td>
                     <td class="px-6 py-4 font-medium ${itemTypeClass}" data-label="Amount">${formatCurrency(item.amount)}</td>
-                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Frequency">${item.frequency}</td>
-                    <td class="px-6 py-4 text-black dark:text-gray-300" data-label="Date">${formattedStartDate}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Frequency">${item.frequency}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Date">${formattedStartDate}</td>
                     <td class="px-6 py-4" data-label="Status">
                         <span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-cancelled'}">${item.status}</span>
                     </td>
@@ -22412,7 +22482,7 @@ function renderMobileExpenseList(expArr) {
 
         /* Date header */
         html += `
-            <div style="padding:8px 12px;font-weight:600;font-size:14px;color:#555;">
+            <div style="padding:8px 12px;font-weight:600;font-size:14px;" class="text-gray-900 dark:text-white">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                     <span>${dateLabel(dateKey)}</span>
                     <span>- ${formatCurrency(dayTotal)}</span>
@@ -22429,10 +22499,10 @@ function renderMobileExpenseList(expArr) {
                  border-radius:6px;border:1px solid var(--color-border);cursor:pointer;">
                 <span style="font-size:22px;">${icon}</span>
                 <div style="flex:1;min-width:0;">
-                    <div style="font-weight:500;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${escapeHTML(exp.name)}</div>
-                    <div style="font-size:12px;color:#666;">${escapeHTML(exp.category)}</div>
+                    <div style="font-weight:500;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;" class="text-gray-900 dark:text-white">${escapeHTML(exp.name)}</div>
+                    <div style="font-size:12px;" class="text-gray-600 dark:text-gray-300">${escapeHTML(exp.category)}</div>
                 </div>
-                <div style="font-weight:600;white-space:nowrap;">${exp.type === 'Income' ? '' : '-'}${formatCurrency(toNumber(exp.cost))}</div>
+                <div style="font-weight:600;white-space:nowrap;" class="text-gray-900 dark:text-white">${exp.type === 'Income' ? '' : '-'}${formatCurrency(toNumber(exp.cost))}</div>
             </div>`;
         });
     });
@@ -22713,7 +22783,7 @@ function initializeSettingsForm() {
         const helpText = incomeInput.parentNode.querySelector('.income-help-text') || 
             (() => {
                 const div = document.createElement('div');
-                div.className = 'income-help-text text-sm text-gray-600 dark:text-gray-400 mt-2';
+                div.className = 'income-help-text text-sm text-gray-600 dark:text-gray-300 mt-2';
                 incomeInput.parentNode.appendChild(div);
                 return div;
             })();
@@ -23338,7 +23408,7 @@ function generateRealDailyBreakdown() {
                                                  isNoSpend ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20' : 
                                                            'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800'}">
                 <div class="text-center">
-                    <div class="text-sm font-medium text-gray-600 dark:text-gray-400">Day ${day.day}</div>
+                    <div class="text-sm font-medium text-gray-600 dark:text-gray-300">Day ${day.day}</div>
                     <div class="text-lg font-bold ${isOverBudget ? 'text-red-600 dark:text-red-400' : 
                                                    isNoSpend ? 'text-green-600 dark:text-green-400' : 
                                                              'text-gray-900 dark:text-white'}">${formatCurrency(day.amount)}</div>
@@ -23739,7 +23809,7 @@ function updateRealMetrics() {
     if (metricElements.monthlyIncome) {
         metricElements.monthlyIncome.innerHTML = `
             <div class="text-center p-4">
-                <div class="text-sm text-gray-600 dark:text-gray-400">Monthly Income</div>
+                <div class="text-sm text-gray-600 dark:text-gray-300">Monthly Income</div>
                 <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">${formatCurrency(monthlyIncome)}</div>
                 <div class="text-xs text-gray-500">+5% vs last month</div>
             </div>
@@ -23749,7 +23819,7 @@ function updateRealMetrics() {
     if (metricElements.monthlyBudget) {
         metricElements.monthlyBudget.innerHTML = `
             <div class="text-center p-4">
-                <div class="text-sm text-gray-600 dark:text-gray-400">Monthly Budget</div>
+                <div class="text-sm text-gray-600 dark:text-gray-300">Monthly Budget</div>
                 <div class="text-2xl font-bold text-green-600 dark:text-green-400">${formatCurrency(monthlyBudget)}</div>
                 <div class="text-xs text-gray-500">${insights.budgetVariancePercent > 0 ? 'Over' : 'Under'} by ${Math.abs(insights.budgetVariancePercent).toFixed(1)}%</div>
             </div>
@@ -23759,7 +23829,7 @@ function updateRealMetrics() {
     if (metricElements.dailyBudget) {
         metricElements.dailyBudget.innerHTML = `
             <div class="text-center p-4">
-                <div class="text-sm text-gray-600 dark:text-gray-400">Daily Budget</div>
+                <div class="text-sm text-gray-600 dark:text-gray-300">Daily Budget</div>
                 <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">${formatCurrency(insights.dailyBudgetTarget)}</div>
                 <div class="text-xs text-gray-500">${insights.daysOverBudget}/${insights.daysElapsed} days over</div>
             </div>
@@ -24408,7 +24478,7 @@ class FinanceInsights {
         const totalSpent = currentMonthExpenses.reduce((sum, expense) => sum + expense.cost, 0);
         
         if (totalSpent === 0) {
-            container.innerHTML = '<p class="text-gray-500 text-sm">No expenses this month yet</p>';
+            container.innerHTML = '<p class="text-gray-500 dark:text-gray-300 text-sm">No expenses this month yet</p>';
             return;
         }
         
@@ -24449,7 +24519,7 @@ class FinanceInsights {
                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                         <div class="${color} h-2 rounded-full transition-all duration-300" style="width: ${progressWidth}%"></div>
                     </div>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">${percentage}% of total spending</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">${percentage}% of total spending</p>
                 </div>
             `;
         }).join('');
@@ -27569,7 +27639,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <span class="text-2xl">🚨</span>
                             <div>
                                 <h4 class="font-semibold text-gray-900 dark:text-white mb-1">Spending Acceleration Alert</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
                                     At £${dailyRate.toFixed(0)}/day pace, you'll hit £${projectedEnd.toFixed(0)} by month-end
                                 </p>
                                 <div class="text-xs bg-white dark:bg-gray-800 px-3 py-1 rounded-full">
@@ -27649,7 +27719,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">
                                 £${overage.toFixed(0)} Over Budget
                             </div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">
+                            <div class="text-sm text-gray-600 dark:text-gray-300">
                                 Burning £${dailyBurn.toFixed(0)}/day • ${Math.ceil(overage / dailyBurn)} days to get back on track
                             </div>
                             <div class="mt-2 text-xs bg-white dark:bg-gray-800 px-3 py-1 rounded-full inline-block">
