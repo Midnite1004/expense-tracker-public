@@ -3291,9 +3291,9 @@
         .stat-card-value.text-green-600 { color: var(--accent-green); }
         .stat-card-value.text-red-600 { color: var(--accent-red); }
         .stat-card-value.text-blue-600 { color: var(--accent-primary); }
-        .dark .stat-card-value.text-green-600 { color: var(--accent-success); }
-        .dark .stat-card-value.text-red-600 { color: var(--accent-warning); }
-        .dark .stat-card-value.text-blue-600 { color: var(--accent-primary); }
+        [data-theme="dark"] .stat-card-value.text-green-600 { color: var(--accent-success); }
+[data-theme="dark"] .stat-card-value.text-red-600 { color: var(--accent-warning); }
+[data-theme="dark"] .stat-card-value.text-blue-600 { color: var(--accent-primary); }
         
         /* Google Sign-In Button Styling */
         #googleSignInButton {
@@ -3747,10 +3747,10 @@
         }
         
         /* Dark mode checked state */
-        .dark .w-11.h-6.peer-checked\\:bg-blue-600 {
-            background-color: var(--accent-success) !important;
-            border: 2px solid var(--accent-success) !important;
-        }
+        [data-theme="dark"] .w-11.h-6.peer-checked\\:bg-blue-600 {
+    background-color: var(--accent-success) !important;
+    border: 2px solid var(--accent-success) !important;
+}
         /* Help Tab Contrast */
         #help-tab p, #help-tab li {
             color: var(--help-text-color);
@@ -3843,10 +3843,10 @@
             font-weight: 600;
         }
         /* Consistent Dark Mode */
-        html.dark body { background-color: var(--bg-secondary); color: var(--text-primary); }
-        html.dark .card { background-color: var(--bg-primary); border-color: var(--border-color); }
-        html.dark .stat-card { background-color: var(--bg-tertiary); border-color: var(--border-color); }
-        html.dark .modern-input, html.dark .modern-select { background-color: var(--bg-tertiary); border-color: var(--border-color); color: var(--text-primary); }
+        [data-theme="dark"] body { background-color: var(--bg-primary); color: var(--text-primary); }
+[data-theme="dark"] .card { background-color: var(--bg-secondary); border-color: var(--bg-subtle); }
+[data-theme="dark"] .stat-card { background-color: var(--bg-card); border-color: var(--bg-subtle); }
+[data-theme="dark"] .modern-input, [data-theme="dark"] .modern-select { background-color: var(--bg-card); border-color: var(--bg-subtle); color: var(--text-primary); }
         select option { background-color: var(--color-surface); color: var(--text-primary); }
         html.dark select option { background-color: var(--bg-tertiary); color: var(--text-primary); }
         html.dark .modern-button-secondary { background-color: var(--bg-tertiary); color: var(--text-primary); }
@@ -4208,10 +4208,10 @@
             justify-content: space-between !important;
             align-items: center !important;
             padding: 0.75rem 1rem !important;
-            color: var(--color-text-primary) !important;
-            font-size: 1.1em !important;
-            font-weight: 700 !important;
-            border-bottom: 1px solid var(--color-border) !important;
+                    color: var(--text-primary) !important;
+        font-size: 1.1em !important;
+        font-weight: 700 !important;
+        border-bottom: 1px solid var(--bg-tertiary) !important;
             margin-bottom: 0.5rem !important;
             background: transparent !important;
             border-radius: 0 !important;
@@ -4420,34 +4420,34 @@
 
           /* Dark mode improvements */
           html.dark tr:not(.mobile-date-header) {
-            background: var(--color-bg-card) !important;
-            border-color: var(--color-border) !important;
-          }
-
-          html.dark tr:not(.mobile-date-header):hover {
-            background: var(--color-bg-tertiary) !important;
-          }
-
-          html.dark .mobile-date-header td {
-            color: var(--color-text-primary) !important;
-            border-color: var(--color-border) !important;
-          }
-
-          html.dark td[data-label="Name"] > span {
-            color: var(--color-text-primary) !important;
-          }
-
-          html.dark td[data-label="Name"]::after {
-            color: var(--color-text-secondary) !important;
-          }
-
-          html.dark td[data-label="Amount"] {
-            color: var(--color-text-primary) !important;
-          }
-
-          html.dark td[data-label="Amount"][data-positive="true"] {
+            background: var(--bg-card) !important;
+            border-color: var(--bg-subtle) !important;
+        }
+        
+        html.dark tr:not(.mobile-date-header):hover {
+            background: var(--bg-subtle) !important;
+        }
+        
+        html.dark .mobile-date-header td {
+            color: var(--text-primary) !important;
+            border-color: var(--bg-subtle) !important;
+        }
+        
+        html.dark td[data-label="Name"] > span {
+            color: var(--text-primary) !important;
+        }
+        
+        html.dark td[data-label="Name"]::after {
+            color: var(--text-secondary) !important;
+        }
+        
+        html.dark td[data-label="Amount"] {
+            color: var(--text-primary) !important;
+        }
+        
+        html.dark td[data-label="Amount"][data-positive="true"] {
             color: var(--accent-success) !important;
-          }
+        }
 
           /* Responsive adjustments for smaller screens */
           @media (max-width: 375px) {
@@ -5781,27 +5781,33 @@
 
 /* CSS Color Variables - Navy + Gold Design System */
 :root {
-  --color-bg: #faf7f2;
-  --color-bg-card: #ffffff;
-  --color-border: rgba(26, 35, 126, 0.1);
-  --color-text-primary: #1a237e;
-  --color-text-secondary: #424242;
-  --color-accent: #ffa000;
-  --color-success: #2e7d32;
-  --color-error: #ff5722;
-  --color-warning: #ff5722;
+  /* Light Mode - Navy + Cream */
+  --bg-primary: #faf7f2;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f5f5f5;
+  --text-primary: #1a237e;
+  --text-secondary: #424242;
+  --text-muted: #757575;
+  --accent-primary: #ffa000;
+  --accent-success: #2e7d32;
+  --accent-warning: #ff5722;
+  --accent-info: #1976d2;
   --color-font: 'Inter', system-ui, sans-serif;
 }
-.dark {
-  --color-bg: #0d1421;
-  --color-bg-card: rgba(255, 255, 255, 0.1);
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #b0bec5;
-  --color-accent: #ffa000;
-  --color-success: #4caf50;
-  --color-error: #ff5722;
-  --color-warning: #ff5722;
+
+[data-theme="dark"] {
+  /* Dark Mode - Navy + Gold */
+  --bg-primary: #0d1421;
+  --bg-secondary: #1a2332;
+  --bg-card: rgba(255, 255, 255, 0.1);
+  --bg-subtle: rgba(255, 255, 255, 0.05);
+  --text-primary: #ffffff;
+  --text-secondary: #b0bec5;
+  --text-muted: #78909c;
+  --accent-primary: #ffa000;
+  --accent-secondary: #ffb74d;
+  --accent-success: #4caf50;
+  --accent-warning: #ff5722;
   --color-font: 'Inter', system-ui, sans-serif;
 }
 body {
@@ -5887,20 +5893,78 @@ h1, h2, h3, h4, h5, h6 {
         }
         
         /* Update specific background colors to use new system */
-        .bg-blue-50 {
-            background-color: var(--bg-tertiary) !important;
-        }
-        
-        .bg-gray-200, .bg-gray-300, .bg-gray-100 {
-            background-color: var(--bg-tertiary) !important;
-        }
-        
-        .bg-gray-700, .bg-gray-800 {
-            background-color: var(--bg-secondary) !important;
-        }
+.bg-blue-50 {
+    background-color: var(--bg-tertiary) !important;
+}
+
+.bg-gray-200, .bg-gray-300, .bg-gray-100 {
+    background-color: var(--bg-tertiary) !important;
+}
+
+.bg-gray-700, .bg-gray-800 {
+    background-color: var(--bg-secondary) !important;
+}
+
+/* Update all CSS variable references to use correct names */
+body, .trezor-app {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.card, .trezor-card {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--bg-tertiary) !important;
+}
+
+/* Text color updates */
+.text-primary {
+    color: var(--text-primary) !important;
+}
+
+.text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Accent color updates */
+.text-accent-primary {
+    color: var(--accent-primary) !important;
+}
+
+.text-accent-success {
+    color: var(--accent-success) !important;
+}
+
+.text-accent-warning {
+    color: var(--accent-warning) !important;
+}
+
+.text-accent-info {
+    color: var(--accent-info) !important;
+}
+
+/* Background color updates */
+.bg-accent-primary {
+    background-color: var(--accent-primary) !important;
+}
+
+.bg-accent-success {
+    background-color: var(--accent-success) !important;
+}
+
+.bg-accent-warning {
+    background-color: var(--accent-warning) !important;
+}
+
+.bg-accent-info {
+    background-color: var(--accent-info) !important;
+}
 /* Chart and legend backgrounds */
 #daily-spending-insights-chart, #category-donut-chart {
-  background: var(--color-bg-card) !important;
+  background: var(--bg-secondary) !important;
 }
 /* Chart legends text color fix */
 .chart-legend, .chart-legend .legend-item {
@@ -5983,17 +6047,17 @@ h1, h2, h3, h4, h5, h6 {
         }
 /* Insights page consistency */
 #insights-tab, #insights-tab .card, #insights-tab .max-w-6xl {
-  background: var(--color-bg) !important;
+  background: var(--bg-primary) !important;
 }
 #insights-tab .ai-insight {
-  background: var(--color-bg-card) !important;
-  border: 1px solid var(--color-border) !important;
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--bg-tertiary) !important;
 }
 /* Misc */
-::-webkit-input-placeholder { color: var(--color-text-secondary); }
-::-moz-placeholder { color: var(--color-text-secondary); }
-:-ms-input-placeholder { color: var(--color-text-secondary); }
-::placeholder { color: var(--color-text-secondary); }
+::-webkit-input-placeholder { color: var(--text-secondary); }
+::-moz-placeholder { color: var(--text-secondary); }
+:-ms-input-placeholder { color: var(--text-secondary); }
+::placeholder { color: var(--text-secondary); }
 
 /* REDUCE ROUNDED CORNERS - MINIMAL DESIGN */
 .card, .trezor-card, .stat-card, .modern-button, .modern-input, .modern-select {
@@ -6054,7 +6118,7 @@ button, .btn, input[type="button"], input[type="submit"] {
     background-color: var(--accent-primary)/10 !important;
 }
 
-.dark .bg-blue-50, .dark .bg-blue-900\/20, .dark .bg-blue-900\/10, .dark .bg-blue-100, .dark .bg-blue-200 {
+[data-theme="dark"] .bg-blue-50, [data-theme="dark"] .bg-blue-900\/20, [data-theme="dark"] .bg-blue-900\/10, [data-theme="dark"] .bg-blue-100, [data-theme="dark"] .bg-blue-200 {
     background-color: var(--accent-primary)/20 !important;
 }
 
@@ -6062,7 +6126,7 @@ button, .btn, input[type="button"], input[type="submit"] {
     color: var(--accent-primary) !important;
 }
 
-.dark .text-blue-600, .dark .text-blue-700, .dark .text-blue-800, .dark .text-blue-900, .dark .text-blue-500, .dark .text-blue-400, .dark .text-blue-300, .dark .text-blue-200, .dark .text-blue-100 {
+[data-theme="dark"] .text-blue-600, [data-theme="dark"] .text-blue-700, [data-theme="dark"] .text-blue-800, [data-theme="dark"] .text-blue-900, [data-theme="dark"] .text-blue-500, [data-theme="dark"] .text-blue-400, [data-theme="dark"] .text-blue-300, [data-theme="dark"] .text-blue-200, [data-theme="dark"] .text-blue-100 {
     color: var(--accent-primary) !important;
 }
 
@@ -6070,7 +6134,7 @@ button, .btn, input[type="button"], input[type="submit"] {
     border-color: var(--accent-primary)/30 !important;
 }
 
-.dark .border-blue-200, .dark .border-blue-300, .dark .border-blue-400, .dark .border-blue-500, .dark .border-blue-600, .dark .border-blue-700, .dark .border-blue-800 {
+[data-theme="dark"] .border-blue-200, [data-theme="dark"] .border-blue-300, [data-theme="dark"] .border-blue-400, [data-theme="dark"] .border-blue-500, [data-theme="dark"] .border-blue-600, [data-theme="dark"] .border-blue-700, [data-theme="dark"] .border-blue-800 {
     border-color: var(--accent-primary)/50 !important;
 }
 
@@ -6086,7 +6150,7 @@ button, .btn, input[type="button"], input[type="submit"] {
     background-color: var(--accent-primary)/10 !important;
 }
 
-.dark .hover\\:bg-blue-50, .dark .hover\\:bg-blue-900\/20 {
+[data-theme="dark"] .hover\\:bg-blue-50, [data-theme="dark"] .hover\\:bg-blue-900\/20 {
     background-color: var(--accent-primary)/20 !important;
 }
 
@@ -6102,7 +6166,7 @@ button, .btn, input[type="button"], input[type="submit"] {
     background-color: var(--accent-success) !important;
 }
 
-.dark .peer-checked\\:bg-blue-600 {
+[data-theme="dark"] .peer-checked\\:bg-blue-600 {
     background-color: var(--accent-success) !important;
 }
 
@@ -6112,7 +6176,7 @@ button, .btn, input[type="button"], input[type="submit"] {
     --tw-gradient-to: var(--accent-primary)/20 !important;
 }
 
-.dark .from-blue-50, .dark .to-indigo-50, .dark .to-indigo-900\/20 {
+[data-theme="dark"] .from-blue-50, [data-theme="dark"] .to-indigo-50, [data-theme="dark"] .to-indigo-900\/20 {
     --tw-gradient-from: var(--accent-primary)/20 !important;
     --tw-gradient-to: var(--accent-primary)/30 !important;
 }
