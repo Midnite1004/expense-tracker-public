@@ -81,29 +81,29 @@
 
         }
         
-        /* CSS Custom Properties for theme colors and consistent design system */
+        /* CSS Custom Properties for Navy + Gold/Cream Design System */
         :root {
-            /* Light mode color palette */
-            --color-primary: #0066CC;
-            --color-primary-hover: #0052A3;
-            --color-success: #00A651;
-            --color-warning: #FF7B00;
-            --color-error: #E31E24;
+            /* Light mode color palette - Navy + Cream */
+            --color-primary: #1a237e;
+            --color-primary-hover: #0d1421;
+            --color-success: #2e7d32;
+            --color-warning: #ff5722;
+            --color-error: #d32f2f;
             
             /* Backgrounds */
-            --color-bg-primary: #FFFFFF;
-            --color-bg-secondary: #F8F9FA;
-            --color-bg-tertiary: #F1F3F4;
-            --color-surface: #FFFFFF;
+            --color-bg-primary: #faf7f2;
+            --color-bg-secondary: #ffffff;
+            --color-bg-tertiary: #f5f5f5;
+            --color-surface: #ffffff;
             
             /* Text colors */
-            --color-text-primary: #202124;
-            --color-text-secondary: #5F6368;
-            --color-text-tertiary: #9AA0A6;
+            --color-text-primary: #1a237e;
+            --color-text-secondary: #424242;
+            --color-text-tertiary: #757575;
             
             /* Borders */
-            --color-border: #E8EAED;
-            --color-border-focus: #0066CC;
+            --color-border: rgba(26, 35, 126, 0.1);
+            --color-border-focus: #ffa000;
             
             /* Legacy variable mappings maintained for backward compatibility with existing components */
             --bg-primary: var(--color-bg-primary);
@@ -113,14 +113,14 @@
             --text-secondary: var(--color-text-secondary);
             --text-tertiary: var(--color-text-tertiary);
             --border-color: var(--color-border);
-            --accent-primary: var(--color-primary);
-            --accent-secondary: var(--color-warning);
+            --accent-primary: #ffa000;
+            --accent-secondary: #ffb74d;
             --accent-blue: var(--color-primary);
             --accent-green: var(--color-success);
             --accent-red: var(--color-error);
-            --accent-yellow: var(--color-warning);
+            --accent-yellow: #ffa000;
             --accent-purple: var(--color-primary);
-            --accent-pink: var(--color-warning);
+            --accent-pink: #ffa000;
             --accent-orange: var(--color-warning);
             --help-text-color: var(--color-text-secondary);
             --health-score-good: var(--color-success);
@@ -131,34 +131,42 @@
             --sidebar-width: 240px;
             --sidebar-collapsed-width: 64px;
             --header-height: 64px;
-            --border-radius: 6px;
-            --border-radius-sm: 4px;
-            --border-radius-xs: 2px;
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --border-radius-xs: 4px;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
         /* Dark theme overrides using data attribute for explicit theme control */
         [data-theme="dark"] {
-            /* Dark mode color palette with improved contrast and warm grays */
-            --color-primary: #4A9EFF;
-            --color-primary-hover: #66B3FF;
-            --color-success: #00C964;
-            --color-warning: #FF9533;
-            --color-error: #FF4448;
+            /* Dark mode color palette - Navy + Gold */
+            --color-primary: #ffa000;
+            --color-primary-hover: #ffb74d;
+            --color-success: #4caf50;
+            --color-warning: #ff5722;
+            --color-error: #f44336;
             
-            /* Backgrounds - Warm grays, not pure black */
-            --color-bg-primary: #1F1F23;
-            --color-bg-secondary: #2F2F35;
-            --color-bg-tertiary: #3F3F46;
-            --color-surface: #2F2F35;
+            /* Backgrounds - Deep navy with glassmorphism */
+            --color-bg-primary: #0d1421;
+            --color-bg-secondary: #1a2332;
+            --color-bg-tertiary: rgba(255, 255, 255, 0.05);
+            --color-surface: rgba(255, 255, 255, 0.1);
             
-            /* Text colors - Improved contrast for accessibility */
-            --color-text-primary: #F4F4F5;
-            --color-text-secondary: #D4D4D8;
-            --color-text-tertiary: #A1A1AA;
+            /* Text colors - High contrast for accessibility */
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #b0bec5;
+            --color-text-tertiary: #78909c;
             
             /* Borders */
-            --color-border: #52525B;
-            --color-border-focus: #4A9EFF;
+            --color-border: rgba(255, 255, 255, 0.1);
+            --color-border-focus: #ffa000;
+            
+            /* Enhanced shadows for dark mode */
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.5);
         }
         .dark {
             /* Use data-theme approach for dark mode */
@@ -169,14 +177,14 @@
             --text-secondary: var(--color-text-secondary);
             --text-tertiary: var(--color-text-tertiary);
             --border-color: var(--color-border);
-            --accent-primary: var(--color-primary);
-            --accent-secondary: var(--color-warning);
+            --accent-primary: #ffa000;
+            --accent-secondary: #ffb74d;
             --accent-blue: var(--color-primary);
             --accent-green: var(--color-success);
             --accent-red: var(--color-error);
-            --accent-yellow: var(--color-warning);
+            --accent-yellow: #ffa000;
             --accent-purple: var(--color-primary);
-            --accent-pink: var(--color-warning);
+            --accent-pink: #ffa000;
             --accent-orange: var(--color-warning);
             --help-text-color: var(--color-text-secondary);
             --health-score-good: var(--color-success);
@@ -271,12 +279,42 @@
         
         /* Base body styles with theme-aware colors and smooth transitions */
         body {
-            background-color: var(--bg-secondary);
+            background-color: var(--bg-primary);
             color: var(--text-primary);
-            transition: background-color 0.3s, color 0.3s;
+            transition: all 0.2s ease-in-out;
             padding: 0;
             margin: 0;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        /* Smooth transitions for all elements */
+        * {
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        
+        /* Force Navy + Gold design system to take precedence */
+        body {
+            background-color: var(--color-bg) !important;
+            color: var(--color-text-primary) !important;
+        }
+        
+        .trezor-app {
+            background-color: var(--color-bg) !important;
+        }
+        
+        .card, .trezor-card, .stat-card {
+            background-color: var(--color-bg-card) !important;
+            border-color: var(--color-border) !important;
+            color: var(--color-text-primary) !important;
+        }
+        
+        /* Ensure text colors use the new system */
+        .text-primary, h1, h2, h3, h4, h5, h6 {
+            color: var(--color-text-primary) !important;
+        }
+        
+        .text-secondary, .text-muted {
+            color: var(--color-text-secondary) !important;
         }
         
         /* Main application container using flexbox layout */
@@ -406,7 +444,7 @@
         }
         
         .nav-item.active {
-            background-color: rgba(0, 171, 85, 0.1);
+            background-color: rgba(255, 160, 0, 0.1);
             color: var(--accent-primary);
             font-weight: 600;
         }
@@ -537,11 +575,90 @@
             max-width: 100%;
         }
         
-        /* Card component styling with text wrapping for long content */
+        /* Card component styling with Navy + Gold design system */
         .card, .trezor-card {
             max-width: 100%;
             box-sizing: border-box;
             word-wrap: break-word;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease-in-out;
+        }
+        
+        /* Glassmorphism effect for dark mode cards */
+        [data-theme="dark"] .card,
+        [data-theme="dark"] .trezor-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+        
+        /* Navy + Gold accent color classes */
+        .text-accent-primary {
+            color: var(--accent-primary) !important;
+        }
+        
+        .text-accent-secondary {
+            color: var(--accent-secondary) !important;
+        }
+        
+        .text-accent-success {
+            color: var(--accent-success) !important;
+        }
+        
+        .text-accent-warning {
+            color: var(--accent-warning) !important;
+        }
+        
+        .bg-accent-primary {
+            background-color: var(--accent-primary) !important;
+        }
+        
+        .bg-accent-secondary {
+            background-color: var(--accent-secondary) !important;
+        }
+        
+        .border-accent-primary {
+            border-color: var(--accent-primary) !important;
+        }
+        
+        /* Form elements with Navy + Gold design */
+        input, select, textarea {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: var(--border-radius-sm);
+            padding: 0.75rem;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(255, 160, 0, 0.1);
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* Dark mode form elements */
+        [data-theme="dark"] input,
+        [data-theme="dark"] select,
+        [data-theme="dark"] textarea {
+            background-color: var(--bg-card);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] input:focus,
+        [data-theme="dark"] select:focus,
+        [data-theme="dark"] textarea:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(255, 160, 0, 0.2);
         }
         
         /* 
@@ -809,9 +926,9 @@
                 position: fixed !important;
                 top: 0 !important;
                 z-index: 100 !important;
-                background-color: var(--bg-primary) !important;
+                background-color: var(--bg-secondary) !important;
                 border-bottom: 1px solid var(--border-color) !important;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+                box-shadow: var(--shadow) !important;
                 backdrop-filter: blur(10px) !important;
                 -webkit-backdrop-filter: blur(10px) !important;
                 transition: all 0.3s ease !important;
@@ -1296,11 +1413,9 @@
                 position: fixed !important;
                 top: 0 !important;
                 z-index: 100 !important;
-                background-color: #ffffff !important;
-                background-color: var(--bg-primary) !important;
-                border-bottom: 1px solid #e5e5e5 !important;
+                background-color: var(--bg-secondary) !important;
                 border-bottom: 1px solid var(--border-color) !important;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+                box-shadow: var(--shadow) !important;
                 backdrop-filter: blur(10px) !important;
                 -webkit-backdrop-filter: blur(10px) !important;
             }
@@ -2939,7 +3054,7 @@
         
 
         
-        /* Trezor Suite Button Styles */
+        /* Trezor Suite Button Styles - Navy + Gold Design */
         .btn-primary {
             background-color: var(--accent-primary);
             color: white;
@@ -2954,15 +3069,17 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
+            box-shadow: var(--shadow);
         }
         
         .btn-primary:hover {
-            background-color: var(--color-primary-hover);
+            background-color: var(--accent-secondary);
             transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
         }
         
         .btn-secondary {
-            background-color: var(--bg-primary);
+            background-color: var(--bg-secondary);
             color: var(--text-primary);
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
@@ -2975,12 +3092,14 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
+            box-shadow: var(--shadow);
         }
         
         .btn-secondary:hover {
-            background-color: var(--color-bg-tertiary);
-            border-color: var(--color-primary);
+            background-color: var(--bg-tertiary);
+            border-color: var(--accent-primary);
             transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
         }
         
         .btn-danger {
@@ -3171,10 +3290,10 @@
         }
         .stat-card-value.text-green-600 { color: var(--accent-green); }
         .stat-card-value.text-red-600 { color: var(--accent-red); }
-        .stat-card-value.text-blue-600 { color: var(--accent-blue); }
-        .dark .stat-card-value.text-green-600 { color: #34d399; }
-        .dark .stat-card-value.text-red-600 { color: #f87171; }
-        .dark .stat-card-value.text-blue-600 { color: #60a5fa; }
+        .stat-card-value.text-blue-600 { color: var(--accent-primary); }
+        .dark .stat-card-value.text-green-600 { color: var(--accent-success); }
+        .dark .stat-card-value.text-red-600 { color: var(--accent-warning); }
+        .dark .stat-card-value.text-blue-600 { color: var(--accent-primary); }
         
         /* Google Sign-In Button Styling */
         #googleSignInButton {
@@ -3598,14 +3717,14 @@
         /* Light Mode Toggle Visibility Fixes */
         /* Make toggles more visible in light mode */
         .w-11.h-6.bg-gray-200 {
-            background-color: #d1d5db !important; /* darker gray */
-            border: 2px solid #9ca3af !important; /* visible border */
+            background-color: var(--bg-tertiary) !important;
+            border: 2px solid var(--border-color) !important;
         }
         
         /* Dark mode toggles - keep existing styling */
         .dark .w-11.h-6.bg-gray-200 {
-            background-color: #374151 !important; /* dark gray for dark mode */
-            border: 2px solid #4b5563 !important;
+            background-color: var(--bg-subtle) !important;
+            border: 2px solid var(--border-color) !important;
         }
         
         /* Toggle circle visibility in light mode */
@@ -3623,14 +3742,14 @@
         
         /* Checked state visibility in light mode */
         .w-11.h-6.peer-checked\\:bg-blue-600 {
-            background-color: #2563eb !important; /* bright blue when checked */
-            border: 2px solid #1d4ed8 !important;
+            background-color: var(--accent-primary) !important;
+            border: 2px solid var(--accent-primary) !important;
         }
         
         /* Dark mode checked state */
         .dark .w-11.h-6.peer-checked\\:bg-blue-600 {
-            background-color: #2563eb !important;
-            border: 2px solid #1d4ed8 !important;
+            background-color: var(--accent-primary) !important;
+            border: 2px solid var(--accent-primary) !important;
         }
         /* Help Tab Contrast */
         #help-tab p, #help-tab li {
@@ -4008,38 +4127,42 @@
             color: var(--accent-primary);
         }
         
-        /* New Mobile Card Styling */
+        /* New Mobile Card Styling - Navy + Gold Design */
         .mobile-card {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 16px;
-            background-color: var(--color-bg-primary);
-            border: 1px solid var(--color-border);
-            border-radius: 6px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             margin: 0 0 12px 0;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s ease-in-out;
+            box-shadow: var(--shadow);
         }
         html.dark .mobile-card {
-            background-color: var(--color-bg-tertiary);
+            background-color: var(--bg-card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         .mobile-card:active {
-            background-color: var(--color-bg-tertiary);
+            background-color: var(--bg-tertiary);
+            transform: scale(0.98);
         }
         .mobile-card-icon {
             width: 40px;
             height: 40px;
             min-width: 40px;
-            border-radius: 4px;
+            border-radius: var(--border-radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--color-bg-tertiary);
+            background-color: var(--bg-tertiary);
             font-size: 1.25rem;
         }
          html.dark .mobile-card-icon {
-            background-color: var(--color-bg-secondary);
+            background-color: var(--bg-subtle);
         }
         .mobile-card-main {
             flex: 1;
@@ -4047,14 +4170,14 @@
         }
         .mobile-card-title {
             font-weight: 500;
-            color: var(--color-text-primary);
+            color: var(--text-primary);
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
         }
         .mobile-card-subtitle {
             font-size: 0.875rem;
-            color: var(--color-text-secondary);
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 4px;
@@ -5625,29 +5748,29 @@
             color: var(--color-text-tertiary) !important;
         }
 
-/* CSS Color Variables */
+/* CSS Color Variables - Navy + Gold Design System */
 :root {
-  --color-bg: #F7F7F8;
-  --color-bg-card: #FFFFFF;
-  --color-border: #E5E7EB;
-  --color-text-primary: #222;
-  --color-text-secondary: #666;
-  --color-accent: #4F8CFF;
-  --color-success: #2ECC40;
-  --color-error: #FF4D4F;
-  --color-warning: #FFB020;
+  --color-bg: #faf7f2;
+  --color-bg-card: #ffffff;
+  --color-border: rgba(26, 35, 126, 0.1);
+  --color-text-primary: #1a237e;
+  --color-text-secondary: #424242;
+  --color-accent: #ffa000;
+  --color-success: #2e7d32;
+  --color-error: #ff5722;
+  --color-warning: #ff5722;
   --color-font: 'Inter', system-ui, sans-serif;
 }
 .dark {
-  --color-bg: #181A1B;
-  --color-bg-card: #232526;
-  --color-border: #23272A;
-  --color-text-primary: #F7F7F8;
-  --color-text-secondary: #D4D4D8;
-  --color-accent: #4F8CFF;
-  --color-success: #2ECC40;
-  --color-error: #FF4D4F;
-  --color-warning: #FFB020;
+  --color-bg: #0d1421;
+  --color-bg-card: rgba(255, 255, 255, 0.1);
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #b0bec5;
+  --color-accent: #ffa000;
+  --color-success: #4caf50;
+  --color-error: #ff5722;
+  --color-warning: #ff5722;
   --color-font: 'Inter', system-ui, sans-serif;
 }
 body {
@@ -5726,11 +5849,24 @@ h1, h2, h3, h4, h5, h6 {
 .text-warning, .text-yellow-600, .text-yellow-400 {
   color: var(--color-warning) !important;
 }
-/* Remove all background color pops and gradients */
-.bg-blue-50, .bg-blue-900, .bg-red-50, .bg-red-900, .bg-green-50, .bg-green-900, .bg-purple-50, .bg-purple-900, .bg-orange-50, .bg-orange-900, .bg-indigo-500, .bg-sky-500, .bg-gray-200, .bg-gray-700, .bg-gray-800, .bg-gray-50, .bg-gray-600, .bg-gray-400, .bg-gray-300, .bg-gray-100, .bg-gradient-to-r, .from-blue-500, .to-purple-600, .from-green-500, .to-teal-600, .from-purple-500, .to-indigo-600 {
-  background: var(--color-bg-card) !important;
-  color: var(--color-text-primary) !important;
-}
+        /* Remove all background color pops and gradients */
+        .bg-blue-50, .bg-blue-900, .bg-red-50, .bg-red-900, .bg-green-50, .bg-green-900, .bg-purple-50, .bg-purple-900, .bg-orange-50, .bg-orange-900, .bg-indigo-500, .bg-sky-500, .bg-gray-200, .bg-gray-700, .bg-gray-800, .bg-gray-50, .bg-gray-600, .bg-gray-400, .bg-gray-300, .bg-gray-100, .bg-gradient-to-r, .from-blue-500, .to-purple-600, .from-green-500, .to-teal-600, .from-purple-500, .to-indigo-600 {
+            background: var(--color-bg-card) !important;
+            color: var(--color-text-primary) !important;
+        }
+        
+        /* Update specific background colors to use new system */
+        .bg-blue-50 {
+            background-color: var(--bg-tertiary) !important;
+        }
+        
+        .bg-gray-200, .bg-gray-300, .bg-gray-100 {
+            background-color: var(--bg-tertiary) !important;
+        }
+        
+        .bg-gray-700, .bg-gray-800 {
+            background-color: var(--bg-secondary) !important;
+        }
 /* Chart and legend backgrounds */
 #daily-spending-insights-chart, #category-donut-chart {
   background: var(--color-bg-card) !important;
@@ -5739,10 +5875,19 @@ h1, h2, h3, h4, h5, h6 {
 .chart-legend, .chart-legend .legend-item {
   color: var(--color-text-primary) !important;
 }
-/* Remove all colored borders except semantic */
-.border-blue-200, .border-blue-800, .border-red-200, .border-red-800, .border-green-200, .border-green-800, .border-purple-200, .border-purple-800, .border-orange-200, .border-orange-700, .border-gray-200, .border-gray-700 {
-  border-color: var(--color-border) !important;
-}
+        /* Remove all colored borders except semantic */
+        .border-blue-200, .border-blue-800, .border-red-200, .border-red-800, .border-green-200, .border-green-800, .border-purple-200, .border-purple-800, .border-orange-200, .border-orange-700, .border-gray-200, .border-gray-700 {
+            border-color: var(--color-border) !important;
+        }
+        
+        /* Update border colors to use new system */
+        .border-gray-300, .border-gray-400, .border-gray-500 {
+            border-color: var(--border-color) !important;
+        }
+        
+        .border-blue-500, .border-blue-600 {
+            border-color: var(--accent-primary) !important;
+        }
 /* Status cards */
 .success-card {
   border-left: 4px solid var(--color-success) !important;
@@ -5753,14 +5898,58 @@ h1, h2, h3, h4, h5, h6 {
 .error-card {
   border-left: 4px solid var(--color-error) !important;
 }
-/* Remove all text color pops except semantic */
-.text-purple-600, .text-purple-400, .text-indigo-500, .text-sky-500, .text-orange-600, .text-orange-400 {
-  color: var(--color-text-primary) !important;
-}
-/* Remove all box shadows for minimal look */
-.shadow, .shadow-sm, .shadow-lg, .hover\:shadow-lg {
-  box-shadow: none !important;
-}
+        /* Remove all text color pops except semantic */
+        .text-purple-600, .text-purple-400, .text-indigo-500, .text-sky-500, .text-orange-600, .text-orange-400 {
+            color: var(--color-text-primary) !important;
+        }
+        
+        /* Update text colors to use new system */
+        .text-blue-600, .text-blue-500, .text-blue-400 {
+            color: var(--accent-primary) !important;
+        }
+        
+        .text-green-600, .text-green-500 {
+            color: var(--accent-success) !important;
+        }
+        
+        .text-red-600, .text-red-500 {
+            color: var(--accent-warning) !important;
+        }
+        
+        .text-gray-600, .text-gray-500, .text-gray-400 {
+            color: var(--text-secondary) !important;
+        }
+        
+        .text-gray-300, .text-gray-200 {
+            color: var(--text-muted) !important;
+        }
+        /* Remove all box shadows for minimal look */
+        .shadow, .shadow-sm, .shadow-lg, .hover\:shadow-lg {
+            box-shadow: none !important;
+        }
+        
+        /* Final override to ensure Navy + Gold design system takes precedence */
+        .trezor-app * {
+            color: inherit;
+        }
+        
+        /* Ensure proper contrast for all text elements */
+        .text-white {
+            color: var(--text-primary) !important;
+        }
+        
+        .text-black {
+            color: var(--text-primary) !important;
+        }
+        
+        /* Ensure proper background colors */
+        .bg-white {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        .bg-black {
+            background-color: var(--bg-primary) !important;
+        }
 /* Insights page consistency */
 #insights-tab, #insights-tab .card, #insights-tab .max-w-6xl {
   background: var(--color-bg) !important;
@@ -6464,8 +6653,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-4xl font-bold mb-2" id="total-monthly-income">£0.00</div>
-                                <div class="text-gray-600 dark:text-gray-300 font-medium" id="savings-rate-display">💰 Savings Rate: 25%</div>
+                                <div class="text-4xl font-bold mb-2 text-accent-primary" id="total-monthly-income">£0.00</div>
+                                <div class="text-accent-success font-medium" id="savings-rate-display">💰 Savings Rate: 25%</div>
                             </div>
                             <div class="flex-shrink-0">
                                 <button onclick="showAddIncomeForm()" class="btn-primary">
@@ -6482,8 +6671,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4 stats-grid">
                         <div class="stat-card">
                             <div class="stat-card-title">Monthly Budget</div>
-                            <div class="stat-card-value text-blue-600" id="monthly-budget">£0.00</div>
-                            <div class="text-xs text-green-600 mt-1" id="budget-change-indicator">30.6% of income</div>
+                            <div class="stat-card-value text-accent-primary" id="monthly-budget">£0.00</div>
+                            <div class="text-xs text-accent-success mt-1" id="budget-change-indicator">30.6% of income</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-card-title">Spent This Month</div>
@@ -19105,7 +19294,7 @@ function closeGoalSelection() {
             initInsightsDashboard(); // Initialize new insights dashboard
         }
 
-        const chartColors = ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316', '#06b6d4', '#d946ef', '#84cc16'];
+        const chartColors = ['#ffa000', '#2e7d32', '#ff5722', '#1976d2', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316', '#06b6d4', '#d946ef', '#84cc16'];
         /**
          * Generate array of chart colors for multiple data series
          * @param {number} count - Number of colors needed
