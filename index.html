@@ -1437,7 +1437,7 @@
                 width: 100% !important;
                 max-width: 100% !important;
                 overflow-x: hidden !important;
-                padding-bottom: 100px !important;
+                padding-bottom: 60px !important;
                 padding-top: 5rem !important;
             }
             
@@ -2370,13 +2370,13 @@
             
             /* Ensure proper spacing with bottom nav */
             .trezor-content {
-                padding-bottom: 100px !important;
+                padding-bottom: 60px !important;
             }
             
             /* Fix the card container positioning */
             .mobile-cards-container {
                 padding: 16px !important;
-                margin-bottom: 100px !important; /* Space for bottom nav */
+                margin-bottom: 60px !important; /* Space for bottom nav */
                 display: block !important;
             }
         }
@@ -3761,7 +3761,7 @@
         [data-theme="dark"] .w-11.h-6.peer-checked\\:bg-blue-600 {
     background-color: var(--accent-success) !important;
     border: 2px solid var(--accent-success) !important;
-}
+        }
         /* Help Tab Contrast */
         #help-tab p, #help-tab li {
             color: var(--help-text-color);
@@ -4219,9 +4219,9 @@
             justify-content: space-between !important;
             align-items: center !important;
             padding: 0.75rem 1rem !important;
-                    color: var(--text-primary) !important;
-        font-size: 1.1em !important;
-        font-weight: 700 !important;
+            color: var(--text-primary) !important;
+            font-size: 1.1em !important;
+            font-weight: 700 !important;
         border-bottom: 1px solid var(--bg-tertiary) !important;
             margin-bottom: 0.5rem !important;
             background: transparent !important;
@@ -4433,32 +4433,32 @@
           html.dark tr:not(.mobile-date-header) {
             background: var(--bg-card) !important;
             border-color: var(--bg-subtle) !important;
-        }
-        
-        html.dark tr:not(.mobile-date-header):hover {
+          }
+
+          html.dark tr:not(.mobile-date-header):hover {
             background: var(--bg-subtle) !important;
-        }
-        
-        html.dark .mobile-date-header td {
+          }
+
+          html.dark .mobile-date-header td {
             color: var(--text-primary) !important;
             border-color: var(--bg-subtle) !important;
-        }
-        
-        html.dark td[data-label="Name"] > span {
+          }
+
+          html.dark td[data-label="Name"] > span {
             color: var(--text-primary) !important;
-        }
-        
-        html.dark td[data-label="Name"]::after {
+          }
+
+          html.dark td[data-label="Name"]::after {
             color: var(--text-secondary) !important;
-        }
-        
-        html.dark td[data-label="Amount"] {
+          }
+
+          html.dark td[data-label="Amount"] {
             color: var(--text-primary) !important;
-        }
-        
-        html.dark td[data-label="Amount"][data-positive="true"] {
+          }
+
+          html.dark td[data-label="Amount"][data-positive="true"] {
             color: var(--accent-success) !important;
-        }
+          }
 
           /* Responsive adjustments for smaller screens */
           @media (max-width: 375px) {
@@ -4774,6 +4774,35 @@
                 width: 3rem;
                 padding: 0.375rem 0.5rem;
                 font-size: 0.8125rem;
+            }
+            
+            /* Hide pagination on mobile */
+            @media (max-width: 768px) {
+                .pagination-container {
+                    display: none !important;
+                }
+                
+                /* Make search bars more visible on mobile */
+                #expense-search,
+                #recurring-search {
+                    border: 2px solid #d1d5db !important;
+                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+                }
+                
+                #expense-search:focus,
+                #recurring-search:focus {
+                    border-color: #3b82f6 !important;
+                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+                }
+                
+                /* Reduce bottom spacing on mobile */
+                .tab-content {
+                    padding-bottom: 20px !important;
+                }
+                
+                .mobile-cards-container {
+                    margin-bottom: 20px !important;
+                }
             }
             
             /* Ensure filter panels stay within containers */
@@ -5897,10 +5926,10 @@ h1, h2, h3, h4, h5, h6 {
 .text-warning, .text-yellow-600, .text-yellow-400 {
   color: var(--color-warning) !important;
 }
-        /* Remove all background color pops and gradients */
-        .bg-blue-50, .bg-blue-900, .bg-red-50, .bg-red-900, .bg-green-50, .bg-green-900, .bg-purple-50, .bg-purple-900, .bg-orange-50, .bg-orange-900, .bg-indigo-500, .bg-sky-500, .bg-gray-200, .bg-gray-700, .bg-gray-800, .bg-gray-50, .bg-gray-600, .bg-gray-400, .bg-gray-300, .bg-gray-100, .bg-gradient-to-r, .from-blue-500, .to-purple-600, .from-green-500, .to-teal-600, .from-purple-500, .to-indigo-600 {
-            background: var(--color-bg-card) !important;
-            color: var(--color-text-primary) !important;
+/* Remove all background color pops and gradients */
+.bg-blue-50, .bg-blue-900, .bg-red-50, .bg-red-900, .bg-green-50, .bg-green-900, .bg-purple-50, .bg-purple-900, .bg-orange-50, .bg-orange-900, .bg-indigo-500, .bg-sky-500, .bg-gray-200, .bg-gray-700, .bg-gray-800, .bg-gray-50, .bg-gray-600, .bg-gray-400, .bg-gray-300, .bg-gray-100, .bg-gradient-to-r, .from-blue-500, .to-purple-600, .from-green-500, .to-teal-600, .from-purple-500, .to-indigo-600 {
+  background: var(--color-bg-card) !important;
+  color: var(--color-text-primary) !important;
         }
         
         /* Update specific background colors to use new system */
@@ -5981,10 +6010,10 @@ body, .trezor-app {
 .chart-legend, .chart-legend .legend-item {
   color: var(--color-text-primary) !important;
 }
-        /* Remove all colored borders except semantic */
-        .border-blue-200, .border-blue-800, .border-red-200, .border-red-800, .border-green-200, .border-green-800, .border-purple-200, .border-purple-800, .border-orange-200, .border-orange-700, .border-gray-200, .border-gray-700 {
-            border-color: var(--color-border) !important;
-        }
+/* Remove all colored borders except semantic */
+.border-blue-200, .border-blue-800, .border-red-200, .border-red-800, .border-green-200, .border-green-800, .border-purple-200, .border-purple-800, .border-orange-200, .border-orange-700, .border-gray-200, .border-gray-700 {
+  border-color: var(--color-border) !important;
+}
         
         /* Update border colors to use new system */
         .border-gray-300, .border-gray-400, .border-gray-500 {
@@ -6004,10 +6033,10 @@ body, .trezor-app {
 .error-card {
   border-left: 4px solid var(--color-error) !important;
 }
-        /* Remove all text color pops except semantic */
-        .text-purple-600, .text-purple-400, .text-indigo-500, .text-sky-500, .text-orange-600, .text-orange-400 {
-            color: var(--color-text-primary) !important;
-        }
+/* Remove all text color pops except semantic */
+.text-purple-600, .text-purple-400, .text-indigo-500, .text-sky-500, .text-orange-600, .text-orange-400 {
+  color: var(--color-text-primary) !important;
+}
         
         /* Update text colors to use new system */
         .text-blue-600, .text-blue-500, .text-blue-400 {
@@ -6029,10 +6058,10 @@ body, .trezor-app {
         .text-gray-300, .text-gray-200 {
             color: var(--text-muted) !important;
         }
-        /* Remove all box shadows for minimal look */
-        .shadow, .shadow-sm, .shadow-lg, .hover\:shadow-lg {
-            box-shadow: none !important;
-        }
+/* Remove all box shadows for minimal look */
+.shadow, .shadow-sm, .shadow-lg, .hover\:shadow-lg {
+  box-shadow: none !important;
+}
         
         /* Final override to ensure Navy + Gold design system takes precedence */
         .trezor-app * {
@@ -6165,7 +6194,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 /* Mobile-specific bottom spacing */
 @media (max-width: 768px) {
     .tab-content {
-        padding-bottom: 4rem !important;
+        padding-bottom: 60px !important;
     }
     
     /* Ensure last elements in accordions are visible */
@@ -6212,7 +6241,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 @media (max-width: 768px) {
     .trezor-content {
         padding-top: 5rem !important;
-        padding-bottom: 6rem !important;
+        padding-bottom: 60px !important;
     }
     
     .trezor-header {
@@ -6987,7 +7016,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                                                    <div class="font-medium text-gray-900 dark:text-white quick-add-title">Coffee</div>
+                                            <div class="font-medium text-gray-900 dark:text-white quick-add-title">Coffee</div>
                         <div class="text-sm text-gray-500 dark:text-gray-100 quick-add-category">Food/Drink</div>
                                         </div>
                                         <span class="font-medium text-amber-600 dark:text-amber-400 quick-add-price">£5</span>
@@ -7019,7 +7048,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                                                    <div class="font-medium text-gray-900 dark:text-white quick-add-title">Lunch</div>
+                                            <div class="font-medium text-gray-900 dark:text-white quick-add-title">Lunch</div>
                         <div class="text-sm text-gray-500 dark:text-gray-100 quick-add-category">Food/Drink</div>
                                         </div>
                                         <span class="font-medium text-green-600 dark:text-green-400 quick-add-price">£15</span>
@@ -7267,7 +7296,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         
                         <!-- Search Field -->
                         <div class="relative mb-4">
-                            <input type="text" id="expense-search" placeholder="Search expenses..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-accent-primary focus:border-accent-primary" onkeyup="renderExpensesTable()">
+                            <input type="text" id="expense-search" placeholder="Search expenses..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-400 dark:border-gray-500 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-0 focus:border-blue-500" onkeyup="renderExpensesTable()">
                             <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
@@ -7332,14 +7361,12 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                         
                         <!-- Expenses Pagination -->
-                        <div id="expenses-pagination" class="pagination-container" style="display: none !important;">
+                        <div id="expenses-pagination" class="pagination-container">
                             <div class="pagination-info">
                                 <span>Show</span>
                                 <select id="expenses-per-page" onchange="changeExpensesPerPage(this.value)">
-                                    <option value="5" selected>5</option>
                                     <option value="10">10</option>
-                                    <option value="15">15</option>
-                                    <option value="25">25</option>
+                                    <option value="25" selected>25</option>
                                     <option value="50">50</option>
                                 </select>
                                 <span>entries</span>
@@ -7349,9 +7376,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <span id="expenses-page-info" class="pagination-status"></span>
                                 <div class="pagination-buttons">
                                     <button onclick="goToExpensesPage('first')" id="expenses-first-btn" class="pagination-nav-btn" title="First page">
-                                        ⏮
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                        </svg>
                                     </button>
                                     <button onclick="changeExpensesPage('prev')" id="expenses-prev-btn" class="pagination-nav-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
                                         Previous
                                     </button>
                                     <div class="pagination-page-input-container">
@@ -7361,9 +7393,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     </div>
                                     <button onclick="changeExpensesPage('next')" id="expenses-next-btn" class="pagination-nav-btn">
                                         Next
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
                                     </button>
                                     <button onclick="goToExpensesPage('last')" id="expenses-last-btn" class="pagination-nav-btn" title="Last page">
-                                        ⏭
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0zm6 0a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
                                     </button>
                                 </div>
                             </div>
@@ -7448,7 +7485,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         
                         <!-- Search Field -->
                         <div class="relative mb-4">
-                            <input type="text" id="recurring-search" placeholder="Search recurring items..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:ring-2 focus:ring-accent-primary focus:border-accent-primary" onkeyup="renderRecurringTable()">
+                            <input type="text" id="recurring-search" placeholder="Search recurring items..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-400 dark:border-gray-500 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:ring-0 focus:border-blue-500" onkeyup="renderRecurringTable()">
                             <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
@@ -7513,13 +7550,12 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                         
                         <!-- Recurring Pagination -->
-                        <div id="recurring-pagination" class="pagination-container" style="display: none !important;">
+                        <div id="recurring-pagination" class="pagination-container">
                             <div class="pagination-info">
                                 <span>Show</span>
                                 <select id="recurring-per-page" onchange="changeRecurringPerPage(this.value)">
                                     <option value="10">10</option>
-                                    <option value="15" selected>15</option>
-                                    <option value="25">25</option>
+                                    <option value="25" selected>25</option>
                                     <option value="50">50</option>
                                 </select>
                                 <span>entries</span>
@@ -7529,9 +7565,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <span id="recurring-page-info" class="pagination-status"></span>
                                 <div class="pagination-buttons">
                                     <button onclick="goToRecurringPage('first')" id="recurring-first-btn" class="pagination-nav-btn" title="First page">
-                                        ⏮
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                        </svg>
                                     </button>
                                     <button onclick="changeRecurringPage('prev')" id="recurring-prev-btn" class="pagination-nav-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
                                         Previous
                                     </button>
                                     <div class="pagination-page-input-container">
@@ -7541,9 +7582,14 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     </div>
                                     <button onclick="changeRecurringPage('next')" id="recurring-next-btn" class="pagination-nav-btn">
                                         Next
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
                                     </button>
                                     <button onclick="goToRecurringPage('last')" id="recurring-last-btn" class="pagination-nav-btn" title="Last page">
-                                        ⏭
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0zm6 0a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
                                     </button>
                                 </div>
                             </div>
@@ -7593,8 +7639,8 @@ button, .btn, input[type="button"], input[type="submit"] {
         <div class="mb-6">
             <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
                 <div class="flex-1">
-                    <h2 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Daily Spending Visualization</h2>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Track your daily spending patterns with budget alerts and reference lines</p>
+                            <h2 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Daily Spending Visualization</h2>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Track your daily spending patterns with budget alerts and reference lines</p>
                 </div>
                 <div class="flex gap-3 flex-wrap">
                     <button class="period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-accent-primary bg-accent-primary text-white hover:bg-accent-primary-hover hover:border-accent-primary-hover shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('7days')" data-period="7days">7 Days</button>
@@ -7618,7 +7664,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <span id="budget-coach-toggle" class="text-lg text-gray-900 dark:text-white">▼</span>
             </button>
             <div id="budget-coach-content" class="">
-                <!-- Will be populated with dynamic coaching messages -->
+                    <!-- Will be populated with dynamic coaching messages -->
             </div>
         </div>
 
@@ -7629,16 +7675,16 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <span id="spending-breakdown-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="spending-breakdown-content" class="hidden">
-                <div class="flex justify-around items-center text-center mb-4">
-                    <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">Essential</p>
-                        <p class="text-2xl font-semibold" style="color: var(--color-primary);" id="insights-essential-spending">£0.00</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">Non-Essential</p>
-                        <p class="text-2xl font-semibold" style="color: var(--color-warning);" id="insights-non-essential-spending">£0.00</p>
-                    </div>
+            <div class="flex justify-around items-center text-center mb-4">
+                <div>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Essential</p>
+                    <p class="text-2xl font-semibold" style="color: var(--color-primary);" id="insights-essential-spending">£0.00</p>
                 </div>
+                <div>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Non-Essential</p>
+                    <p class="text-2xl font-semibold" style="color: var(--color-warning);" id="insights-non-essential-spending">£0.00</p>
+                </div>
+            </div>
                 <div class="w-full rounded-full h-3">
                     <div id="insights-essential-bar" class="bg-sky-500 h-3 rounded-l-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div>
                     <div id="insights-non-essential-bar" class="bg-indigo-500 h-3 rounded-r-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div>
@@ -7653,15 +7699,15 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <span id="todays-budget-toggle" class="text-lg">▶</span>
             </button>
             <div id="todays-budget-content" class="hidden">
-                <div class="text-center mb-4">
-                    <div class="text-3xl font-bold text-gray-900 dark:text-white" id="todays-remaining">£0</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-300">Remaining Today</div>
-                </div>
-                
-                <div class="w-full rounded-full h-3 mb-2" style="background-color: var(--color-bg-tertiary);">
+            <div class="text-center mb-4">
+                <div class="text-3xl font-bold text-gray-900 dark:text-white" id="todays-remaining">£0</div>
+                <div class="text-sm text-gray-600 dark:text-gray-300">Remaining Today</div>
+            </div>
+            
+            <div class="w-full rounded-full h-3 mb-2" style="background-color: var(--color-bg-tertiary);">
                     <div class="bg-accent-primary h-3 rounded-full transition-all duration-300" id="todays-budget-bar" style="width: 0%"></div>
-                </div>
-                
+            </div>
+            
                 <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
                     <span id="todays-spent">Spent: £0</span>
                     <span id="todays-budget-total">Budget: £0</span>
@@ -7694,9 +7740,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <!-- Chart Legend -->
                         <div class="mt-4 grid grid-cols-2 gap-2 text-sm" id="category-chart-legend">
                             <!-- Will be populated by JavaScript -->
-                        </div>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
 
@@ -7707,7 +7753,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <span id="smart-insights-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="smart-insights-content" class="hidden">
-                <!-- Will be populated by JavaScript -->
+                    <!-- Will be populated by JavaScript -->
             </div>
         </div>
 
@@ -7718,7 +7764,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <span id="budget-performance-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="budget-performance-content" class="hidden">
-                <!-- Will be populated by JavaScript -->
+                    <!-- Will be populated by JavaScript -->
             </div>
         </div>
     </div>
@@ -10431,6 +10477,10 @@ button, .btn, input[type="button"], input[type="submit"] {
         // Pagination state for large data sets
         window.expensesCurrentPage = 1;
         window.expensesItemsPerPage = 25;     // Items per page for expense list
+        window.expensesLoadedCount = 10;       // For mobile "load more" functionality
+        window.recurringCurrentPage = 1;
+        window.recurringItemsPerPage = 25;     // Items per page for recurring list
+        window.recurringLoadedCount = 10;      // For mobile "load more" functionality
         window.recurringCurrentPage = 1;
         window.recurringItemsPerPage = 25;    // Items per page for recurring list
         // Currency configuration for multi-currency support
@@ -14613,7 +14663,7 @@ function renderGoalEditForm(goal, index) {
                     <span>Progress: <span id="goal-${index}-progress-text" class="font-medium">${Math.round((goal.currentProgress / goal.target) * 100)}%</span></span>
                     <span>Remaining: <span id="goal-${index}-remaining-text" class="font-medium">£${(goal.target - goal.currentProgress).toLocaleString()}</span></span>
                 </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2 goal-progress-container" style="margin-top: 20px;">
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-2 goal-progress-container" style="margin-top: 20px;">
                             <div id="goal-${index}-progress-bar" class="bg-accent-primary h-2 rounded-full transition-all duration-500" style="width: ${Math.min((goal.currentProgress / goal.target) * 100, 100)}%"></div>
                     <!-- 50% midpoint reference marker -->
                     <div class="goal-50-marker"></div>
@@ -18904,16 +18954,33 @@ function closeGoalSelection() {
                 return;
             }
 
-            // Show all items (no pagination for app-like experience)
+            console.log('📱 Mobile detection:', { isMobile, windowWidth: window.innerWidth });
+            console.log('📱 Filtered expenses count:', filteredExpenses.length);
+            
             if (isMobile) {
+                console.log('📱 Rendering mobile expenses with', filteredExpenses.length, 'expenses');
+                // Initialize loaded count if not set
+                if (!window.expensesLoadedCount) {
+                    window.expensesLoadedCount = 10;
+                }
                 renderMobileExpenses(filteredExpenses);
             } else {
-                renderDesktopExpensesTable(filteredExpenses, tableBody);
+                console.log('🖥️ Rendering desktop expenses with', filteredExpenses.length, 'expenses');
+                renderDesktopExpensesTableWithPagination(filteredExpenses, tableBody);
             }
         }
 
-        // Mobile expenses rendering function
-        function renderMobileExpenses(expenses) {
+        // Mobile expenses rendering function with load more
+        function renderMobileExpenses(allExpenses) {
+            // Get the expenses to display (first N based on loaded count)
+            const expenses = allExpenses.slice(0, window.expensesLoadedCount);
+            
+            console.log('📱 renderMobileExpenses:', {
+                totalExpenses: allExpenses.length,
+                loadedCount: window.expensesLoadedCount,
+                displayingCount: expenses.length,
+                shouldShowLoadMore: allExpenses.length > window.expensesLoadedCount
+            });
             
             // Get or create mobile container
             let mobileContainer = document.querySelector('#expenses-tab .mobile-cards-container');
@@ -18922,7 +18989,7 @@ function closeGoalSelection() {
                 mobileContainer = document.createElement('div');
                 mobileContainer.className = 'mobile-cards-container';
                 mobileContainer.style.display = 'block';
-                mobileContainer.style.marginBottom = '120px';
+                mobileContainer.style.marginBottom = '20px';
                 
                 const expensesTab = document.getElementById('expenses-tab');
                 if (expensesTab) {
@@ -19033,6 +19100,24 @@ function closeGoalSelection() {
                     `;
                 });
 
+            // Add Load More button if there are more expenses
+            console.log('📱 Load More check:', {
+                totalExpenses: allExpenses.length,
+                loadedCount: window.expensesLoadedCount,
+                shouldShowLoadMore: allExpenses.length > window.expensesLoadedCount
+            });
+            
+            if (allExpenses.length > window.expensesLoadedCount) {
+                console.log('📱 Adding Load More button');
+                html += `
+                    <div class="px-4 pb-4">
+                        <button onclick="loadMoreExpenses()" class="w-full py-3 px-4 bg-accent-primary text-white rounded-lg hover:bg-accent-primary-hover transition-colors font-medium">
+                            Load More (${allExpenses.length - window.expensesLoadedCount} remaining)
+                        </button>
+                    </div>
+                `;
+            }
+
             mobileContainer.innerHTML = html || `
                 <div class="text-center py-12">
                     <div class="w-24 h-24 mx-auto mb-4 opacity-30">
@@ -19048,9 +19133,27 @@ function closeGoalSelection() {
 
         }
 
-        // Desktop table rendering function
-        function renderDesktopExpensesTable(expenses, tableBody) {
-            console.log('🖥️ renderDesktopExpensesTable called with', expenses.length, 'items');
+        // Load more expenses for mobile
+        function loadMoreExpenses() {
+            console.log('📱 loadMoreExpenses called, current count:', window.expensesLoadedCount);
+            window.expensesLoadedCount += 10;
+            console.log('📱 New loaded count:', window.expensesLoadedCount);
+            renderExpensesTable();
+        }
+        window.loadMoreExpenses = loadMoreExpenses;
+        
+        // Load more recurring for mobile
+        function loadMoreRecurring() {
+            console.log('📱 loadMoreRecurring called, current count:', window.recurringLoadedCount);
+            window.recurringLoadedCount += 10;
+            console.log('📱 New loaded count:', window.recurringLoadedCount);
+            renderRecurringTable();
+        }
+        window.loadMoreRecurring = loadMoreRecurring;
+
+        // Desktop table rendering function with pagination
+        function renderDesktopExpensesTableWithPagination(allExpenses, tableBody) {
+            console.log('🖥️ renderDesktopExpensesTableWithPagination called with', allExpenses.length, 'items');
             
             // Show desktop table
             const tableContainer = document.querySelector('#expenses-tab table');
@@ -19063,6 +19166,13 @@ function closeGoalSelection() {
             if (mobileContainer) {
                 mobileContainer.style.display = 'none';
             }
+
+            // Calculate pagination
+            const totalItems = allExpenses.length;
+            const totalPages = Math.ceil(totalItems / window.expensesItemsPerPage);
+            const startIndex = (window.expensesCurrentPage - 1) * window.expensesItemsPerPage;
+            const endIndex = Math.min(startIndex + window.expensesItemsPerPage, totalItems);
+            const expenses = allExpenses.slice(startIndex, endIndex);
 
             tableBody.innerHTML = expenses.map(expense => {
                 const isRecurringInstance = !!expense.recurringSourceId;
@@ -19113,6 +19223,9 @@ function closeGoalSelection() {
             }).join('');
             
             console.log('🖥️ Desktop table rendered with', expenses.length, 'items');
+            
+            // Update pagination
+            updateExpensesPagination(totalItems, totalPages);
         }
 
         // Pagination update function
@@ -19259,7 +19372,7 @@ function closeGoalSelection() {
                     mobileContainer = document.createElement('div');
                     mobileContainer.className = 'mobile-cards-container';
                     mobileContainer.style.display = 'block';
-                    mobileContainer.style.marginBottom = '120px';
+                    mobileContainer.style.marginBottom = '20px';
                     
                     // Add mobile delete button for recurring items
                     const mobileDeleteBtn = document.createElement('div');
@@ -19301,6 +19414,11 @@ function closeGoalSelection() {
                 return; // Exit early for mobile - don't render desktop table
             }
                 console.log('🖥️ Rendering recurring desktop table...');
+                renderDesktopRecurringTableWithPagination(filtered);
+        }
+        
+        // Desktop recurring table with pagination
+        function renderDesktopRecurringTableWithPagination(allItems) {
                 // Show desktop table
                 const tableContainer = DOMElements.recurringTableBody.closest('table');
                 if (tableContainer) {
@@ -19315,6 +19433,13 @@ function closeGoalSelection() {
                 
                 // Clear table first
                 DOMElements.recurringTableBody.innerHTML = '';
+                
+                // Calculate pagination
+                const totalItems = allItems.length;
+                const totalPages = Math.ceil(totalItems / window.recurringItemsPerPage);
+                const startIndex = (window.recurringCurrentPage - 1) * window.recurringItemsPerPage;
+                const endIndex = Math.min(startIndex + window.recurringItemsPerPage, totalItems);
+                const filtered = allItems.slice(startIndex, endIndex);
 
                 filtered.forEach(item => {
                 const tr = document.createElement('tr');
@@ -19351,6 +19476,9 @@ function closeGoalSelection() {
                 `;
                 DOMElements.recurringTableBody.appendChild(tr);
             });
+            
+            // Update pagination
+            updateRecurringPagination(totalItems, totalPages);
         }
 
         // --- Pagination Functions ---
@@ -19449,7 +19577,7 @@ function closeGoalSelection() {
 
         window.changeExpensesPerPage = function(value) {
             console.log('changeExpensesPerPage called with:', value);
-            window.expensesItemsPerPage = parseInt(value) || 15;
+            window.expensesItemsPerPage = parseInt(value) || 25;
             window.expensesCurrentPage = 1;
             console.log('Items per page set to:', window.expensesItemsPerPage);
             renderExpensesTable();
@@ -19469,8 +19597,9 @@ function closeGoalSelection() {
                 window.expensesCurrentPage = 1;
             } else if (target === 'last') {
                 // Calculate total pages on the fly
-                const totalItems = expenses.length; // Use simple total for now
-                const totalPages = Math.ceil(totalItems / (window.expensesItemsPerPage || 15));
+                const filteredExpenses = getFilteredExpenses();
+                const totalItems = filteredExpenses.length;
+                const totalPages = Math.ceil(totalItems / (window.expensesItemsPerPage || 25));
                 window.expensesCurrentPage = totalPages;
             } else {
                 const page = parseInt(target);
@@ -22613,15 +22742,18 @@ function showInsightsError() {
             }
         }
 
-        function renderMobileRecurringCards(items, container) {
-            console.log('🔧 renderMobileRecurringCards called with:', items?.length || 0, 'items');
+        function renderMobileRecurringCards(allItems, container) {
+            console.log('🔧 renderMobileRecurringCards called with:', allItems?.length || 0, 'items');
             console.log('🔧 Container:', container);
             
-            if (!items || items.length === 0) {
+            if (!allItems || allItems.length === 0) {
                 console.log('🔧 No items to render, showing empty message');
                 container.innerHTML = `<div class="text-center py-8 text-gray-500 dark:text-gray-300">No recurring items found.</div>`;
                 return;
             }
+            
+            // Slice items based on loaded count
+            const items = allItems.slice(0, window.recurringLoadedCount);
             // Group by start date
             const groupedItems = {};
             items.forEach(item => {
@@ -22706,6 +22838,25 @@ function showInsightsError() {
                         </div>
                     `;
                 });
+            
+            // Add Load More button if there are more items
+            console.log('📱 Recurring Load More check:', {
+                totalItems: allItems.length,
+                loadedCount: window.recurringLoadedCount,
+                shouldShowLoadMore: allItems.length > window.recurringLoadedCount
+            });
+            
+            if (allItems.length > window.recurringLoadedCount) {
+                console.log('📱 Adding Recurring Load More button');
+                html += `
+                    <div class="px-4 pb-4">
+                        <button onclick="loadMoreRecurring()" class="w-full py-3 px-4 bg-accent-primary text-white rounded-lg hover:bg-accent-primary-hover transition-colors font-medium">
+                            Load More (${allItems.length - window.recurringLoadedCount} remaining)
+                        </button>
+                    </div>
+                `;
+            }
+            
             container.innerHTML = html;
         }
 
