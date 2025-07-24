@@ -6135,6 +6135,61 @@ button, .btn, input[type="button"], input[type="submit"] {
     box-shadow: none !important;
 }
 
+/* Ensure insights content displays properly without containers */
+#smart-insights-content,
+#budget-performance-content,
+#budget-coach-content,
+#category-analysis-content {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Remove any container styling from budget performance content */
+#budget-performance-content > div {
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin-bottom: 1rem !important;
+}
+
+#budget-performance-content > div:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Ensure bottom content is visible above navigation */
+.tab-content {
+    padding-bottom: 2rem !important;
+}
+
+/* Mobile-specific bottom spacing */
+@media (max-width: 768px) {
+    .tab-content {
+        padding-bottom: 4rem !important;
+    }
+    
+    /* Ensure last elements in accordions are visible */
+    .mb-6:last-child,
+    .mb-3:last-child {
+        margin-bottom: 2rem !important;
+    }
+}
+
+/* Ensure proper spacing for insights content */
+#smart-insights-content > *,
+#budget-performance-content > *,
+#budget-coach-content > *,
+#category-analysis-content > * {
+    margin-bottom: 1rem !important;
+}
+
+#smart-insights-content > *:last-child,
+#budget-performance-content > *:last-child,
+#budget-coach-content > *:last-child,
+#category-analysis-content > *:last-child {
+    margin-bottom: 0 !important;
+}
+
 /* Remove all borders from cards and containers */
 .card, .trezor-card, .stat-card, .quick-add-button, .budget-progress, .insights-section, .ai-insight, .prediction-card,
 .stats-grid .stat-card, .quick-add-grid .quick-add-button, .budget-progress .card, .insights-section .card,
@@ -6157,6 +6212,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 @media (max-width: 768px) {
     .trezor-content {
         padding-top: 5rem !important;
+        padding-bottom: 6rem !important;
     }
     
     .trezor-header {
@@ -7496,7 +7552,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
 
                 
-                <!-- Replace your insights tab HTML with this better layout -->
+<!-- Insights Tab - Simplified Structure -->
 <div id="insights-tab" class="tab-content hidden fade-in">
     <div class="max-w-6xl mx-auto space-y-6 p-4">
         <!-- Header -->
@@ -7534,22 +7590,18 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
 
         <!-- Daily Spending Visualization Chart -->
-        <div class="card p-4 mb-4">
+        <div class="mb-6">
             <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
                 <div class="flex-1">
-                    <div class="p-2">
-                        <div>
-                            <h2 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Daily Spending Visualization</h2>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Track your daily spending patterns with budget alerts and reference lines</p>
-                        </div>
-                    </div>
+                    <h2 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Daily Spending Visualization</h2>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Track your daily spending patterns with budget alerts and reference lines</p>
                 </div>
                 <div class="flex gap-3 flex-wrap">
-                                                <button class="period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-accent-primary bg-accent-primary text-white hover:bg-accent-primary-hover hover:border-accent-primary-hover shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('7days')" data-period="7days">7 Days</button>
-                                          <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('30days')" data-period="30days">30 Days</button>
-                      <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('90days')" data-period="90days">90 Days</button>
-                      <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('month')" data-period="month" id="month-button">Month</button>
-                      <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('12months')" data-period="12months">12 Months</button>
+                    <button class="period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-accent-primary bg-accent-primary text-white hover:bg-accent-primary-hover hover:border-accent-primary-hover shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('7days')" data-period="7days">7 Days</button>
+                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('30days')" data-period="30days">30 Days</button>
+                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('90days')" data-period="90days">90 Days</button>
+                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('month')" data-period="month" id="month-button">Month</button>
+                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('12months')" data-period="12months">12 Months</button>
                 </div>
             </div>
 
@@ -7560,59 +7612,56 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
 
         <!-- Real-Time Daily Coaching -->
-        <div class="card p-4 mb-4">
+        <div class="mb-6">
             <button onclick="toggleInsightsSection('budget-coach')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🎯 Daily Budget Coach</h3>
                 <span id="budget-coach-toggle" class="text-lg text-gray-900 dark:text-white">▼</span>
             </button>
             <div id="budget-coach-content" class="">
-                <div id="daily-coaching-container">
-                    <!-- Will be populated with dynamic coaching messages -->
-                </div>
+                <!-- Will be populated with dynamic coaching messages -->
             </div>
         </div>
 
         <!-- Essential vs Non-Essential -->
-        <div class="card p-4 mb-4">
-            <button onclick="toggleInsightsSection('spending-breakdown')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
+        <div class="mb-3">
+            <button onclick="toggleInsightsSection('spending-breakdown')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-2">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Spending Breakdown (Month)</h3>
                 <span id="spending-breakdown-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="spending-breakdown-content" class="hidden">
-            <div class="flex justify-around items-center text-center mb-4">
-                <div>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Essential</p>
-                    <p class="text-2xl font-semibold" style="color: var(--color-primary);" id="insights-essential-spending">£0.00</p>
+                <div class="flex justify-around items-center text-center mb-4">
+                    <div>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Essential</p>
+                        <p class="text-2xl font-semibold" style="color: var(--color-primary);" id="insights-essential-spending">£0.00</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Non-Essential</p>
+                        <p class="text-2xl font-semibold" style="color: var(--color-warning);" id="insights-non-essential-spending">£0.00</p>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Non-Essential</p>
-                    <p class="text-2xl font-semibold" style="color: var(--color-warning);" id="insights-non-essential-spending">£0.00</p>
-                </div>
-            </div>
                 <div class="w-full rounded-full h-3">
-                    <div id="insights-essential-bar" class="bg-sky-500 h-3 rounded-l-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div><!--
-                 --><div id="insights-non-essential-bar" class="bg-indigo-500 h-3 rounded-r-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div>
+                    <div id="insights-essential-bar" class="bg-sky-500 h-3 rounded-l-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div>
+                    <div id="insights-non-essential-bar" class="bg-indigo-500 h-3 rounded-r-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div>
                 </div>
             </div>
         </div>
 
         <!-- Today's Budget Section -->
-        <div class="card p-4 mb-4">
-            <button onclick="toggleInsightsSection('todays-budget')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
+        <div class="mb-3">
+            <button onclick="toggleInsightsSection('todays-budget')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-2">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Today's Budget</h3>
                 <span id="todays-budget-toggle" class="text-lg">▶</span>
             </button>
             <div id="todays-budget-content" class="hidden">
-            
-            <div class="text-center mb-4">
-                <div class="text-3xl font-bold text-gray-900 dark:text-white" id="todays-remaining">£0</div>
-                <div class="text-sm text-gray-600 dark:text-gray-300">Remaining Today</div>
-            </div>
-            
-            <div class="w-full rounded-full h-3 mb-2" style="background-color: var(--color-bg-tertiary);">
-                                                <div class="bg-accent-primary h-3 rounded-full transition-all duration-300" id="todays-budget-bar" style="width: 0%"></div>
-            </div>
-            
+                <div class="text-center mb-4">
+                    <div class="text-3xl font-bold text-gray-900 dark:text-white" id="todays-remaining">£0</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">Remaining Today</div>
+                </div>
+                
+                <div class="w-full rounded-full h-3 mb-2" style="background-color: var(--color-bg-tertiary);">
+                    <div class="bg-accent-primary h-3 rounded-full transition-all duration-300" id="todays-budget-bar" style="width: 0%"></div>
+                </div>
+                
                 <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
                     <span id="todays-spent">Spent: £0</span>
                     <span id="todays-budget-total">Budget: £0</span>
@@ -7621,13 +7670,12 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
 
         <!-- Category Spending Analysis -->
-        <div class="card p-4 mb-4">
-            <button onclick="toggleInsightsSection('category-analysis')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
+        <div class="mb-3">
+            <button onclick="toggleInsightsSection('category-analysis')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-2">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">📊 Category Spending Analysis</h3>
                 <span id="category-analysis-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="category-analysis-content" class="hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Top Categories This Month -->
                 <div>
                     <h4 class="font-medium mb-4 text-gray-900 dark:text-white">Top Categories This Month</h4>
@@ -7650,32 +7698,27 @@ button, .btn, input[type="button"], input[type="submit"] {
                     </div>
                 </div>
             </div>
-            </div>
         </div>
 
         <!-- Smart Insights -->
-        <div class="card p-4 mb-4">
-            <button onclick="toggleInsightsSection('smart-insights')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
+        <div class="mb-3">
+            <button onclick="toggleInsightsSection('smart-insights')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-2">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">💡 Smart Insights</h3>
                 <span id="smart-insights-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="smart-insights-content" class="hidden">
-                <div class="space-y-4" id="insights-container">
-                    <!-- Will be populated by JavaScript -->
-                </div>
+                <!-- Will be populated by JavaScript -->
             </div>
         </div>
 
         <!-- Budget Coach Recommendations -->
-        <div class="card p-4 mb-4">
-            <button onclick="toggleInsightsSection('budget-performance')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
+        <div class="mb-3">
+            <button onclick="toggleInsightsSection('budget-performance')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-2">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">📊 Budget Performance</h3>
                 <span id="budget-performance-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
             </button>
             <div id="budget-performance-content" class="hidden">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="coaching-panel">
-                    <!-- Will be populated by JavaScript -->
-                </div>
+                <!-- Will be populated by JavaScript -->
             </div>
         </div>
     </div>
@@ -16075,7 +16118,7 @@ function closeGoalSelection() {
         // Generate coaching panel
         function generateCoachingPanel() {
             const insights = calculateInsights();
-            const container = document.getElementById('coaching-panel');
+            const container = document.getElementById('budget-performance-content');
             const today = new Date();
             const daysLeft = 30 - today.getDate();
 
@@ -16101,7 +16144,7 @@ function closeGoalSelection() {
             ];
 
             container.innerHTML = coaching.map(item => `
-                <div class="text-center p-4 rounded-lg" style="background-color: var(--color-bg-tertiary);">
+                <div class="text-center p-4">
                     <div class="text-2xl font-bold" style="color: ${item.status === 'success' ? 'var(--color-success)' : item.status === 'warning' ? 'var(--color-error)' : 'var(--color-text-primary)'};">${item.value}</div>
                     <div class="text-sm font-medium" style="color: var(--color-text-primary);">${item.title}</div>
                     <div class="text-xs" style="color: var(--color-text-primary);">${item.subtitle}</div>
@@ -23785,12 +23828,12 @@ function createRealCategoryChart() {
 function generateRealInsights() {
     const insights = calculateRealInsights();
     const spendingData = getRealSpendingData();
-    const container = document.getElementById('insights-container');
+    const container = document.getElementById('smart-insights-content');
     
     console.log('generateRealInsights called:', { insights, monthlyBudget, hasContainer: !!container });
     
     if (!container) {
-        console.warn('insights-container not found');
+        console.warn('smart-insights-content not found');
         return;
     }
     
@@ -24793,7 +24836,7 @@ class FinanceInsights {
 
     generateDailyCoaching() {
         const insights = this.calculateInsights();
-        const container = document.getElementById('daily-coaching-container');
+        const container = document.getElementById('budget-coach-content');
         
         if (!container) return;
         
@@ -25162,7 +25205,7 @@ class FinanceInsights {
     }
 
     renderCoaching() {
-        const container = document.getElementById('coaching-panel');
+        const container = document.getElementById('budget-performance-content');
         if (!container) return;
         
         const insights = this.calculateInsights();
@@ -25189,7 +25232,7 @@ class FinanceInsights {
         ];
 
         container.innerHTML = recommendations.map(rec => `
-            <div class="text-center p-4 rounded-lg bg-gray-50">
+            <div class="text-center p-4">
                 <div class="text-2xl font-bold ${rec.type === 'success' ? 'text-green-600' : rec.type === 'warning' ? 'text-red-600' : 'text-blue-600'}">${rec.value}</div>
                 <div class="text-sm font-medium text-gray-700">${rec.title}</div>
                 <div class="text-xs text-gray-500">${rec.subtitle}</div>
@@ -27052,9 +27095,9 @@ function updateCurrentSpendingRate() {
 
 // Enhanced daily budget coaching function
 function updateDailyBudgetCoach() {
-    const coachElement = document.getElementById('daily-coaching-container');
+    const coachElement = document.getElementById('budget-coach-content');
     if (!coachElement) {
-        console.log('❌ Daily coaching container not found');
+        console.log('❌ Budget coach content not found');
         return;
     }
     
@@ -28207,7 +28250,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             function addBudgetRunway() {
                 // Find your existing Budget Performance section
-                const budgetSection = document.getElementById('coaching-panel');
+                const budgetSection = document.getElementById('budget-performance-content');
                 if (!budgetSection) return;
                 
                 // Calculate actual runway based on your real numbers
