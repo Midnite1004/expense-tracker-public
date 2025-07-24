@@ -1390,6 +1390,11 @@
                 min-height: 100vh !important;
             }
             
+            /* Mobile-specific fix for goals empty state hiding */
+            #goals-empty-state {
+                display: var(--goals-empty-display, none) !important;
+            }
+            
             /* Force scrollable content areas */
             .trezor-main {
                 overflow-y: visible !important;
@@ -7437,7 +7442,18 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <div class="text-2xl font-bold text-green-700 dark:text-green-300" id="completed-goals-count">0</div>
                                 </div>
                                 <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                                    <div class="text-sm text-purple-600 dark:text-purple-400">Total Progress</div>
+                                    <div class="text-sm text-purple-600 dark:text-purple-400 flex items-center gap-1">
+                                        Total Progress
+                                        <div class="relative group">
+                                            <svg class="w-3 h-3 text-purple-500 dark:text-purple-400 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
+                                                Average progress across all goals
+                                                <div class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-700"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="text-2xl font-bold text-purple-700 dark:text-purple-300" id="total-progress">0%</div>
                                 </div>
                             </div>
@@ -7449,7 +7465,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                         
                         <!-- Empty State -->
-                        <div id="goals-empty-state" class="card p-8 text-center">
+                        <div id="goals-empty-state" class="card p-8 text-center" style="display: none;">
                             <div class="text-6xl mb-4">🎯</div>
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Goals Yet</h3>
                             <p class="text-gray-600 dark:text-gray-300 mb-6">Start by creating your first financial goal. Whether it's saving for a house, building an emergency fund, or paying off debt - every financial journey begins with a goal.</p>
@@ -14204,10 +14220,19 @@ function addDirectCSS() {
 }
 
 function updateDashboardGoals() {
+    console.log('🎯 updateDashboardGoals called');
+    console.log('📊 Current userGoals:', userGoals);
+    
     const container = document.getElementById('dashboard-goals-container');
-    if (!container) return;
+    if (!container) {
+        console.error('❌ dashboard-goals-container not found!');
+        return;
+    }
+    
+    console.log('📦 Container found:', container);
     
     if (!userGoals || userGoals.length === 0) {
+        console.log('⚠️ No goals found, showing empty state');
         container.innerHTML = `
             <div class="border border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center">
                 <div class="text-gray-500 dark:text-gray-300 mb-2">No Goals Set</div>
@@ -14216,6 +14241,8 @@ function updateDashboardGoals() {
         `;
         return;
     }
+    
+    console.log('✅ Goals found:', userGoals.length, 'goals');
     
     // Show only the first goal (or most recent goal)
     const displayGoal = userGoals[0];
@@ -15347,6 +15374,7 @@ function deleteSimpleGoal(goalId) {
 
 function renderGoalsPage() {
     console.log('🎯 Rendering goals page');
+    console.log('📊 Current userGoals in renderGoalsPage:', userGoals);
     
     if (!userGoals) userGoals = [];
     
@@ -15354,6 +15382,8 @@ function renderGoalsPage() {
     const completedGoals = userGoals.filter(g => g.completed);
     const totalProgress = userGoals.length > 0 ? 
         Math.round(userGoals.reduce((sum, g) => sum + ((g.currentProgress || 0) / (g.target || 1) * 100), 0) / userGoals.length) : 0;
+    
+    console.log('📈 Active goals:', activeGoals.length, 'Completed:', completedGoals.length);
     
     // Update stats
     document.getElementById('active-goals-count').textContent = activeGoals.length;
@@ -15364,14 +15394,45 @@ function renderGoalsPage() {
     const emptyState = document.getElementById('goals-empty-state');
     const listContainer = document.getElementById('goals-list-container');
     
+    // Check for duplicate IDs
+    const allEmptyStates = document.querySelectorAll('#goals-empty-state');
+    const allListContainers = document.querySelectorAll('#goals-list-container');
+    
+    console.log('🔍 Empty state element:', emptyState);
+    console.log('🔍 List container element:', listContainer);
+    console.log('⚠️ Found', allEmptyStates.length, 'elements with ID goals-empty-state');
+    console.log('⚠️ Found', allListContainers.length, 'elements with ID goals-list-container');
+    
     if (userGoals.length === 0) {
-        emptyState.style.display = 'block';
-        listContainer.style.display = 'none';
+        console.log('⚠️ No goals, showing empty state');
+        if (emptyState) {
+            document.documentElement.style.setProperty('--goals-empty-display', 'block');
+            emptyState.style.display = 'block';
+        }
+        if (listContainer) listContainer.style.display = 'none';
         return;
     }
     
-    emptyState.style.display = 'none';
-    listContainer.style.display = 'block';
+    console.log('✅ Have goals, showing list');
+    
+    // Debug: Check if we're actually getting the right elements
+    console.log('🔍 emptyState element details:', {
+        element: emptyState,
+        id: emptyState?.id,
+        currentDisplay: emptyState?.style.display,
+        computedDisplay: emptyState ? window.getComputedStyle(emptyState).display : 'none',
+        isVisible: emptyState ? !emptyState.hidden : false
+    });
+    
+    if (emptyState) {
+        document.documentElement.style.setProperty('--goals-empty-display', 'none');
+        emptyState.style.setProperty('display', 'none', 'important');
+        console.log('🙈 Set empty state display to none with CSS variable and !important');
+    }
+    if (listContainer) {
+        listContainer.style.display = 'block';
+        console.log('👀 Set list container display to block');
+    }
     
     // Render goals list
     listContainer.innerHTML = userGoals.map(goal => {
@@ -15387,6 +15448,7 @@ function renderGoalsPage() {
                             ${isCompleted ? '<span class="text-green-600 text-lg">✅</span>' : ''}
                         </h3>
                         <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">${getGoalDescription(goal.type)}</p>
+                        ${goal.timeline ? `<p class="text-gray-500 dark:text-gray-400 text-xs mt-1">📅 Target: ${getTimelineLabel(goal.timeline)}</p>` : ''}
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="editGoalNew('${goal.id}')" class="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors">
@@ -15487,6 +15549,20 @@ function getGoalDescription(type) {
     return descriptions[type] || 'Working toward your financial goal';
 }
 
+function getTimelineLabel(timeline) {
+    const labels = {
+        '6months': '6 months',
+        '1year': '1 year',
+        '18months': '18 months',
+        '2years': '2 years',
+        '3years': '3 years',
+        '4years': '4 years',
+        '5years': '5+ years',
+        'custom': 'Custom timeframe'
+    };
+    return labels[timeline] || timeline;
+}
+
 function getGoalColor(type) {
     const colors = {
         house: 'bg-green-500', emergency: 'bg-blue-500', vacation: 'bg-purple-500',
@@ -15538,6 +15614,21 @@ function startGoalCreation(type) {
                     </div>
                 </div>
                 
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Target Timeline</label>
+                    <select name="timeline" 
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        <option value="6months">6 months</option>
+                        <option value="1year" selected>1 year</option>
+                        <option value="18months">18 months</option>
+                        <option value="2years">2 years</option>
+                        <option value="3years">3 years</option>
+                        <option value="4years">4 years</option>
+                        <option value="5years">5+ years</option>
+                        <option value="custom">Custom timeframe</option>
+                    </select>
+                </div>
+                
                 <div class="flex gap-3 pt-4">
                     <button type="button" onclick="this.closest('.fixed').remove()" 
                             class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
@@ -15565,20 +15656,45 @@ function createNewGoal(event, type) {
         name: formData.get('name'),
         target: parseFloat(formData.get('target')),
         currentProgress: parseFloat(formData.get('current')) || 0,
+        timeline: formData.get('timeline') || '1year',
         created: new Date().toISOString(),
-        unit: 'currency'
+        unit: 'currency',
+        status: 'active'
     };
     
     if (!userGoals) userGoals = [];
     userGoals.push(newGoal);
     
+    console.log('🆕 Creating goal:', newGoal);
+    console.log('📊 Goals before save:', userGoals.length);
+    
     saveData();
+    
+    // Force immediate update of Goals tab
+    console.log('🔄 Force rendering goals page immediately');
     renderGoalsPage();
+    
     updateGoalProgressDisplay(); // Update overview section
+    updateDashboardGoals(); // Explicitly update dashboard goals
+    
+    console.log('✅ Goal saved successfully. Total goals:', userGoals.length);
     
     // Close modal
     form.closest('.fixed').remove();
-    showToast(`Goal "${newGoal.name}" created!`, 'success');
+    showToast(`Goal "${newGoal.name}" created successfully!`, 'success');
+    
+    // If we're on the overview tab, refresh it
+    if (activeTab === 'overview') {
+        setTimeout(() => updateDashboardGoals(), 100);
+    }
+    
+    // If we're on the goals tab, refresh it to ensure empty state is hidden
+    if (activeTab === 'goals') {
+        setTimeout(() => {
+            console.log('🔄 Refreshing goals tab after creation');
+            renderGoalsPage();
+        }, 100);
+    }
 }
 
 function editGoalNew(goalId) {
@@ -15668,15 +15784,32 @@ function updateGoalNew(event, goalId) {
 }
 
 function deleteGoalNew(goalId) {
-    const goal = userGoals.find(g => g.id === goalId);
-    if (!goal) return;
-    
-    if (confirm(`Delete "${goal.name}"? This action cannot be undone.`)) {
-        userGoals = userGoals.filter(g => g.id !== goalId);
-        saveData();
-        renderGoalsPage();
-        updateGoalProgressDisplay(); // Update overview section
-        showToast('Goal deleted', 'info');
+    try {
+        console.log('🗑️ Attempting to delete goal with ID:', goalId);
+        console.log('📊 Current userGoals:', userGoals);
+        
+        const goalIndex = userGoals.findIndex(g => g.id == goalId); // Use == for flexible comparison
+        if (goalIndex === -1) {
+            console.error('❌ Goal not found with ID:', goalId);
+            showToast('Goal not found', 'error');
+            return;
+        }
+        
+        const goal = userGoals[goalIndex];
+        console.log('🎯 Found goal to delete:', goal.name);
+        
+        if (confirm(`Delete "${goal.name}"? This action cannot be undone.`)) {
+            userGoals.splice(goalIndex, 1); // Remove by index instead of filter
+            console.log('✅ Goal removed, remaining goals:', userGoals.length);
+            
+            saveData();
+            renderGoalsPage();
+            updateGoalProgressDisplay(); // Update overview section
+            showToast(`"${goal.name}" deleted successfully`, 'success');
+        }
+    } catch (error) {
+        console.error('❌ Error deleting goal:', error);
+        showToast('Error deleting goal. Please try again.', 'error');
     }
 }
 
@@ -16049,6 +16182,8 @@ function closeGoalSelection() {
                     } else {
                         updateSevenDayTrendChart();
                     }
+                    // Update dashboard goals section
+                    updateDashboardGoals();
                 } else if (activeTab === 'insights') {
                     updateChartsAndInsights();
                     // Update Today's Budget section when switching to insights
@@ -16702,6 +16837,13 @@ function closeGoalSelection() {
                 currentCurrencyCode = parsedData.currentCurrencyCode || 'GBP';
                 activeTab = parsedData.activeTab || 'overview';
                 userGoals = parsedData.userGoals || [];
+                
+                // Clear any onboarding-generated goals if user wants fresh start
+                if (localStorage.getItem('clearDefaultGoals') === 'true') {
+                    userGoals = [];
+                    localStorage.removeItem('clearDefaultGoals');
+                    console.log('🧹 Cleared default goals per user request');
+                }
                 
                 console.log('loadData - userGoals after assignment:', userGoals);
                 console.log('🎯 loadData - userGoals length:', userGoals.length);
