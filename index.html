@@ -3742,14 +3742,14 @@
         
         /* Checked state visibility in light mode */
         .w-11.h-6.peer-checked\\:bg-blue-600 {
-            background-color: var(--accent-primary) !important;
-            border: 2px solid var(--accent-primary) !important;
+            background-color: var(--accent-success) !important;
+            border: 2px solid var(--accent-success) !important;
         }
         
         /* Dark mode checked state */
         .dark .w-11.h-6.peer-checked\\:bg-blue-600 {
-            background-color: var(--accent-primary) !important;
-            border: 2px solid var(--accent-primary) !important;
+            background-color: var(--accent-success) !important;
+            border: 2px solid var(--accent-success) !important;
         }
         /* Help Tab Contrast */
         #help-tab p, #help-tab li {
@@ -4208,10 +4208,10 @@
             justify-content: space-between !important;
             align-items: center !important;
             padding: 0.75rem 1rem !important;
-            color: var(--text-primary) !important;
+            color: var(--color-text-primary) !important;
             font-size: 1.1em !important;
             font-weight: 700 !important;
-            border-bottom: 1px solid var(--border-color) !important;
+            border-bottom: 1px solid var(--color-border) !important;
             margin-bottom: 0.5rem !important;
             background: transparent !important;
             border-radius: 0 !important;
@@ -4237,8 +4237,8 @@
           tr:not(.mobile-date-header) {
             display: flex !important;
             align-items: center !important;
-            background: var(--bg-primary) !important;
-            border: 1px solid var(--border-color) !important;
+            background: var(--color-bg-card) !important;
+            border: 1px solid var(--color-border) !important;
             border-bottom: none !important;
             padding: 1rem !important;
             margin-bottom: 0 !important;
@@ -4420,8 +4420,8 @@
 
           /* Dark mode improvements */
           html.dark tr:not(.mobile-date-header) {
-            background: var(--bg-primary) !important;
-            border-color: var(--border-color) !important;
+            background: var(--color-bg-card) !important;
+            border-color: var(--color-border) !important;
           }
 
           html.dark tr:not(.mobile-date-header):hover {
@@ -4429,24 +4429,24 @@
           }
 
           html.dark .mobile-date-header td {
-            color: var(--text-secondary) !important;
-            border-color: var(--border-color) !important;
+            color: var(--color-text-primary) !important;
+            border-color: var(--color-border) !important;
           }
 
           html.dark td[data-label="Name"] > span {
-            color: var(--text-primary) !important;
+            color: var(--color-text-primary) !important;
           }
 
           html.dark td[data-label="Name"]::after {
-            color: var(--text-secondary) !important;
+            color: var(--color-text-secondary) !important;
           }
 
           html.dark td[data-label="Amount"] {
-            color: var(--text-primary) !important;
+            color: var(--color-text-primary) !important;
           }
 
           html.dark td[data-label="Amount"][data-positive="true"] {
-            color: var(--accent-green) !important;
+            color: var(--accent-success) !important;
           }
 
           /* Responsive adjustments for smaller screens */
@@ -4519,6 +4519,37 @@
           
           .bottom-nav {
             padding-bottom: max(0px, env(safe-area-inset-bottom));
+          }
+        }
+
+        /* Fix mobile scrolling issues */
+        body {
+          -webkit-overflow-scrolling: touch !important;
+          overflow-x: hidden !important;
+          touch-action: pan-y !important;
+        }
+        
+        .trezor-content {
+          -webkit-overflow-scrolling: touch !important;
+          overflow-x: hidden !important;
+          touch-action: pan-y !important;
+        }
+        
+        /* Prevent scroll blocking on mobile */
+        .mobile-cards-container {
+          -webkit-overflow-scrolling: touch !important;
+          overflow-x: hidden !important;
+          touch-action: pan-y !important;
+        }
+        
+        /* Fix for iOS Safari scroll issues */
+        @supports (-webkit-touch-callout: none) {
+          body {
+            -webkit-overflow-scrolling: touch !important;
+          }
+          
+          .trezor-content {
+            -webkit-overflow-scrolling: touch !important;
           }
         }
 
@@ -6016,6 +6047,77 @@ button, .btn, input[type="button"], input[type="submit"] {
     background: var(--color-success);
     color: white;
     padding: 0.5rem 1rem;
+}
+
+/* Comprehensive blue color overrides for new design system */
+.bg-blue-50, .bg-blue-900\/20, .bg-blue-900\/10, .bg-blue-100, .bg-blue-200 {
+    background-color: var(--accent-primary)/10 !important;
+}
+
+.dark .bg-blue-50, .dark .bg-blue-900\/20, .dark .bg-blue-900\/10, .dark .bg-blue-100, .dark .bg-blue-200 {
+    background-color: var(--accent-primary)/20 !important;
+}
+
+.text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900, .text-blue-500, .text-blue-400, .text-blue-300, .text-blue-200, .text-blue-100 {
+    color: var(--accent-primary) !important;
+}
+
+.dark .text-blue-600, .dark .text-blue-700, .dark .text-blue-800, .dark .text-blue-900, .dark .text-blue-500, .dark .text-blue-400, .dark .text-blue-300, .dark .text-blue-200, .dark .text-blue-100 {
+    color: var(--accent-primary) !important;
+}
+
+.border-blue-200, .border-blue-300, .border-blue-400, .border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800 {
+    border-color: var(--accent-primary)/30 !important;
+}
+
+.dark .border-blue-200, .dark .border-blue-300, .dark .border-blue-400, .dark .border-blue-500, .dark .border-blue-600, .dark .border-blue-700, .dark .border-blue-800 {
+    border-color: var(--accent-primary)/50 !important;
+}
+
+.focus\\:ring-blue-500, .focus\\:ring-blue-300, .focus\\:ring-blue-800 {
+    --tw-ring-color: var(--accent-primary) !important;
+}
+
+.focus\\:border-blue-500, .focus\\:border-blue-300, .focus\\:border-blue-800 {
+    border-color: var(--accent-primary) !important;
+}
+
+.hover\\:bg-blue-50, .hover\\:bg-blue-900\/20 {
+    background-color: var(--accent-primary)/10 !important;
+}
+
+.dark .hover\\:bg-blue-50, .dark .hover\\:bg-blue-900\/20 {
+    background-color: var(--accent-primary)/20 !important;
+}
+
+.hover\\:border-blue-500, .hover\\:border-blue-300, .hover\\:border-blue-700 {
+    border-color: var(--accent-primary) !important;
+}
+
+.hover\\:text-blue-600, .hover\\:text-blue-700, .hover\\:text-blue-400 {
+    color: var(--accent-primary) !important;
+}
+
+.peer-checked\\:bg-blue-600 {
+    background-color: var(--accent-success) !important;
+}
+
+.dark .peer-checked\\:bg-blue-600 {
+    background-color: var(--accent-success) !important;
+}
+
+/* Fix for gradient backgrounds */
+.from-blue-50, .to-indigo-50, .to-indigo-900\/20 {
+    --tw-gradient-from: var(--accent-primary)/10 !important;
+    --tw-gradient-to: var(--accent-primary)/20 !important;
+}
+
+.dark .from-blue-50, .dark .to-indigo-50, .dark .to-indigo-900\/20 {
+    --tw-gradient-from: var(--accent-primary)/20 !important;
+    --tw-gradient-to: var(--accent-primary)/30 !important;
+}
+
+.daily-coaching-badge {
     border-radius: 4px;
     font-size: 0.875rem;
     font-weight: 600;
@@ -6698,7 +6800,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 quick-add-grid">
                             <div id="quick-add-coffee" class="quick-add-wrapper">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Coffee', 'Food/Drink', 'Non-Essential', 5.00)">
+                                <button class="w-full bg-gray-50 hover:bg-accent-primary/10 dark:bg-gray-700 dark:hover:bg-accent-primary/20 border border-gray-200 dark:border-gray-600 hover:border-accent-primary/30 dark:hover:border-accent-primary/50 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Coffee', 'Food/Drink', 'Non-Essential', 5.00)">
                                     <div class="flex items-center gap-3 quick-add-content">
                                         <div class="w-10 h-10 bg-amber-500 group-hover:bg-amber-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -6718,9 +6820,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 </button>
                             </div>
                             <div id="quick-add-transport" class="quick-add-wrapper">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Transport', 'Essential', 'Essential', 10.00)">
+                                <button class="w-full bg-gray-50 hover:bg-accent-primary/10 dark:bg-gray-700 dark:hover:bg-accent-primary/20 border border-gray-200 dark:border-gray-600 hover:border-accent-primary/30 dark:hover:border-accent-primary/50 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Transport', 'Essential', 'Essential', 10.00)">
                                     <div class="flex items-center gap-3 quick-add-content">
-                                        <div class="w-10 h-10 bg-blue-500 group-hover:bg-blue-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
+                                        <div class="w-10 h-10 bg-accent-primary group-hover:bg-accent-primary-hover rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
                                             </svg>
@@ -6729,12 +6831,12 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             <div class="font-medium text-gray-900 dark:text-white quick-add-title">Transport</div>
                                             <div class="text-sm text-gray-500 dark:text-gray-300 quick-add-category">Essential</div>
                                         </div>
-                                        <span class="font-medium text-blue-600 dark:text-blue-400 quick-add-price">£10</span>
+                                        <span class="font-medium text-accent-primary dark:text-accent-primary quick-add-price">£10</span>
                                     </div>
                                 </button>
                             </div>
                             <div id="quick-add-lunch" class="quick-add-wrapper">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Lunch', 'Food/Drink', 'Non-Essential', 15.00)">
+                                <button class="w-full bg-gray-50 hover:bg-accent-primary/10 dark:bg-gray-700 dark:hover:bg-accent-primary/20 border border-gray-200 dark:border-gray-600 hover:border-accent-primary/30 dark:hover:border-accent-primary/50 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Lunch', 'Food/Drink', 'Non-Essential', 15.00)">
                                     <div class="flex items-center gap-3 quick-add-content">
                                         <div class="w-10 h-10 bg-green-500 group-hover:bg-green-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -6750,7 +6852,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 </button>
                             </div>
                             <div id="quick-add-groceries" class="quick-add-wrapper">
-                                <button class="w-full bg-gray-50 hover:bg-blue-50 dark:bg-gray-700 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Groceries', 'Essential', 'Essential', 50.00)">
+                                <button class="w-full bg-gray-50 hover:bg-accent-primary/10 dark:bg-gray-700 dark:hover:bg-accent-primary/20 border border-gray-200 dark:border-gray-600 hover:border-accent-primary/30 dark:hover:border-accent-primary/50 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Groceries', 'Essential', 'Essential', 50.00)">
                                     <div class="flex items-center gap-3 quick-add-content">
                                         <div class="w-10 h-10 bg-purple-500 group-hover:bg-purple-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -6795,7 +6897,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </div>
                                         </div>
                                     </div>
-                                    <button class="text-sm text-blue-600 hover:underline" onclick="showTab('settings')">
+                                    <button class="text-sm text-accent-primary hover:underline" onclick="showTab('settings')">
                                         Edit budget
                                     </button>
                                 </div>
@@ -6813,7 +6915,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <div class="w-full mb-4">
                                             <!-- Progress bar container with border -->
                                             <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-4 border border-gray-300 dark:border-gray-500 relative overflow-hidden" style="overflow: hidden !important;">
-                                                <div id="budget-progress-bar" class="bg-green-500 h-full rounded-full transition-all duration-500" style="width: 0%; max-width: 100% !important; overflow: hidden !important; border-radius: inherit !important; height: 100% !important;"></div>
+                                                <div id="budget-progress-bar" class="bg-accent-primary h-full rounded-full transition-all duration-500" style="width: 0%; max-width: 100% !important; overflow: hidden !important; border-radius: inherit !important; height: 100% !important;"></div>
                                                 <!-- Optional: Add tick marks -->
                                                 <div class="absolute top-0 left-1/4 w-px h-full bg-gray-400 opacity-30"></div>
                                                 <div class="absolute top-0 left-1/2 w-px h-full bg-gray-400 opacity-50"></div>
@@ -6833,7 +6935,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         </div>
                                         
                                         <!-- Budget insight box -->
-                                        <div class="bg-blue-50 rounded-lg p-3 border border-blue-100">
+                                        <div class="bg-accent-primary/10 rounded-lg p-3 border border-accent-primary/20">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm" id="ai-insight">📈 Projection: Set up your budget to get insights</span>
                                             </div>
@@ -6883,7 +6985,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="card p-4">
                                 <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-xl font-semibold">7-Day Trend</h3>
-                                    <button class="text-sm text-blue-600 hover:underline" onclick="showTab('insights')">
+                                    <button class="text-sm text-accent-primary hover:underline" onclick="showTab('insights')">
                                         Full Chart
                                     </button>
                                 </div>
@@ -6896,7 +6998,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="card p-4" data-tour="goals-section">
                                 <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-xl font-semibold">Goals Progress</h3>
-                                    <button onclick="showTab('goals')" class="text-sm text-blue-600 dark:text-blue-400 opacity-70 hover:opacity-100 hover:underline">
+                                    <button onclick="showTab('goals')" class="text-sm text-accent-primary dark:text-accent-primary opacity-70 hover:opacity-100 hover:underline">
                                         Manage Goals
                                     </button>
                                 </div>
@@ -6912,7 +7014,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="card p-4">
                                 <div class="flex justify-between items-center mb-3">
                                     <h3 class="text-lg font-semibold">Upcoming Bills</h3>
-                                    <button onclick="showTab('recurring')" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">See all</button>
+                                    <button onclick="showTab('recurring')" class="text-xs text-accent-primary dark:text-accent-primary hover:underline">See all</button>
                                 </div>
                                 <div id="upcoming-events" class="space-y-3">
                                     <p class="text-gray-500 dark:text-gray-300 text-sm">No upcoming bills.</p>
@@ -6924,7 +7026,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <h3 class="text-lg font-semibold mb-3">Quick Actions</h3>
                                 <div class="space-y-3">
                                     <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
-                                        <button onclick="showAddForm()" class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 flex items-center justify-center gap-2 font-medium">
+                                        <button onclick="showAddForm()" class="w-full px-4 py-3 bg-accent-primary text-white rounded-lg hover:bg-accent-primary-hover transition-all duration-200 flex items-center justify-center gap-2 font-medium">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                             </svg>
@@ -6954,7 +7056,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="card p-4">
                                 <div class="flex justify-between items-center mb-3">
                                     <h3 class="text-lg font-semibold">Recent Activity</h3>
-                                    <button onclick="showTab('expenses')" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">See all</button>
+                                    <button onclick="showTab('expenses')" class="text-xs text-accent-primary dark:text-accent-primary hover:underline">See all</button>
                                 </div>
                                 <div id="recent-expenses" class="space-y-3">
                                     <p class="text-gray-700 dark:text-gray-300 text-sm">No recent expenses.</p>
@@ -6990,7 +7092,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         
                         <!-- Search Field -->
                         <div class="relative mb-4">
-                            <input type="text" id="expense-search" placeholder="Search expenses..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeyup="renderExpensesTable()">
+                            <input type="text" id="expense-search" placeholder="Search expenses..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-accent-primary focus:border-accent-primary" onkeyup="renderExpensesTable()">
                             <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
@@ -7104,7 +7206,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Financial Goals</h2>
                                     <p class="text-gray-600 dark:text-gray-300 mt-1">Track your progress toward financial milestones</p>
                                 </div>
-                                <button onclick="showGoalTypeSelector()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                                <button onclick="showGoalTypeSelector()" class="bg-accent-primary hover:bg-accent-primary-hover text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                     </svg>
@@ -7114,9 +7216,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                             
                             <!-- Quick Stats -->
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                                <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                                    <div class="text-sm text-blue-600 dark:text-blue-400">Active Goals</div>
-                                    <div class="text-2xl font-bold text-blue-700 dark:text-blue-300" id="active-goals-count">0</div>
+                                                            <div class="bg-accent-primary/10 dark:bg-accent-primary/20 p-4 rounded-lg">
+                                <div class="text-sm text-accent-primary dark:text-accent-primary">Active Goals</div>
+                                <div class="text-2xl font-bold text-accent-primary dark:text-accent-primary" id="active-goals-count">0</div>
                                 </div>
                                 <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
                                     <div class="text-sm text-green-600 dark:text-green-400">Completed</div>
@@ -7139,7 +7241,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="text-6xl mb-4">🎯</div>
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Goals Yet</h3>
                             <p class="text-gray-600 dark:text-gray-300 mb-6">Start by creating your first financial goal. Whether it's saving for a house, building an emergency fund, or paying off debt - every financial journey begins with a goal.</p>
-                            <button onclick="showGoalTypeSelector()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition-colors">
+                                                            <button onclick="showGoalTypeSelector()" class="bg-accent-primary hover:bg-accent-primary-hover text-white px-4 py-3 rounded-lg transition-colors">
                                 Create Your First Goal
                             </button>
                         </div>
@@ -7171,7 +7273,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         
                         <!-- Search Field -->
                         <div class="relative mb-4">
-                            <input type="text" id="recurring-search" placeholder="Search recurring items..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeyup="renderRecurringTable()">
+                            <input type="text" id="recurring-search" placeholder="Search recurring items..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:ring-2 focus:ring-accent-primary focus:border-accent-primary" onkeyup="renderRecurringTable()">
                             <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
@@ -7324,11 +7426,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                     </div>
                 </div>
                 <div class="flex gap-3 flex-wrap">
-                    <button class="period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-blue-500 bg-blue-500 text-white hover:bg-blue-600 hover:border-blue-600 shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('7days')" data-period="7days">7 Days</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('30days')" data-period="30days">30 Days</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('90days')" data-period="90days">90 Days</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('month')" data-period="month" id="month-button">Month</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('12months')" data-period="12months">12 Months</button>
+                                                <button class="period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-accent-primary bg-accent-primary text-white hover:bg-accent-primary-hover hover:border-accent-primary-hover shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('7days')" data-period="7days">7 Days</button>
+                                          <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('30days')" data-period="30days">30 Days</button>
+                      <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('90days')" data-period="90days">90 Days</button>
+                      <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('month')" data-period="month" id="month-button">Month</button>
+                      <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('12months')" data-period="12months">12 Months</button>
                 </div>
             </div>
 
@@ -7389,7 +7491,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             </div>
             
             <div class="w-full rounded-full h-3 mb-2" style="background-color: var(--color-bg-tertiary);">
-                <div class="bg-blue-500 h-3 rounded-full transition-all duration-300" id="todays-budget-bar" style="width: 0%"></div>
+                                                <div class="bg-accent-primary h-3 rounded-full transition-all duration-300" id="todays-budget-bar" style="width: 0%"></div>
             </div>
             
                 <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
@@ -7494,7 +7596,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <input type="number" 
                                    id="settings-monthly-income" 
                                    placeholder="Enter your monthly income" 
-                                   class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg"
+                                   class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-accent-primary focus:border-accent-primary transition-colors font-semibold text-lg"
                                    onchange="updateIncome(this.value)" oninput="updateIncome(this.value)">
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-300 mt-1">Your total monthly income before taxes</p>
@@ -7509,23 +7611,23 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <input type="number" 
                                        id="settings-monthly-budget" 
                                        placeholder="Enter your monthly budget" 
-                                       class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg"
+                                       class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-accent-primary focus:border-accent-primary transition-colors font-semibold text-lg"
                                        onchange="updateBudget(this.value)" oninput="updateBudget(this.value)">
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-300 mt-1">How much you plan to spend each month</p>
                         </div>
 
                         <!-- Budget Helper -->
-                        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-                            <h4 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">💡 Budget Helper</h4>
-                            <div class="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                        <div class="bg-accent-primary/10 dark:bg-accent-primary/20 rounded-lg p-4">
+                            <h4 class="text-sm font-medium text-accent-primary dark:text-accent-primary mb-2">💡 Budget Helper</h4>
+                            <div class="text-sm text-accent-primary dark:text-accent-primary space-y-1">
                                 <div id="budget-surplus-display">• Monthly Surplus: <span class="font-semibold">£0</span> (Income - Budget)</div>
                                 <div id="daily-budget-display">• Daily Budget: <span class="font-semibold">£0</span></div>
                                 <div id="savings-rate-display">• Savings Rate: <span class="font-semibold">0%</span> of income</div>
                             </div>
                         </div>
                         
-                        <div class="text-xs text-gray-500 dark:text-gray-300 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+                                                    <div class="text-xs text-gray-500 dark:text-gray-300 bg-accent-primary/10 dark:bg-accent-primary/20 p-3 rounded-lg">
                             <strong>💾 Auto-save enabled:</strong> Changes save automatically as you type.
                         </div>
                     </div>
@@ -7555,13 +7657,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="dark-mode-toggle" class="sr-only peer" onchange="toggleTheme(this.checked)">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent-primary/30 dark:peer-focus:ring-accent-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-accent-success"></div>
                             </label>
                         </div>
                         
                         <div>
                             <label for="currency-selector" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency</label>
-                            <select id="currency-selector" onchange="changeCurrency(this.value)" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                            <select id="currency-selector" onchange="changeCurrency(this.value)" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-accent-primary focus:border-accent-primary transition-colors">
                                 <option value="AUD">AUD - Australian Dollar (A$)</option>
                                 <option value="CAD">CAD - Canadian Dollar (C$)</option>
                                 <option value="EUR">EUR - Euro (€)</option>
@@ -7578,7 +7680,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="income-display-enabled" class="sr-only peer" onchange="toggleIncomeDisplay()">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent-primary/30 dark:peer-focus:ring-accent-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-accent-success"></div>
                             </label>
                         </div>
                     </div>
@@ -7767,7 +7869,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="help-component-steps">
                             <h5 class="font-medium mb-2">Quick Setup (3 minutes):</h5>
                             <ol class="list-decimal list-inside space-y-2">
-                                <li><strong>Set Your Budget:</strong> Go to <button onclick="showTab('settings')" class="text-blue-600 hover:underline">Settings</button> → Budget & Income</li>
+                                <li><strong>Set Your Budget:</strong> Go to <button onclick="showTab('settings')" class="text-accent-primary hover:underline">Settings</button> → Budget & Income</li>
                                 <li><strong>Add First Expense:</strong> Use the floating "+" button or Quick Add section</li>
                                 <li><strong>Track Recurring Bills:</strong> Add subscriptions in the Recurring tab</li>
                                 <li><strong>Set Financial Goals:</strong> Visit the Goals tab to start saving</li>
@@ -8520,11 +8622,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="space-y-4">
                             <p>Welcome to <strong>Lens</strong> - your comprehensive personal finance companion! This Progressive Web App (PWA) provides powerful expense tracking, goal management, and financial optimization tools.</p>
                             
-                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                            <div class="bg-accent-primary/10 dark:bg-accent-primary/20 p-4 rounded-lg">
                                 <h4 class="font-semibold mb-2">First Steps:</h4>
                                 <ol class="list-decimal ml-5 space-y-2">
                                     <li>Complete the <strong>onboarding tour</strong> to set up your income, goals, and savings</li>
-                                    <li>Visit <button onclick="openSettings('budget')" class="text-blue-600 hover:underline">Settings</button> to configure your monthly budget and preferences</li>
+                                    <li>Visit <button onclick="openSettings('budget')" class="text-accent-primary hover:underline">Settings</button> to configure your monthly budget and preferences</li>
                                     <li>Connect bank accounts via Plaid for automatic transaction import</li>
                                     <li>Start tracking expenses and watch your financial insights grow</li>
                                 </ol>
@@ -8550,7 +8652,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 </ul>
                             </div>
 
-                            <div class="border-l-4 border-blue-500 pl-4">
+                            <div class="border-l-4 border-accent-primary pl-4">
                                 <h4 class="font-semibold text-md mb-2">💸 Expenses</h4>
                                 <p class="mb-3">Comprehensive expense management with intelligent categorization and bulk operations.</p>
                                 <ul class="list-disc ml-5 space-y-1 text-sm">
@@ -8638,7 +8740,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <section>
                         <h3 class="text-lg font-semibold mb-3 border-b pb-2">🏦 Banking Integration & Transaction Import</h3>
                         <div class="space-y-4">
-                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                            <div class="bg-accent-primary/10 dark:bg-accent-primary/20 p-4 rounded-lg">
                                 <h4 class="font-semibold mb-2">Plaid Integration Setup</h4>
                                 <ol class="list-decimal ml-5 space-y-1 text-sm">
                                     <li>Ensure backend server (Node.js/Express) is running on localhost:8000</li>
@@ -8726,10 +8828,10 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 </div>
                             </div>
 
-                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                            <div class="bg-accent-primary/10 dark:bg-accent-primary/20 p-4 rounded-lg">
                                 <h4 class="font-semibold mb-2">Optimization Formula</h4>
                                 <div class="text-xs font-mono space-y-1">
-                                    <div><span class="text-blue-600">potentialValue</span> = transactionAmount × pointRate × pointValue</div>
+                                    <div><span class="text-accent-primary">potentialValue</span> = transactionAmount × pointRate × pointValue</div>
                                     <div><span class="text-green-600">annualSavings</span> = monthlyMissedValue × 12</div>
                                     <div><span class="text-purple-600">optimizationImpact</span> = annualSavings ÷ 12 (monthly boost)</div>
                                 </div>
@@ -8817,7 +8919,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 </div>
                             </div>
 
-                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                            <div class="bg-accent-primary/10 dark:bg-accent-primary/20 p-4 rounded-lg">
                                 <h4 class="font-semibold mb-2">YNAB-Style Allocation System</h4>
                                 <div class="space-y-3">
                                     <p class="text-sm"><strong>Core Principle:</strong> "Give every dollar a job" - Every pound of savings should be allocated to a specific goal or purpose.</p>
@@ -8864,7 +8966,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     </ul>
                                 </div>
 
-                                <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                                <div class="bg-accent-primary/10 dark:bg-accent-primary/20 p-4 rounded-lg">
                                     <h4 class="font-semibold mb-2">Personalization</h4>
                                     <ul class="list-disc ml-5 space-y-1 text-sm">
                                         <li><strong>Currency Support:</strong> Multiple currency display options</li>
@@ -9061,42 +9163,42 @@ button, .btn, input[type="button"], input[type="submit"] {
             <p class="text-gray-600 dark:text-gray-300 text-center mb-6">Choose your primary financial focus</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="house">
+                                            <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-accent-primary transition-all" data-goal="house">
                     <div class="flex items-center gap-2">
                         <div class="text-2xl">🏠</div>
                         <h3 class="font-medium text-sm sm:text-base">House Deposit</h3>
                     </div>
                 </div>
                 
-                <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="emergency">
+                                            <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-accent-primary transition-all" data-goal="emergency">
                     <div class="flex items-center gap-2">
                         <div class="text-2xl">💰</div>
                         <h3 class="font-medium text-sm sm:text-base">Emergency Fund</h3>
                     </div>
                 </div>
                 
-                <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="debt">
+                                            <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-accent-primary transition-all" data-goal="debt">
                     <div class="flex items-center gap-2">
                         <div class="text-2xl">💳</div>
                         <h3 class="font-medium text-sm sm:text-base">Pay Off Debt</h3>
                     </div>
                 </div>
                 
-                <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="vacation">
+                                            <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-accent-primary transition-all" data-goal="vacation">
                     <div class="flex items-center gap-2">
                         <div class="text-2xl">✈️</div>
                         <h3 class="font-medium text-sm sm:text-base">Vacation</h3>
                     </div>
                 </div>
                 
-                <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="investment">
+                                            <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-accent-primary transition-all" data-goal="investment">
                     <div class="flex items-center gap-2">
                         <div class="text-2xl">📈</div>
                         <h3 class="font-medium text-sm sm:text-base">Investing</h3>
                     </div>
                 </div>
                 
-                <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-all" data-goal="custom">
+                                            <div class="clean-goal-option p-4 sm:p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:border-accent-primary transition-all" data-goal="custom">
                     <div class="flex items-center gap-2">
                         <div class="text-2xl">🎯</div>
                         <h3 class="font-medium text-sm sm:text-base">Custom Goal</h3>
@@ -9651,15 +9753,15 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 </button>
                             </div>
                             
-                            ${feature ? `<div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                                <p class="text-sm text-blue-800 dark:text-blue-200">
+                                            ${feature ? `<div class="mb-4 p-3 bg-accent-primary/10 dark:bg-accent-primary/20 rounded-lg">
+                    <p class="text-sm text-accent-primary dark:text-accent-primary">
                                     <strong>${this.getFeatureDisplayName(feature)}</strong> requires a Premium subscription.
                                 </p>
                             </div>` : ''}
                             
                             <div class="mb-6">
                                 <div class="text-center mb-4">
-                                    <div class="text-3xl font-bold text-blue-600">£9.99</div>
+                                    <div class="text-3xl font-bold text-accent-primary">£9.99</div>
                                     <div class="text-gray-600 dark:text-gray-300">per month</div>
                                 </div>
                                 
@@ -9900,7 +10002,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         ${!subscriptionManager.isPremium() ? `
                             <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
                                 <button onclick="subscriptionManager.showUpgradeModal('aiCoaching')" 
-                                        class="w-full text-xs text-blue-600 hover:text-blue-700 font-medium">
+                                        class="w-full text-xs text-accent-primary hover:text-accent-primary-hover font-medium">
                                     ✨ Upgrade for smart coaching & insights
                                 </button>
                             </div>
@@ -9922,9 +10024,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="space-y-4">
                         ${this.renderBasicDailyTracker()}
                         
-                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-700">
-                            <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">💡 Smart Insights</h4>
-                            <div class="space-y-2 text-sm text-blue-700 dark:text-blue-300">
+                        <div class="bg-gradient-to-r from-accent-primary/10 to-accent-primary/20 dark:from-accent-primary/20 dark:to-accent-primary/30 rounded-lg p-4 border border-accent-primary/30 dark:border-accent-primary/50">
+                            <h4 class="font-semibold text-accent-primary dark:text-accent-primary mb-2">💡 Smart Insights</h4>
+                            <div class="space-y-2 text-sm text-accent-primary dark:text-accent-primary">
                                 ${insights.map(insight => `<div>• ${insight}</div>`).join('')}
                             </div>
                         </div>
@@ -14349,8 +14451,8 @@ function renderGoalEditForm(goal, index) {
                     <span>Progress: <span id="goal-${index}-progress-text" class="font-medium">${Math.round((goal.currentProgress / goal.target) * 100)}%</span></span>
                     <span>Remaining: <span id="goal-${index}-remaining-text" class="font-medium">£${(goal.target - goal.currentProgress).toLocaleString()}</span></span>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-2 mt-2 goal-progress-container" style="margin-top: 20px;">
-                    <div id="goal-${index}-progress-bar" class="bg-purple-600 h-2 rounded-full transition-all duration-500" style="width: ${Math.min((goal.currentProgress / goal.target) * 100, 100)}%"></div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2 goal-progress-container" style="margin-top: 20px;">
+                            <div id="goal-${index}-progress-bar" class="bg-accent-primary h-2 rounded-full transition-all duration-500" style="width: ${Math.min((goal.currentProgress / goal.target) * 100, 100)}%"></div>
                     <!-- 50% midpoint reference marker -->
                     <div class="goal-50-marker"></div>
                     <div class="goal-50-label">50%</div>
@@ -18724,7 +18826,7 @@ function closeGoalSelection() {
                                         -${formatCurrency(dayTotal)}
                                     </span>
                                     <button onclick="toggleSelectAllForDate('${date}')" 
-                                            class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded" title="Select all expenses for this date">
+                                            class="text-xs px-2 py-1 bg-accent-primary text-white rounded whitespace-nowrap font-medium" title="Select all expenses for this date">
                                         Select All
                                     </button>
                                 </div>
