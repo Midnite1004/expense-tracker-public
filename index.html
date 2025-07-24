@@ -945,6 +945,16 @@
                 background: inherit;
                 z-index: -1;
             }
+            
+            /* Ensure content starts below header */
+            .trezor-main {
+                padding-top: 0 !important;
+            }
+            
+            /* Add extra spacing for first content element */
+            .trezor-content > *:first-child {
+                margin-top: 1rem !important;
+            }
         }
 
         /* Settings Accordion Styles */
@@ -1418,6 +1428,7 @@
                 box-shadow: var(--shadow) !important;
                 backdrop-filter: blur(10px) !important;
                 -webkit-backdrop-filter: blur(10px) !important;
+                height: 80px !important;
             }
             
             .trezor-content {
@@ -1427,7 +1438,7 @@
                 max-width: 100% !important;
                 overflow-x: hidden !important;
                 padding-bottom: 100px !important;
-                padding-top: 4rem !important;
+                padding-top: 5rem !important;
             }
             
             /* Modal specific fixes */
@@ -6116,6 +6127,50 @@ button, .btn, input[type="button"], input[type="submit"] {
 /* Comprehensive blue color overrides for new design system */
 .bg-blue-50, .bg-blue-900\/20, .bg-blue-900\/10, .bg-blue-100, .bg-blue-200 {
     background-color: var(--accent-primary)/10 !important;
+}
+
+/* COMPREHENSIVE BORDER REMOVAL - ALL SCREENS */
+.card, .trezor-card, .stat-card, .quick-add-button, .budget-progress, .insights-section, .ai-insight, .prediction-card {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Remove all borders from cards and containers */
+.card, .trezor-card, .stat-card, .quick-add-button, .budget-progress, .insights-section, .ai-insight, .prediction-card,
+.stats-grid .stat-card, .quick-add-grid .quick-add-button, .budget-progress .card, .insights-section .card,
+.period-toggle, .modern-button, .modern-input, .modern-select {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Remove borders from specific problematic elements */
+.border, .border-1, .border-2, .border-gray-200, .border-gray-300, .border-gray-400, .border-gray-500, .border-gray-600, .border-gray-700, .border-gray-800 {
+    border: none !important;
+}
+
+/* Ensure proper spacing without borders */
+.card + .card, .stat-card + .stat-card {
+    margin-top: 1rem !important;
+}
+
+/* Mobile header fix - minimal padding for proper spacing */
+@media (max-width: 768px) {
+    .trezor-content {
+        padding-top: 5rem !important;
+    }
+    
+    .trezor-header {
+        height: 70px !important;
+    }
+}
+
+/* Fix slider thumb white borders */
+.slider::-webkit-slider-thumb {
+    border: 2px solid var(--bg-secondary) !important;
+}
+
+.slider::-moz-range-thumb {
+    border: 2px solid var(--bg-secondary) !important;
 }
 
 [data-theme="dark"] .bg-blue-50, [data-theme="dark"] .bg-blue-900\/20, [data-theme="dark"] .bg-blue-900\/10, [data-theme="dark"] .bg-blue-100, [data-theme="dark"] .bg-blue-200 {
