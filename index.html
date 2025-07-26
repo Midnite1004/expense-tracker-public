@@ -150,7 +150,7 @@
             /* Dark mode color palette - Navy + Gold */
             --color-primary: #ffa000;
             --color-primary-hover: #ffb74d;
-            --color-success: #4caf50;
+            --color-success: #2e7d32;
             --color-warning: #ff5722;
             --color-error: #f44336;
             
@@ -2526,7 +2526,7 @@
                 font-weight: 600 !important;
                 background: rgba(239, 68, 68, 0.2) !important;
                 border: 2px solid rgba(239, 68, 68, 0.6) !important;
-                color: #dc2626 !important;
+                color: #ff5722 !important;
                 border-radius: 0.5rem !important;
                 margin: 1rem 0 !important;
                 text-align: left !important;
@@ -2881,7 +2881,7 @@
                 box-sizing: border-box !important;
                 touch-action: manipulation !important;
                 -webkit-tap-highlight-color: rgba(239, 68, 68, 0.3) !important;
-                color: #dc2626 !important;
+                color: #ff5722 !important;
             }
             
             /* Clear data in settings dropdown - mobile friendly */
@@ -3591,16 +3591,16 @@
         }
         .dark .status-active {
              background-color: rgba(16, 185, 129, 0.2);
-             color: #10b981;
+             color: #2e7d32;
         }
         .status-cancelled {
             background-color: rgba(239, 68, 68, 0.1);
-            color: #dc2626;
+            color: #ff5722;
             text-decoration: line-through;
         }
          .dark .status-cancelled {
              background-color: rgba(239, 68, 68, 0.2);
-             color: #ef4444;
+             color: #ff5722;
         }
         .toast {
             position: fixed;
@@ -4343,10 +4343,10 @@
             background: linear-gradient(135deg, #8b5cf6, #a855f7) !important;
           }
           tr[data-category="Housing"] td:nth-child(2) {
-            background: linear-gradient(135deg, #10b981, #059669) !important;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20) !important;
           }
           tr[data-category="Subscriptions"] td:nth-child(2) {
-            background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+            background: linear-gradient(135deg, #ff5722, #e64a19) !important;
           }
           tr[data-category="Utilities"] td:nth-child(2) {
             background: linear-gradient(135deg, #f59e0b, #d97706) !important;
@@ -5859,7 +5859,7 @@
   --text-muted: #78909c;
   --accent-primary: #ffa000;
   --accent-secondary: #ffb74d;
-  --accent-success: #4caf50;
+  --accent-success: #2e7d32;
   --accent-warning: #ff5722;
   --color-font: 'Inter', system-ui, sans-serif;
 }
@@ -7707,176 +7707,195 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
 
                 
-<!-- Insights Tab - Simplified Structure -->
-<div id="insights-tab" class="tab-content hidden fade-in">
-    <div class="max-w-6xl mx-auto space-y-6 p-4">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Your Financial Insights</h1>
-            <p class="text-gray-600 dark:text-gray-300">Smart analysis with real-time daily budget coaching</p>
-        </div>
-
-        <!-- Smart Alerts Section -->
-        <div id="alerts-section" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <!-- Will be populated by JavaScript -->
-        </div>
-
-        <!-- Key Metrics -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="metric-card">
-                <div class="text-sm text-gray-600 dark:text-gray-300">Monthly Budget</div>
-                <div class="text-2xl font-bold" id="monthly-budget-display">£0</div>
-                <div class="text-xs text-gray-600 dark:text-gray-300 mt-1" id="budget-vs-income">0% of income</div>
+<!-- Insights Tab - Integrated Design -->
+<div id="insights-tab" class="tab-content hidden fade-in space-y-6">
+        
+        <!-- 1. Four Brand Color Metric Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="metric-card p-4 rounded-lg text-center hover:transform hover:-translate-y-1 transition-all duration-200 shadow-lg" style="background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); color: #faf7f2;">
+                <div class="text-2xl md:text-3xl font-bold" id="insights-total-income">£0</div>
+                <div class="text-sm opacity-90">Monthly Income</div>
             </div>
-            <div class="metric-card">
-                <div class="text-sm text-gray-600 dark:text-gray-300">Total Spent</div>
-                <div class="text-2xl font-bold" id="total-spent-display">£0</div>
-                <div class="text-xs text-gray-600 dark:text-gray-300 mt-1" id="spent-vs-budget">0% of budget</div>
+            <div class="metric-card p-4 rounded-lg text-center hover:transform hover:-translate-y-1 transition-all duration-200 shadow-lg" style="background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%); color: #faf7f2;">
+                <div class="text-2xl md:text-3xl font-bold" id="insights-total-spent">£0</div>
+                <div class="text-sm opacity-90">Total Spent</div>
             </div>
-            <div class="metric-card">
-                <div class="text-sm text-gray-600 dark:text-gray-300">Daily Budget</div>
-                <div class="text-2xl font-bold" id="daily-budget-display">£0</div>
-                <div class="text-xs text-gray-600 dark:text-gray-300 mt-1" id="daily-budget-status">Auto-calculated</div>
+            <div class="metric-card p-4 rounded-lg text-center hover:transform hover:-translate-y-1 transition-all duration-200 shadow-lg" style="background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%); color: #faf7f2;">
+                <div class="text-2xl md:text-3xl font-bold" id="insights-daily-budget">£0</div>
+                <div class="text-sm opacity-90">Daily Budget</div>
             </div>
-            <div class="metric-card">
-                <div class="text-sm text-gray-600 dark:text-gray-300">Today's Spending</div>
-                <div class="text-2xl font-bold" id="today-spent-display">£0</div>
+            <div class="metric-card p-4 rounded-lg text-center hover:transform hover:-translate-y-1 transition-all duration-200 shadow-lg" style="background: linear-gradient(135deg, #ffa000 0%, #ff8f00 100%); color: #1a237e;">
+                <div class="text-2xl md:text-3xl font-bold" id="insights-today-spending">£0</div>
+                <div class="text-sm opacity-90">Today's Spending</div>
             </div>
         </div>
-
-        <!-- Daily Spending Visualization Chart -->
-        <div class="mb-6">
-            <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
-                <div class="flex-1">
-                            <h2 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Daily Spending Visualization</h2>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Track your daily spending patterns with budget alerts and reference lines</p>
+        
+        <!-- 2. Budget Overview (Preserve chart functionality) -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Budget Overview</h2>
+            
+            <!-- Period selector -->
+            <div class="flex space-x-2 mb-4">
+                <button class="period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 text-white shadow-sm" style="background-color: #3949ab;" data-period="7days" onclick="setInsightsPeriod('7days')">7 Days</button>
+                <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 desktop-only" data-period="30days" onclick="setInsightsPeriod('30days')">30 Days</button>
+                <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 desktop-only" data-period="90days" onclick="setInsightsPeriod('90days')">90 Days</button>
+            </div>
+            
+            <!-- Key metrics row (brand colors) -->
+            <div class="flex space-x-3 overflow-x-auto pb-2 mb-4">
+                <div class="flex-shrink-0 px-3 py-2 rounded-lg min-w-fit" style="background-color: rgba(26, 35, 126, 0.1);">
+                    <div class="text-xs font-medium" style="color: #1a237e;">Budget</div>
+                    <div class="text-sm font-semibold" style="color: #1a237e;" id="insights-period-budget">£0</div>
                 </div>
-                <div class="flex gap-3 flex-wrap">
-                    <button class="period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-accent-primary bg-accent-primary text-white hover:bg-accent-primary-hover hover:border-accent-primary-hover shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('7days')" data-period="7days">7 Days</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('30days')" data-period="30days">30 Days</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105 desktop-only" onclick="setInsightsPeriod('90days')" data-period="90days">90 Days</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('month')" data-period="month" id="month-button">Month</button>
-                    <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-accent-primary hover:bg-accent-primary/10 dark:hover:bg-accent-primary/20 hover:text-accent-primary dark:hover:text-accent-primary shadow-sm hover:shadow-md transform hover:scale-105" onclick="setInsightsPeriod('12months')" data-period="12months">12 Months</button>
+                <div class="flex-shrink-0 px-3 py-2 rounded-lg min-w-fit" style="background-color: rgba(255, 87, 34, 0.1);">
+                    <div class="text-xs font-medium" style="color: #ff5722;">Spent</div>
+                    <div class="text-sm font-semibold" style="color: #ff5722;" id="insights-period-spent">£0</div>
+                </div>
+                <div class="flex-shrink-0 px-3 py-2 rounded-lg min-w-fit" style="background-color: rgba(255, 160, 0, 0.1);">
+                    <div class="text-xs font-medium" style="color: #ffa000;">Remaining</div>
+                    <div class="text-sm font-semibold" style="color: #ffa000;" id="insights-period-remaining">£0</div>
+                </div>
+                <div class="flex-shrink-0 px-3 py-2 rounded-lg min-w-fit" style="background-color: rgba(95, 99, 104, 0.1);">
+                    <div class="text-xs font-medium" style="color: #5f6368;">% Used</div>
+                    <div class="text-sm font-semibold" style="color: #5f6368;" id="insights-period-percent">0%</div>
                 </div>
             </div>
-
-            <!-- Chart Container -->
-            <div class="relative h-96 w-full mb-4">
+            
+            <!-- Chart with preserved functionality -->
+            <div class="relative h-80 w-full mb-4">
                 <canvas id="daily-spending-insights-chart"></canvas>
             </div>
         </div>
-
-        <!-- Real-Time Daily Coaching -->
-        <div class="mb-6">
-            <button onclick="toggleInsightsSection('budget-coach')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🎯 Daily Budget Coach</h3>
-                <span id="budget-coach-toggle" class="text-lg text-gray-900 dark:text-white">▼</span>
-            </button>
-            <div id="budget-coach-content" class="">
-                    <!-- Will be populated with dynamic coaching messages -->
+        
+        <!-- 3. Goals Progress (Always visible) -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Goal Progress</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="insights-goals-progress">
+                <!-- Goals with flat progress bars -->
             </div>
         </div>
-
-        <!-- Essential vs Non-Essential -->
-        <div class="mb-3">
-            <button onclick="toggleInsightsSection('spending-breakdown')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-2">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Spending Breakdown (Month)</h3>
-                <span id="spending-breakdown-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
-            </button>
-            <div id="spending-breakdown-content" class="hidden">
-            <div class="flex justify-around items-center text-center mb-4">
-                <div>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Essential</p>
-                    <p class="text-2xl font-semibold" style="color: var(--color-primary);" id="insights-essential-spending">£0.00</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Non-Essential</p>
-                    <p class="text-2xl font-semibold" style="color: var(--color-warning);" id="insights-non-essential-spending">£0.00</p>
-                </div>
+        
+        <!-- 4. Smart Insights (Always visible) -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Smart Insights</h3>
+            <div class="space-y-3" id="insights-smart-insights">
+                <!-- Consolidated insights, alerts, and actions -->
             </div>
-                <div class="w-full rounded-full h-3">
-                    <div id="insights-essential-bar" class="bg-sky-500 h-3 rounded-l-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div>
-                    <div id="insights-non-essential-bar" class="bg-indigo-500 h-3 rounded-r-full inline-block transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+        
+        <!-- 5. Category Breakdown (Collapsible) -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+            <button onclick="toggleInsightsSection('categories')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Where Your Money Goes</h3>
+                <svg id="categories-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+            <div id="categories-content" class="hidden">
+                <div class="space-y-3" id="insights-category-breakdown">
+                    <!-- Categories with flat bars -->
                 </div>
             </div>
         </div>
-
-        <!-- Today's Budget Section -->
-        <div class="mb-3">
-            <button onclick="toggleInsightsSection('todays-budget')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-2">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Today's Budget</h3>
-                <span id="todays-budget-toggle" class="text-lg">▶</span>
+        
+        <!-- 6. Month Comparison (Collapsible) -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+            <button onclick="toggleInsightsSection('comparison')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">This Month vs Last Month</h3>
+                <svg id="comparison-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
             </button>
-            <div id="todays-budget-content" class="hidden">
-            <div class="text-center mb-4">
-                <div class="text-3xl font-bold text-gray-900 dark:text-white" id="todays-remaining">£0</div>
-                <div class="text-sm text-gray-600 dark:text-gray-300">Remaining Today</div>
-            </div>
-            
-            <div class="w-full rounded-full h-3 mb-2" style="background-color: var(--color-bg-tertiary);">
-                    <div class="bg-accent-primary h-3 rounded-full transition-all duration-300" id="todays-budget-bar" style="width: 0%"></div>
-            </div>
-            
-                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
-                    <span id="todays-spent">Spent: £0</span>
-                    <span id="todays-budget-total">Budget: £0</span>
+            <div id="comparison-content" class="hidden">
+                <div class="space-y-3" id="insights-month-comparison">
+                    <!-- Clear month comparisons -->
                 </div>
             </div>
         </div>
-
-        <!-- Category Spending Analysis -->
-        <div class="mb-3">
-            <button onclick="toggleInsightsSection('category-analysis')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-2">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">📊 Category Spending Analysis</h3>
-                <span id="category-analysis-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
+        
+        <!-- 7. Monthly Overview (Collapsible) -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+            <button onclick="toggleInsightsSection('monthly')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Monthly Overview</h3>
+                <svg id="monthly-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
             </button>
-            <div id="category-analysis-content" class="hidden">
-                <!-- Top Categories This Month -->
-                <div>
-                    <h4 class="font-medium mb-4 text-gray-900 dark:text-white">Top Categories This Month</h4>
-                    <div class="space-y-4" id="category-spending-breakdown">
-                        <!-- Will be populated by JavaScript -->
+            <div id="monthly-content" class="hidden">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                    <div class="text-center p-3 rounded-lg" style="background-color: rgba(46, 125, 50, 0.1);">
+                        <div class="text-xl font-bold" style="color: #2e7d32;" id="insights-monthly-income">£0</div>
+                        <div class="text-xs" style="color: #2e7d32;">Income</div>
+                    </div>
+                    <div class="text-center p-3 rounded-lg" style="background-color: rgba(255, 87, 34, 0.1);">
+                        <div class="text-xl font-bold" style="color: #ff5722;" id="insights-monthly-expenses">£0</div>
+                        <div class="text-xs" style="color: #ff5722;">Expenses</div>
+                    </div>
+                    <div class="text-center p-3 rounded-lg" style="background-color: rgba(255, 160, 0, 0.1);">
+                        <div class="text-xl font-bold" style="color: #ffa000;" id="insights-monthly-savings">£0</div>
+                        <div class="text-xs" style="color: #ffa000;">Savings</div>
+                    </div>
+                    <div class="text-center p-3 rounded-lg" style="background-color: rgba(26, 35, 126, 0.1);">
+                        <div class="text-xl font-bold" style="color: #1a237e;" id="insights-savings-rate">0%</div>
+                        <div class="text-xs" style="color: #1a237e;">Savings Rate</div>
                     </div>
                 </div>
                 
-                <!-- Budget Impact by Category Chart -->
-                <div>
-                    <h4 class="font-medium mb-4 text-gray-900 dark:text-white">Budget Impact by Category</h4>
-                    <div class="relative">
-                        <div class="h-80 flex items-center justify-center">
-                            <canvas id="category-donut-chart" style="max-height: 300px;"></canvas>
-                        </div>
-                        <!-- Chart Legend -->
-                        <div class="mt-4 grid grid-cols-2 gap-2 text-sm" id="category-chart-legend">
-                            <!-- Will be populated by JavaScript -->
+                <!-- Income allocation bar -->
+                <div class="mb-4">
+                    <div class="text-sm font-medium mb-2" style="color: #1a237e;">Income Allocation</div>
+                    <div class="h-4 rounded-full overflow-hidden relative" style="background-color: #f5f5f5;">
+                        <div class="h-full rounded-full transition-all duration-500" style="background-color: #ff5722;" id="expenses-allocation"></div>
+                        <div class="h-full rounded-full transition-all duration-500 absolute top-0" style="background-color: #2e7d32;" id="savings-allocation"></div>
+                    </div>
+                    <div class="flex justify-between mt-1 text-xs">
+                        <span style="color: #ff5722;">Expenses</span>
+                        <span style="color: #2e7d32;">Savings</span>
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-
-        <!-- Smart Insights -->
-        <div class="mb-3">
-            <button onclick="toggleInsightsSection('smart-insights')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-2">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">💡 Smart Insights</h3>
-                <span id="smart-insights-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
+        
+        <!-- 8. Annual Overview (Collapsible) -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+            <button onclick="toggleInsightsSection('annual')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Annual Overview</h3>
+                <svg id="annual-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
             </button>
-            <div id="smart-insights-content" class="hidden">
-                    <!-- Will be populated by JavaScript -->
+            <div id="annual-content" class="hidden">
+                <!-- Annual metrics (2x2 grid) -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="text-center p-4 rounded-lg" style="background-color: rgba(26, 35, 126, 0.1);">
+                        <div class="text-2xl font-bold" style="color: #1a237e;" id="insights-annual-budget">£48,000</div>
+                        <div class="text-sm" style="color: #1a237e;">Annual Budget</div>
+                    </div>
+                    <div class="text-center p-4 rounded-lg" style="background-color: rgba(255, 87, 34, 0.1);">
+                        <div class="text-2xl font-bold" style="color: #ff5722;" id="insights-ytd-spent">£13,501</div>
+                        <div class="text-sm" style="color: #ff5722;">YTD Spent</div>
+                    </div>
+                    <div class="text-center p-4 rounded-lg" style="background-color: rgba(46, 125, 50, 0.1);">
+                        <div class="text-2xl font-bold" style="color: #2e7d32;" id="insights-annual-remaining">£34,499</div>
+                        <div class="text-sm" style="color: #2e7d32;">Remaining</div>
+                    </div>
+                    <div class="text-center p-4 rounded-lg" style="background-color: rgba(255, 160, 0, 0.1);">
+                        <div class="text-2xl font-bold" style="color: #ffa000;" id="insights-avg-month">£1,929</div>
+                        <div class="text-sm" style="color: #ffa000;">Avg/Month</div>
+                    </div>
+                </div>
+                
+                <!-- Monthly List View -->
+                <h4 class="text-md font-medium mb-3 text-gray-900 dark:text-white">Monthly Performance</h4>
+                <div class="space-y-2" id="insights-monthly-list">
+                    <!-- Monthly list items will be inserted here -->
+                </div>
+                <button id="insights-load-more-months" class="w-full mt-4 py-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium" onclick="loadMoreInsightsMonths()">
+                    Load More Months
+                </button>
             </div>
         </div>
-
-        <!-- Budget Coach Recommendations -->
-        <div class="mb-3">
-            <button onclick="toggleInsightsSection('budget-performance')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-2">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">📊 Budget Performance</h3>
-                <span id="budget-performance-toggle" class="text-lg text-gray-900 dark:text-white">▶</span>
-            </button>
-            <div id="budget-performance-content" class="hidden">
-                    <!-- Will be populated by JavaScript -->
-            </div>
-        </div>
-    </div>
+        
 </div>
 
 <!-- Settings Tab -->
@@ -7890,7 +7909,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         <div class="space-y-4">
             <!-- Essential Settings -->
             <div class="settings-accordion">
-                <button class="settings-section-header w-full" onclick="toggleSettingsSection('essential')">
+                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('essential')">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">💰</span>
@@ -7899,7 +7918,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Essential financial settings</p>
                             </div>
                         </div>
-                        <span id="essential-toggle" class="settings-toggle">▼</span>
+                        <svg id="essential-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </div>
                 </button>
                 <div id="essential-content" class="settings-section-content show">
@@ -7953,7 +7974,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 
             <!-- Display & Preferences -->
             <div class="settings-accordion">
-                <button class="settings-section-header w-full" onclick="toggleSettingsSection('display')">
+                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('display')">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">🎨</span>
@@ -7962,7 +7983,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Theme, currency, and chart options</p>
                             </div>
                         </div>
-                        <span id="display-toggle" class="settings-toggle">▼</span>
+                        <svg id="display-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </div>
                 </button>
                 <div id="display-content" class="settings-section-content">
@@ -8006,7 +8029,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 
             <!-- Advanced Settings -->
             <div class="settings-accordion">
-                <button class="settings-section-header w-full" onclick="toggleSettingsSection('advanced')">
+                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('advanced')">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">⚙️</span>
@@ -8015,7 +8038,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Daily budgets, coaching, and chart options</p>
                             </div>
                         </div>
-                        <span id="advanced-toggle" class="settings-toggle">▼</span>
+                        <svg id="advanced-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </div>
                 </button>
                 <div id="advanced-content" class="settings-section-content">
@@ -8063,7 +8088,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 
             <!-- Data Management -->
             <div class="settings-accordion">
-                <button class="settings-section-header w-full" onclick="toggleSettingsSection('data')">
+                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('data')">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">📊</span>
@@ -8072,7 +8097,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Import, export, and backup your data</p>
                             </div>
                         </div>
-                        <span id="data-toggle" class="settings-toggle">▼</span>
+                        <svg id="data-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </div>
                 </button>
                 <div id="data-content" class="settings-section-content">
@@ -8103,7 +8130,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 
             <!-- Banking Integration & Quick Actions -->
             <div class="settings-accordion">
-                <button class="settings-section-header w-full" onclick="toggleSettingsSection('actions')">
+                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('actions')">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">⚡</span>
@@ -8112,7 +8139,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Quick actions and banking features</p>
                             </div>
                         </div>
-                        <span id="actions-toggle" class="settings-toggle">▼</span>
+                        <svg id="actions-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </div>
                 </button>
                 <div id="actions-content" class="settings-section-content">
@@ -8173,9 +8202,13 @@ button, .btn, input[type="button"], input[type="submit"] {
         <div class="help-accordion space-y-4">
             <!-- Getting Started -->
             <div class="help-section">
-                <button class="help-section-header" onclick="toggleHelpSection('getting-started')">
-                    <span class="help-section-title">🚀 Getting Started</span>
-                    <span id="getting-started-toggle" class="help-toggle">▼</span>
+                <button class="help-section-header hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleHelpSection('getting-started')">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="help-section-title">🚀 Getting Started</span>
+                        <svg id="getting-started-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
                 </button>
                 <div id="getting-started-content" class="help-section-content hidden">
                     <div class="help-component">
@@ -8217,14 +8250,18 @@ button, .btn, input[type="button"], input[type="submit"] {
             <div class="help-section">
                 <button class="help-section-header" onclick="toggleHelpSection('dashboard')">
                     <span class="help-section-title">📊 Understanding Your Dashboard</span>
-                    <span id="dashboard-toggle" class="help-toggle">▼</span>
+                    <svg id="dashboard-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                 </button>
                 <div id="dashboard-content" class="help-section-content hidden">
                     <!-- Budget Summary Cards Subsection -->
                     <div class="help-subsection">
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('budget-cards')">
                             <h4 class="help-component-title">📊 Budget Summary Cards</h4>
-                            <span id="budget-cards-toggle" class="help-toggle">▼</span>
+                            <svg id="budget-cards-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
                         <div id="budget-cards-content" class="help-subsection-content hidden">
                             <p class="help-component-description">
@@ -8263,7 +8300,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="help-subsection">
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('health-score')">
                             <h4 class="help-component-title">🎯 Budget Health Score</h4>
-                            <span id="health-score-toggle" class="help-toggle">▼</span>
+                            <svg id="health-score-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
                         <div id="health-score-content" class="help-subsection-content hidden">
                             <p class="help-component-description">
@@ -8294,7 +8333,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="help-subsection">
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('upcoming-bills')">
                             <h4 class="help-component-title">↻ Upcoming Bills</h4>
-                            <span id="upcoming-bills-toggle" class="help-toggle">▼</span>
+                            <svg id="upcoming-bills-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
                         <div id="upcoming-bills-content" class="help-subsection-content hidden">
                             <p class="help-component-description">
@@ -8323,7 +8364,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="help-subsection">
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('quick-actions')">
                             <h4 class="help-component-title">⚡ Quick Actions</h4>
-                            <span id="quick-actions-toggle" class="help-toggle">▼</span>
+                            <svg id="quick-actions-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
                         <div id="quick-actions-content" class="help-subsection-content hidden">
                             <p class="help-component-description">
@@ -8346,7 +8389,9 @@ button, .btn, input[type="button"], input[type="submit"] {
             <div class="help-section">
                 <button class="help-section-header" onclick="toggleHelpSection('expenses')">
                     <span class="help-section-title">💰 Managing Expenses</span>
-                    <span id="expenses-toggle" class="help-toggle">▼</span>
+                    <svg id="expenses-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                 </button>
                 <div id="expenses-content" class="help-section-content hidden">
                     <div class="help-component">
@@ -8457,7 +8502,9 @@ button, .btn, input[type="button"], input[type="submit"] {
             <div class="help-section">
                 <button class="help-section-header" onclick="toggleHelpSection('analytics-insights')">
                     <span class="help-section-title">📈 Analytics & Insights</span>
-                    <span id="analytics-insights-toggle" class="help-toggle">▼</span>
+                    <svg id="analytics-insights-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                 </button>
                 <div id="analytics-insights-content" class="help-section-content hidden">
                     <div class="help-component">
@@ -8539,7 +8586,9 @@ button, .btn, input[type="button"], input[type="submit"] {
             <div class="help-section">
                 <button class="help-section-header" onclick="toggleHelpSection('goals-planning')">
                     <span class="help-section-title">🎯 Goals & Financial Planning</span>
-                    <span id="goals-planning-toggle" class="help-toggle">▼</span>
+                    <svg id="goals-planning-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                 </button>
                 <div id="goals-planning-content" class="help-section-content hidden">
                     <div class="help-component">
@@ -8615,7 +8664,9 @@ button, .btn, input[type="button"], input[type="submit"] {
             <div class="help-section">
                 <button class="help-section-header" onclick="toggleHelpSection('settings-troubleshooting')">
                     <span class="help-section-title">⚙️ Settings & Troubleshooting</span>
-                    <span id="settings-troubleshooting-toggle" class="help-toggle">▼</span>
+                    <svg id="settings-troubleshooting-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                 </button>
                 <div id="settings-troubleshooting-content" class="help-section-content hidden">
                     <div class="help-component">
@@ -8673,7 +8724,9 @@ button, .btn, input[type="button"], input[type="submit"] {
             <div class="help-section">
                 <button class="help-section-header" onclick="toggleHelpSection('features-tips')">
                     <span class="help-section-title">✨ Features & Tips</span>
-                    <span id="features-tips-toggle" class="help-toggle">▼</span>
+                    <svg id="features-tips-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                 </button>
                 <div id="features-tips-content" class="help-section-content hidden">
                     <div class="help-component">
@@ -16161,35 +16214,43 @@ function closeGoalSelection() {
         // Settings Accordion Toggle Function
         function toggleSettingsSection(sectionId) {
             const content = document.getElementById(`${sectionId}-content`);
-            const toggle = document.getElementById(`${sectionId}-toggle`);
+            const chevron = document.getElementById(`${sectionId}-chevron`);
             
-            if (content.classList.contains('show')) {
+            if (content && content.classList.contains('show')) {
                 content.classList.remove('show');
-                toggle.classList.remove('rotated');
-            } else {
+                if (chevron) {
+                    chevron.style.transform = 'rotate(0deg)'; // Point down when collapsed
+                }
+            } else if (content) {
                 content.classList.add('show');
-                toggle.classList.add('rotated');
+                if (chevron) {
+                    chevron.style.transform = 'rotate(180deg)'; // Point up when expanded
+                }
             }
         }
 
         function toggleHelpSection(sectionId) {
             const content = document.getElementById(`${sectionId}-content`);
-            const toggle = document.getElementById(`${sectionId}-toggle`);
+            const chevron = document.getElementById(`${sectionId}-chevron`) || document.getElementById(`${sectionId}-toggle`);
             
-            if (content.classList.contains('hidden')) {
+            if (content && content.classList.contains('hidden')) {
                 content.classList.remove('hidden');
-                toggle.textContent = '▲';
-                toggle.style.transform = 'rotate(0deg)';
-            } else {
+                if (chevron) {
+                    chevron.style.transform = 'rotate(180deg)'; // Point up when expanded
+                }
+            } else if (content) {
                 content.classList.add('hidden');
-                toggle.textContent = '▼';
-                toggle.style.transform = 'rotate(0deg)';
+                if (chevron) {
+                    chevron.style.transform = 'rotate(0deg)'; // Point down when collapsed
+                }
             }
             
             // Save state to localStorage
             const expandedSections = JSON.parse(localStorage.getItem('expandedHelpSections') || '{}');
-            expandedSections[sectionId] = !content.classList.contains('hidden');
-            localStorage.setItem('expandedHelpSections', JSON.stringify(expandedSections));
+            if (content) {
+                expandedSections[sectionId] = !content.classList.contains('hidden');
+                localStorage.setItem('expandedHelpSections', JSON.stringify(expandedSections));
+            }
         }
 
         // Toggle Help Subsections
@@ -16200,10 +16261,10 @@ function closeGoalSelection() {
             if (content && toggle) {
                 if (content.classList.contains('hidden')) {
                     content.classList.remove('hidden');
-                    toggle.textContent = '▲';
+                    toggle.style.transform = 'rotate(180deg)'; // Point up when expanded
                 } else {
                     content.classList.add('hidden');
-                    toggle.textContent = '▼';
+                    toggle.style.transform = 'rotate(0deg)'; // Point down when collapsed
                 }
             }
         }
@@ -16225,10 +16286,10 @@ function closeGoalSelection() {
                     
                     if (shouldExpand) {
                         content.classList.remove('hidden');
-                        toggle.textContent = '▲';
+                        toggle.style.transform = 'rotate(180deg)'; // Point up when expanded
                     } else {
                         content.classList.add('hidden');
-                        toggle.textContent = '▼';
+                        toggle.style.transform = 'rotate(0deg)'; // Point down when collapsed
                     }
                 }
             });
@@ -16309,22 +16370,26 @@ function closeGoalSelection() {
         // --- Insights Section Toggle Management ---
         function toggleInsightsSection(sectionId) {
             const content = document.getElementById(`${sectionId}-content`);
-            const toggle = document.getElementById(`${sectionId}-toggle`);
+            const chevron = document.getElementById(`${sectionId}-chevron`);
             
-            if (content.classList.contains('hidden')) {
+            if (content && content.classList.contains('hidden')) {
                 content.classList.remove('hidden');
-                toggle.textContent = '▼'; // Down arrow for expanded
-                toggle.style.transform = 'rotate(0deg)';
-            } else {
+                if (chevron) {
+                    chevron.style.transform = 'rotate(180deg)'; // Point up when expanded
+                }
+            } else if (content) {
                 content.classList.add('hidden');
-                toggle.textContent = '▶'; // Right arrow for collapsed
-                toggle.style.transform = 'rotate(0deg)';
+                if (chevron) {
+                    chevron.style.transform = 'rotate(0deg)'; // Point down when collapsed
+                }
             }
             
             // Save the state to localStorage
             const expandedSections = JSON.parse(localStorage.getItem('expandedInsightsSections') || '{}');
-            expandedSections[sectionId] = !content.classList.contains('hidden');
-            localStorage.setItem('expandedInsightsSections', JSON.stringify(expandedSections));
+            if (content) {
+                expandedSections[sectionId] = !content.classList.contains('hidden');
+                localStorage.setItem('expandedInsightsSections', JSON.stringify(expandedSections));
+            }
         }
         
         // Initialize collapsed state for insights sections
@@ -16345,12 +16410,10 @@ function closeGoalSelection() {
                     
                     if (shouldBeExpanded) {
                         content.classList.remove('hidden');
-                        toggle.textContent = '▼';
-                        toggle.style.transform = 'rotate(0deg)';
+                        toggle.style.transform = 'rotate(180deg)'; // Point up when expanded
                     } else {
                         content.classList.add('hidden');
-                        toggle.textContent = '▶';
-                        toggle.style.transform = 'rotate(0deg)';
+                        toggle.style.transform = 'rotate(0deg)'; // Point down when collapsed
                     }
                 }
             });
@@ -16471,11 +16534,11 @@ function closeGoalSelection() {
             container.innerHTML = sortedCategories.map(([category, amount]) => {
                 const percentage = (amount / total * 100).toFixed(0);
                 const colors = {
-                    'Food': ['#10b981', '#059669'],
+                    'Food': ['#2e7d32', '#1b5e20'],
                     'Transport': ['#3b82f6', '#1d4ed8'],
                     'Entertainment': ['#8b5cf6', '#7c3aed'],
                     'Shopping': ['#f59e0b', '#d97706'],
-                    'Bills': ['#ef4444', '#dc2626']
+                    'Bills': ['#ff5722', '#e64a19']
                 };
                 const [startColor, endColor] = colors[category] || ['#6b7280', '#4b5563'];
 
@@ -16537,7 +16600,7 @@ function closeGoalSelection() {
                 {
                     label: 'Daily Budget Threshold',
                     data: Array(labels.length).fill(financialData.dailyBudget),
-                    borderColor: '#10b981',
+                    borderColor: '#2e7d32',
                     backgroundColor: 'rgba(16, 185, 129, 0.1)',
                     borderWidth: 2,
                     pointRadius: 0,
@@ -16551,9 +16614,9 @@ function closeGoalSelection() {
                     borderWidth: 3,
                     pointRadius: 6,
                     pointBackgroundColor: spendingAmounts.slice(0, spendingData.length).map(amount => {
-                        if (amount > financialData.dailyBudget) return '#ef4444';
+                        if (amount > financialData.dailyBudget) return '#ff5722';
                         if (amount === 0) return '#6b7280';
-                        return '#10b981';
+                        return '#2e7d32';
                     }),
                     pointBorderColor: '#8b5cf6',
                     pointBorderWidth: 2,
@@ -16567,7 +16630,7 @@ function closeGoalSelection() {
                 datasets.push({
                     label: 'Recommended Spending',
                     data: [...Array(spendingData.length).fill(null), ...predictions],
-                    borderColor: '#ef4444',
+                    borderColor: '#ff5722',
                     backgroundColor: 'rgba(239, 68, 68, 0.1)',
                     borderWidth: 2,
                     pointRadius: 3,
@@ -16636,7 +16699,7 @@ function closeGoalSelection() {
 
             const categories = Object.keys(categoryTotals);
             const amounts = Object.values(categoryTotals);
-            const colors = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444'];
+            const colors = ['#2e7d32', '#1976d2', '#1a237e', '#ffa000', '#ff5722'];
 
             if (categoryChart) categoryChart.destroy();
             
@@ -16691,7 +16754,7 @@ function closeGoalSelection() {
                     }, {
                         label: 'Daily Budget',
                         data: Array(movingAverage.length).fill(financialData.dailyBudget),
-                        borderColor: '#10b981',
+                        borderColor: '#2e7d32',
                         borderWidth: 2,
                         borderDash: [5, 5],
                         pointRadius: 0,
@@ -24245,7 +24308,7 @@ function createRealCategoryChart() {
     }
     
     const colors = [
-        '#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6',
+        '#1976d2', '#ff5722', '#2e7d32', '#ffa000', '#1a237e',
         '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#6366f1'
     ];
     
@@ -24671,6 +24734,537 @@ function updateInsightsTiles() {
         const percentage = ((monthlyBudget / monthlyIncome) * 100).toFixed(0);
         budgetPercentage.textContent = `${percentage}% of income`;
         console.log('✅ Updated budget percentage to:', `${percentage}% of income`);
+    }
+    
+    // Update integrated insights cards
+    updateIntegratedInsights();
+}
+
+// New integrated insights update functions
+function updateIntegratedInsights() {
+    updateIntegratedBlueCards();
+    updateIntegratedPeriodMetrics();
+    updateIntegratedGoalsProgress();
+    updateIntegratedSmartInsights();
+    updateIntegratedCategories();
+    updateIntegratedMonthComparison();
+    updateIntegratedMonthlyOverview();
+    updateIntegratedAnnualOverview();
+}
+
+function updateIntegratedBlueCards() {
+    const recurringIncome = recurringItems
+        .filter(item => item.type === 'income' && item.status === 'active')
+        .reduce((sum, item) => sum + item.amount, 0);
+    const totalIncome = monthlyIncome + recurringIncome;
+    
+    const monthExpenses = getCurrentMonthExpenses();
+    const totalSpent = monthExpenses.reduce((sum, exp) => sum + (exp.amount || exp.cost || 0), 0);
+    
+    const todayExpenses = getTodayExpenses();
+    const todaySpent = todayExpenses.reduce((sum, exp) => sum + (exp.amount || exp.cost || 0), 0);
+    
+    updateElementText('insights-total-income', formatCurrency(totalIncome));
+    updateElementText('insights-total-spent', formatCurrency(totalSpent));
+    updateElementText('insights-daily-budget', formatCurrency(dailyBudget));
+    updateElementText('insights-today-spending', formatCurrency(todaySpent));
+}
+
+function updateIntegratedPeriodMetrics() {
+    const days = getCurrentPeriodDays();
+    const periodBudget = (monthlyBudget / 30) * days;
+    const periodExpenses = getExpensesForPeriod(days);
+    const periodSpent = periodExpenses.reduce((sum, exp) => sum + (exp.amount || exp.cost || 0), 0);
+    const periodRemaining = periodBudget - periodSpent;
+    const periodPercent = periodBudget > 0 ? ((periodSpent / periodBudget) * 100).toFixed(1) : '0.0';
+    
+    updateElementText('insights-period-budget', formatCurrency(periodBudget));
+    updateElementText('insights-period-spent', formatCurrency(periodSpent));
+    updateElementText('insights-period-remaining', formatCurrency(periodRemaining));
+    updateElementText('insights-period-percent', periodPercent + '%');
+}
+
+function updateIntegratedGoalsProgress() {
+    const container = document.getElementById('insights-goals-progress');
+    if (!container || !userGoals || userGoals.length === 0) {
+        if (container) {
+            container.innerHTML = `
+                <div class="col-span-2 text-center py-6 text-gray-500 dark:text-gray-400">
+                    <div class="text-2xl mb-2">🎯</div>
+                    <p class="text-sm">No goals set yet</p>
+                    <button onclick="showTab('goals')" class="text-blue-600 hover:underline text-sm mt-1">Set your goals →</button>
+                </div>
+            `;
+        }
+        return;
+    }
+    
+    const goalsHTML = userGoals.slice(0, 2).map(goal => {
+        const current = goal.currentProgress || goal.currentAmount || 0;
+        const target = goal.target || goal.targetAmount || 1;
+        const progressPercent = target > 0 ? (current / target) * 100 : 0;
+        
+        return `
+            <div class="goal-card p-4 rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h4 class="font-medium text-gray-900 dark:text-white">${goal.name || 'Unnamed Goal'}</h4>
+                    <span class="text-sm font-semibold text-blue-600 dark:text-blue-400">${progressPercent.toFixed(1)}%</span>
+                </div>
+                <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full mb-2">
+                    <div class="h-2 bg-blue-500 rounded-full transition-all duration-500" style="width: ${Math.min(progressPercent, 100)}%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400">
+                    <span>${formatCurrency(current)}</span>
+                    <span>${formatCurrency(target)}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    if (container) {
+        container.innerHTML = goalsHTML;
+    }
+}
+
+function updateIntegratedSmartInsights() {
+    const container = document.getElementById('insights-smart-insights');
+    if (!container) return;
+    
+    const insights = [];
+    const monthExpenses = getCurrentMonthExpenses();
+    const lastMonthExpenses = getLastMonthExpenses();
+    const totalSpent = monthExpenses.reduce((sum, exp) => sum + (exp.amount || exp.cost || 0), 0);
+    const lastMonthSpent = lastMonthExpenses.reduce((sum, exp) => sum + (exp.amount || exp.cost || 0), 0);
+    const remaining = monthlyBudget - totalSpent;
+    
+    const now = new Date();
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const daysElapsed = now.getDate();
+    const dailyAverage = totalSpent / Math.max(1, daysElapsed);
+    const projectedMonthly = dailyAverage * daysInMonth;
+    
+    // Calculate category analysis
+    const categoryTotals = {};
+    monthExpenses.forEach(exp => {
+        const category = exp.category || 'Other';
+        categoryTotals[category] = (categoryTotals[category] || 0) + (exp.amount || exp.cost || 0);
+    });
+    const topCategory = Object.entries(categoryTotals).sort(([,a], [,b]) => b - a)[0];
+    
+    // Spending pace analysis
+    const progressThroughMonth = daysElapsed / daysInMonth;
+    const budgetProgress = totalSpent / monthlyBudget;
+    
+    if (remaining < 0) {
+        insights.push({
+            type: 'error',
+            icon: '🚨',
+            title: 'Budget Exceeded',
+            message: `You're ${formatCurrency(Math.abs(remaining))} over budget with ${daysInMonth - daysElapsed} days remaining.`,
+            action: 'Consider reducing non-essential spending for the rest of the month.'
+        });
+    } else if (budgetProgress > progressThroughMonth + 0.1) {
+        insights.push({
+            type: 'warning',
+            icon: '⚡',
+            title: 'Spending Too Fast',
+            message: `You've used ${(budgetProgress * 100).toFixed(0)}% of your budget but only ${(progressThroughMonth * 100).toFixed(0)}% of the month has passed.`,
+            action: `Slow down to avoid overspending. Target: ${formatCurrency(monthlyBudget * progressThroughMonth)} by now.`
+        });
+    } else if (projectedMonthly > monthlyBudget * 1.05) {
+        insights.push({
+            type: 'warning',
+            icon: '📊',
+            title: 'Projection Alert',
+            message: `At current pace, you'll spend ${formatCurrency(projectedMonthly)} this month.`,
+            action: `That's ${formatCurrency(projectedMonthly - monthlyBudget)} over budget. Consider cutting back.`
+        });
+    } else if (budgetProgress < progressThroughMonth - 0.15) {
+        insights.push({
+            type: 'success',
+            icon: '🎯',
+            title: 'Great Self-Control!',
+            message: `You're well under budget - only ${(budgetProgress * 100).toFixed(0)}% used with ${(progressThroughMonth * 100).toFixed(0)}% of month passed.`,
+            action: `You have ${formatCurrency(remaining)} left to spend this month.`
+        });
+    } else {
+        insights.push({
+            type: 'info',
+            icon: '✅',
+            title: 'On Track',
+            message: `Your spending pace looks good. ${formatCurrency(remaining)} remaining for ${daysInMonth - daysElapsed} days.`,
+            action: `That's about ${formatCurrency(remaining / Math.max(1, daysInMonth - daysElapsed))} per day.`
+        });
+    }
+    
+    // Category insights
+    if (topCategory && topCategory[1] > totalSpent * 0.4) {
+        insights.push({
+            type: 'info',
+            icon: '📊',
+            title: 'Top Spending Category',
+            message: `${topCategory[0]} accounts for ${((topCategory[1] / totalSpent) * 100).toFixed(0)}% of your spending.`,
+            action: `That's ${formatCurrency(topCategory[1])} this month. Consider if this aligns with your priorities.`
+        });
+    }
+    
+    // Month comparison
+    if (lastMonthSpent > 0) {
+        const monthChange = ((totalSpent - lastMonthSpent) / lastMonthSpent) * 100;
+        if (Math.abs(monthChange) > 15) {
+            insights.push({
+                type: monthChange > 0 ? 'warning' : 'success',
+                icon: monthChange > 0 ? '📈' : '📉',
+                title: 'Month-over-Month Change',
+                message: `You're spending ${Math.abs(monthChange).toFixed(0)}% ${monthChange > 0 ? 'more' : 'less'} than last month.`,
+                action: monthChange > 0 ? 'Review what changed in your spending patterns.' : 'Great job reducing your expenses!'
+            });
+        }
+    }
+    
+    // Weekend spending insight
+    const weekendExpenses = monthExpenses.filter(exp => {
+        const expDate = new Date(exp.date);
+        const dayOfWeek = expDate.getDay();
+        return dayOfWeek === 0 || dayOfWeek === 6; // Sunday or Saturday
+    });
+    const weekendTotal = weekendExpenses.reduce((sum, exp) => sum + (exp.amount || exp.cost || 0), 0);
+    const weekendPercentage = totalSpent > 0 ? (weekendTotal / totalSpent) * 100 : 0;
+    
+    if (weekendPercentage > 40) {
+        insights.push({
+            type: 'info',
+            icon: '🎉',
+            title: 'Weekend Spending',
+            message: `${weekendPercentage.toFixed(0)}% of your spending happens on weekends.`,
+            action: `That's ${formatCurrency(weekendTotal)}. Consider if this fits your lifestyle goals.`
+        });
+    }
+    
+    const getCardClass = (type) => {
+        switch(type) {
+            case 'error': return 'border-red-500 bg-red-50 dark:bg-red-900/20';
+            case 'warning': return 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20';
+            case 'success': return 'border-green-500 bg-green-50 dark:bg-green-900/20';
+            case 'info': return 'border-blue-500 bg-blue-50 dark:bg-blue-900/20';
+            default: return 'border-gray-500 bg-gray-50 dark:bg-gray-900/20';
+        }
+    };
+    
+    const insightsHTML = insights.slice(0, 3).map(insight => `
+        <div class="insight-card p-4 rounded-lg border-l-4 ${getCardClass(insight.type)}">
+            <div class="flex items-start space-x-3">
+                <span class="text-xl flex-shrink-0">${insight.icon}</span>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-gray-900 dark:text-white mb-1">${insight.title}</h4>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">${insight.message}</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-400 italic">${insight.action}</p>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    container.innerHTML = insightsHTML || `
+        <div class="text-center py-6 text-gray-500 dark:text-gray-400">
+            <div class="text-2xl mb-2">🔍</div>
+            <p class="text-sm">Add some expenses to see smart insights</p>
+        </div>
+    `;
+}
+
+function updateIntegratedCategories() {
+    const container = document.getElementById('insights-category-breakdown');
+    if (!container) return;
+    
+    const monthExpenses = getCurrentMonthExpenses();
+    console.log('Month expenses for categories:', monthExpenses);
+    
+    const categoryTotals = {};
+    
+    monthExpenses.forEach(exp => {
+        const category = exp.category || 'Other';
+        categoryTotals[category] = (categoryTotals[category] || 0) + (exp.amount || exp.cost || 0);
+    });
+    
+    console.log('Category totals:', categoryTotals);
+    
+    const sortedCategories = Object.entries(categoryTotals)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 5);
+    
+    const totalSpent = Object.values(categoryTotals).reduce((sum, amount) => sum + amount, 0);
+    
+    if (sortedCategories.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-sm">No expenses this month</p>';
+        return;
+    }
+    
+    const categoriesHTML = sortedCategories.map(([category, amount]) => {
+        const percentage = totalSpent > 0 ? (amount / totalSpent) * 100 : 0;
+        const color = getCategoryColor(category);
+        
+        return `
+            <div class="flex items-center justify-between py-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg px-2 transition-colors">
+                <div class="flex items-center space-x-3 flex-1">
+                    <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${color}"></div>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">${category}</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="w-24 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-500" style="background-color: ${color}; width: ${percentage}%"></div>
+                    </div>
+                    <span class="text-sm font-semibold text-gray-900 dark:text-white w-20 text-right">${formatCurrency(amount)}</span>
+                    <span class="text-xs text-gray-500 w-10 text-right">${percentage.toFixed(0)}%</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    container.innerHTML = categoriesHTML;
+}
+
+function updateIntegratedMonthComparison() {
+    const container = document.getElementById('insights-month-comparison');
+    if (!container) return;
+    
+    const thisMonth = getCurrentMonthExpenses();
+    const lastMonth = getLastMonthExpenses();
+    
+    const thisMonthByCategory = {};
+    const lastMonthByCategory = {};
+    
+    thisMonth.forEach(exp => {
+        const category = exp.category || 'Other';
+        thisMonthByCategory[category] = (thisMonthByCategory[category] || 0) + (exp.amount || exp.cost || 0);
+    });
+    
+    lastMonth.forEach(exp => {
+        const category = exp.category || 'Other';
+        lastMonthByCategory[category] = (lastMonthByCategory[category] || 0) + (exp.amount || exp.cost || 0);
+    });
+    
+    const allCategories = new Set([...Object.keys(thisMonthByCategory), ...Object.keys(lastMonthByCategory)]);
+    
+    const comparisonHTML = Array.from(allCategories).slice(0, 5).map(category => {
+        const thisAmount = thisMonthByCategory[category] || 0;
+        const lastAmount = lastMonthByCategory[category] || 0;
+        const difference = thisAmount - lastAmount;
+        const isIncrease = difference > 0;
+        const changePercent = lastAmount > 0 ? Math.abs(difference / lastAmount * 100) : 0;
+        
+        return `
+            <div class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                <div class="flex-1">
+                    <h4 class="font-medium text-gray-900 dark:text-white">${category}</h4>
+                    <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        <span>Last: ${formatCurrency(lastAmount)}</span>
+                        <span>→</span>
+                        <span>This: ${formatCurrency(thisAmount)}</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="flex items-center space-x-1">
+                        <span class="${isIncrease ? 'text-red-600' : 'text-green-600'} text-sm font-medium">
+                            ${isIncrease ? '↑' : '↓'} ${formatCurrency(Math.abs(difference))}
+                        </span>
+                    </div>
+                    ${changePercent > 0 ? `<div class="text-xs text-gray-500">${changePercent.toFixed(0)}% ${isIncrease ? 'more' : 'less'}</div>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    container.innerHTML = comparisonHTML || '<p class="text-gray-500 dark:text-gray-400 text-sm">No data for comparison</p>';
+}
+
+function updateIntegratedMonthlyOverview() {
+    const monthExpenses = getCurrentMonthExpenses();
+    const totalExpenses = monthExpenses.reduce((sum, exp) => sum + (exp.amount || exp.cost || 0), 0);
+    const savings = monthlyIncome - totalExpenses;
+    const savingsRate = monthlyIncome > 0 ? (savings / monthlyIncome * 100).toFixed(1) : '0.0';
+    
+    updateElementText('insights-monthly-income', formatCurrency(monthlyIncome));
+    updateElementText('insights-monthly-expenses', formatCurrency(totalExpenses));
+    updateElementText('insights-monthly-savings', formatCurrency(savings));
+    updateElementText('insights-savings-rate', savingsRate + '%');
+    
+    // Update income allocation bar
+    const expensesAllocation = document.getElementById('expenses-allocation');
+    const savingsAllocation = document.getElementById('savings-allocation');
+    
+    if (expensesAllocation && savingsAllocation && monthlyIncome > 0) {
+        const expensePercent = (totalExpenses / monthlyIncome) * 100;
+        const savingsPercent = Math.max(0, (savings / monthlyIncome) * 100);
+        
+        expensesAllocation.style.width = Math.min(expensePercent, 100) + '%';
+        expensesAllocation.style.backgroundColor = '#ff5722'; // Alert Orange for expenses
+        savingsAllocation.style.width = Math.max(0, savingsPercent) + '%';
+        savingsAllocation.style.backgroundColor = '#2e7d32'; // Success Green for savings
+        savingsAllocation.style.left = Math.min(expensePercent, 100) + '%';
+    }
+}
+
+function updateIntegratedAnnualOverview() {
+    const annualBudget = monthlyBudget * 12;
+    const ytdExpenses = getYTDExpenses();
+    const ytdSpent = ytdExpenses.reduce((sum, exp) => sum + (exp.amount || exp.cost || 0), 0);
+    const remaining = annualBudget - ytdSpent;
+    const avgMonth = ytdSpent / Math.max(1, new Date().getMonth() + 1);
+    
+    updateElementText('insights-annual-budget', formatCurrency(annualBudget));
+    updateElementText('insights-ytd-spent', formatCurrency(ytdSpent));
+    updateElementText('insights-annual-remaining', formatCurrency(remaining));
+    updateElementText('insights-avg-month', formatCurrency(avgMonth));
+    
+    updateIntegratedMonthlyList();
+}
+
+let insightsMonthsShown = 6;
+
+function updateIntegratedMonthlyList() {
+    const container = document.getElementById('insights-monthly-list');
+    if (!container) return;
+    
+    const now = new Date();
+    const months = [];
+    
+    for (let i = 0; i < insightsMonthsShown; i++) {
+        const month = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthExpenses = getExpensesForMonth(month);
+        const spent = monthExpenses.reduce((sum, exp) => sum + (exp.amount || exp.cost || 0), 0);
+        const isCurrentMonth = i === 0;
+        const status = spent > monthlyBudget ? 'over' : spent > monthlyBudget * 0.9 ? 'near' : 'under';
+        
+        months.push({
+            date: month,
+            spent,
+            budget: monthlyBudget,
+            status,
+            isCurrentMonth
+        });
+    }
+    
+    const monthsHTML = months.map(month => {
+        const monthName = month.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+        const statusColor = month.status === 'over' ? 'border-red-500' : month.status === 'near' ? 'border-yellow-500' : 'border-green-500';
+        const statusText = month.status === 'over' ? 'Over budget' : month.status === 'near' ? 'Near budget' : month.isCurrentMonth ? 'Current' : 'Under budget';
+        const overage = month.spent - month.budget;
+        
+        return `
+            <div class="flex items-center justify-between py-3 border-l-4 ${statusColor} pl-4 bg-gray-50 dark:bg-gray-800 rounded-r">
+                <div class="flex-1">
+                    <div class="flex items-center space-x-3">
+                        <h4 class="font-medium text-gray-900 dark:text-white">${monthName}</h4>
+                        <span class="text-xs px-2 py-1 rounded-full ${month.status === 'over' ? 'bg-red-100 text-red-700' : month.status === 'near' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}">${statusText}</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="font-semibold text-gray-900 dark:text-white">${formatCurrency(month.spent)} / ${formatCurrency(month.budget)}</div>
+                    ${overage > 0 ? `<div class="text-xs text-red-600">${formatCurrency(overage)} over</div>` : overage < -50 ? `<div class="text-xs text-green-600">${formatCurrency(Math.abs(overage))} saved</div>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    container.innerHTML = monthsHTML;
+}
+
+function loadMoreInsightsMonths() {
+    insightsMonthsShown += 6;
+    updateIntegratedMonthlyList();
+}
+
+// Helper functions
+function getCurrentPeriodDays() {
+    const activeTab = document.querySelector('#insights-tab .period-toggle.active');
+    if (!activeTab) return 7;
+    
+    const period = activeTab.getAttribute('data-period');
+    switch(period) {
+        case '7days': return 7;
+        case '30days': return 30;
+        case '90days': return 90;
+        default: return 7;
+    }
+}
+
+function getExpensesForPeriod(days) {
+    const now = new Date();
+    const startDate = new Date(now);
+    startDate.setDate(startDate.getDate() - days);
+    
+    return expenses.filter(exp => {
+        const expDate = new Date(exp.date);
+        return expDate >= startDate && expDate <= now && exp.status === 'active';
+    });
+}
+
+function getCurrentMonthExpenses() {
+    const now = new Date();
+    return expenses.filter(exp => {
+        const expDate = new Date(exp.date);
+        return expDate.getMonth() === now.getMonth() && 
+               expDate.getFullYear() === now.getFullYear() && 
+               exp.status === 'active';
+    });
+}
+
+function getLastMonthExpenses() {
+    const now = new Date();
+    const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    
+    return expenses.filter(exp => {
+        const expDate = new Date(exp.date);
+        return expDate.getMonth() === lastMonth.getMonth() && 
+               expDate.getFullYear() === lastMonth.getFullYear() && 
+               exp.status === 'active';
+    });
+}
+
+function getTodayExpenses() {
+    const today = new Date().toISOString().split('T')[0];
+    return expenses.filter(exp => exp.date === today && exp.status === 'active');
+}
+
+function getYTDExpenses() {
+    const now = new Date();
+    const yearStart = new Date(now.getFullYear(), 0, 1);
+    
+    return expenses.filter(exp => {
+        const expDate = new Date(exp.date);
+        return expDate >= yearStart && expDate <= now && exp.status === 'active';
+    });
+}
+
+function getExpensesForMonth(monthDate) {
+    return expenses.filter(exp => {
+        const expDate = new Date(exp.date);
+        return expDate.getMonth() === monthDate.getMonth() && 
+               expDate.getFullYear() === monthDate.getFullYear() && 
+               exp.status === 'active';
+    });
+}
+
+function getCategoryColor(category) {
+    const colors = {
+        'Food & Dining': '#ff5722',     // Alert Orange
+        'Transport': '#ffa000',         // Gold Accent
+        'Shopping': '#1a237e',          // Navy Primary
+        'Entertainment': '#1976d2',     // Info Blue
+        'Bills': '#2e7d32',             // Success Green
+        'Groceries': '#2e7d32',         // Success Green
+        'Health': '#ff5722',            // Alert Orange
+        'Education': '#1976d2',         // Info Blue
+        'Travel': '#ffa000',            // Gold Accent
+        'Other': '#757575'              // Medium Grey
+    };
+    return colors[category] || '#757575';
+}
+
+function updateElementText(id, text) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.textContent = text;
     }
 }
 
@@ -25383,7 +25977,7 @@ class FinanceInsights {
         
         // Set color based on type
         const colors = {
-            critical: '#dc2626',
+            critical: '#ff5722',
             warning: '#f59e0b',
             info: '#3b82f6'
         };
@@ -25569,11 +26163,11 @@ class FinanceInsights {
         
         // Define colors
         const backgroundColors = [
-            '#10b981', // Green for Food
+            '#2e7d32', // Green for Food
             '#3b82f6', // Blue for Transport  
             '#8b5cf6', // Purple for Entertainment
             '#f59e0b', // Orange for Shopping
-            '#ef4444'  // Red for Bills
+            '#ff5722'  // Red for Bills
         ];
         
         const ctx = canvas.getContext('2d');
@@ -25739,9 +26333,9 @@ function initializeSevenDayTrendChart() {
                     if (spendingAmount === 0) {
                         return '#94a3b8'; // Grey for no spend days
                     } else if (spendingAmount > dailyBudgetAmount && dailyBudgetAmount > 0) {
-                        return '#ef4444'; // Red for over budget
+                        return '#ff5722'; // Red for over budget
                     } else {
-                        return '#10b981'; // Green for under budget
+                        return '#2e7d32'; // Green for under budget
                     }
                 },
                 backgroundColor: function(context) {
@@ -25765,9 +26359,9 @@ function initializeSevenDayTrendChart() {
                     if (spendingAmount === 0) {
                         return '#94a3b8'; // Grey for no spend days
                     } else if (spendingAmount > dailyBudgetAmount && dailyBudgetAmount > 0) {
-                        return '#ef4444'; // Red for over budget
+                        return '#ff5722'; // Red for over budget
                     } else {
-                        return '#10b981'; // Green for under budget
+                        return '#2e7d32'; // Green for under budget
                     }
                 },
                 borderWidth: 3,
@@ -26055,9 +26649,9 @@ function initializeDailySpendingInsightsChart() {
                     if (spendingAmount === 0) {
                         return '#94a3b8'; // Grey for no spend days
                     } else if (spendingAmount > dailyBudgetAmount && dailyBudgetAmount > 0) {
-                        return '#ef4444'; // Red for over budget
+                        return '#ff5722'; // Red for over budget
                     } else {
-                        return '#10b981'; // Green for under budget
+                        return '#2e7d32'; // Green for under budget
                     }
                 },
                 borderColor: function(context) {
@@ -26069,7 +26663,7 @@ function initializeDailySpendingInsightsChart() {
                     if (spendingAmount === 0) {
                         return '#64748b'; // Grey border for no spend days
                     } else if (spendingAmount > dailyBudgetAmount && dailyBudgetAmount > 0) {
-                        return '#dc2626'; // Dark red border for over budget
+                        return '#ff5722'; // Red border for over budget
                     } else {
                         return '#059669'; // Dark green border for under budget
                     }
@@ -26656,15 +27250,16 @@ function setInsightsPeriod(period) {
     // Update button states - CRITICAL FIX
     document.querySelectorAll('.period-toggle').forEach(btn => {
         btn.classList.remove('active');
-        // Reset to inactive styling
-        btn.className = 'period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 shadow-sm hover:shadow-md transform hover:scale-105';
+        // Reset to inactive styling (Navy Design Guide)
+        btn.className = 'period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 shadow-sm';
     });
     
     const activeBtn = document.querySelector(`[data-period="${period}"]`);
     if (activeBtn) {
         activeBtn.classList.add('active');
-        // Apply active styling
-        activeBtn.className = 'period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 border-2 border-blue-500 bg-blue-500 text-white hover:bg-blue-600 hover:border-blue-600 shadow-sm hover:shadow-md transform hover:scale-105';
+        // Apply active styling (Navy Design Guide)
+        activeBtn.className = 'period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 text-white shadow-sm';
+        activeBtn.style.backgroundColor = '#3949ab'; // Lighter Navy (more readable)
         console.log('✅ Button state updated for:', period);
     } else {
         console.error('❌ Button not found for period:', period);
