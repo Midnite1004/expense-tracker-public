@@ -4057,52 +4057,6 @@
             }
         }
 
-        /* Progress Tooltip - Unique Classes */
-        .progress-tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .progress-tooltip-text {
-            visibility: hidden;
-            background-color: #000;
-            color: #fff;
-            text-align: center;
-            padding: 8px 12px;
-            border-radius: 6px;
-            position: absolute;
-            z-index: 1000;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            margin-top: 5px;
-            font-size: 13px;
-            white-space: normal;
-            min-width: 200px;
-            max-width: 250px;
-            line-height: 1.4;
-        }
-
-        .progress-tooltip:hover .progress-tooltip-text {
-            visibility: visible;
-        }
-
-        /* Mobile: Show on tap */
-        @media (max-width: 767px) {
-            .progress-tooltip-text {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                margin-top: 0;
-                background-color: #000;
-                color: #fff;
-                padding: 10px;
-                border-radius: 8px;
-                z-index: 9999;
-            }
-        }
-
         /* Budget Insights v2 Styling */
         .ai-section-title {
             display: flex;
@@ -7498,12 +7452,15 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
                                     <div class="text-sm text-purple-600 dark:text-purple-400 flex items-center gap-1">
                                         Total Progress
-                                        <span class="progress-tooltip" onclick="this.querySelector('.progress-tooltip-text').style.visibility = this.querySelector('.progress-tooltip-text').style.visibility === 'visible' ? 'hidden' : 'visible'">
-                                            <svg class="w-3 h-3 text-purple-500 dark:text-purple-400 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="relative group">
+                                            <svg class="w-3 h-3 text-purple-500 dark:text-purple-400 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="toggleGoalsProgressTooltip()">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
-                                            <span class="progress-tooltip-text">Average progress across all goals</span>
-                                        </span>
+                                            <div id="goals-progress-tooltip" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 w-48 z-50 pointer-events-none" style="background-color: var(--tooltip-bg-color, #1a1a1a); color: var(--tooltip-text-color, #ffffff);">
+                                                Average progress across all goals
+                                                <div class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent" style="border-top-color: var(--tooltip-bg-color, #1a1a1a);"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="text-2xl font-bold text-purple-700 dark:text-purple-300" id="total-progress">0%</div>
                                 </div>
@@ -16220,7 +16177,16 @@ function closeGoalSelection() {
                 }
             }
             
-                activeTab = tabName;
+            activeTab = tabName;
+            
+            // Fix for mobile scroll freeze: ensure body overflow is always auto after tab switch
+            if (window.innerWidth <= 768) {
+                setTimeout(() => {
+                    document.body.style.overflow = 'auto';
+                    document.body.style.overflowY = 'auto';
+                    document.body.classList.remove('overflow-hidden');
+                }, 50);
+            }
                 
                 // Save current tab to localStorage for page refresh persistence
                 localStorage.setItem('currentTab', tabName);
@@ -17053,12 +17019,24 @@ function closeGoalSelection() {
             }
         }
 
-
+        function toggleGoalsProgressTooltip() {
+            const tooltip = document.getElementById('goals-progress-tooltip');
+            if (tooltip.style.opacity === '1') {
+                tooltip.style.opacity = '0';
+                tooltip.classList.add('invisible');
+                tooltip.style.pointerEvents = 'none';
+            } else {
+                tooltip.style.opacity = '1';
+                tooltip.classList.remove('invisible');
+                tooltip.style.pointerEvents = 'auto';
+            }
+        }
 
         // Hide tooltips when clicking outside
         document.addEventListener('click', function(event) {
             const budgetTooltip = document.getElementById('budget-health-tooltip-container');
             const scoreTooltip = document.getElementById('health-score-tooltip-container');
+            const goalsTooltip = document.getElementById('goals-progress-tooltip');
             
             // Check if click is outside both tooltips and their triggers
             if (!event.target.closest('#budget-health-tooltip-container') && 
@@ -17071,6 +17049,13 @@ function closeGoalSelection() {
                 !event.target.closest('svg[onclick="toggleHealthScoreTooltip()"]')) {
                 scoreTooltip.style.opacity = '0';
                 scoreTooltip.style.pointerEvents = 'none';
+            }
+            
+            if (goalsTooltip && !event.target.closest('#goals-progress-tooltip') && 
+                !event.target.closest('svg[onclick="toggleGoalsProgressTooltip()"]')) {
+                goalsTooltip.style.opacity = '0';
+                goalsTooltip.classList.add('invisible');
+                goalsTooltip.style.pointerEvents = 'none';
             }
         });
 
@@ -23802,6 +23787,45 @@ document.addEventListener('DOMContentLoaded', function() {
             trezorContent.style.overflowY = 'auto';
             trezorContent.style.touchAction = 'manipulation';
         }
+        
+        // Global fix for mobile context menu scroll freeze
+        // Listen for visibility changes (when browser modals/context menus close)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                setTimeout(() => {
+                    document.body.style.overflow = 'auto';
+                    document.body.style.overflowY = 'auto';
+                    document.body.classList.remove('overflow-hidden');
+                }, 100);
+            }
+        });
+        
+        // Listen for focus events (when returning from context menu)
+        window.addEventListener('focus', function() {
+            setTimeout(() => {
+                document.body.style.overflow = 'auto';
+                document.body.style.overflowY = 'auto';
+                document.body.classList.remove('overflow-hidden');
+            }, 100);
+        });
+        
+        // Prevent context menu on all chart canvases
+        document.addEventListener('DOMContentLoaded', function() {
+            // Apply to all chart canvases after they're created
+            setTimeout(() => {
+                document.querySelectorAll('canvas').forEach(canvas => {
+                    canvas.style.webkitTouchCallout = 'none';
+                    canvas.style.webkitUserSelect = 'none';
+                    canvas.style.userSelect = 'none';
+                    
+                    // Prevent long press context menu
+                    canvas.addEventListener('contextmenu', function(e) {
+                        e.preventDefault();
+                        return false;
+                    });
+                });
+            }, 2000);
+        });
     }
     
     // Handle window resize for mobile/desktop switching
@@ -25676,8 +25700,21 @@ function initializeSevenDayTrendChart() {
             onClick: function(event, elements) {
                 if (elements.length > 0) {
                     const dataIndex = elements[0].index;
-                    const dataPoint = sevenDayTrendChart.data.datasets[0].data[dataIndex];
-                    const clickedDate = new Date(dataPoint.x);
+                    let clickedDate;
+                    
+                    // Mobile-only fix for date calculation
+                    if (window.innerWidth <= 768) {
+                        // Calculate the start date (6 days ago)
+                        const chartStartDate = new Date();
+                        chartStartDate.setDate(chartStartDate.getDate() - 6);
+                        
+                        clickedDate = new Date(chartStartDate);
+                        clickedDate.setDate(chartStartDate.getDate() + dataIndex);
+                    } else {
+                        // Desktop uses original method
+                        const dataPoint = sevenDayTrendChart.data.datasets[0].data[dataIndex];
+                        clickedDate = new Date(dataPoint.x);
+                    }
                     
                     // Navigate to expenses tab with date filter
                     showTab('expenses');
@@ -25694,6 +25731,15 @@ function initializeSevenDayTrendChart() {
                             
                             // Trigger filter update
                             renderExpensesTable();
+                            
+                            // Mobile fix: ensure scrolling stays enabled after chart navigation
+                            if (window.innerWidth <= 768) {
+                                setTimeout(() => {
+                                    document.body.style.overflow = 'auto';
+                                    document.body.style.overflowY = 'auto';
+                                    document.body.classList.remove('overflow-hidden');
+                                }, 50);
+                            }
                         }
                     }, 100);
                 }
@@ -25793,6 +25839,30 @@ function initializeSevenDayTrendChart() {
             }
         }
     });
+    
+    // Prevent browser context menu on mobile chart touches
+    if (window.innerWidth <= 768) {
+        const chartCanvas = sevenDayTrendChart.canvas;
+        if (chartCanvas) {
+            chartCanvas.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Add CSS to prevent context menu
+            chartCanvas.style.webkitTouchCallout = 'none';
+            chartCanvas.style.webkitUserSelect = 'none';
+            chartCanvas.style.userSelect = 'none';
+            
+            chartCanvas.addEventListener('touchend', function(e) {
+                // Ensure body scroll is enabled after any touch
+                setTimeout(() => {
+                    document.body.style.overflow = 'auto';
+                    document.body.style.overflowY = 'auto';
+                }, 50);
+            });
+        }
+    }
     
     updateSevenDayTrendChart();
 }
@@ -26252,6 +26322,29 @@ function initializeDailySpendingInsightsChart() {
             }
         }
     });
+    
+    // Prevent browser context menu on mobile chart touches
+    if (window.innerWidth <= 768 && dailySpendingInsightsChart) {
+        const chartCanvas = dailySpendingInsightsChart.canvas;
+        if (chartCanvas) {
+            chartCanvas.style.webkitTouchCallout = 'none';
+            chartCanvas.style.webkitUserSelect = 'none';
+            chartCanvas.style.userSelect = 'none';
+            
+            chartCanvas.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            chartCanvas.addEventListener('touchend', function(e) {
+                // Ensure body scroll is enabled after any touch
+                setTimeout(() => {
+                    document.body.style.overflow = 'auto';
+                    document.body.style.overflowY = 'auto';
+                }, 50);
+            });
+        }
+    }
     
     // Load data immediately with correct period
     updateDailySpendingInsightsChart();
@@ -29320,7 +29413,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-
 
         
 
