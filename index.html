@@ -17092,7 +17092,7 @@ function closeGoalSelection() {
                             title: { display: true, text: 'Amount (£)' },
                             beginAtZero: true,
                             max: Math.max(financialData.income / 30 * 1.2, Math.max(...spendingAmounts) * 1.2),
-                            grid: { color: 'rgba(0, 0, 0, 0.02)' }
+                            grid: { color: 'rgba(0, 0, 0, 0.12)' }
                         }
                     },
                     interaction: {
@@ -17185,7 +17185,15 @@ function closeGoalSelection() {
                         legend: { display: false }
                     },
                     scales: {
-                        y: { beginAtZero: true }
+                        x: { 
+                            grid: { color: 'rgba(0, 0, 0, 0.12)' },
+                            ticks: { color: '#64748b' }
+                        },
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0, 0, 0, 0.12)' },
+                            ticks: { color: '#64748b' }
+                        }
                     }
                 }
             });
@@ -17384,6 +17392,35 @@ function closeGoalSelection() {
                 console.warn('⚠️ Theme icons not found:', { themeIconLight: !!themeIconLight, themeIconDark: !!themeIconDark });
             }
             
+            // Update all charts with new theme colors
+            updateChartTheme();
+            
+            // Update overview charts if on overview tab
+            if (activeTab === 'overview') {
+                if (spendingTrendChart) {
+                    const isDarkMode = darkMode;
+                    const options = getChartOptions(isDarkMode);
+                    spendingTrendChart.options = options;
+                    spendingTrendChart.update('none');
+                }
+                if (categorySpendingChart) {
+                    const isDarkMode = darkMode;
+                    const options = getChartOptions(isDarkMode);
+                    categorySpendingChart.options = options;
+                    categorySpendingChart.update('none');
+                }
+                if (monthlySavingsChart) {
+                    const isDarkMode = darkMode;
+                    const options = getChartOptions(isDarkMode);
+                    monthlySavingsChart.options = options;
+                    monthlySavingsChart.update('none');
+                }
+                if (sevenDayTrendChart) {
+                    sevenDayTrendChart.update('none');
+                }
+            }
+            
+            // Update insights charts if on insights tab
             if (activeTab === 'insights') {
                 updateChartsAndInsights(); 
             }
@@ -20733,7 +20770,7 @@ function closeGoalSelection() {
          * @returns {Object} Chart.js configuration options
          */
         function getChartOptions(isDarkMode) {
-            const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)';
+            const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.18)';
             const textColor = isDarkMode ? '#cbd5e1' : '#64748b';
             return {
                 responsive: true,
@@ -27182,7 +27219,7 @@ function initializeSevenDayTrendChart() {
                     },
                     grid: {
                         display: true,
-                        color: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'
+                        color: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.15)'
                     },
                     ticks: {
                         color: isDark ? '#f3f4f6' : '#1f2937',
@@ -27196,7 +27233,7 @@ function initializeSevenDayTrendChart() {
                 y: {
                     beginAtZero: true,
                     grid: {
-                        color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                        color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.2)'
                     },
                     ticks: {
                         color: isDark ? '#f3f4f6' : '#1f2937',
@@ -27405,7 +27442,7 @@ function initializeDailySpendingInsightsChart() {
                         color: isDark ? '#cbd5e1' : '#64748b'
                     },
                     grid: {
-                        color: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'
+                        color: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.18)'
                     }
                 } : {
                     title: {
@@ -27417,7 +27454,7 @@ function initializeDailySpendingInsightsChart() {
                         color: isDark ? '#cbd5e1' : '#64748b'
                     },
                     grid: {
-                        color: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'
+                        color: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.18)'
                     },
                     // Bar chart specific options - increase for mobile 12 months
                     categoryPercentage: (currentInsightsPeriod === '12months' && window.innerWidth <= 768) ? 0.95 : (currentInsightsPeriod === '12months' ? 0.8 : 0.6),
@@ -27437,7 +27474,7 @@ function initializeDailySpendingInsightsChart() {
                         }
                     },
                     grid: {
-                        color: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'
+                        color: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.18)'
                     }
                 }
             },
@@ -28541,35 +28578,58 @@ window.deleteExpense = function() {
 function updateChartTheme() {
     const isDarkMode = document.documentElement.classList.contains('dark');
     const textColor = isDarkMode ? '#cbd5e1' : '#64748b';
-    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)';
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.18)';
     
-    if (dailySpendingInsightsChart && activeTab === 'insights') {
-        dailySpendingInsightsChart.options.scales.x.title.color = textColor;
-        dailySpendingInsightsChart.options.scales.x.grid.color = gridColor;
-        dailySpendingInsightsChart.options.scales.x.ticks.color = textColor;
-        dailySpendingInsightsChart.options.scales.y.title.color = textColor;
-        dailySpendingInsightsChart.options.scales.y.grid.color = gridColor;
-        dailySpendingInsightsChart.options.scales.y.ticks.color = textColor;
+    // Update daily spending insights chart (insights tab)
+    if (dailySpendingInsightsChart) {
+        if (dailySpendingInsightsChart.options.scales && dailySpendingInsightsChart.options.scales.x) {
+            dailySpendingInsightsChart.options.scales.x.title.color = textColor;
+            dailySpendingInsightsChart.options.scales.x.grid.color = gridColor;
+            dailySpendingInsightsChart.options.scales.x.ticks.color = textColor;
+        }
+        if (dailySpendingInsightsChart.options.scales && dailySpendingInsightsChart.options.scales.y) {
+            dailySpendingInsightsChart.options.scales.y.title.color = textColor;
+            dailySpendingInsightsChart.options.scales.y.grid.color = gridColor;
+            dailySpendingInsightsChart.options.scales.y.ticks.color = textColor;
+        }
         
         // Fix legend text color
-        if (dailySpendingInsightsChart.options.plugins.legend) {
+        if (dailySpendingInsightsChart.options.plugins && dailySpendingInsightsChart.options.plugins.legend) {
             dailySpendingInsightsChart.options.plugins.legend.labels.color = textColor;
         }
         
-        dailySpendingInsightsChart.options.plugins.tooltip.backgroundColor = isDarkMode ? '#1a1d1f' : '#ffffff';
-        dailySpendingInsightsChart.options.plugins.tooltip.titleColor = isDarkMode ? '#f8f9fa' : '#0f1419';
-        dailySpendingInsightsChart.options.plugins.tooltip.bodyColor = isDarkMode ? '#cbd5e1' : '#64748b';
-        dailySpendingInsightsChart.options.plugins.tooltip.borderColor = isDarkMode ? '#334155' : '#e2e8f0';
+        // Update tooltip colors
+        if (dailySpendingInsightsChart.options.plugins && dailySpendingInsightsChart.options.plugins.tooltip) {
+            dailySpendingInsightsChart.options.plugins.tooltip.backgroundColor = isDarkMode ? '#1a1d1f' : '#ffffff';
+            dailySpendingInsightsChart.options.plugins.tooltip.titleColor = isDarkMode ? '#f8f9fa' : '#0f1419';
+            dailySpendingInsightsChart.options.plugins.tooltip.bodyColor = isDarkMode ? '#cbd5e1' : '#64748b';
+            dailySpendingInsightsChart.options.plugins.tooltip.borderColor = isDarkMode ? '#334155' : '#e2e8f0';
+        }
         
         dailySpendingInsightsChart.update('none');
     }
     
-    // Update category chart legend colors
+    // Update category chart legend colors (insights dashboard)
     if (window.insightsDashboard && window.insightsDashboard.categoryChart) {
-        if (window.insightsDashboard.categoryChart.options.plugins.legend) {
+        if (window.insightsDashboard.categoryChart.options.plugins && window.insightsDashboard.categoryChart.options.plugins.legend) {
             window.insightsDashboard.categoryChart.options.plugins.legend.labels.color = textColor;
         }
         window.insightsDashboard.categoryChart.update('none');
+    }
+    
+    // Update seven day trend chart (overview tab)
+    if (sevenDayTrendChart) {
+        sevenDayTrendChart.update('none');
+    }
+    
+    // Update velocity chart (overview tab)
+    if (velocityChart) {
+        velocityChart.update('none');
+    }
+    
+    // Update category chart (overview tab)
+    if (categoryChart) {
+        categoryChart.update('none');
     }
 }
 
