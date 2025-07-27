@@ -2181,6 +2181,200 @@
             margin-bottom: 120px; /* Extra space for bottom nav */
             margin-top: 1rem;
         }
+
+        /* NEW MOBILE UI REFINEMENTS - Three-dot menu system */
+        .mobile-card-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .card-checkbox {
+            margin-right: 12px;
+            margin-top: 2px; /* Align with first line of text */
+        }
+
+        .card-main-content {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card-left-content {
+            flex: 1;
+            min-width: 0; /* Allow text truncation */
+        }
+
+        .card-right-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            min-width: 80px; /* Ensure consistent width */
+        }
+
+        .three-dot-menu {
+            margin-top: 4px;
+            padding: 4px;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .three-dot-menu:hover {
+            opacity: 1;
+        }
+
+        /* Three-dot menu icon */
+        .three-dots-icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Group header improvements */
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px 8px;
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .group-date {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--color-text-primary);
+        }
+
+        .group-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .select-all-icon {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .select-all-icon:hover {
+            color: var(--accent-primary);
+        }
+
+        .select-all-icon.selected {
+            color: var(--accent-primary);
+        }
+
+        .group-total {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--color-text-primary);
+        }
+
+        /* Compact action modal */
+        .action-modal {
+            position: absolute;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            min-width: 80px;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .action-modal {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .action-modal-item {
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .action-modal-item:hover {
+            background: var(--color-bg-tertiary);
+        }
+
+        .action-modal-item.destructive {
+            color: var(--color-error);
+        }
+
+        .action-modal-item svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        /* Icon color variables for light/dark mode */
+        .icon-edit {
+            color: var(--accent-primary);
+        }
+
+        .icon-delete {
+            color: var(--color-error);
+        }
+
+        .icon-pause {
+            color: #f59e0b;
+        }
+
+        .icon-play {
+            color: #10b981;
+        }
+
+        [data-theme="dark"] .icon-edit {
+            color: var(--accent-primary);
+        }
+
+        [data-theme="dark"] .icon-delete {
+            color: #f87171;
+        }
+
+        [data-theme="dark"] .icon-pause {
+            color: #fbbf24;
+        }
+
+        [data-theme="dark"] .icon-play {
+            color: #34d399;
+        }
+
+        /* Price alignment for mobile cards */
+        .mobile-card-amount {
+            font-weight: 600;
+            font-size: 14px;
+            text-align: right;
+            color: var(--color-text-primary);
+        }
+
+        .mobile-card-amount.expense {
+            color: var(--color-error);
+        }
+
+        .mobile-card-amount.income {
+            color: var(--color-success);
+        }
         
         /* Hide on desktop */
         @media (min-width: 769px) {
@@ -5421,8 +5615,8 @@
             .mobile-fab {
                 width: 48px !important;
                 height: 48px !important;
-                bottom: 140px !important;
-                right: 20px !important;
+                bottom: 284px !important;
+                right: 8px !important;
             }
             
             .mobile-fab svg {
@@ -5451,8 +5645,8 @@
             .mobile-fab {
                 width: 44px !important;
                 height: 44px !important;
-                bottom: 140px !important;
-                right: 16px !important;
+                bottom: 272px !important;
+                right: 8px !important;
             }
             
             .mobile-fab svg {
@@ -6441,8 +6635,8 @@ button, .btn, input[type="button"], input[type="submit"] {
         /* FAB Button - matches existing design system */
         .mobile-fab {
             position: fixed;
-            bottom: 140px;
-            right: 20px;
+            bottom: 284px;
+            right: 8px;
             width: 48px;
             height: 48px;
             background: var(--accent-primary);
@@ -19512,8 +19706,8 @@ function closeGoalSelection() {
 
                     html += `
                         <div class="mb-8">
-                            <div class="flex justify-between items-center mb-3 px-4 pb-2 border-b-2 border-gray-200 dark:border-gray-700">
-                                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
+                            <div class="group-header">
+                                <h3 class="group-date">
                                     ${new Date(date).toLocaleDateString('en-GB', { 
                                         weekday: 'long', 
                                         day: 'numeric', 
@@ -19521,26 +19715,29 @@ function closeGoalSelection() {
                                         year: 'numeric' 
                                     })}
                                 </h3>
-                                <div class="flex items-center gap-3">
-                                    <span class="text-sm font-medium text-gray-900 dark:text-white">
+                                <div class="group-actions">
+                                    <div class="select-all-icon" 
+                                         data-select-date="${date}"
+                                         onclick="toggleSelectAllForDate('${date}')" 
+                                         title="Select all expenses for this date">
+                                        ${getSelectAllIcon(false)}
+                                    </div>
+                                    <span class="group-total">
                                         -${formatCurrency(dayTotal)}
                                     </span>
-                                    <button onclick="toggleSelectAllForDate('${date}')" 
-                                            class="text-xs px-2 py-1 bg-accent-primary text-white rounded whitespace-nowrap font-medium" title="Select all expenses for this date">
-                                        Select All
-                                    </button>
                                 </div>
                             </div>
                             <div class="space-y-3">
                                 ${dayExpenses.map(expense => {
                                     const isRecurringInstance = !!expense.recurringSourceId;
                                     const isPlaid = isPlaidTransaction(expense);
+                                    
                                     return `
-                                    <div class="flex items-center border-b border-gray-200 py-3 last:border-b-0 ${isPlaid ? 'plaid-transaction-row' : ''}">
+                                    <div class="mobile-card-item ${isPlaid ? 'plaid-transaction-row' : ''}">
                                         <input type="checkbox" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
-                                               class="mr-3 table-checkbox expense-checkbox" ${isRecurringInstance || isPlaid ? 'disabled' : ''}>
-                                        <div class="flex-1 flex justify-between items-center ${!isPlaid ? 'cursor-pointer' : ''}" ${!isPlaid ? `onclick="editExpense(${expense.id})"` : ''}>
-                                            <div>
+                                               class="card-checkbox table-checkbox expense-checkbox" ${isRecurringInstance || isPlaid ? 'disabled' : ''}>
+                                        <div class="card-main-content ${!isPlaid ? 'cursor-pointer' : ''}" ${!isPlaid ? `onclick="editExpense('${expense.id}')"` : ''}>
+                                            <div class="card-left-content">
                                                 <p class="font-medium text-sm text-gray-900 dark:text-white">
                                                     ${escapeHTML(expense.name)}
                                                     ${isPlaid ? '<span class="plaid-badge ml-2"><svg class="plaid-lock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></span>' : ''}
@@ -19550,36 +19747,22 @@ function closeGoalSelection() {
                                                     ${isPlaid ? '<span class="plaid-badge ml-2">Bank synced</span>' : ''}
                                                 </p>
                                             </div>
-                                            <p class="font-medium text-sm text-red-600 dark:text-red-400">-${formatCurrency(expense.cost)}</p>
-                                        </div>
-                                        <div class="ml-3 flex items-center" style="width: 80px; justify-content: flex-end;">
-                                            ${!isPlaid ? `
-                                                <button onclick="event.stopPropagation(); editExpense(${expense.id})" 
-                                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded" title="Edit">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                        <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                                ${!isRecurringInstance ? `
-                                                <button onclick="event.stopPropagation(); deleteExpense(${expense.id})" 
-                                                        class="p-2 text-red-600 hover:bg-red-50 rounded ml-2" title="Delete">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                                ` : `
-                                                <div style="width: 40px;"></div>
-                                                `}
-                                            ` : `
-                                                <div class="plaid-tooltip">
-                                                    <div class="plaid-badge">
-                                                        <svg class="plaid-lock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                                                        </svg>
+                                            <div class="card-right-content">
+                                                <p class="mobile-card-amount expense">-${formatCurrency(expense.cost)}</p>
+                                                ${!isPlaid ? `
+                                                    <div class="three-dot-menu" onclick="event.stopPropagation(); showExpenseActionMenu(event, '${expense.id}')">
+                                                        ${getThreeDotIcon()}
                                                     </div>
-                                                </div>
-                                            `}
+                                                ` : `
+                                                    <div class="plaid-tooltip">
+                                                        <div class="plaid-badge">
+                                                            <svg class="plaid-lock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                `}
+                                            </div>
                                         </div>
                                     </div>
                                 `}).join('')}
@@ -19629,6 +19812,273 @@ function closeGoalSelection() {
             renderExpensesTable();
         }
         window.loadMoreExpenses = loadMoreExpenses;
+
+        // Three-dot menu system functions
+        let activeActionModal = null;
+
+        function showActionMenu(event, itemType, itemId, actions) {
+            // Close any existing modal
+            hideActionMenu();
+            
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const modal = document.createElement('div');
+            modal.className = 'action-modal';
+            modal.id = 'action-modal';
+            
+            // Create action buttons first to measure modal size
+            const actionButtons = actions.map(action => `
+                <button class="action-modal-item ${action.destructive ? 'destructive' : ''}" 
+                        onclick="handleActionMenuClick('${action.type}', ${itemId}, '${itemType}')">
+                    ${action.icon}
+                    ${action.label}
+                </button>
+            `).join('');
+            
+            modal.innerHTML = actionButtons;
+            modal.style.position = 'fixed';
+            modal.style.zIndex = '1000';
+            modal.style.visibility = 'hidden'; // Hide while measuring
+            document.body.appendChild(modal);
+            
+            // Get dimensions after adding to DOM
+            const modalRect = modal.getBoundingClientRect();
+            const targetRect = event.target.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            // Calculate optimal position
+            let left = targetRect.right - modalRect.width + 10; // Align right edge with some offset
+            let top = targetRect.bottom + 5;
+            
+            // Prevent modal from going off right edge
+            if (left + modalRect.width > viewportWidth - 20) {
+                left = viewportWidth - modalRect.width - 20;
+            }
+            
+            // Prevent modal from going off left edge
+            if (left < 10) {
+                left = 10;
+            }
+            
+            // Prevent modal from going off bottom edge
+            if (top + modalRect.height > viewportHeight - 20) {
+                top = targetRect.top - modalRect.height - 5;
+            }
+            
+            // Prevent modal from going off top edge
+            if (top < 10) {
+                top = 10;
+            }
+            
+            // Apply final position and show
+            modal.style.left = left + 'px';
+            modal.style.top = top + 'px';
+            modal.style.visibility = 'visible';
+            
+            activeActionModal = modal;
+            
+            // Close modal when clicking outside or scrolling
+            setTimeout(() => {
+                document.addEventListener('click', handleOutsideClick);
+                document.addEventListener('scroll', hideActionMenu, true); // true for capture phase to catch all scroll events
+                document.addEventListener('touchmove', hideActionMenu, true); // Handle touch scrolling on mobile
+            }, 10);
+        }
+
+        function hideActionMenu() {
+            if (activeActionModal) {
+                document.removeEventListener('click', handleOutsideClick);
+                document.removeEventListener('scroll', hideActionMenu, true);
+                document.removeEventListener('touchmove', hideActionMenu, true);
+                activeActionModal.remove();
+                activeActionModal = null;
+            }
+        }
+
+        function handleOutsideClick(event) {
+            if (activeActionModal && !activeActionModal.contains(event.target)) {
+                hideActionMenu();
+            }
+        }
+
+        function handleActionMenuClick(actionType, itemId, itemType) {
+            hideActionMenu();
+            
+            switch (actionType) {
+                case 'edit':
+                    if (itemType === 'expense') {
+                        editExpense(itemId);
+                    } else if (itemType === 'recurring') {
+                        editRecurring(itemId);
+                    }
+                    break;
+                case 'delete':
+                    if (itemType === 'expense') {
+                        deleteExpense(itemId);
+                    } else if (itemType === 'recurring') {
+                        deleteRecurring(itemId);
+                    }
+                    break;
+                case 'pause':
+                case 'resume':
+                    if (itemType === 'recurring') {
+                        toggleRecurringStatus(itemId);
+                    }
+                    break;
+            }
+        }
+
+        // Three-dot menu icons with light/dark mode support
+        function getThreeDotIcon() {
+            return `<svg class="three-dots-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <circle cx="3" cy="8" r="1.5"/>
+                <circle cx="8" cy="8" r="1.5"/>
+                <circle cx="13" cy="8" r="1.5"/>
+            </svg>`;
+        }
+
+        function getEditIcon() {
+            return `<svg class="icon-edit" width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/>
+                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"/>
+            </svg>`;
+        }
+
+        function getDeleteIcon() {
+            return `<svg class="icon-delete" width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>`;
+        }
+
+        function getPauseIcon() {
+            return `<svg class="icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="10" y1="15" x2="10" y2="9"/>
+                <line x1="14" y1="15" x2="14" y2="9"/>
+            </svg>`;
+        }
+
+        function getPlayIcon() {
+            return `<svg class="icon-play" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polygon points="10,8 16,12 10,16"/>
+            </svg>`;
+        }
+
+        // Select All SVG icons
+        function getSelectAllIcon(isSelected = false) {
+            return `<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                ${isSelected ? 
+                    `<rect x="3" y="3" width="14" height="14" rx="2" fill="currentColor"/>
+                     <path d="M8.5 12.5L6 10l1.5-1.5L8.5 9.5l3-3L13 8l-4.5 4.5z" fill="white"/>` :
+                    `<rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>`
+                }
+            </svg>`;
+        }
+
+        // Select All functionality for mobile cards
+        function toggleSelectAllForDate(date) {
+            const expensesForDate = expenses.filter(expense => expense.date === date && expense.status === 'active');
+            const checkboxes = expensesForDate.map(expense => 
+                document.querySelector(`input[data-id="${expense.id}"].expense-checkbox`)
+            ).filter(checkbox => checkbox && !checkbox.disabled);
+            
+            const allChecked = checkboxes.every(checkbox => checkbox.checked);
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !allChecked;
+                toggleExpenseSelection(checkbox, checkbox.dataset.id);
+            });
+
+            // Update the icon
+            const iconContainer = document.querySelector(`[data-select-date="${date}"]`);
+            if (iconContainer) {
+                iconContainer.innerHTML = getSelectAllIcon(!allChecked);
+                iconContainer.classList.toggle('selected', !allChecked);
+            }
+        }
+
+        function toggleSelectAllRecurringForDate(date) {
+            const recurringItemsForDate = recurringItems.filter(item => item.startDate === date);
+            const checkboxes = recurringItemsForDate.map(item => 
+                document.querySelector(`input[data-id="${item.id}"].recurring-checkbox`)
+            ).filter(checkbox => checkbox && !checkbox.disabled);
+            
+            const allChecked = checkboxes.every(checkbox => checkbox.checked);
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !allChecked;
+                toggleRecurringSelection(checkbox, parseInt(checkbox.dataset.id));
+            });
+
+            // Update the icon
+            const iconContainer = document.querySelector(`[data-select-recurring-date="${date}"]`);
+            if (iconContainer) {
+                iconContainer.innerHTML = getSelectAllIcon(!allChecked);
+                iconContainer.classList.toggle('selected', !allChecked);
+            }
+        }
+
+        // Specific action menu functions to avoid JSON serialization issues
+        function showExpenseActionMenu(event, expenseId) {
+            const expense = expenses.find(e => e.id == expenseId);
+            if (!expense) return;
+            
+            const isRecurringInstance = !!expense.recurringSourceId;
+            const isPlaid = isPlaidTransaction(expense);
+            
+            if (isPlaid) return; // No menu for Plaid transactions
+            
+            const actions = [
+                {
+                    type: 'edit',
+                    label: 'Edit',
+                    icon: getEditIcon(),
+                    destructive: false
+                }
+            ];
+            
+            if (!isRecurringInstance) {
+                actions.push({
+                    type: 'delete',
+                    label: 'Delete',
+                    icon: getDeleteIcon(),
+                    destructive: true
+                });
+            }
+            
+            showActionMenu(event, 'expense', expenseId, actions);
+        }
+
+        function showRecurringActionMenu(event, itemId) {
+            const item = recurringItems.find(i => i.id == itemId);
+            if (!item) return;
+            
+            const actions = [
+                {
+                    type: 'edit',
+                    label: 'Edit',
+                    icon: getEditIcon(),
+                    destructive: false
+                },
+                {
+                    type: item.status === 'active' ? 'pause' : 'resume',
+                    label: item.status === 'active' ? 'Pause' : 'Resume',
+                    icon: item.status === 'active' ? getPauseIcon() : getPlayIcon(),
+                    destructive: false
+                },
+                {
+                    type: 'delete',
+                    label: 'Delete',
+                    icon: getDeleteIcon(),
+                    destructive: true
+                }
+            ];
+            
+            showActionMenu(event, 'recurring', itemId, actions);
+        }
         
         // Load more recurring for mobile
         function loadMoreRecurring() {
@@ -23270,8 +23720,8 @@ function showInsightsError() {
                     const dayTotalClass = dayTotal >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
                     html += `
                         <div class="mb-8">
-                            <div class="flex justify-between items-center mb-3 px-4 pb-2 border-b-2 border-gray-200 dark:border-gray-700">
-                                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
+                            <div class="group-header">
+                                <h3 class="group-date">
                                     ${new Date(date).toLocaleDateString('en-GB', { 
                                         weekday: 'long', 
                                         day: 'numeric', 
@@ -23279,55 +23729,69 @@ function showInsightsError() {
                                         year: 'numeric' 
                                     })}
                                 </h3>
-                                <span class="text-sm font-medium text-gray-900 dark:text-white">
-                                    ${dayTotal >= 0 ? '+' : ''}${formatCurrency(Math.abs(dayTotal))}
-                                </span>
+                                <div class="group-actions">
+                                    <div class="select-all-icon" 
+                                         data-select-recurring-date="${date}"
+                                         onclick="toggleSelectAllRecurringForDate('${date}')" 
+                                         title="Select all recurring items for this date">
+                                        ${getSelectAllIcon(false)}
+                                    </div>
+                                    <span class="group-total">
+                                        ${dayTotal >= 0 ? '+' : ''}${formatCurrency(Math.abs(dayTotal))}
+                                    </span>
+                                </div>
                             </div>
                             <div class="space-y-3">
                                 ${dayItems.map(item => {
                                     const categoryIcon = window.categoryIcons?.[item.category] || window.categoryIcons?.['Other'] || '💰';
                                     const isCancelled = item.status === 'cancelled';
                                     const typeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+                                    
+                                    // Prepare actions for three-dot menu
+                                    const actions = [
+                                        {
+                                            type: 'edit',
+                                            label: 'Edit',
+                                            icon: getEditIcon(),
+                                            destructive: false
+                                        },
+                                        {
+                                            type: item.status === 'active' ? 'pause' : 'resume',
+                                            label: item.status === 'active' ? 'Pause' : 'Resume',
+                                            icon: item.status === 'active' ? getPauseIcon() : getPlayIcon(),
+                                            destructive: false
+                                        },
+                                        {
+                                            type: 'delete',
+                                            label: 'Delete',
+                                            icon: getDeleteIcon(),
+                                            destructive: true
+                                        }
+                                    ];
+                                    
                                     return `
-                                        <div class="flex items-center py-3 border-b border-gray-200 last:border-b-0 ${isCancelled ? 'opacity-60' : ''}">
+                                        <div class="mobile-card-item ${isCancelled ? 'opacity-60' : ''}">
                                             <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" 
-                                                   class="mr-3 table-checkbox recurring-checkbox">
-                                            <div class="flex-1 flex items-center justify-between cursor-pointer" onclick="editRecurring(${item.id})">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="text-lg">${categoryIcon}</div>
-                                                    <div class="min-w-0 flex-1">
-                                                        <div class="font-medium text-sm">${escapeHTML(item.name)}</div>
-                                                        <div class="text-xs text-gray-500">
-                                                            <span class="capitalize">${item.type}</span> • ${item.frequency}
+                                                   class="card-checkbox table-checkbox recurring-checkbox">
+                                            <div class="card-main-content cursor-pointer" onclick="editRecurring(${item.id})">
+                                                <div class="card-left-content">
+                                                    <div class="flex items-center gap-3">
+                                                        <div class="text-lg">${categoryIcon}</div>
+                                                        <div class="min-w-0 flex-1">
+                                                            <div class="font-medium text-sm text-gray-900 dark:text-white">${escapeHTML(item.name)}</div>
+                                                            <div class="text-xs text-gray-500 dark:text-gray-300">
+                                                                <span class="capitalize">${item.type}</span> • ${item.frequency}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="text-right flex-shrink-0">
-                                                    <div class="font-medium text-sm ${typeClass}">${formatCurrency(item.amount)}</div>
-                                                    <div class="text-xs text-gray-500">${item.status === 'active' ? 'Active' : 'Cancelled'}</div>
+                                                <div class="card-right-content">
+                                                    <div class="mobile-card-amount ${item.type === 'income' ? 'income' : 'expense'}">${item.type === 'income' ? '+' : ''}${formatCurrency(item.amount)}</div>
+                                                    <div class="text-xs text-gray-500 dark:text-gray-300 text-right">${item.status === 'active' ? 'Active' : 'Cancelled'}</div>
+                                                    <div class="three-dot-menu" onclick="event.stopPropagation(); showRecurringActionMenu(event, '${item.id}')">
+                                                        ${getThreeDotIcon()}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="ml-3 flex gap-2">
-                                                <button onclick="event.stopPropagation(); editRecurring(${item.id})" 
-                                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded" title="Edit">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                        <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                                <button onclick="event.stopPropagation(); toggleRecurringStatus(${item.id})" 
-                                                        class="p-2 text-yellow-600 hover:bg-yellow-50 rounded" title="${item.status === 'active' ? 'Pause' : 'Resume'}">
-                                                    ${item.status === 'active' ? 
-                                                        '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' : 
-                                                        '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
-                                                    }
-                                                </button>
-                                                <button onclick="event.stopPropagation(); deleteRecurring(${item.id})" 
-                                                        class="p-2 text-red-600 hover:bg-red-50 rounded" title="Delete">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
                                             </div>
                                         </div>
                                     `;
