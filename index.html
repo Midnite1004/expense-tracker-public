@@ -27013,48 +27013,30 @@ function initializeSevenDayTrendChart() {
             onClick: function(event, elements) {
                 if (elements.length > 0) {
                     const dataIndex = elements[0].index;
-                    let clickedDate;
+                    const chartData = sevenDayTrendChart.data.datasets[0].data;
+                    const dataPoint = chartData[dataIndex];
+                    const dateString = dataPoint?.dateString;
                     
-                    // Mobile-only fix for date calculation
-                    if (window.innerWidth <= 768) {
-                        // Calculate the start date (6 days ago)
-                        const chartStartDate = new Date();
-                        chartStartDate.setDate(chartStartDate.getDate() - 6);
+                    if (dateString) {
+                        console.log('📅 7-Day Chart clicked on date:', dateString);
                         
-                        clickedDate = new Date(chartStartDate);
-                        clickedDate.setDate(chartStartDate.getDate() + dataIndex);
-                    } else {
-                        // Desktop uses original method
-                        const dataPoint = sevenDayTrendChart.data.datasets[0].data[dataIndex];
-                        clickedDate = new Date(dataPoint.x);
-                    }
-                    
-                    // Navigate to expenses tab with date filter
-                    showTab('expenses');
-                    
-                    // Set date filter to the clicked day
-                    setTimeout(() => {
-                        const dateFrom = document.getElementById('expense-filter-date-from');
-                        const dateTo = document.getElementById('expense-filter-date-to');
-                        const dateStr = clickedDate.toISOString().split('T')[0];
+                        // Navigate to expenses tab
+                        showTab('expenses');
                         
-                        if (dateFrom && dateTo) {
-                            dateFrom.value = dateStr;
-                            dateTo.value = dateStr;
+                        // Set date filters to the clicked date
+                        setTimeout(() => {
+                            const dateFromInput = document.getElementById('expense-filter-date-from');
+                            const dateToInput = document.getElementById('expense-filter-date-to');
                             
-                            // Trigger filter update
-                            renderExpensesTable();
-                            
-                            // Mobile fix: ensure scrolling stays enabled after chart navigation
-                            if (window.innerWidth <= 768) {
-                                setTimeout(() => {
-                                    document.body.style.overflow = 'auto';
-                                    document.body.style.overflowY = 'auto';
-                                    document.body.classList.remove('overflow-hidden');
-                                }, 50);
+                            if (dateFromInput && dateToInput) {
+                                dateFromInput.value = dateString;
+                                dateToInput.value = dateString;
+                                
+                                // Trigger the expense table update
+                                renderExpensesTable();
                             }
-                        }
-                    }, 100);
+                        }, 100);
+                    }
                 }
             },
             plugins: {
