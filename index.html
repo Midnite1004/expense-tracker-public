@@ -5595,7 +5595,31 @@
             box-shadow: none !important;
             cursor: pointer;
             transition: background-color 0.2s ease;
-            border-radius: 8px;
+            border-radius: 4px;
+            padding: 8px 12px !important;
+            margin-bottom: 8px !important;
+        }
+        
+        /* Make insights accordions more compact */
+        #insights-tab .bg-white.dark\\:bg-gray-800.rounded-lg.shadow-sm.p-4,
+        #insights-tab .bg-white.dark\\:bg-gray-800.rounded-lg.shadow-sm {
+            padding: 0.75rem !important;
+        }
+        
+        #insights-tab .insights-section-toggle h3 {
+            font-size: 0.95rem !important;
+            font-weight: 600 !important;
+            line-height: 1.2 !important;
+        }
+        
+        #insights-tab .insights-section-toggle svg {
+            width: 1rem !important;
+            height: 1rem !important;
+        }
+        
+        #insights-tab [id$="-content"] {
+            padding-top: 0 !important;
+            margin-top: -0.25rem !important;
         }
 
         /* ========== COLLAPSED STATE HEIGHT OPTIMIZATION ========== */
@@ -5678,8 +5702,8 @@
             }
             
             .insights-section-toggle {
-                padding: 12px 16px !important;
-                margin-bottom: 8px !important;
+                padding: 8px 12px !important;
+                margin-bottom: 6px !important;
             }
         }
 
@@ -6901,6 +6925,105 @@ button, .btn, input[type="button"], input[type="submit"] {
                 font-size: 0.875rem !important;
             }
         }
+        
+        /* Enhanced Plaid transaction styling */
+        .plaid-transaction-row {
+            background-color: rgba(59, 130, 246, 0.05);
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .dark .plaid-transaction-row {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left-color: #60a5fa;
+        }
+        
+        .plaid-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: #3b82f6;
+            font-weight: 500;
+        }
+        
+        .dark .plaid-badge {
+            background-color: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+        
+        .plaid-lock-icon {
+            color: #6b7280;
+            width: 16px;
+            height: 16px;
+        }
+        
+        .dark .plaid-lock-icon {
+            color: #9ca3af;
+        }
+        
+        /* Enhanced tooltip styles for Plaid transactions */
+        .plaid-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .plaid-tooltip::after {
+            content: "Bank transactions cannot be edited or deleted";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background-color: #1f2937;
+            color: white;
+            font-size: 0.75rem;
+            border-radius: 6px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .plaid-tooltip::before {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 2px;
+            border: 6px solid transparent;
+            border-top-color: #1f2937;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 1000;
+        }
+        
+        .plaid-tooltip:hover::after,
+        .plaid-tooltip:hover::before {
+            opacity: 1;
+        }
+        
+        /* Enhanced search field styling for all devices */
+        #expense-search,
+        #recurring-search {
+            background-color: #f8f9fa !important;
+            border: none !important;
+        }
+        
+        .dark #expense-search,
+        .dark #recurring-search {
+            background-color: #1f2937 !important;
+            border: none !important;
+        }
     </style>
 
 </head>
@@ -7248,7 +7371,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <!-- Right side: Circular health score -->
                                     <div class="text-center">
                                         <div class="relative w-20 h-20">
-                                            <svg class="w-20 h-20 transform -rotate-90" viewBox="0 0 100 100">
+                                            <svg class="w-20 h-20 transform -" viewBox="0 0 100 100">
                                                 <!-- Background circle -->
                                                 <circle cx="50" cy="50" r="45" stroke="#e5e7eb" stroke-width="8" fill="none"/>
                                                 <!-- Progress circle -->
@@ -7372,23 +7495,10 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <!-- Expenses Tab -->
                 <div id="expenses-tab" class="tab-content hidden fade-in">
                     <div class="card">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 gap-4">
+                        <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
                             <div>
                                 <h2 class="text-xl font-bold">All Expenses</h2>
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Track and manage your daily spending and purchases.</p>
-                            </div>
-                            <div class="flex-shrink-0 flex flex-wrap items-center gap-2 sm:space-x-2 sm:gap-0">
-                                <button onclick="toggleFilterPanel('expense-filter-panel')" class="modern-button modern-button-secondary" style="min-width: 90px;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" /></svg>
-                                    Filter
-                                </button>
-                                <button id="delete-selected-btn" onclick="deleteSelectedExpenses()" class="modern-button modern-button-danger hidden">
-                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
-                                    <span>Delete Selected</span>
-                                </button>
-                                <button onclick="showAddForm()" class="modern-button modern-button-primary" style="display: block !important; visibility: visible !important;">
-                                    <span>➕</span> Add Expense
-                                </button>
                             </div>
                         </div>
                         
@@ -7398,6 +7508,21 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex flex-wrap items-center gap-2 mb-4">
+                            <button onclick="toggleFilterPanel('expense-filter-panel')" class="modern-button modern-button-secondary" style="min-width: 90px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" /></svg>
+                                Filter
+                            </button>
+                            <button id="delete-selected-btn" onclick="deleteSelectedExpenses()" class="modern-button modern-button-danger hidden">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                                <span>Delete Selected</span>
+                            </button>
+                            <button onclick="showAddForm()" class="modern-button modern-button-primary" style="display: block !important; visibility: visible !important;">
+                                <span>➕</span> Add Expense
+                            </button>
                         </div>
                         
                         <!-- Filter Panel -->
@@ -7572,23 +7697,10 @@ button, .btn, input[type="button"], input[type="submit"] {
                  <!-- Recurring Tab -->
                 <div id="recurring-tab" class="tab-content hidden fade-in">
                     <div class="card p-4 md:p-6">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 gap-4">
+                        <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
                             <div>
                                 <h2 class="text-xl font-bold text-gray-900 dark:text-white">Recurring Items</h2>
                                 <p class="text-sm text-gray-600 dark:text-gray-300">Regular income and expenses like salaries or subscriptions.</p>
-                            </div>
-                            <div class="flex-shrink-0 flex flex-wrap items-center gap-2 sm:space-x-2 sm:gap-0">
-                                <button onclick="toggleFilterPanel('recurring-filter-panel')" class="modern-button modern-button-secondary" style="min-width: 90px;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" /></svg>
-                                    Filter
-                                </button>
-                                <button id="delete-selected-recurring-btn" onclick="deleteSelectedRecurring()" class="modern-button modern-button-danger hidden">
-                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
-                                    <span>Delete Selected</span>
-                                </button>
-                                <button onclick="showRecurringForm()" class="modern-button modern-button-primary">
-                                    <span>🔁</span> Add Recurring
-                                </button>
                             </div>
                         </div>
                         
@@ -7598,6 +7710,21 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex flex-wrap items-center gap-2 mb-4">
+                            <button onclick="toggleFilterPanel('recurring-filter-panel')" class="modern-button modern-button-secondary" style="min-width: 90px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" /></svg>
+                                Filter
+                            </button>
+                            <button id="delete-selected-recurring-btn" onclick="deleteSelectedRecurring()" class="modern-button modern-button-danger hidden">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                                <span>Delete Selected</span>
+                            </button>
+                            <button onclick="showRecurringForm()" class="modern-button modern-button-primary">
+                                <span>🔁</span> Add Recurring
+                            </button>
                         </div>
                 
                         <div id="recurring-filter-panel" class="hidden p-4 border-b border-gray-200 dark:border-gray-700">
@@ -7785,7 +7912,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 5. Category Breakdown (Collapsible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <button onclick="toggleInsightsSection('categories')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <button onclick="toggleInsightsSection('categories')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Where Your Money Goes</h3>
                 <svg id="categories-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -7800,7 +7927,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 6. Month Comparison (Collapsible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <button onclick="toggleInsightsSection('comparison')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <button onclick="toggleInsightsSection('comparison')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">This Month vs Last Month</h3>
                 <svg id="comparison-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -7815,7 +7942,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 7. Monthly Overview (Collapsible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <button onclick="toggleInsightsSection('monthly')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <button onclick="toggleInsightsSection('monthly')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Monthly Overview</h3>
                 <svg id="monthly-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -7858,7 +7985,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 8. Annual Overview (Collapsible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <button onclick="toggleInsightsSection('annual')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <button onclick="toggleInsightsSection('annual')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Annual Overview</h3>
                 <svg id="annual-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -7918,7 +8045,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Essential financial settings</p>
                             </div>
                         </div>
-                        <svg id="essential-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg id="essential-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </div>
@@ -7983,7 +8110,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Theme, currency, and chart options</p>
                             </div>
                         </div>
-                        <svg id="display-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg id="display-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </div>
@@ -8038,7 +8165,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Daily budgets, coaching, and chart options</p>
                             </div>
                         </div>
-                        <svg id="advanced-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg id="advanced-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </div>
@@ -8097,7 +8224,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Import, export, and backup your data</p>
                             </div>
                         </div>
-                        <svg id="data-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg id="data-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </div>
@@ -8139,7 +8266,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Quick actions and banking features</p>
                             </div>
                         </div>
-                        <svg id="actions-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg id="actions-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </div>
@@ -8251,7 +8378,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <button class="help-section-header" onclick="toggleHelpSection('dashboard')">
                     <span class="help-section-title">📊 Understanding Your Dashboard</span>
                     <svg id="dashboard-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </button>
                 <div id="dashboard-content" class="help-section-content hidden">
@@ -8260,7 +8387,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('budget-cards')">
                             <h4 class="help-component-title">📊 Budget Summary Cards</h4>
                             <svg id="budget-cards-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </button>
                         <div id="budget-cards-content" class="help-subsection-content hidden">
@@ -8301,7 +8428,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('health-score')">
                             <h4 class="help-component-title">🎯 Budget Health Score</h4>
                             <svg id="health-score-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </button>
                         <div id="health-score-content" class="help-subsection-content hidden">
@@ -8334,7 +8461,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('upcoming-bills')">
                             <h4 class="help-component-title">↻ Upcoming Bills</h4>
                             <svg id="upcoming-bills-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </button>
                         <div id="upcoming-bills-content" class="help-subsection-content hidden">
@@ -8365,7 +8492,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('quick-actions')">
                             <h4 class="help-component-title">⚡ Quick Actions</h4>
                             <svg id="quick-actions-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </button>
                         <div id="quick-actions-content" class="help-subsection-content hidden">
@@ -8390,7 +8517,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <button class="help-section-header" onclick="toggleHelpSection('expenses')">
                     <span class="help-section-title">💰 Managing Expenses</span>
                     <svg id="expenses-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </button>
                 <div id="expenses-content" class="help-section-content hidden">
@@ -8503,7 +8630,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <button class="help-section-header" onclick="toggleHelpSection('analytics-insights')">
                     <span class="help-section-title">📈 Analytics & Insights</span>
                     <svg id="analytics-insights-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </button>
                 <div id="analytics-insights-content" class="help-section-content hidden">
@@ -8587,7 +8714,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <button class="help-section-header" onclick="toggleHelpSection('goals-planning')">
                     <span class="help-section-title">🎯 Goals & Financial Planning</span>
                     <svg id="goals-planning-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </button>
                 <div id="goals-planning-content" class="help-section-content hidden">
@@ -8665,7 +8792,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <button class="help-section-header" onclick="toggleHelpSection('settings-troubleshooting')">
                     <span class="help-section-title">⚙️ Settings & Troubleshooting</span>
                     <svg id="settings-troubleshooting-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </button>
                 <div id="settings-troubleshooting-content" class="help-section-content hidden">
@@ -8725,7 +8852,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <button class="help-section-header" onclick="toggleHelpSection('features-tips')">
                     <span class="help-section-title">✨ Features & Tips</span>
                     <svg id="features-tips-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </button>
                 <div id="features-tips-content" class="help-section-content hidden">
@@ -11075,7 +11202,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                             date: dateStr,
                             paymentMethod: item.paymentMethod,
                             status: 'active',
-                            recurringSourceId: item.id
+                            recurringSourceId: item.id,
+                            source: 'manual'
                         });
                         newExpensesGenerated++;
                     }
@@ -11107,6 +11235,19 @@ button, .btn, input[type="button"], input[type="submit"] {
                 
                 showToast(`${newExpensesGenerated} new recurring expense(s) have been added.`, 'info');
             }
+        }
+
+        // --- Helper Functions for Plaid Transactions ---
+        function isPlaidTransaction(expense) {
+            return expense && expense.source === 'plaid';
+        }
+        
+        function canEditTransaction(expense) {
+            return !isPlaidTransaction(expense);
+        }
+        
+        function canDeleteTransaction(expense) {
+            return !isPlaidTransaction(expense);
         }
 
         // --- Expense Sorting ---
@@ -11855,7 +11996,7 @@ function prepareGoalCommitment() {
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </div>
                     </div>
@@ -12065,7 +12206,7 @@ function prepareCompleteGoalPlanning() {
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </div>
                     </div>
@@ -16219,12 +16360,12 @@ function closeGoalSelection() {
             if (content && content.classList.contains('show')) {
                 content.classList.remove('show');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(0deg)'; // Point down when collapsed
+                    chevron.style.transform = 'rotate(0deg)'; // Point right when collapsed
                 }
             } else if (content) {
                 content.classList.add('show');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(180deg)'; // Point up when expanded
+                    chevron.style.transform = 'rotate(90deg)'; // Point down when expanded
                 }
             }
         }
@@ -16236,12 +16377,12 @@ function closeGoalSelection() {
             if (content && content.classList.contains('hidden')) {
                 content.classList.remove('hidden');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(180deg)'; // Point up when expanded
+                    chevron.style.transform = 'rotate(90deg)'; // Point down when expanded
                 }
             } else if (content) {
                 content.classList.add('hidden');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(0deg)'; // Point down when collapsed
+                    chevron.style.transform = 'rotate(0deg)'; // Point right when collapsed
                 }
             }
             
@@ -16261,10 +16402,10 @@ function closeGoalSelection() {
             if (content && toggle) {
                 if (content.classList.contains('hidden')) {
                     content.classList.remove('hidden');
-                    toggle.style.transform = 'rotate(180deg)'; // Point up when expanded
+                    toggle.style.transform = 'rotate(90deg)'; // Point down when expanded
                 } else {
                     content.classList.add('hidden');
-                    toggle.style.transform = 'rotate(0deg)'; // Point down when collapsed
+                    toggle.style.transform = 'rotate(0deg)'; // Point right when collapsed
                 }
             }
         }
@@ -16286,10 +16427,10 @@ function closeGoalSelection() {
                     
                     if (shouldExpand) {
                         content.classList.remove('hidden');
-                        toggle.style.transform = 'rotate(180deg)'; // Point up when expanded
+                        toggle.style.transform = 'rotate(90deg)'; // Point down when expanded
                     } else {
                         content.classList.add('hidden');
-                        toggle.style.transform = 'rotate(0deg)'; // Point down when collapsed
+                        toggle.style.transform = 'rotate(0deg)'; // Point right when collapsed
                     }
                 }
             });
@@ -16375,12 +16516,12 @@ function closeGoalSelection() {
             if (content && content.classList.contains('hidden')) {
                 content.classList.remove('hidden');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(180deg)'; // Point up when expanded
+                    chevron.style.transform = 'rotate(90deg)'; // Point down when expanded
                 }
             } else if (content) {
                 content.classList.add('hidden');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(0deg)'; // Point down when collapsed
+                    chevron.style.transform = 'rotate(0deg)'; // Point right when collapsed
                 }
             }
             
@@ -16410,10 +16551,10 @@ function closeGoalSelection() {
                     
                     if (shouldBeExpanded) {
                         content.classList.remove('hidden');
-                        toggle.style.transform = 'rotate(180deg)'; // Point up when expanded
+                        toggle.style.transform = 'rotate(90deg)'; // Point down when expanded
                     } else {
                         content.classList.add('hidden');
-                        toggle.style.transform = 'rotate(0deg)'; // Point down when collapsed
+                        toggle.style.transform = 'rotate(0deg)'; // Point right when collapsed
                     }
                 }
             });
@@ -17412,7 +17553,8 @@ function closeGoalSelection() {
                 category: DOMElements.expenseCategory.value,
                 date: date,
                 paymentMethod: DOMElements.expensePaymentMethod.value,
-                status: 'active'
+                status: 'active',
+                source: editingExpense ? (editingExpense.source || 'manual') : 'manual'
             };
 
             // Check for spending intervention (only when viewing insights tab)
@@ -17473,7 +17615,8 @@ function closeGoalSelection() {
                 category: category || 'Other',
                 date: getLocalDateString(),
                 paymentMethod: '',
-                    status: 'active'
+                    status: 'active',
+                    source: 'manual'
                 };
             
             // Debug: Log the exact parameters received
@@ -19391,34 +19534,51 @@ function closeGoalSelection() {
                             <div class="space-y-3">
                                 ${dayExpenses.map(expense => {
                                     const isRecurringInstance = !!expense.recurringSourceId;
+                                    const isPlaid = isPlaidTransaction(expense);
                                     return `
-                                    <div class="flex items-center border-b border-gray-200 py-3 last:border-b-0">
+                                    <div class="flex items-center border-b border-gray-200 py-3 last:border-b-0 ${isPlaid ? 'plaid-transaction-row' : ''}">
                                         <input type="checkbox" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
-                                               class="mr-3 table-checkbox expense-checkbox" ${isRecurringInstance ? 'disabled' : ''}>
-                                        <div class="flex-1 flex justify-between items-center cursor-pointer" onclick="editExpense(${expense.id})">
+                                               class="mr-3 table-checkbox expense-checkbox" ${isRecurringInstance || isPlaid ? 'disabled' : ''}>
+                                        <div class="flex-1 flex justify-between items-center ${!isPlaid ? 'cursor-pointer' : ''}" ${!isPlaid ? `onclick="editExpense(${expense.id})"` : ''}>
                                             <div>
-                                                <p class="font-medium text-sm text-gray-900 dark:text-white">${escapeHTML(expense.name)}</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-300">${escapeHTML(expense.category)}</p>
+                                                <p class="font-medium text-sm text-gray-900 dark:text-white">
+                                                    ${escapeHTML(expense.name)}
+                                                    ${isPlaid ? '<span class="plaid-badge ml-2"><svg class="plaid-lock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></span>' : ''}
+                                                </p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-300">
+                                                    ${escapeHTML(expense.category)}
+                                                    ${isPlaid ? '<span class="plaid-badge ml-2">Bank synced</span>' : ''}
+                                                </p>
                                             </div>
                                             <p class="font-medium text-sm text-red-600 dark:text-red-400">-${formatCurrency(expense.cost)}</p>
                                         </div>
                                         <div class="ml-3 flex items-center" style="width: 80px; justify-content: flex-end;">
-                                            <button onclick="event.stopPropagation(); editExpense(${expense.id})" 
-                                                    class="p-2 text-blue-600 hover:bg-blue-50 rounded" title="Edit">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                            ${!isRecurringInstance ? `
-                                            <button onclick="event.stopPropagation(); deleteExpense(${expense.id})" 
-                                                    class="p-2 text-red-600 hover:bg-red-50 rounded ml-2" title="Delete">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
+                                            ${!isPlaid ? `
+                                                <button onclick="event.stopPropagation(); editExpense(${expense.id})" 
+                                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded" title="Edit">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                                        <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                                ${!isRecurringInstance ? `
+                                                <button onclick="event.stopPropagation(); deleteExpense(${expense.id})" 
+                                                        class="p-2 text-red-600 hover:bg-red-50 rounded ml-2" title="Delete">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                                ` : `
+                                                <div style="width: 40px;"></div>
+                                                `}
                                             ` : `
-                                            <div style="width: 40px;"></div>
+                                                <div class="plaid-tooltip">
+                                                    <div class="plaid-badge">
+                                                        <svg class="plaid-lock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
                                             `}
                                         </div>
                                     </div>
@@ -19523,28 +19683,38 @@ function closeGoalSelection() {
                 });
 
                 return `
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${isCancelled ? 'opacity-60' : ''}">
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${isCancelled ? 'opacity-60' : ''} ${isPlaidTransaction(expense) ? 'plaid-transaction-row' : ''}">
                         <td class="px-4 py-3" data-label="">
                             <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
-                            class="table-checkbox expense-checkbox" ${isRecurringInstance ? 'disabled' : ''} ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
+                            class="table-checkbox expense-checkbox" ${isRecurringInstance || isPlaidTransaction(expense) ? 'disabled' : ''} ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
                         </td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Date">${formattedDate}</td>
                         <td class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" data-label="Description">
-                            <span class="text-gray-900 dark:text-white">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''}
+                            <span class="text-gray-900 dark:text-white">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-700 dark:text-gray-300 ml-1">(R)</span>' : ''} ${isPlaidTransaction(expense) ? '<span class="plaid-badge ml-2"><svg class="plaid-lock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></span>' : ''}
                         </td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Category">${escapeHTML(expense.category)}</td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Amount">${formatCurrency(expense.cost)}</td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Type">${escapeHTML(expense.type)}</td>
                         <td class="px-4 py-3 text-right" data-label="Actions">
-                            <div class="flex items-center justify-end gap-1">
-                                <button onclick="${editAction}" title="Edit" class="icon-button" ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
-                                </button>
-                                <button onclick="${deleteAction}" title="Delete" class="icon-button text-red-600/80 hover:text-red-500" ${isRecurringInstance ? 'disabled' : ''} ${isRecurringInstance ? 'opacity-50 cursor-not-allowed' : ''}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
-                                </button>
-                            </div>
+                            ${isPlaidTransaction(expense) ? 
+                                `<div class="plaid-tooltip">
+                                    <div class="plaid-badge">
+                                        <svg class="plaid-lock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                        </svg>
+                                        <span>Bank synced</span>
+                                    </div>
+                                </div>` :
+                                `<div class="flex items-center justify-end gap-1">
+                                    <button onclick="${editAction}" title="Edit" class="icon-button" ${isCancelled ? 'disabled' : ''} ${isCancelled ? 'opacity-50 cursor-not-allowed' : ''}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                                    </button>
+                                    <button onclick="${deleteAction}" title="Delete" class="icon-button text-red-600/80 hover:text-red-500" ${isRecurringInstance ? 'disabled' : ''} ${isRecurringInstance ? 'opacity-50 cursor-not-allowed' : ''}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                                    </button>
+                                </div>`
+                            }
                         </td>
                     </tr>
                 `;
