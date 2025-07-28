@@ -1102,6 +1102,24 @@
         .settings-section-header:hover {
             background: var(--bg-secondary);
         }
+        
+        /* Ensure proper text visibility in expanded accordions */
+        .settings-accordion button[class*="settings-section-header"] {
+            background-color: transparent;
+        }
+        
+        .dark .settings-accordion button[class*="settings-section-header"]:hover {
+            background-color: rgba(55, 65, 81, 0.5);
+        }
+        
+        /* Active/expanded state styling */
+        .settings-section-content.show {
+            background-color: var(--bg-primary);
+        }
+        
+        .dark .settings-section-content.show {
+            background-color: rgba(31, 41, 55, 0.5);
+        }
 
         .settings-section-content {
             max-height: 0;
@@ -8053,16 +8071,20 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="card">
                         <!-- Header -->
                         <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                            <div class="mb-4">
                                 <div>
                                     <p class="text-gray-600 dark:text-gray-300 mt-1 font-semibold">Track your progress toward financial milestones</p>
                                 </div>
-                                <button onclick="showGoalTypeSelector()" class="text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2" style="background-color: #a855f7;">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                                    </svg>
-                                    Add Goal
-                                </button>
+                                <div class="mt-4 md:mt-6">
+                                    <div class="px-4 pb-4 md:px-0 md:pb-0">
+                                        <button onclick="showGoalTypeSelector()" class="py-3 px-4 md:py-2 md:px-4 text-white rounded-lg transition-colors flex items-center justify-center gap-2" style="background-color: #ffa000; color: white !important;">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                            </svg>
+                                            <span class="text-black md:text-white">Add Goal</span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             
                             <!-- Quick Stats -->
@@ -8103,8 +8125,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="text-6xl mb-4">🎯</div>
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Goals Yet</h3>
                             <p class="text-gray-600 dark:text-gray-300 mb-6">Start by creating your first financial goal. Whether it's saving for a house, building an emergency fund, or paying off debt - every financial journey begins with a goal.</p>
-                                                            <button onclick="showGoalTypeSelector()" class="text-white px-4 py-3 rounded-lg transition-colors" style="background-color: #a855f7;">
-                                Create Your First Goal
+                                                            <button onclick="showGoalTypeSelector()" class="py-3 px-4 md:py-2 md:px-4 text-white rounded-lg transition-colors flex items-center justify-center gap-2" style="background-color: #ffa000; color: white !important;">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                </svg>
+                                <span class="text-black md:text-white">Create Your First Goal</span>
                             </button>
                         </div>
                     </div>
@@ -8327,7 +8352,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 5. Category Breakdown (Collapsible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <button onclick="toggleInsightsSection('categories')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <button onclick="toggleInsightsSection('categories')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Where Your Money Goes</h3>
                 <svg id="categories-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -8342,7 +8367,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 6. Month Comparison (Collapsible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <button onclick="toggleInsightsSection('comparison')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <button onclick="toggleInsightsSection('comparison')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">This Month vs Last Month</h3>
                 <svg id="comparison-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -8357,7 +8382,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 7. Monthly Overview (Collapsible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <button onclick="toggleInsightsSection('monthly')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <button onclick="toggleInsightsSection('monthly')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Monthly Overview</h3>
                 <svg id="monthly-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -8400,7 +8425,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 8. Annual Overview (Collapsible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <button onclick="toggleInsightsSection('annual')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <button onclick="toggleInsightsSection('annual')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Annual Overview</h3>
                 <svg id="annual-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -8452,17 +8477,17 @@ button, .btn, input[type="button"], input[type="submit"] {
         <div class="space-y-4">
             <!-- Essential Settings -->
             <div class="settings-accordion">
-                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('essential')">
+                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('essential')">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <span class="text-xl">💰</span>
-                            <div class="text-left">
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            <span class="text-xl flex-shrink-0">💰</span>
+                            <div class="text-left flex-1 min-w-0">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Budget & Income</h3>
                                 <p class="text-sm text-gray-500 dark:text-gray-300">Essential financial settings</p>
                             </div>
                         </div>
-                        <svg id="essential-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <svg id="essential-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </div>
                 </button>
@@ -8517,17 +8542,17 @@ button, .btn, input[type="button"], input[type="submit"] {
 
             <!-- Display & Preferences -->
             <div class="settings-accordion">
-                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('display')">
+                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('display')">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <span class="text-xl">🎨</span>
-                            <div class="text-left">
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            <span class="text-xl flex-shrink-0">🎨</span>
+                            <div class="text-left flex-1 min-w-0">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Display & Preferences</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-300">Theme, currency, and chart options</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300">Theme, currency, chart options</p>
                             </div>
                         </div>
-                        <svg id="display-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <svg id="display-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </div>
                 </button>
@@ -8572,17 +8597,17 @@ button, .btn, input[type="button"], input[type="submit"] {
 
             <!-- Advanced Settings -->
             <div class="settings-accordion">
-                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('advanced')">
+                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('advanced')">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <span class="text-xl">⚙️</span>
-                            <div class="text-left">
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            <span class="text-xl flex-shrink-0">⚙️</span>
+                            <div class="text-left flex-1 min-w-0">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Advanced Features</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-300">Daily budgets, coaching, and chart options</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300">Daily budgets, coaching, chart options</p>
                             </div>
                         </div>
-                        <svg id="advanced-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <svg id="advanced-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </div>
                 </button>
@@ -8631,23 +8656,23 @@ button, .btn, input[type="button"], input[type="submit"] {
 
             <!-- Data Management -->
             <div class="settings-accordion">
-                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('data')">
+                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('data')">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <span class="text-xl">📊</span>
-                            <div class="text-left">
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            <span class="text-xl flex-shrink-0">📊</span>
+                            <div class="text-left flex-1 min-w-0">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Data Management</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-300">Import, export, and backup your data</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300">Import, export, backup data</p>
                             </div>
                         </div>
-                        <svg id="data-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <svg id="data-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </div>
                 </button>
                 <div id="data-content" class="settings-section-content">
                     <div class="p-6 space-y-4">
-                        <button onclick="exportData()" class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <button onclick="exportData()" class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
@@ -8656,7 +8681,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         
                         <div class="relative">
                             <input type="file" id="import-file" accept=".json" class="hidden" onchange="importData(event)">
-                            <button onclick="document.getElementById('import-file').click()" class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <button onclick="document.getElementById('import-file').click()" class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
                                 </svg>
@@ -8673,17 +8698,17 @@ button, .btn, input[type="button"], input[type="submit"] {
 
             <!-- Banking Integration & Quick Actions -->
             <div class="settings-accordion">
-                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('actions')">
+                <button class="settings-section-header w-full hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors p-2 rounded-lg" onclick="toggleSettingsSection('actions')">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <span class="text-xl">⚡</span>
-                            <div class="text-left">
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            <span class="text-xl flex-shrink-0">⚡</span>
+                            <div class="text-left flex-1 min-w-0">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Banking & Actions</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-300">Quick actions and banking features</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300">Quick actions, banking features</p>
                             </div>
                         </div>
-                        <svg id="actions-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <svg id="actions-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </div>
                 </button>
@@ -8708,7 +8733,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="space-y-3">
                             <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Quick Actions</h4>
                             
-                            <button onclick="restartTour()" class="w-full flex items-center justify-start gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <button onclick="restartTour()" class="w-full flex items-center justify-start gap-2 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                 </svg>
@@ -8744,11 +8769,11 @@ button, .btn, input[type="button"], input[type="submit"] {
         <div class="help-accordion space-y-4">
             <!-- Getting Started -->
             <div class="help-section">
-                <button class="help-section-header hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors p-2 rounded-lg" onclick="toggleHelpSection('getting-started')">
+                <button class="help-section-header hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors p-2 rounded-lg" onclick="toggleHelpSection('getting-started')">
                     <div class="flex items-center justify-between w-full">
                         <span class="help-section-title">🚀 Getting Started</span>
                         <svg id="getting-started-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </div>
                 </button>
@@ -8802,7 +8827,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('budget-cards')">
                             <h4 class="help-component-title">📊 Budget Summary Cards</h4>
                             <svg id="budget-cards-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
                         <div id="budget-cards-content" class="help-subsection-content hidden">
@@ -8843,7 +8868,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('health-score')">
                             <h4 class="help-component-title">🎯 Budget Health Score</h4>
                             <svg id="health-score-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
                         <div id="health-score-content" class="help-subsection-content hidden">
@@ -8876,7 +8901,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('upcoming-bills')">
                             <h4 class="help-component-title">↻ Upcoming Bills</h4>
                             <svg id="upcoming-bills-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
                         <div id="upcoming-bills-content" class="help-subsection-content hidden">
@@ -8907,7 +8932,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <button class="help-subsection-header" onclick="toggleHelpSubsection('quick-actions')">
                             <h4 class="help-component-title">⚡ Quick Actions</h4>
                             <svg id="quick-actions-toggle" class="help-toggle w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
                         <div id="quick-actions-content" class="help-subsection-content hidden">
@@ -9335,14 +9360,14 @@ button, .btn, input[type="button"], input[type="submit"] {
             
                 <!-- General Settings -->
                 <div class="space-y-2">
-                    <div class="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                    <div class="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800/50/30">
                         <label for="theme-toggle" class="text-sm font-medium">Dark Mode</label>
                         <label class="toggle-switch">
                             <input type="checkbox" id="theme-toggle" onchange="toggleThemeFromSettings(this.checked)">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
-                    <div class="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                    <div class="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800/50/30">
                         <label for="currency-select" class="text-sm font-medium">Currency</label>
                         <select id="currency-select" onchange="changeCurrency(this.value)" class="modern-select text-sm w-40">
                             <option value="AUD">AUD (A$)</option>
@@ -12409,7 +12434,7 @@ function prepareGoalCommitment() {
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
                     </div>
@@ -12619,7 +12644,7 @@ function prepareCompleteGoalPlanning() {
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
                     </div>
@@ -16331,7 +16356,7 @@ function startGoalCreation(type) {
                 
                 <div class="flex gap-3 pt-4">
                     <button type="button" onclick="this.closest('.fixed').remove()" 
-                            class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                         Cancel
                     </button>
                     <button type="submit" 
@@ -16445,7 +16470,7 @@ function editGoalNew(goalId) {
                 
                 <div class="flex gap-3 pt-4">
                     <button type="button" onclick="this.closest('.fixed').remove()" 
-                            class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                         Cancel
                     </button>
                     <button type="submit" 
@@ -16773,12 +16798,12 @@ function closeGoalSelection() {
             if (content && content.classList.contains('show')) {
                 content.classList.remove('show');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(0deg)'; // Point right when collapsed
+                    chevron.style.transform = 'rotate(0deg)'; // Point down when collapsed
                 }
             } else if (content) {
                 content.classList.add('show');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(90deg)'; // Point down when expanded
+                    chevron.style.transform = 'rotate(180deg)'; // Point up when expanded
                 }
             }
         }
@@ -16790,12 +16815,12 @@ function closeGoalSelection() {
             if (content && content.classList.contains('hidden')) {
                 content.classList.remove('hidden');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(90deg)'; // Point down when expanded
+                    chevron.style.transform = 'rotate(180deg)'; // Point up when expanded
                 }
             } else if (content) {
                 content.classList.add('hidden');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(0deg)'; // Point right when collapsed
+                    chevron.style.transform = 'rotate(0deg)'; // Point down when collapsed
                 }
             }
             
@@ -16929,12 +16954,12 @@ function closeGoalSelection() {
             if (content && content.classList.contains('hidden')) {
                 content.classList.remove('hidden');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(90deg)'; // Point down when expanded
+                    chevron.style.transform = 'rotate(180deg)'; // Point up when expanded
                 }
             } else if (content) {
                 content.classList.add('hidden');
                 if (chevron) {
-                    chevron.style.transform = 'rotate(0deg)'; // Point right when collapsed
+                    chevron.style.transform = 'rotate(0deg)'; // Point down when collapsed
                 }
             }
             
@@ -20049,7 +20074,7 @@ function closeGoalSelection() {
                 console.log('📱 Adding Load More button');
                 html += `
                     <div class="px-4 pb-4">
-                        <button onclick="loadMoreExpenses()" class="w-full py-3 px-4 bg-accent-primary text-white rounded-lg hover:bg-accent-primary-hover transition-colors font-medium">
+                        <button onclick="loadMoreExpenses()" class="w-full py-3 px-4 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium" style="background-color: #2176FF; color: white !important;">
                             Load More (${allExpenses.length - window.expensesLoadedCount} remaining)
                         </button>
                     </div>
@@ -20400,7 +20425,7 @@ function closeGoalSelection() {
                 });
 
                 return `
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${isCancelled ? 'opacity-60' : ''} ${isPlaidTransaction(expense) ? 'plaid-transaction-row' : ''} ${!isPlaidTransaction(expense) ? 'cursor-pointer' : ''}" ${!isPlaidTransaction(expense) ? `onclick="${editAction}"` : ''}>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50/50 ${isCancelled ? 'opacity-60' : ''} ${isPlaidTransaction(expense) ? 'plaid-transaction-row' : ''} ${!isPlaidTransaction(expense) ? 'cursor-pointer' : ''}" ${!isPlaidTransaction(expense) ? `onclick="${editAction}"` : ''}>
                         <td class="px-4 py-3" data-label="" onclick="event.stopPropagation();">
                             <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" onchange="toggleExpenseSelection(this, '${expense.id}')" 
                             class="table-checkbox expense-checkbox" ${isRecurringInstance || isPlaidTransaction(expense) ? 'disabled' : ''} ${selectedExpenseIds.has(expense.id.toString()) ? 'checked' : ''}>
@@ -20660,7 +20685,7 @@ function closeGoalSelection() {
                 filtered.forEach(item => {
                 const tr = document.createElement('tr');
                 const isSelected = selectedRecurringIds.has(item.id);
-                tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
+                tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
                 const itemTypeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
 
                 // Format start date for better display
@@ -23312,7 +23337,7 @@ function renderSmartRecommendations(recommendations) {
                     <div class="text-xs text-gray-500">
                         ${rec.potentialSaving > 0 ? `💰 Potential saving: <strong>${formatCurrency(rec.potentialSaving)}</strong>` : '📊 Organization improvement'}
             </div>
-                    <div class="text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded border hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <div class="text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded border hover:bg-gray-50 dark:hover:bg-gray-800/50">
                         Take Action →
                     </div>
                 </div>
@@ -23892,7 +23917,7 @@ function showInsightsError() {
                 });
 
                 return `
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${isCancelled ? 'opacity-60' : ''} cursor-pointer"
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${isCancelled ? 'opacity-60' : ''} cursor-pointer"
                         data-category="${expense.category}" onclick="${editAction}">
                         <td class="px-4 py-3" data-label="" onclick="event.stopPropagation();">
                             <input type="checkbox" id="${checkboxId}" data-id="${expense.id}" 
@@ -24093,7 +24118,7 @@ function showInsightsError() {
                 console.log('📱 Adding Recurring Load More button');
                 html += `
                     <div class="px-4 pb-4">
-                        <button onclick="loadMoreRecurring()" class="w-full py-3 px-4 bg-accent-primary text-white rounded-lg hover:bg-accent-primary-hover transition-colors font-medium">
+                        <button onclick="loadMoreRecurring()" class="w-full py-3 px-4 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium" style="background-color: #2176FF; color: white !important;">
                             Load More (${allItems.length - window.recurringLoadedCount} remaining)
                         </button>
                     </div>
@@ -24176,7 +24201,7 @@ function showInsightsError() {
             items.forEach(item => {
                 const tr = document.createElement('tr');
                 const isSelected = selectedRecurringIds.has(item.id);
-                tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
+                tr.className = `border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${item.status === 'cancelled' ? 'opacity-60' : ''} ${isSelected ? 'bg-blue-50 dark:bg-blue-900/50' : 'bg-white dark:bg-gray-800'}`;
                 const itemTypeClass = item.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
 
                 const formattedStartDate = new Date(item.startDate).toLocaleDateString('en-GB', {
@@ -25928,7 +25953,7 @@ function updateIntegratedCategories() {
         const color = getCategoryColor(category);
         
         return `
-            <div class="py-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg px-2 transition-colors">
+            <div class="py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg px-2 transition-colors">
                 <div class="flex items-center justify-between mb-2">
                     <div class="flex items-center space-x-3">
                         <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${color}"></div>
