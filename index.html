@@ -27406,7 +27406,7 @@ function initializeDailySpendingInsightsChart() {
                 borderWidth: 2,
                 pointRadius: 6,
                 pointHoverRadius: 8,
-                showLine: false
+                showLine: true
             }]
         };
     }
@@ -27442,7 +27442,7 @@ function initializeDailySpendingInsightsChart() {
                         color: isDark ? '#cbd5e1' : '#64748b'
                     },
                     grid: {
-                        color: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.18)'
+                        color: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.25)'
                     }
                 } : {
                     title: {
@@ -27454,7 +27454,7 @@ function initializeDailySpendingInsightsChart() {
                         color: isDark ? '#cbd5e1' : '#64748b'
                     },
                     grid: {
-                        color: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.18)'
+                        color: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.25)'
                     },
                     // Bar chart specific options - increase for mobile 12 months
                     categoryPercentage: (currentInsightsPeriod === '12months' && window.innerWidth <= 768) ? 0.95 : (currentInsightsPeriod === '12months' ? 0.8 : 0.6),
@@ -27474,7 +27474,7 @@ function initializeDailySpendingInsightsChart() {
                         }
                     },
                     grid: {
-                        color: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.18)'
+                        color: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.25)'
                     }
                 }
             },
