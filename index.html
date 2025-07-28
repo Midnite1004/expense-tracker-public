@@ -967,6 +967,93 @@
             .app-content > *:first-child {
                 margin-top: 1rem !important;
             }
+            
+            /* Monthly Performance List Mobile Optimizations */
+            #insights-monthly-list .flex {
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                min-width: 0 !important;
+            }
+            
+            #insights-monthly-list .flex > div:first-child {
+                flex: 1 !important;
+                min-width: 0 !important;
+                overflow: hidden !important;
+            }
+            
+            #insights-monthly-list .flex > div:last-child {
+                flex-shrink: 0 !important;
+                min-width: 0 !important;
+                text-align: right !important;
+            }
+            
+            #insights-monthly-list h4,
+            #insights-monthly-list span,
+            #insights-monthly-list div {
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+            }
+            
+            #insights-monthly-list .space-x-3 > * + * {
+                margin-left: 0.75rem !important;
+            }
+            
+            /* Annual Overview Cards Mobile Optimizations */
+            #annual-content .grid {
+                gap: 0.5rem !important;
+            }
+            
+            #annual-content .text-2xl {
+                font-size: 1.25rem !important;
+                line-height: 1.5 !important;
+            }
+            
+            #annual-content .text-sm {
+                font-size: 0.75rem !important;
+            }
+            
+            #annual-content .p-4 {
+                padding: 0.75rem !important;
+            }
+        }
+        
+        /* Extra small screens (phones) */
+        @media (max-width: 480px) {
+            #insights-monthly-list .flex {
+                padding: 0.5rem !important;
+            }
+            
+            #insights-monthly-list h4 {
+                font-size: 0.875rem !important;
+            }
+            
+            #insights-monthly-list span {
+                font-size: 0.75rem !important;
+                padding: 0.25rem 0.5rem !important;
+            }
+            
+            #insights-monthly-list .text-right {
+                font-size: 0.75rem !important;
+            }
+            
+            #insights-monthly-list .text-xs {
+                font-size: 0.625rem !important;
+            }
+            
+            /* Annual Overview Cards Extra Small Screen Optimizations */
+            #annual-content .text-2xl {
+                font-size: 1.125rem !important;
+            }
+            
+            #annual-content .text-sm {
+                font-size: 0.625rem !important;
+            }
+            
+            #annual-content .p-4 {
+                padding: 0.5rem !important;
+            }
         }
 
         /* Settings Accordion Styles */
@@ -8290,20 +8377,20 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <!-- Annual metrics (2x2 grid) -->
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div class="text-center p-4 rounded-lg" style="background-color: rgba(26, 35, 126, 0.1);">
-                        <div class="text-2xl font-bold" style="color: #1a237e;" id="insights-annual-budget">£48,000</div>
-                        <div class="text-sm" style="color: #1a237e;">Annual Budget</div>
+                        <div class="text-2xl font-bold whitespace-nowrap" style="color: #1a237e;" id="insights-annual-budget">£48,000</div>
+                        <div class="text-sm whitespace-nowrap" style="color: #1a237e;">Annual Budget</div>
                     </div>
                     <div class="text-center p-4 rounded-lg" style="background-color: rgba(255, 87, 34, 0.1);">
-                        <div class="text-2xl font-bold" style="color: #ff5722;" id="insights-ytd-spent">£13,501</div>
-                        <div class="text-sm" style="color: #ff5722;">YTD Spent</div>
+                        <div class="text-2xl font-bold whitespace-nowrap" style="color: #ff5722;" id="insights-ytd-spent">£13,501</div>
+                        <div class="text-sm whitespace-nowrap" style="color: #ff5722;">YTD Spent</div>
                     </div>
                     <div class="text-center p-4 rounded-lg" style="background-color: rgba(46, 125, 50, 0.1);">
-                        <div class="text-2xl font-bold" style="color: #2e7d32;" id="insights-annual-remaining">£34,499</div>
-                        <div class="text-sm" style="color: #2e7d32;">Remaining</div>
+                        <div class="text-2xl font-bold whitespace-nowrap" style="color: #2e7d32;" id="insights-annual-remaining">£34,499</div>
+                        <div class="text-sm whitespace-nowrap" style="color: #2e7d32;">Remaining</div>
                     </div>
                     <div class="text-center p-4 rounded-lg" style="background-color: rgba(255, 160, 0, 0.1);">
-                        <div class="text-2xl font-bold" style="color: #ffa000;" id="insights-avg-month">£1,929</div>
-                        <div class="text-sm" style="color: #ffa000;">Avg/Month</div>
+                        <div class="text-2xl font-bold whitespace-nowrap" style="color: #ffa000;" id="insights-avg-month">£1,929</div>
+                        <div class="text-sm whitespace-nowrap" style="color: #ffa000;">Avg/Month</div>
                     </div>
                 </div>
                 
@@ -25959,15 +26046,13 @@ function updateIntegratedMonthlyList() {
         
         return `
             <div class="flex items-center justify-between py-3 border-l-4 ${statusColor} pl-4 bg-gray-50 dark:bg-gray-800 rounded-r">
-                <div class="flex-1">
-                    <div class="flex items-center space-x-3">
-                        <h4 class="font-medium text-gray-900 dark:text-white">${monthName}</h4>
-                        <span class="text-xs px-2 py-1 rounded-full ${month.status === 'over' ? 'bg-red-100 text-red-700' : month.status === 'near' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}">${statusText}</span>
-                    </div>
+                <div class="flex items-center space-x-3 min-w-0 flex-1">
+                    <h4 class="font-medium text-gray-900 dark:text-white whitespace-nowrap">${monthName}</h4>
+                    <span class="text-xs px-2 py-1 rounded-full whitespace-nowrap ${month.status === 'over' ? 'bg-red-100 text-red-700' : month.status === 'near' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}">${statusText}</span>
                 </div>
-                <div class="text-right">
-                    <div class="font-semibold text-gray-900 dark:text-white">${formatCurrency(month.spent)} / ${formatCurrency(month.budget)}</div>
-                    ${overage > 0 ? `<div class="text-xs text-red-600">${formatCurrency(overage)} over</div>` : overage < -50 ? `<div class="text-xs text-green-600">${formatCurrency(Math.abs(overage))} saved</div>` : ''}
+                <div class="text-right ml-4 min-w-0 flex-shrink-0">
+                    <div class="font-semibold text-gray-900 dark:text-white whitespace-nowrap">${formatCurrency(month.spent)} / ${formatCurrency(month.budget)}</div>
+                    ${overage > 0 ? `<div class="text-xs text-red-600 whitespace-nowrap">${formatCurrency(overage)} over</div>` : overage < -50 ? `<div class="text-xs text-green-600 whitespace-nowrap">${formatCurrency(Math.abs(overage))} saved</div>` : ''}
                 </div>
             </div>
         `;
