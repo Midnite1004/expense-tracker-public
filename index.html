@@ -119,7 +119,7 @@
             --text-secondary: var(--color-text-secondary);
             --text-tertiary: var(--color-text-tertiary);
             --border-color: var(--color-border);
-            --accent-primary: #ffa000;
+            --accent-primary: #1a237e;
             --accent-secondary: #ffb74d;
             --accent-blue: var(--color-primary);
             --accent-green: var(--color-success);
@@ -148,7 +148,7 @@
         /* Dark theme overrides using data attribute for explicit theme control */
         [data-theme="dark"] {
             /* Dark mode color palette - Navy + Gold */
-            --color-primary: #ffa000;
+            --color-primary: #1a237e;
             --color-primary-hover: #ffb74d;
             --color-success: #2e7d32;
             --color-warning: #ff5722;
@@ -189,7 +189,7 @@
             --text-secondary: var(--color-text-secondary);
             --text-tertiary: var(--color-text-tertiary);
             --border-color: var(--color-border);
-            --accent-primary: #ffa000;
+            --accent-primary: #1a237e;
             --accent-secondary: #ffb74d;
             --accent-blue: var(--color-primary);
             --accent-green: var(--color-success);
@@ -2857,29 +2857,22 @@
                 border-color: rgb(59 130 246) !important; /* blue-500 */
             }
             
-            /* Enhanced Quick Action button hover effects */
-            button[onclick="showAddForm()"]:hover {
-                background-color: rgb(29 78 216) !important; /* blue-700 */
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-                transform: translateY(-1px) !important;
-            }
-            
-            button[onclick="showAddIncomeForm()"]:hover,
-            button[onclick="showRecurringForm()"]:hover {
-                background-color: rgb(249 250 251) !important; /* gray-50 */
-                border-color: rgb(59 130 246) !important; /* blue-500 */
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-                transform: translateY(-1px) !important;
-            }
-            
-            .dark button[onclick="showAddIncomeForm()"]:hover,
-            .dark button[onclick="showRecurringForm()"]:hover {
-                background-color: rgb(55 65 81) !important; /* gray-700 */
-                border-color: rgb(59 130 246) !important; /* blue-500 */
+            /* Quick Actions buttons - uniform hover (desktop only) */
+            @media (min-width: 769px) {
+                button[onclick="showAddForm()"].hover\:bg-gray-500:hover {
+                    background-color: #374151 !important; /* uniform dark gray hover */
+                }
+                button[onclick="showAddIncomeForm()"].hover\:bg-gray-500:hover {
+                    background-color: #374151 !important; /* uniform dark gray hover */
+                }
+                button[onclick="showRecurringForm()"].hover\:bg-gray-500:hover {
+                    background-color: #374151 !important; /* uniform dark gray hover */
+                }
             }
             
             /* Enhanced Add Income button in top area */
             .btn-primary:hover {
+                background-color: #374151 !important; /* uniform dark gray hover */
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
                 transform: translateY(-1px) !important;
             }
@@ -3816,11 +3809,11 @@
             white-space: nowrap;
         }
         .modern-button-primary {
-            background-color: var(--color-primary);
+            background-color: #1a237e;
             color: white;
         }
         .modern-button-primary:hover {
-            background-color: var(--color-primary-hover);
+            background-color: #0d1421;
         }
         .modern-button-secondary {
             background-color: var(--color-bg-tertiary);
@@ -7465,9 +7458,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </button>
                 
                 <button onclick="showTab('expenses')" id="nav-expenses" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zM14 6a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h8zM6 8a2 2 0 000 4h8a2 2 0 000-4H6z"/>
-                        <path d="M1 11a1 1 0 011-1h2a1 1 0 010 2H2a1 1 0 01-1-1zM13 11a1 1 0 011-1h2a1 1 0 010 2h-2a1 1 0 01-1-1z"/>
+                    <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
                     <span class="nav-text">Expenses</span>
                 </button>
@@ -7480,8 +7472,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </button>
                 
                 <button onclick="showTab('recurring')" id="nav-recurring" class="nav-item">
-                    <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                    <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                     </svg>
                     <span class="nav-text">Recurring</span>
                 </button>
@@ -7536,19 +7528,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div id="mobile-dropdown" class="mobile-dropdown hidden">
                             <button onclick="showTab('recurring'); closeMobileDropdown();" class="mobile-dropdown-item">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                    <line x1="16" y1="2" x2="16" y2="6"/>
-                                    <line x1="8" y1="2" x2="8" y2="6"/>
-                                    <line x1="3" y1="10" x2="21" y2="10"/>
-                                    <circle cx="8" cy="16" r="2"/>
-                                    <path d="M16 14v6"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                 </svg>
                                 <span>Recurring</span>
                             </button>
                             <button onclick="showTab('settings'); closeMobileDropdown();" class="mobile-dropdown-item">
-                                <svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.925 2.732a1 1 0 00-1.85 0l-.638 1.538a1 1 0 01-.754.54l-1.706.27a1 1 0 00-.656 1.614l1.13 1.428a1 1 0 010 1.156l-1.13 1.428a1 1 0 00.656 1.614l1.706.27a1 1 0 01.754.54l.638 1.538a1 1 0 001.85 0l.638-1.538a1 1 0 01.754-.54l1.706-.27a1 1 0 00.656-1.614l-1.13-1.428a1 1 0 010-1.156l1.13-1.428a1 1 0 00-.656-1.614l-1.706-.27a1 1 0 01-.754-.54L10.925 2.732z"/>
-                                    <circle cx="10" cy="10" r="3"/>
+                                <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
                                 </svg>
                                 <span>Settings</span>
                             </button>
@@ -7592,7 +7578,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <div class="text-accent-success font-medium" id="savings-rate-display">💰 Savings Rate: 25%</div>
                             </div>
                             <div class="flex-shrink-0">
-                                <button onclick="showAddIncomeForm()" class="btn-primary">
+                                <button onclick="showAddIncomeForm()" class="btn-primary hover:bg-gray-500 transition-all duration-200" style="background-color: #2e7d32; color: white !important;">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                     </svg>
@@ -7655,7 +7641,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div id="quick-add-transport" class="quick-add-wrapper">
                                 <button class="w-full bg-gray-50 hover:bg-accent-primary/10 dark:bg-gray-700 dark:hover:bg-accent-primary/20 border border-gray-200 dark:border-gray-600 hover:border-accent-primary/30 dark:hover:border-accent-primary/50 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Transport', 'Essential', 'Essential', 10.00)">
                                     <div class="flex items-center gap-3 quick-add-content">
-                                        <div class="w-10 h-10 bg-accent-primary group-hover:bg-accent-primary-hover rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
+                                        <div class="w-10 h-10 bg-blue-500 group-hover:bg-blue-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
                                             </svg>
@@ -7664,7 +7650,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             <div class="font-medium text-gray-900 dark:text-white quick-add-title">Transport</div>
                                             <div class="text-sm text-gray-500 dark:text-gray-300 quick-add-category">Essential</div>
                                         </div>
-                                        <span class="font-medium text-accent-primary dark:text-accent-primary quick-add-price">£10</span>
+                                        <span class="font-medium text-blue-600 dark:text-blue-400 quick-add-price">£10</span>
                                     </div>
                                 </button>
                             </div>
@@ -7859,27 +7845,27 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <h3 class="text-lg font-semibold mb-3">Quick Actions</h3>
                                 <div class="space-y-3">
                                     <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
-                                        <button onclick="showAddForm()" class="w-full px-4 py-3 bg-accent-primary text-white rounded-lg hover:bg-accent-primary-hover transition-all duration-200 flex items-center justify-center gap-2 font-medium">
+                                        <button onclick="showAddForm()" class="w-full px-4 py-3 rounded-lg hover:bg-gray-500 transition-all duration-200 flex items-center justify-center gap-2 font-medium" style="background-color: #1a237e; color: white !important;">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                             </svg>
-                                            + Add Expense
+                                            Add Expense
                                         </button>
                                     </div>
                                     <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
-                                        <button onclick="showAddIncomeForm()" class="w-full px-4 py-3 bg-transparent border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 flex items-center justify-center gap-2 font-medium">
+                                        <button onclick="showAddIncomeForm()" class="w-full px-4 py-3 rounded-lg hover:bg-gray-500 transition-all duration-200 flex items-center justify-center gap-2 font-medium" style="background-color: #2e7d32; color: white !important;">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                             </svg>
-                                            💰 Add Income
+                                            Add Income
                                         </button>
                                     </div>
                                     <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
-                                        <button onclick="showRecurringForm()" class="w-full px-4 py-3 bg-transparent border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 flex items-center justify-center gap-2 font-medium">
+                                        <button onclick="showRecurringForm()" class="w-full px-4 py-3 rounded-lg hover:bg-gray-500 transition-all duration-200 flex items-center justify-center gap-2 font-medium" style="background-color: #1976d2; color: white !important;">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                             </svg>
-                                            🔄 Add Recurring
+                                            Add Recurring
                                         </button>
                                     </div>
                                 </div>
@@ -8047,7 +8033,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <div>
                                     <p class="text-gray-600 dark:text-gray-300 mt-1 font-semibold">Track your progress toward financial milestones</p>
                                 </div>
-                                <button onclick="showGoalTypeSelector()" class="bg-accent-primary hover:bg-accent-primary-hover text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                                <button onclick="showGoalTypeSelector()" class="text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2" style="background-color: #a855f7;">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                     </svg>
@@ -8093,7 +8079,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="text-6xl mb-4">🎯</div>
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Goals Yet</h3>
                             <p class="text-gray-600 dark:text-gray-300 mb-6">Start by creating your first financial goal. Whether it's saving for a house, building an emergency fund, or paying off debt - every financial journey begins with a goal.</p>
-                                                            <button onclick="showGoalTypeSelector()" class="bg-accent-primary hover:bg-accent-primary-hover text-white px-4 py-3 rounded-lg transition-colors">
+                                                            <button onclick="showGoalTypeSelector()" class="text-white px-4 py-3 rounded-lg transition-colors" style="background-color: #a855f7;">
                                 Create Your First Goal
                             </button>
                         </div>
