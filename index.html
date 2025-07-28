@@ -7461,7 +7461,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
                     </svg>
-                    <span class="nav-text">Dashboard</span>
+                    <span class="nav-text">Overview</span>
                 </button>
                 
                 <button onclick="showTab('expenses')" id="nav-expenses" class="nav-item">
@@ -7512,7 +7512,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- Main Content Area -->
         <div class="app-main">
             <header class="app-header">
-                <h1 class="page-title" id="current-page-title">Dashboard</h1>
+                <h1 class="page-title" id="current-page-title">Overview</h1>
                 <div class="header-actions">
                     <button onclick="toggleThemeFromHeader()" class="btn-icon" title="Toggle theme" id="theme-toggle-btn">
                         <!-- Sun icon (light mode) -->
@@ -7905,8 +7905,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="card">
                         <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
                             <div>
-                                <h2 class="text-xl font-bold">All Expenses</h2>
-                                <p class="text-sm text-gray-500 dark:text-gray-300">Track and manage your daily spending and purchases.</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300 font-semibold">Track and manage your daily spending and purchases.</p>
                             </div>
                         </div>
                         
@@ -8046,8 +8045,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="card p-6 mb-6">
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
                                 <div>
-                                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Financial Goals</h2>
-                                    <p class="text-gray-600 dark:text-gray-300 mt-1">Track your progress toward financial milestones</p>
+                                    <p class="text-gray-600 dark:text-gray-300 mt-1 font-semibold">Track your progress toward financial milestones</p>
                                 </div>
                                 <button onclick="showGoalTypeSelector()" class="bg-accent-primary hover:bg-accent-primary-hover text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -8107,8 +8105,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="card p-4 md:p-6">
                         <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
                             <div>
-                                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Recurring Items</h2>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">Regular income and expenses like salaries or subscriptions.</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300 font-semibold">Regular income and expenses like salaries or subscriptions.</p>
                             </div>
                         </div>
                         
@@ -8437,8 +8434,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 <div id="settings-tab" class="tab-content hidden fade-in">
     <div class="max-w-4xl mx-auto">
         <div class="mb-6">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Settings</h2>
-            <p class="text-gray-600 dark:text-gray-300">Customize your experience and manage your data</p>
+            <p class="text-gray-600 dark:text-gray-300 font-semibold">Customize your experience and manage your data</p>
         </div>
 
         <div class="space-y-4">
@@ -8729,8 +8725,7 @@ button, .btn, input[type="button"], input[type="submit"] {
     <div class="card">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 gap-4">
             <div>
-                <h2 class="text-xl font-bold">Help & Documentation</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-300">Learn how to make the most of your personal finance tracker</p>
+                <p class="text-sm text-gray-600 dark:text-gray-300 font-semibold">Learn how to make the most of your personal finance tracker</p>
             </div>
         </div>
         
@@ -9517,7 +9512,6 @@ button, .btn, input[type="button"], input[type="submit"] {
     <div id="help-modal" onclick="closeHelpModal()" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden fade-in">
         <div onclick="event.stopPropagation()" class="card max-w-2xl w-full max-h-[90vh] overflow-y-auto">
              <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 class="text-xl font-semibold">Help & Documentation</h3>
                 <button onclick="closeHelpModal()" class="icon-button text-2xl leading-none">&times;</button>
             </div>
             <div class="p-6 md:p-8">
@@ -9971,7 +9965,6 @@ button, .btn, input[type="button"], input[type="submit"] {
 <div id="goals-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-semibold">Financial Goals</h3>
             <button onclick="closeGoalsModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
         </div>
         
@@ -24632,9 +24625,10 @@ function updateAppNavigation(activeTab) {
     
     // Update page title
     const titles = {
-        'overview': 'Dashboard',
-        'expenses': 'Expenses',
-        'recurring': 'Recurring',
+                    'overview': 'Overview',
+        'expenses': 'All Expenses',
+        'goals': 'Financial Goals',
+        'recurring': 'Recurring Items',
         'insights': 'Insights',
         'settings': 'Settings',
         'help': 'Help & Documentation'
