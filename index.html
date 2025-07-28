@@ -5818,6 +5818,11 @@
 
         /* Mobile-specific height reduction for insights accordions */
         @media (max-width: 768px) {
+            /* Hide 7-day toggle button row on mobile since it's the only option */
+            #insights-tab .flex.space-x-2.mb-4:has(.period-toggle) {
+                display: none !important;
+            }
+            
             #insights-tab .bg-white.dark\\:bg-gray-800.rounded-lg.shadow-sm.p-4,
             #insights-tab .bg-white.dark\\:bg-gray-800.rounded-lg.shadow-sm {
                 padding: 0.5rem !important;
