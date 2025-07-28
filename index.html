@@ -7716,7 +7716,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </div>
                                         </div>
                                     </div>
-                                    <button class="text-sm text-accent-primary hover:underline" onclick="showTab('settings')">
+                                    <button class="text-sm hover:underline" onclick="showTab('settings')" style="color: #1976d2;">
                                         Edit budget
                                     </button>
                                 </div>
@@ -7804,7 +7804,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="card p-4">
                                 <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-xl font-semibold">7-Day Trend</h3>
-                                    <button class="text-sm text-accent-primary hover:underline" onclick="showTab('insights')">
+                                    <button class="text-sm hover:underline" onclick="showTab('insights')" style="color: #1976d2;">
                                         Full Chart
                                     </button>
                                 </div>
@@ -7817,7 +7817,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="card p-4" data-tour="goals-section">
                                 <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-xl font-semibold">Goals Progress</h3>
-                                    <button onclick="showTab('goals')" class="text-sm text-accent-primary dark:text-accent-primary opacity-70 hover:opacity-100 hover:underline">
+                                    <button onclick="showTab('goals')" class="text-sm hover:underline" style="color: #1976d2;">
                                         Manage Goals
                                     </button>
                                 </div>
@@ -7833,7 +7833,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="card p-4">
                                 <div class="flex justify-between items-center mb-3">
                                     <h3 class="text-lg font-semibold">Upcoming Bills</h3>
-                                    <button onclick="showTab('recurring')" class="text-xs text-accent-primary dark:text-accent-primary hover:underline">See all</button>
+                                    <button onclick="showTab('recurring')" class="text-xs hover:underline" style="color: #1976d2;">See all</button>
                                 </div>
                                 <div id="upcoming-events" class="space-y-3">
                                     <p class="text-gray-500 dark:text-gray-300 text-sm">No upcoming bills.</p>
@@ -7875,7 +7875,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <div class="card p-4">
                                 <div class="flex justify-between items-center mb-3">
                                     <h3 class="text-lg font-semibold">Recent Activity</h3>
-                                    <button onclick="showTab('expenses')" class="text-xs text-accent-primary dark:text-accent-primary hover:underline">See all</button>
+                                    <button onclick="showTab('expenses')" class="text-xs hover:underline" style="color: #1976d2;">See all</button>
                                 </div>
                                 <div id="recent-expenses" class="space-y-3">
                                     <p class="text-gray-700 dark:text-gray-300 text-sm">No recent expenses.</p>
@@ -8737,7 +8737,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         <div class="help-component-steps">
                             <h5 class="font-medium mb-2">Quick Setup (3 minutes):</h5>
                             <ol class="list-decimal list-inside space-y-2">
-                                <li><strong>Set Your Budget:</strong> Go to <button onclick="showTab('settings')" class="text-accent-primary hover:underline">Settings</button> → Budget & Income</li>
+                                <li><strong>Set Your Budget:</strong> Go to <button onclick="showTab('settings')" class="hover:underline" style="color: #1976d2;">Settings</button> → Budget & Income</li>
                                 <li><strong>Add First Expense:</strong> Use the floating "+" button or Quick Add section</li>
                                 <li><strong>Track Recurring Bills:</strong> Add subscriptions in the Recurring tab</li>
                                 <li><strong>Set Financial Goals:</strong> Visit the Goals tab to start saving</li>
@@ -9513,7 +9513,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                 <h4 class="font-semibold mb-2">First Steps:</h4>
                                 <ol class="list-decimal ml-5 space-y-2">
                                     <li>Complete the <strong>onboarding tour</strong> to set up your income, goals, and savings</li>
-                                    <li>Visit <button onclick="openSettings('budget')" class="text-accent-primary hover:underline">Settings</button> to configure your monthly budget and preferences</li>
+                                    <li>Visit <button onclick="openSettings('budget')" class="hover:underline" style="color: #1976d2;">Settings</button> to configure your monthly budget and preferences</li>
                                     <li>Connect bank accounts via Plaid for automatic transaction import</li>
                                     <li>Start tracking expenses and watch your financial insights grow</li>
                                 </ol>
@@ -14959,7 +14959,7 @@ function updateDashboardGoals() {
     // Add "See All Goals" button if there are more goals
     const seeAllButton = userGoals.length > 1 ? `
         <div class="text-center mt-4">
-            <button onclick="showTab('goals')" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                                            <button onclick="showTab('goals')" class="text-sm hover:underline" style="color: #1976d2;">
                 See All Goals (${userGoals.length}) →
             </button>
         </div>
@@ -22035,7 +22035,7 @@ function closeGoalSelection() {
                     <div class="text-center py-6">
                         <div class="text-3xl mb-2">🎯</div>
                         <p class="text-gray-500 dark:text-gray-300 text-sm mb-3">No goals set yet</p>
-                        <button onclick="showTab('goals')" class="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium">
+                                                        <button onclick="showTab('goals')" class="hover:underline text-sm font-medium" style="color: #1976d2;">
                             Choose your goals →
                         </button>
                     </div>
@@ -22142,7 +22142,7 @@ function closeGoalSelection() {
                     ${goalsHTML}
                     
                     <div class="text-center pt-2">
-                        <button onclick="showTab('goals')" class="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium transition-colors">
+                                                        <button onclick="showTab('goals')" class="hover:underline text-sm font-medium transition-colors" style="color: #1976d2;">
                             View details & edit goals →
                         </button>
                     </div>
@@ -24715,7 +24715,7 @@ function initializeSettingsForm() {
                 <div class="flex items-center gap-2">
                     <span>💼 ${breakdown.items.length} income source(s) configured</span>
                     <button onclick="showTab('recurring')" 
-                            class="text-blue-600 hover:text-blue-800 underline text-sm whitespace-nowrap">
+                            class="underline text-sm whitespace-nowrap" style="color: #1976d2;">
                         Manage Income →
                     </button>
                 </div>
@@ -24725,7 +24725,7 @@ function initializeSettingsForm() {
                 <div class="flex items-center gap-2">
                     <span class="text-orange-600">⚠️ No income sources configured</span>
                     <button onclick="showTab('recurring')" 
-                            class="text-blue-600 hover:text-blue-800 underline text-sm whitespace-nowrap">
+                            class="underline text-sm whitespace-nowrap" style="color: #1976d2;">
                         Add Income →
                     </button>
                 </div>
@@ -25692,7 +25692,7 @@ function updateIntegratedGoalsProgress() {
                 <div class="col-span-2 text-center py-6 text-gray-500 dark:text-gray-400">
                     <div class="text-2xl mb-2">🎯</div>
                     <p class="text-sm">No goals set yet</p>
-                    <button onclick="showTab('goals')" class="text-blue-600 hover:underline text-sm mt-1">Set your goals →</button>
+                                                    <button onclick="showTab('goals')" class="hover:underline text-sm mt-1" style="color: #1976d2;">Set your goals →</button>
                 </div>
             `;
         }
