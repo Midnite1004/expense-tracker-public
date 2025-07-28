@@ -6885,6 +6885,14 @@ button, .btn, input[type="button"], input[type="submit"] {
             border: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
+            height: 80px; /* Fixed height for consistency */
+            min-height: 80px; /* Prevent shrinking */
+        }
+        
+        /* Dark mode specific styling for better readability */
+        [data-theme="dark"] .fab-quick-item {
+            background: #1a2332; /* Navy secondary from design guide */
+            border-color: #2d3748;
         }
         
         .fab-quick-item:active {
@@ -6922,45 +6930,56 @@ button, .btn, input[type="button"], input[type="submit"] {
         }
         
         .fab-quick-icon.coffee {
-            background: rgba(254, 243, 199, 0.5);
+            background: transparent;
         }
         
         .fab-quick-icon.lunch {
-            background: rgba(209, 250, 229, 0.5);
+            background: transparent;
         }
         
         .fab-quick-icon.transport {
-            background: rgba(219, 234, 254, 0.5);
+            background: transparent;
         }
         
         .fab-quick-icon.groceries {
-            background: rgba(233, 213, 255, 0.5);
+            background: transparent;
         }
         
         .fab-quick-content {
             flex: 1;
             min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
         }
         
         .fab-quick-label {
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 16px;
+            font-weight: 600;
             color: var(--text-primary);
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            overflow: visible;
+            text-overflow: clip;
+            line-height: 1.2;
+            min-width: 0;
         }
         
-        .fab-quick-category {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 2px;
+        /* Dark mode text color for better contrast */
+        [data-theme="dark"] .fab-quick-label {
+            color: #ffffff; /* Pure white for maximum contrast */
         }
         
         .fab-quick-amount {
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-primary);
+            white-space: nowrap;
+        }
+        
+        /* Dark mode amount color for better contrast */
+        [data-theme="dark"] .fab-quick-amount {
+            color: #ffffff; /* Pure white for maximum contrast */
         }
         
         /* Main Actions */
@@ -30371,36 +30390,36 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="fab-quick-icon coffee">☕</div>
                     <div class="fab-quick-content">
                         <div class="fab-quick-label">Coffee</div>
-                        <div class="fab-quick-category">Food/Drink</div>
+                        <div class="fab-quick-amount">£5</div>
                     </div>
-                    <div class="fab-quick-amount">£5</div>
                 </button>
                 
                 <button class="fab-quick-item" onclick="fabQuickAddExpense('Lunch', 15, 'Food/Drink')">
-                    <div class="fab-quick-icon lunch">🍽️</div>
+                    <div class="fab-quick-icon lunch">🍔</div>
                     <div class="fab-quick-content">
                         <div class="fab-quick-label">Lunch</div>
-                        <div class="fab-quick-category">Food/Drink</div>
+                        <div class="fab-quick-amount">£15</div>
                     </div>
-                    <div class="fab-quick-amount">£15</div>
                 </button>
                 
                 <button class="fab-quick-item" onclick="fabQuickAddExpense('Transport', 10, 'Transport')">
-                    <div class="fab-quick-icon transport">🚇</div>
+                    <div class="fab-quick-icon transport">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                        </svg>
+                    </div>
                     <div class="fab-quick-content">
                         <div class="fab-quick-label">Transport</div>
-                        <div class="fab-quick-category">Essential</div>
+                        <div class="fab-quick-amount">£10</div>
                     </div>
-                    <div class="fab-quick-amount">£10</div>
                 </button>
                 
                 <button class="fab-quick-item" onclick="fabQuickAddExpense('Groceries', 50, 'Shopping')">
                     <div class="fab-quick-icon groceries">🛒</div>
                     <div class="fab-quick-content">
                         <div class="fab-quick-label">Groceries</div>
-                        <div class="fab-quick-category">Essential</div>
+                        <div class="fab-quick-amount">£50</div>
                     </div>
-                    <div class="fab-quick-amount">£50</div>
                 </button>
             </div>
         </div>
