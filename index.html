@@ -133,7 +133,7 @@
             --health-score-ok: var(--color-warning);
             --health-score-bad: var(--color-error);
             
-            /* Layout system variables inspired by Trezor Suite design patterns */
+            /* Layout system variables */
             --sidebar-width: 240px;
             --sidebar-collapsed-width: 64px;
             --header-height: 64px;
@@ -310,11 +310,11 @@
             color: var(--color-text-primary) !important;
         }
         
-        .trezor-app {
+        .app-container {
             background-color: var(--color-bg) !important;
         }
         
-        .card, .trezor-card, .stat-card {
+        .card, .app-card, .stat-card {
             background-color: var(--color-bg-card) !important;
             border-color: var(--color-border) !important;
             color: var(--color-text-primary) !important;
@@ -330,14 +330,14 @@
         }
         
         /* Main application container using flexbox layout */
-        .trezor-app {
+        .app-container {
             display: flex;
             min-height: 100vh;
             background-color: var(--bg-secondary);
         }
         
         /* Fixed sidebar navigation with collapsible functionality */
-        .trezor-sidebar {
+        .app-sidebar {
             width: var(--sidebar-width);
             background-color: var(--bg-primary);
             border-right: 1px solid var(--border-color);
@@ -351,7 +351,7 @@
             transition: all 0.3s ease;
         }
         
-        .trezor-sidebar.collapsed {
+        .app-sidebar.collapsed {
             width: var(--sidebar-collapsed-width);
         }
         
@@ -406,17 +406,17 @@
             color: var(--text-primary);
         }
         
-        .trezor-sidebar.collapsed .sidebar-brand {
+        .app-sidebar.collapsed .sidebar-brand {
             opacity: 0;
             width: 0;
             overflow: hidden;
         }
         
-        .trezor-sidebar.collapsed .sidebar-toggle {
+        .app-sidebar.collapsed .sidebar-toggle {
             margin-left: 0;
         }
         
-        .trezor-sidebar.collapsed .sidebar-toggle svg {
+        .app-sidebar.collapsed .sidebar-toggle svg {
             transform: rotate(180deg);
         }
         
@@ -427,7 +427,7 @@
         }
         
         /* Visual indicator for sidebar collapse state - rotates chevron icon */
-        .trezor-sidebar.collapsed .nav-item[title="Toggle sidebar"] svg {
+        .app-sidebar.collapsed .nav-item[title="Toggle sidebar"] svg {
             transform: rotate(180deg);
         }
         
@@ -483,23 +483,23 @@
             transition: opacity 0.3s ease;
         }
         
-        .trezor-sidebar.collapsed .nav-text {
+        .app-sidebar.collapsed .nav-text {
             opacity: 0;
             width: 0;
             overflow: hidden;
         }
         
-        .trezor-sidebar.collapsed .nav-item {
+        .app-sidebar.collapsed .nav-item {
             justify-content: center;
             padding: 0.75rem;
         }
         
-        .trezor-sidebar.collapsed .nav-item:hover {
+        .app-sidebar.collapsed .nav-item:hover {
             position: relative;
         }
         
         /* Tooltip display when sidebar is collapsed - shows nav item labels on hover */
-        .trezor-sidebar.collapsed .nav-item::after {
+        .app-sidebar.collapsed .nav-item::after {
             content: attr(data-tooltip);
             position: absolute;
             left: 100%;
@@ -520,11 +520,11 @@
             border: 1px solid var(--color-border);
         }
         
-        .trezor-sidebar.collapsed .nav-item:hover::after {
+        .app-sidebar.collapsed .nav-item:hover::after {
             opacity: 1;
         }
         
-        .trezor-main {
+        .app-main {
             flex: 1;
             margin-left: var(--sidebar-width);
             display: flex;
@@ -533,11 +533,11 @@
             transition: margin-left 0.3s ease;
         }
         
-        .trezor-sidebar.collapsed + .trezor-main {
+        .app-sidebar.collapsed + .app-main {
             margin-left: var(--sidebar-collapsed-width);
         }
         
-        .trezor-header {
+        .app-header {
             background-color: var(--bg-primary);
             border-bottom: 1px solid var(--border-color);
             padding: 0 2rem;
@@ -563,7 +563,7 @@
             gap: 0.75rem;
         }
         
-        .trezor-content {
+        .app-content {
             flex: 1;
             padding: 0.25rem;
             background-color: var(--bg-secondary);
@@ -571,7 +571,7 @@
         }
         
         /* Content area constraints to prevent horizontal overflow */
-        .trezor-content {
+        .app-content {
             max-width: 100%;
             overflow-x: hidden;
         }
@@ -588,7 +588,7 @@
         }
         
         /* Card component styling with Navy + Gold design system */
-        .card, .trezor-card {
+        .card, .app-card {
             max-width: 100%;
             box-sizing: border-box;
             word-wrap: break-word;
@@ -601,7 +601,7 @@
         
         /* Glassmorphism effect for dark mode cards */
         [data-theme="dark"] .card,
-        [data-theme="dark"] .trezor-card {
+        [data-theme="dark"] .app-card {
             background: var(--bg-card);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -934,7 +934,7 @@
         
         /* Enhanced sticky header for mobile */
         @media (max-width: 768px) {
-            .trezor-header {
+            .app-header {
                 position: fixed !important;
                 top: 0 !important;
                 z-index: 100 !important;
@@ -947,7 +947,7 @@
             }
             
             /* Ensure header stays on top of all content */
-            .trezor-header::before {
+            .app-header::before {
                 content: '';
                 position: absolute;
                 top: 0;
@@ -959,12 +959,12 @@
             }
             
             /* Ensure content starts below header */
-            .trezor-main {
+            .app-main {
                 padding-top: 0 !important;
             }
             
             /* Add extra spacing for first content element */
-            .trezor-content > *:first-child {
+            .app-content > *:first-child {
                 margin-top: 1rem !important;
             }
         }
@@ -1408,7 +1408,7 @@
             }
             
             /* Force scrollable content areas */
-            .trezor-main {
+            .app-main {
                 overflow-y: visible !important;
                 height: auto !important;
                 min-height: 100vh !important;
@@ -1416,7 +1416,7 @@
                 position: relative !important;
             }
             
-            .trezor-content {
+            .app-content {
                 overflow-y: auto !important;
                 height: auto !important;
                 min-height: auto !important;
@@ -1424,16 +1424,16 @@
             }
             
             /* Hide desktop sidebar completely on mobile */
-            .trezor-sidebar {
+            .app-sidebar {
                 display: none !important;
             }
             
-            .trezor-main {
+            .app-main {
                 margin-left: 0 !important;
                 width: 100% !important;
             }
             
-            .trezor-header {
+            .app-header {
                 width: 100% !important;
                 left: 0 !important;
                 padding: 1rem !important;
@@ -1448,7 +1448,7 @@
                 height: 80px !important;
             }
             
-            .trezor-content {
+            .app-content {
                 padding: 0.25rem !important;
                 margin: 0 !important;
                 width: 100% !important;
@@ -1483,7 +1483,7 @@
                 overflow-x: hidden !important;
             }
             
-            .trezor-app {
+            .app-container {
                 width: 100vw !important;
                 overflow-x: hidden !important;
             }
@@ -1727,8 +1727,8 @@
             .card.p-6 #budget-progress-used,
             .card.p-6 #days-remaining,
             .card.p-6 #budget-income-percentage,
-            .card.p-6 #ai-insight,
-            .card.p-6 #ai-insight-status {
+            .card.p-6 #projection-insight,
+            .card.p-6 #projection-insight-status {
                 font-size: 0.875rem !important;
                 line-height: 1.4 !important;
             }
@@ -1906,8 +1906,8 @@
                 font-size: 0.75rem !important;
             }
             
-            .card.p-6 #ai-insight,
-            .card.p-6 #ai-insight-status {
+            .card.p-6 #projection-insight,
+            .card.p-6 #projection-insight-status {
                 font-size: 0.75rem !important;
                 line-height: 1.3 !important;
             }
@@ -2580,7 +2580,7 @@
             }
             
             /* Ensure proper spacing with bottom nav */
-            .trezor-content {
+            .app-content {
                 padding-bottom: 60px !important;
             }
             
@@ -2772,7 +2772,7 @@
             }
         }
         
-        /* Hide old container system - using Trezor layout now */
+        /* Hide old container system - using app layout now */
         .container {
             display: none;
         }
@@ -2860,22 +2860,22 @@
             /* Ultra aggressive hiding for mobile */
             /* REMOVED: Monthly income card should be visible on mobile */
             
-            .trezor-content .card.p-4.mb-4:has(.quick-add-grid) {
+            .app-content .card.p-4.mb-4:has(.quick-add-grid) {
                 display: none !important;
             }
             
-            .trezor-content .card.p-4:has(button[onclick*="showAddForm"]) {
+            .app-content .card.p-4:has(button[onclick*="showAddForm"]) {
                 display: none !important;
             }
             
             /* Hide by specific text content */
             /* REMOVED: Monthly income card should be visible on mobile */
             
-            .trezor-content .card:has(h3:contains("Quick Add")) {
+            .app-content .card:has(h3:contains("Quick Add")) {
                 display: none !important;
             }
             
-            .trezor-content .card:has(h3:contains("Quick Actions")) {
+            .app-content .card:has(h3:contains("Quick Actions")) {
                 display: none !important;
             }
             
@@ -2900,7 +2900,7 @@
             }
             
             /* 2. Fix information too close to right edge */
-            .trezor-content {
+            .app-content {
                 padding: 0.25rem !important;
                 max-width: 100vw !important;
                 overflow-x: hidden !important;
@@ -2963,7 +2963,7 @@
             
             /* 5. Prevent horizontal layout changes */
             @media (orientation: landscape) {
-                .trezor-content {
+                .app-content {
                     max-width: 100vw !important;
                     width: 100vw !important;
                 }
@@ -3010,8 +3010,8 @@
             }
             
             /* Ensure Quick Actions section in settings is visible and accessible */
-            #settings-modal .trezor-card:has(.card-title:contains("Quick Actions")),
-            .trezor-card:has(.card-title:contains("Quick Actions")) {
+            #settings-modal .app-card:has(.card-title:contains("Quick Actions")),
+            .app-card:has(.card-title:contains("Quick Actions")) {
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
@@ -3021,7 +3021,7 @@
             }
             
             /* Ensure Quick Actions content is properly spaced */
-            #settings-modal .trezor-card .card-content.space-y-3 {
+            #settings-modal .app-card .card-content.space-y-3 {
                 display: flex !important;
                 flex-direction: column !important;
                 gap: 0.5rem !important;
@@ -3276,7 +3276,7 @@
         
 
         
-        /* Trezor Suite Button Styles - Navy + Gold Design */
+        /* Button Styles - Navy + Gold Design */
         .btn-primary {
             background-color: var(--accent-primary);
             color: white;
@@ -3363,7 +3363,7 @@
             color: var(--text-primary);
         }
         
-        /* Trezor Suite Card Styles */
+        /* Card Styles */
         .card {
             background-color: var(--color-surface);
             border: 1px solid var(--color-border);
@@ -3373,7 +3373,7 @@
         
 
         
-        .trezor-card {
+        .app-card {
             background-color: var(--color-surface);
             border: 1px solid var(--color-border);
             border-radius: var(--border-radius);
@@ -3574,7 +3574,7 @@
         
         /* Desktop only: Hide navigation tooltips when sidebar is expanded */
         @media (min-width: 1024px) {
-            .trezor-sidebar:not(.collapsed) .nav-item:hover::after {
+            .app-sidebar:not(.collapsed) .nav-item:hover::after {
                 display: none !important;
             }
         }
@@ -3907,25 +3907,25 @@
             }
             
             /* Force proper spacing from right edge for all toggle containers */
-            .trezor-card .card-content .flex.items-center.justify-between {
+            .app-card .card-content .flex.items-center.justify-between {
                 padding-right: 1.5rem !important;
                 margin-right: 0.75rem !important;
                 position: relative !important;
             }
             
             /* Ensure toggle switches are not cut off by screen edge */
-            .trezor-card .card-content label.relative.inline-flex.items-center.cursor-pointer {
+            .app-card .card-content label.relative.inline-flex.items-center.cursor-pointer {
                 position: relative !important;
                 z-index: 10 !important;
                 margin-right: 0.5rem !important;
             }
             
             /* Add extra touch area around toggle switches */
-            .trezor-card .card-content .w-11.h-6 {
+            .app-card .card-content .w-11.h-6 {
                 position: relative !important;
             }
             
-            .trezor-card .card-content .w-11.h-6::before {
+            .app-card .card-content .w-11.h-6::before {
                 content: '' !important;
                 position: absolute !important;
                 top: -0.5rem !important;
@@ -4047,7 +4047,7 @@
             margin-top: -5px;
         }
         /* Budget Insights Styling */
-        .ai-insight {
+        .projection-insight {
             background: var(--color-bg-card) !important;
             border: 1px solid var(--color-border) !important;
             padding: 1rem;
@@ -4055,12 +4055,12 @@
             color: var(--color-text-secondary);
             font-size: 0.875rem;
         }
-        .dark .ai-insight {
+        .dark .projection-insight {
             background: var(--color-bg-card) !important;
             border: 1px solid var(--color-border) !important;
             color: var(--color-text-secondary);
         }
-        .ai-insight strong {
+        .projection-insight strong {
             color: var(--color-text-primary);
             font-weight: 600;
         }
@@ -4747,7 +4747,7 @@
           touch-action: pan-y !important;
         }
         
-        .trezor-content {
+        .app-content {
           -webkit-overflow-scrolling: touch !important;
           overflow-x: hidden !important;
           touch-action: pan-y !important;
@@ -4766,7 +4766,7 @@
             -webkit-overflow-scrolling: touch !important;
           }
           
-          .trezor-content {
+          .app-content {
             -webkit-overflow-scrolling: touch !important;
           }
         }
@@ -5118,7 +5118,7 @@
             .card,
             .metric-card,
             .insights-grid,
-            .trezor-content,
+            .app-content,
             .page-content {
                 padding-left: 4px !important;
                 padding-right: 4px !important;
@@ -5250,7 +5250,7 @@
             /* Target any projection or insight containers */
             div[class*="bg-blue"],
             div[class*="border-blue"],
-            .ai-insight-container,
+            .projection-insight-container,
             .projection-box {
                 width: 100% !important;
                 max-width: 100% !important;
@@ -5262,7 +5262,7 @@
             }
             
             /* 2. Better padding for right edge content */
-            .trezor-content {
+            .app-content {
                 padding-left: 4px !important;
                 padding-right: 4px !important;
                 max-width: 100vw !important;
@@ -5271,7 +5271,7 @@
             
             /* CRITICAL: Budget Progress & Health card specific fixes */
             .card:has(.bg-blue-50),
-            .card:has([id*="ai-insight"]),
+            .card:has([id*="projection-insight"]),
             .card:has(.rounded-lg.border) {
                 padding-left: 16px !important;
                 padding-right: 16px !important;
@@ -5303,7 +5303,7 @@
             }
             
             .card:has(.bg-blue-50) > *,
-            .card:has([id*="ai-insight"]) > *,
+            .card:has([id*="projection-insight"]) > *,
             .card:has(.rounded-lg.border) > * {
                 width: 100% !important;
                 max-width: 100% !important;
@@ -5314,10 +5314,10 @@
             /* Force any blue insight boxes to full width */
             [class*="bg-blue-50"],
             [class*="border-blue-100"],
-            .ai-insight,
+            .projection-insight,
             .projection,
-            #ai-insight,
-            #ai-insight-status {
+            #projection-insight,
+            #projection-insight-status {
                 width: 100% !important;
                 max-width: 100% !important;
                 box-sizing: border-box !important;
@@ -5469,7 +5469,7 @@
                 .tab-content,
                 .card,
                 .metric-card,
-                .trezor-content {
+                .app-content {
                     max-width: 100% !important;
                     width: 100% !important;
                     font-size: inherit !important;
@@ -6114,24 +6114,24 @@ body {
   color: var(--color-text-primary);
   font-family: var(--color-font);
 }
-.trezor-app {
+.app-container {
   background: var(--color-bg) !important;
 }
-.card, .trezor-card, .stat-card, .bg-white, .rounded-xl, .p-6, .p-4 {
+.card, .app-card, .stat-card, .bg-white, .rounded-xl, .p-6, .p-4 {
   background: var(--color-bg-card) !important;
   border: 1px solid var(--color-border) !important;
   color: var(--color-text-primary) !important;
   border-radius: 12px !important;
   box-shadow: none !important;
 }
-.sidebar-header, .trezor-sidebar {
+.sidebar-header, .app-sidebar {
   background: var(--color-bg) !important;
   color: var(--color-text-primary);
 }
-.trezor-main, .trezor-content {
+.app-main, .app-content {
   background: var(--color-bg) !important;
 }
-.trezor-header {
+.app-header {
   background: var(--color-bg) !important;
 }
 .nav-item, .sidebar-nav button {
@@ -6205,12 +6205,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Update all CSS variable references to use correct names */
-body, .trezor-app {
+body, .app-container {
     background-color: var(--bg-primary) !important;
     color: var(--text-primary) !important;
 }
 
-.card, .trezor-card {
+.card, .app-card {
     background-color: var(--bg-secondary) !important;
     border-color: var(--bg-tertiary) !important;
 }
@@ -6323,7 +6323,7 @@ body, .trezor-app {
 }
         
         /* Final override to ensure Navy + Gold design system takes precedence */
-        /* Removed .trezor-app * { color: inherit; } as it was breaking text colors */
+        /* Removed .app-container * { color: inherit; } as it was breaking text colors */
         
         /* Ensure proper contrast for all text elements */
         .text-white {
@@ -6346,7 +6346,7 @@ body, .trezor-app {
 #insights-tab, #insights-tab .card, #insights-tab .max-w-6xl {
   background: var(--bg-primary) !important;
 }
-#insights-tab .ai-insight {
+#insights-tab .projection-insight {
   background: var(--bg-secondary) !important;
   border: 1px solid var(--bg-tertiary) !important;
 }
@@ -6357,7 +6357,7 @@ body, .trezor-app {
 ::placeholder { color: var(--text-secondary); }
 
 /* REDUCE ROUNDED CORNERS - MINIMAL DESIGN */
-.card, .trezor-card, .stat-card, .modern-button, .modern-input, .modern-select {
+.card, .app-card, .stat-card, .modern-button, .modern-input, .modern-select {
   border-radius: 4px !important;
 }
 .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl {
@@ -6416,7 +6416,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 }
 
 /* COMPREHENSIVE BORDER REMOVAL - ALL SCREENS */
-.card, .trezor-card, .stat-card, .quick-add-button, .budget-progress, .insights-section, .ai-insight, .prediction-card {
+.card, .app-card, .stat-card, .quick-add-button, .budget-progress, .insights-section, .projection-insight, .prediction-card {
     border: none !important;
     box-shadow: none !important;
 }
@@ -6477,7 +6477,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 }
 
 /* Remove all borders from cards and containers */
-.card, .trezor-card, .stat-card, .quick-add-button, .budget-progress, .insights-section, .ai-insight, .prediction-card,
+.card, .app-card, .stat-card, .quick-add-button, .budget-progress, .insights-section, .projection-insight, .prediction-card,
 .stats-grid .stat-card, .quick-add-grid .quick-add-button, .budget-progress .card, .insights-section .card,
 .period-toggle, .modern-button, .modern-input, .modern-select {
     border: none !important;
@@ -6496,12 +6496,12 @@ button, .btn, input[type="button"], input[type="submit"] {
 
 /* Mobile header fix - minimal padding for proper spacing */
 @media (max-width: 768px) {
-    .trezor-content {
+    .app-content {
         padding-top: 5rem !important;
         padding-bottom: 60px !important;
     }
     
-    .trezor-header {
+    .app-header {
         height: 70px !important;
     }
 }
@@ -6643,7 +6643,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 }
 
 /* Ensure dashboard content is visible behind modal */
-.trezor-app, .trezor-main, .trezor-content {
+.app-container, .app-main, .app-content {
     position: relative;
     z-index: 1;
 }
@@ -6953,7 +6953,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             
             /* Extend chart to full viewport width on mobile */
             #insights-tab .relative.h-96.w-full.mb-4 {
-                margin-left: -0.25rem !important; /* Break out of trezor-content padding */
+                margin-left: -0.25rem !important; /* Break out of app-content padding */
                 margin-right: -0.25rem !important;
                 width: 100vw !important; /* Full viewport width */
                 max-width: 100vw !important;
@@ -7323,9 +7323,9 @@ button, .btn, input[type="button"], input[type="submit"] {
 
 </head>
 <body class="antialiased">
-    <div class="trezor-app">
-        <!-- Trezor Suite Sidebar -->
-        <div class="trezor-sidebar" id="trezor-sidebar">
+    <div class="app-container">
+        <!-- app Suite Sidebar -->
+        <div class="app-sidebar" id="app-sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -7397,8 +7397,8 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
         
         <!-- Main Content Area -->
-        <div class="trezor-main">
-            <header class="trezor-header">
+        <div class="app-main">
+            <header class="app-header">
                 <h1 class="page-title" id="current-page-title">Dashboard</h1>
                 <div class="header-actions">
                     <button onclick="toggleThemeFromHeader()" class="btn-icon" title="Toggle theme" id="theme-toggle-btn">
@@ -7455,7 +7455,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
             </header>
             
-            <div class="trezor-content" id="trezor-content">
+            <div class="app-content" id="app-content">
                 <!-- Overview Tab -->
                 <div id="overview-tab" class="tab-content fade-in">
                     <!-- 1. TOP SECTION - Income (Modified per requirements) -->
@@ -7657,9 +7657,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         <!-- Budget insight box -->
                                         <div class="bg-accent-primary/10 rounded-lg p-3 border border-accent-primary/20">
                                             <div class="flex items-center gap-2">
-                                                <span class="text-sm" id="ai-insight">📈 Projection: Set up your budget to get insights</span>
+                                                <span class="text-sm" id="projection-insight">📈 Projection: Set up your budget to get insights</span>
                                             </div>
-                                            <div class="text-xs text-gray-600 dark:text-gray-100 mt-1" id="ai-insight-status">No data</div>
+                                            <div class="text-xs text-gray-600 dark:text-gray-100 mt-1" id="projection-status">No data</div>
                                         </div>
                                     </div>
                                     
@@ -10572,7 +10572,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                         </div>
-                                        <span class="text-sm">AI-powered daily budget coaching</span>
+                                        <span class="text-sm">Daily budget tracking and insights</span>
                                     </div>
                                     <div class="flex items-center gap-3">
                                         <div class="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
@@ -11091,9 +11091,9 @@ button, .btn, input[type="button"], input[type="submit"] {
         // Chart configuration and caching
         let currentInsightsPeriod = '7days';    // Period for insights display
         let chartPeriod = 30;                   // Default chart period in days
-        let aiSavingsCache = null;              // Cached AI-generated savings insights
-        let aiSpendingCache = null;             // Cached AI-generated spending insights
-        let lastAiUpdate = 0;                   // Timestamp of last AI insight update
+        let savingsCache = null;                // Cached savings insights
+        let spendingCache = null;               // Cached spending insights
+        let lastUpdate = 0;                     // Timestamp of last insight update
         /**
          * Goal System Configuration
          * Pre-defined goal templates for different financial personalities
@@ -11237,7 +11237,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             categorySpendingCanvas: document.getElementById('category-spending-chart'),
             monthlySavingsCanvas: document.getElementById('monthly-savings-chart'),
             spendingInsightsContainer: document.getElementById('spending-insights'),
-            aiSavingsInsightsContainer: document.getElementById('ai-savings-insights'),
+            savingsInsightsContainer: document.getElementById('savings-insights'),
 
             selectAllExpensesCheckbox: document.getElementById('select-all-expenses'),
             deleteSelectedBtn: document.getElementById('delete-selected-btn'),
@@ -11248,7 +11248,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             healthScoreVisual: document.getElementById('health-score-visual'),
             healthScoreTrend: document.getElementById('health-score-trend'),
             healthScoreTooltip: document.getElementById('health-score-tooltip'),
-            aiProjectionContainer: document.getElementById('ai-projection-container'),
+            projectionContainer: document.getElementById('projection-container'),
             };
         }
         
@@ -11277,7 +11277,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             }, 100);
             
             // Enhanced fixed header behavior for mobile
-            const header = document.querySelector('.trezor-header');
+            const header = document.querySelector('.app-header');
             if (header) {
                 let lastScrollTop = 0;
                 window.addEventListener('scroll', () => {
@@ -17135,7 +17135,18 @@ function closeGoalSelection() {
 
             const categories = Object.keys(categoryTotals);
             const amounts = Object.values(categoryTotals);
-            const colors = ['#2e7d32', '#1976d2', '#1a237e', '#ffa000', '#ff5722'];
+            const colors = [
+                '#3b82f6', // Blue for Bills
+                '#10b981', // Green for Groceries  
+                '#f59e0b', // Orange for Shopping
+                '#8b5cf6', // Purple for Entertainment
+                '#ef4444', // Red for Transport
+                '#06b6d4', // Cyan for Housing
+                '#84cc16', // Lime for Food/Drink
+                '#f97316', // Orange for Other
+                '#ec4899', // Pink for Health
+                '#6366f1'  // Indigo for Utilities
+            ];
 
             if (categoryChart) categoryChart.destroy();
             
@@ -17326,7 +17337,7 @@ function closeGoalSelection() {
         }
 
         function toggleSidebar() {
-            const sidebar = document.querySelector('.trezor-sidebar');
+            const sidebar = document.querySelector('.app-sidebar');
             const isCollapsed = sidebar.classList.contains('collapsed');
             
             if (isCollapsed) {
@@ -17339,7 +17350,7 @@ function closeGoalSelection() {
         }
 
         function restoreSidebarState() {
-            const sidebar = document.querySelector('.trezor-sidebar');
+            const sidebar = document.querySelector('.app-sidebar');
             const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
             
             if (isCollapsed) {
@@ -18878,10 +18889,10 @@ function closeGoalSelection() {
                 healthProgressCircle.style.stroke = '#f97316'; // orange
             }
             
-            // Update AI insights with real data  
-            const aiInsight = document.getElementById('ai-insight');
-            const aiInsightStatus = document.getElementById('ai-insight-status');
-            if (aiInsight && aiInsightStatus) {
+            // Update insights with real data  
+            const projectionInsight = document.getElementById('projection-insight');
+            const projectionInsightStatus = document.getElementById('projection-insight-status');
+            if (projectionInsight && projectionInsightStatus) {
                 // DEBUG: Log all the values being used
                 console.log('🔍 PROJECTION DEBUG:');
                 console.log('- Monthly Budget:', formatCurrency(monthlyBudget));
@@ -18906,19 +18917,19 @@ function closeGoalSelection() {
                     console.log('- Projected month-end total:', formatCurrency(projectedTotal));
                     
                     if (projectedTotal <= monthlyBudget) {
-                        aiInsight.innerHTML = `📊 Projection: Spent ${formatCurrency(totalSpent)} so far, on track for ${formatCurrency(projectedTotal)} total. <span class="text-green-600 font-medium">Within Budget</span>`;
-                        aiInsightStatus.textContent = 'Good';
+                        projectionInsight.innerHTML = `📊 Projection: Spent ${formatCurrency(totalSpent)} so far, on track for ${formatCurrency(projectedTotal)} total. <span class="text-green-600 font-medium">Within Budget</span>`;
+                        projectionInsightStatus.textContent = 'Good';
                     } else {
                         const overage = projectedTotal - monthlyBudget;
-                        aiInsight.innerHTML = `📊 Projection: Spent ${formatCurrency(totalSpent)} so far, projecting ${formatCurrency(projectedTotal)} total. <span class="text-red-600 font-medium">Over by ${formatCurrency(overage)}</span>`;
-                        aiInsightStatus.textContent = 'Warning';
+                        projectionInsight.innerHTML = `📊 Projection: Spent ${formatCurrency(totalSpent)} so far, projecting ${formatCurrency(projectedTotal)} total. <span class="text-red-600 font-medium">Over by ${formatCurrency(overage)}</span>`;
+                        projectionInsightStatus.textContent = 'Warning';
                     }
                 } else if (monthlyBudget <= 0) {
-                    aiInsight.textContent = '📊 Projection: Set your monthly budget in Settings to get insights';
-                    aiInsightStatus.textContent = 'No budget set';
+                    projectionInsight.textContent = '📊 Projection: Set your monthly budget in Settings to get insights';
+                    projectionInsightStatus.textContent = 'No budget set';
                 } else {
-                    aiInsight.textContent = '📊 Projection: No expenses yet this month';
-                    aiInsightStatus.textContent = 'No spending data';
+                    projectionInsight.textContent = '📊 Projection: No expenses yet this month';
+                    projectionInsightStatus.textContent = 'No spending data';
                 }
             }
             
@@ -20367,14 +20378,15 @@ function closeGoalSelection() {
 
         function getCategoryColor(category) {
             const colors = {
-                'Food/Drink': '#FF7B00',
-                'Transport': '#0066CC',
-                'Shopping': '#9333EA',
-                'Entertainment': '#EC4899',
-                'Bills': '#6B7280',
-                'Healthcare': '#10B981',
-                'Education': '#F59E0B',
-                'Travel': '#3B82F6',
+                'Food/Drink': '#10b981',
+                'Transport': '#ef4444',
+                'Shopping': '#f59e0b',
+                'Entertainment': '#8b5cf6',
+                'Bills': '#3b82f6',
+                'Healthcare': '#ec4899',
+                'Education': '#8b5cf6',
+                'Travel': '#f59e0b',
+                'Housing': '#1e40af',
                 'Other': '#6B7280'
             };
             return colors[category] || '#6B7280';
@@ -20773,7 +20785,20 @@ function closeGoalSelection() {
             initInsightsDashboard(); // Initialize new insights dashboard
         }
 
-        const chartColors = ['#ffa000', '#2e7d32', '#ff5722', '#1976d2', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6', '#f97316', '#06b6d4', '#d946ef', '#84cc16'];
+        const chartColors = [
+            '#3b82f6', // Blue for Bills
+            '#10b981', // Green for Groceries  
+            '#f59e0b', // Orange for Shopping
+            '#8b5cf6', // Purple for Entertainment
+            '#ef4444', // Red for Transport
+            '#06b6d4', // Cyan for Housing
+            '#84cc16', // Lime for Food/Drink
+            '#f97316', // Orange for Other
+            '#ec4899', // Pink for Health
+            '#6366f1', // Indigo for Utilities
+            '#14b8a6', // Teal
+            '#d946ef'  // Fuchsia
+        ];
         /**
          * Generate array of chart colors for multiple data series
          * @param {number} count - Number of colors needed
@@ -24480,8 +24505,8 @@ function toggleAprUnknown(box) {
     };
 })();
 
-// Trezor Suite Navigation Functions
-function updateTrezorNavigation(activeTab) {
+// app Suite Navigation Functions
+function updateAppNavigation(activeTab) {
     // Update sidebar navigation
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
@@ -24626,7 +24651,7 @@ function initializeSettingsForm() {
     console.log('🎉 Settings form initialized with current values');
 }
 
-// Override the existing showTab function to work with Trezor navigation
+// Override the existing showTab function to work with app navigation
 const originalShowTab = window.showTab;
 window.showTab = function(tabName) {
     // Call the original function
@@ -24634,8 +24659,8 @@ window.showTab = function(tabName) {
         originalShowTab(tabName);
     }
     
-    // Update Trezor navigation
-    updateTrezorNavigation(tabName);
+    // Update app navigation
+    updateAppNavigation(tabName);
     
     // Initialize Settings form if showing settings tab
     if (tabName === 'settings') {
@@ -24647,7 +24672,7 @@ window.showTab = function(tabName) {
 };
 
 /**
- * Initialize Trezor-style navigation system
+ * Initialize app-style navigation system
  * Sets up sidebar navigation and handles initial tab selection
  */
 // Global category icons for mobile cards
@@ -24671,7 +24696,7 @@ window.categoryIcons = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    updateTrezorNavigation('overview');
+    updateAppNavigation('overview');
     
     // Development helper: bypass login for testing
     setTimeout(() => {
@@ -24695,17 +24720,17 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.overflowY = 'auto';
         
         // Force scroll on main content areas
-        const trezorMain = document.querySelector('.trezor-main');
-        const trezorContent = document.querySelector('.trezor-content');
+        const appMain = document.querySelector('.app-main');
+        const appContent = document.querySelector('.app-content');
         
-        if (trezorMain) {
-            trezorMain.style.overflowY = 'auto';
-            trezorMain.style.touchAction = 'manipulation';
+        if (appMain) {
+            appMain.style.overflowY = 'auto';
+            appMain.style.touchAction = 'manipulation';
         }
         
-        if (trezorContent) {
-            trezorContent.style.overflowY = 'auto';
-            trezorContent.style.touchAction = 'manipulation';
+        if (appContent) {
+            appContent.style.overflowY = 'auto';
+            appContent.style.touchAction = 'manipulation';
         }
         
         // Global fix for mobile context menu scroll freeze
@@ -25080,8 +25105,16 @@ function createRealCategoryChart() {
     }
     
     const colors = [
-        '#1976d2', '#ff5722', '#2e7d32', '#ffa000', '#1a237e',
-        '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#6366f1'
+        '#3b82f6', // Blue for Bills
+        '#10b981', // Green for Groceries  
+        '#f59e0b', // Orange for Shopping
+        '#8b5cf6', // Purple for Entertainment
+        '#ef4444', // Red for Transport
+        '#06b6d4', // Cyan for Housing
+        '#84cc16', // Lime for Food/Drink
+        '#f97316', // Orange for Other
+        '#ec4899', // Pink for Health
+        '#6366f1'  // Indigo for Utilities
     ];
     
     categorySpendingChart = new Chart(ctx, {
@@ -25776,17 +25809,19 @@ function updateIntegratedCategories() {
         const color = getCategoryColor(category);
         
         return `
-            <div class="flex items-center justify-between py-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg px-2 transition-colors">
-                <div class="flex items-center space-x-3 flex-1">
-                    <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${color}"></div>
-                    <span class="text-sm font-medium text-gray-900 dark:text-white">${category}</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <div class="w-24 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div class="h-full rounded-full transition-all duration-500" style="background-color: ${color}; width: ${percentage}%"></div>
+            <div class="py-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg px-2 transition-colors">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${color}"></div>
+                        <span class="text-sm font-medium text-gray-900 dark:text-white">${category}</span>
                     </div>
-                    <span class="text-sm font-semibold text-gray-900 dark:text-white w-20 text-right">${formatCurrency(amount)}</span>
-                    <span class="text-xs text-gray-500 w-10 text-right">${percentage.toFixed(0)}%</span>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-sm font-semibold text-gray-900 dark:text-white">${formatCurrency(amount)}</span>
+                        <span class="text-xs text-gray-500">${percentage.toFixed(0)}%</span>
+                    </div>
+                </div>
+                <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="h-full rounded-full transition-all duration-500" style="background-color: ${color}; width: ${percentage}%"></div>
                 </div>
             </div>
         `;
@@ -26019,18 +26054,20 @@ function getExpensesForMonth(monthDate) {
 
 function getCategoryColor(category) {
     const colors = {
-        'Food & Dining': '#ff5722',     // Alert Orange
-        'Transport': '#ffa000',         // Gold Accent
-        'Shopping': '#1a237e',          // Navy Primary
-        'Entertainment': '#1976d2',     // Info Blue
-        'Bills': '#2e7d32',             // Success Green
-        'Groceries': '#2e7d32',         // Success Green
-        'Health': '#ff5722',            // Alert Orange
-        'Education': '#1976d2',         // Info Blue
-        'Travel': '#ffa000',            // Gold Accent
-        'Other': '#757575'              // Medium Grey
+        'Food & Dining': '#10b981',     // Green
+        'Transport': '#ef4444',         // Red
+        'Shopping': '#f59e0b',          // Orange
+        'Entertainment': '#8b5cf6',     // Purple
+        'Bills': '#3b82f6',             // Blue
+        'Groceries': '#10b981',         // Green
+        'Health': '#ec4899',            // Pink
+        'Education': '#8b5cf6',         // Purple
+        'Travel': '#f59e0b',            // Orange
+        'Housing': '#1e40af',           // Dark Blue
+        'Food/Drink': '#059669',        // Dark Green
+        'Other': '#6b7280'              // Grey
     };
-    return colors[category] || '#757575';
+    return colors[category] || '#6b7280';
 }
 
 function updateElementText(id, text) {
@@ -26865,13 +26902,13 @@ class FinanceInsights {
             .sort(([,a], [,b]) => b - a)
             .slice(0, 5); // Top 5 categories
         
-        // Define colors for progress bars
+        // Define colors for progress bars - distinct vibrant colors
         const colors = [
-            'bg-green-500',    // Food
-            'bg-purple-500',   // Entertainment
-            'bg-orange-500',   // Shopping
-            'bg-red-500',      // Bills
-            'bg-blue-500'      // Transport
+            'bg-blue-500',     // First category
+            'bg-green-500',    // Second category  
+            'bg-yellow-500',   // Third category
+            'bg-purple-500',   // Fourth category
+            'bg-pink-500'      // Fifth category
         ];
         
         const formatCurrency = (amount) => `£${amount.toFixed(2)}`;
@@ -26885,12 +26922,14 @@ class FinanceInsights {
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <h5 class="font-medium text-gray-900 dark:text-white">${category}</h5>
-                        <span class="text-lg font-bold text-gray-900 dark:text-white">${formatCurrency(amount)}</span>
+                        <div class="text-right">
+                            <span class="text-lg font-bold text-gray-900 dark:text-white">${formatCurrency(amount)}</span>
+                            <span class="text-sm text-gray-600 dark:text-gray-300 ml-2">${percentage}%</span>
+                        </div>
                     </div>
                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                         <div class="${color} h-2 rounded-full transition-all duration-300" style="width: ${progressWidth}%"></div>
                     </div>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">${percentage}% of total spending</p>
                 </div>
             `;
         }).join('');
@@ -30042,9 +30081,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-            </div> <!-- trezor-content -->
-        </div> <!-- trezor-main -->
-    </div> <!-- trezor-app -->
+            </div> <!-- app-content -->
+        </div> <!-- app-main -->
+    </div> <!-- app-container -->
         </script>
 
         <script>
