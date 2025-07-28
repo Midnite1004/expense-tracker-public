@@ -11615,13 +11615,14 @@ button, .btn, input[type="button"], input[type="submit"] {
         // --- Recurring Expense Processing ---
         function processRecurringExpenses() {
             let newExpensesGenerated = 0;
+            let newIncomeGenerated = 0;
             const today = new Date();
             today.setHours(23, 59, 59, 999);
 
             recurringItems.forEach(item => {
-                if (item.status !== 'active' || item.type !== 'expense') {
-                return;
-            }
+                if (item.status !== 'active') {
+                    return;
+                }
 
                 const itemStartDate = new Date(item.startDate + 'T00:00:00');
                 if (itemStartDate > today) return;
@@ -11643,16 +11644,22 @@ button, .btn, input[type="button"], input[type="submit"] {
                         expenses.push({
                             id: instanceId,
                             name: item.name,
-                            cost: item.amount,
-                            type: item.essentialType || 'Non-Essential',
+                            cost: item.type === 'income' ? -item.amount : item.amount, // Negative cost for income (shows as positive)
+                            type: item.type === 'income' ? 'Income' : (item.essentialType || 'Non-Essential'),
                             category: item.category,
                             date: dateStr,
                             paymentMethod: item.paymentMethod,
                             status: 'active',
                             recurringSourceId: item.id,
-                            source: 'manual'
+                            source: 'manual',
+                            isIncome: item.type === 'income' // Flag to identify income entries
                         });
-                        newExpensesGenerated++;
+                        
+                        if (item.type === 'income') {
+                            newIncomeGenerated++;
+                        } else {
+                            newExpensesGenerated++;
+                        }
                     }
 
                     // Get next date
@@ -11669,9 +11676,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                 }
             });
 
-            if (newExpensesGenerated > 0) {
+            if (newExpensesGenerated > 0 || newIncomeGenerated > 0) {
                 sortExpenses();
-                console.log('🔄 processRecurringExpenses - generated', newExpensesGenerated, 'new expenses');
+                console.log('🔄 processRecurringExpenses - generated', newExpensesGenerated, 'new expenses,', newIncomeGenerated, 'new income entries');
                 console.log('📊 processRecurringExpenses - total expenses now:', expenses.length);
                 saveData();
                 
@@ -11680,7 +11687,18 @@ button, .btn, input[type="button"], input[type="submit"] {
                     renderRecentExpenses();
                 }, 50);
                 
-                showToast(`${newExpensesGenerated} new recurring expense(s) have been added.`, 'info');
+                let message = '';
+                if (newExpensesGenerated > 0 && newIncomeGenerated > 0) {
+                    message = `${newExpensesGenerated} new recurring expense(s) and ${newIncomeGenerated} new recurring income entries have been added.`;
+                } else if (newExpensesGenerated > 0) {
+                    message = `${newExpensesGenerated} new recurring expense(s) have been added.`;
+                } else if (newIncomeGenerated > 0) {
+                    message = `${newIncomeGenerated} new recurring income entries have been added.`;
+                }
+                
+                if (message) {
+                    showToast(message, 'info');
+                }
             }
         }
 
@@ -20003,7 +20021,7 @@ function closeGoalSelection() {
                 .sort((a, b) => new Date(b) - new Date(a))
                 .forEach(date => {
                     const dayExpenses = groupedExpenses[date];
-                    const dayTotal = dayExpenses.reduce((sum, exp) => sum + exp.cost, 0);
+                    const dayTotal = dayExpenses.reduce((sum, exp) => sum + (exp.isIncome ? -exp.cost : exp.cost), 0);
 
                     html += `
                         <div class="mb-8">
@@ -20023,8 +20041,8 @@ function closeGoalSelection() {
                                          title="Select all expenses for this date">
                                         ${getSelectAllIcon(false)}
                                     </div>
-                                    <span class="group-total">
-                                        -${formatCurrency(dayTotal)}
+                                    <span class="group-total ${dayTotal >= 0 ? 'text-green-600 dark:text-green-400' : ''}">
+                                        ${dayTotal >= 0 ? '+' : '-'}${formatCurrency(Math.abs(dayTotal))}
                                     </span>
                                 </div>
                             </div>
@@ -20049,7 +20067,7 @@ function closeGoalSelection() {
                                                 </p>
                                             </div>
                                             <div class="card-right-content">
-                                                <p class="mobile-card-amount expense">-${formatCurrency(expense.cost)}</p>
+                                                <p class="mobile-card-amount ${expense.isIncome ? 'income text-green-600 dark:text-green-400' : 'expense'}">${expense.isIncome ? '+' : '-'}${formatCurrency(Math.abs(expense.cost))}</p>
                                                 ${!isPlaid ? `
                                                     <div class="three-dot-menu" onclick="event.stopPropagation(); showExpenseActionMenu(event, '${expense.id}')">
                                                         ${getThreeDotIcon()}
@@ -20444,7 +20462,7 @@ function closeGoalSelection() {
                             <span class="text-gray-800 dark:text-white font-medium">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-600 dark:text-gray-300 ml-1">(R)</span>' : ''} ${isPlaidTransaction(expense) ? '<span class="plaid-badge ml-2"><svg class="plaid-lock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></span>' : ''}
                         </td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Category">${escapeHTML(expense.category)}</td>
-                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Amount">${formatCurrency(expense.cost)}</td>
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap ${expense.isIncome ? 'text-green-600 dark:text-green-400' : ''}" data-label="Amount">${expense.isIncome ? '+' : ''}${formatCurrency(Math.abs(expense.cost))}</td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Type">${escapeHTML(expense.type)}</td>
                         <td class="px-4 py-3 text-right" data-label="Actions" onclick="event.stopPropagation();">
@@ -22382,17 +22400,19 @@ function closeGoalSelection() {
         }
 
         function calculateTotalIncomeFromRecurring() {
-            const incomeItems = recurringItems.filter(item => 
-                item.type === 'income' && 
-                item.status === 'active'
+            // Calculate actual accumulated income from generated income entries
+            const incomeEntries = expenses.filter(expense => 
+                expense.isIncome === true && 
+                expense.status === 'active'
             );
             
-            const totalIncome = incomeItems.reduce((sum, item) => {
-                return sum + (item.amount || 0);
+            const totalAccumulatedIncome = incomeEntries.reduce((sum, entry) => {
+                // Income entries have negative cost, so we negate to get positive total
+                return sum + Math.abs(entry.cost);
             }, 0);
             
-            console.log('📊 Calculated total income from recurring:', totalIncome);
-            return totalIncome;
+            console.log('📊 Calculated total accumulated income from entries:', totalAccumulatedIncome);
+            return totalAccumulatedIncome;
         }
 
         function getIncomeSourcesBreakdown() {
@@ -23400,7 +23420,7 @@ function renderMonthEndProjectionSmart(budgetRisk) {
         'low': 'text-green-600 dark:text-green-400'
     };
     
-    const totalIncome = monthlyIncome + (recurringItems?.filter(r => r.type === 'income' && r.status === 'active').reduce((sum, r) => sum + r.amount, 0) || 0);
+    const totalIncome = monthlyIncome; // monthlyIncome already contains accumulated income from recurring entries
     const projectedSavings = totalIncome - budgetRisk.projectedSpend;
     
     container.innerHTML = `
@@ -23940,7 +23960,7 @@ function showInsightsError() {
                             <span class="text-gray-800 dark:text-white font-medium">${escapeHTML(expense.name)}</span>${isRecurringInstance ? '<span class="text-xs text-gray-600 dark:text-gray-300 ml-1">(R)</span>' : ''}
                         </td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Category">${escapeHTML(expense.category)}</td>
-                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Amount">${formatCurrency(expense.cost)}</td>
+                        <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap ${expense.isIncome ? 'text-green-600 dark:text-green-400' : ''}" data-label="Amount">${expense.isIncome ? '+' : ''}${formatCurrency(Math.abs(expense.cost))}</td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Payment Method">${escapeHTML(expense.paymentMethod) || '-'}</td>
                         <td class="px-4 py-3 text-gray-900 dark:text-white whitespace-nowrap" data-label="Type">${escapeHTML(expense.type)}</td>
                         <td class="px-4 py-3 text-right" data-label="Actions" onclick="event.stopPropagation();">
