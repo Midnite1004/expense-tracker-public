@@ -3997,7 +3997,7 @@
             border-radius: 50%;
         }
         input:checked + .toggle-slider {
-            background-color: var(--accent-blue);
+            background-color: #22c55e;
         }
         input:checked + .toggle-slider:before {
             transform: translateX(20px);
@@ -4099,14 +4099,14 @@
         
         /* Checked state visibility in light mode */
         .w-11.h-6.peer-checked\\:bg-blue-600 {
-            background-color: var(--accent-success) !important;
-            border: 2px solid var(--accent-success) !important;
+            background-color: #22c55e !important;
+            border: 2px solid #22c55e !important;
         }
         
         /* Dark mode checked state */
         [data-theme="dark"] .w-11.h-6.peer-checked\\:bg-blue-600 {
-    background-color: var(--accent-success) !important;
-    border: 2px solid var(--accent-success) !important;
+    background-color: #22c55e !important;
+    border: 2px solid #22c55e !important;
         }
         /* Help Tab Contrast */
         #help-tab p, #help-tab li {
@@ -6707,11 +6707,11 @@ button, .btn, input[type="button"], input[type="submit"] {
 }
 
 .peer-checked\\:bg-blue-600 {
-    background-color: var(--accent-success) !important;
+    background-color: #22c55e !important;
 }
 
 [data-theme="dark"] .peer-checked\\:bg-blue-600 {
-    background-color: var(--accent-success) !important;
+    background-color: #22c55e !important;
 }
 
 /* Fix for gradient backgrounds */
@@ -7639,7 +7639,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-4xl font-bold mb-2 text-accent-primary" id="total-monthly-income">£0.00</div>
+                                <div class="text-4xl font-bold mb-2 text-accent-primary" id="total-monthly-income">0.00</div>
                                 <div class="text-accent-success font-medium" id="savings-rate-display">💰 Savings Rate: 25%</div>
                             </div>
                             <div class="flex-shrink-0">
@@ -7657,7 +7657,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4 stats-grid">
                         <div class="stat-card">
                             <div class="stat-card-title">Monthly Budget</div>
-                            <div class="stat-card-value text-accent-primary" id="monthly-budget">£0.00</div>
+                            <div class="stat-card-value text-accent-primary" id="monthly-budget">0.00</div>
                             <div class="text-xs text-accent-success mt-1" id="budget-change-indicator">30.6% of income</div>
                         </div>
                         <div class="stat-card">
@@ -8326,7 +8326,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             
             <!-- Period selector -->
             <div class="flex space-x-2 mb-4">
-                <button class="period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 text-white shadow-sm" style="background-color: #3949ab;" data-period="7days" onclick="setInsightsPeriod('7days')">7 Days</button>
+                <button class="period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 text-white shadow-sm" style="background-color: #22c55e;" data-period="7days" onclick="setInsightsPeriod('7days')">7 Days</button>
                 <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 desktop-only" data-period="30days" onclick="setInsightsPeriod('30days')">30 Days</button>
                 <button class="period-toggle px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 desktop-only" data-period="90days" onclick="setInsightsPeriod('90days')">90 Days</button>
             </div>
@@ -8582,7 +8582,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="dark-mode-toggle" class="sr-only peer" onchange="toggleTheme(this.checked)">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent-primary/30 dark:peer-focus:ring-accent-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-accent-success"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent-primary/30 dark:peer-focus:ring-accent-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
                             </label>
                         </div>
                         
@@ -8605,7 +8605,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="income-display-enabled" class="sr-only peer" onchange="toggleIncomeDisplay()">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent-primary/30 dark:peer-focus:ring-accent-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-accent-success"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent-primary/30 dark:peer-focus:ring-accent-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
                             </label>
                         </div>
                     </div>
@@ -8651,7 +8651,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="daily-budget-enabled" class="sr-only peer" onchange="toggleDailyBudgetCoaching()">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
                             </label>
                         </div>
                         
@@ -8662,7 +8662,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="daily-budget-line-enabled" class="sr-only peer" onchange="toggleDailyBudgetLine()" checked>
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
                             </label>
                         </div>
                     </div>
@@ -9470,8 +9470,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
             </div>
             <div class="flex gap-3 mt-6">
-                <button onclick="saveExpense()" class="modern-button modern-button-primary flex-1">Save</button>
                 <button onclick="closeModal()" class="modern-button modern-button-secondary flex-1">Cancel</button>
+                <button onclick="saveExpense()" class="modern-button modern-button-primary flex-1">Save</button>
             </div>
         </div>
     </div>
@@ -9548,8 +9548,8 @@ button, .btn, input[type="button"], input[type="submit"] {
                 </div>
             </div>
             <div class="flex gap-3 mt-6">
-                <button onclick="saveRecurring()" class="modern-button modern-button-primary flex-1">Save</button>
                 <button onclick="closeRecurringModal()" class="modern-button modern-button-secondary flex-1">Cancel</button>
+                <button onclick="saveRecurring()" class="modern-button modern-button-primary flex-1">Save</button>
             </div>
         </div>
     </div>
@@ -10508,11 +10508,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                 if (loading) {
                     button.disabled = true;
                     textEl.classList.add('hidden');
-                    loadingEl.classList.remove('hidden');
+                    loadingEl?.classList.remove('hidden');
                 } else {
                     button.disabled = false;
-                    textEl.classList.remove('hidden');
-                    loadingEl.classList.add('hidden');
+                    textEl?.classList.remove('hidden');
+                    loadingEl?.classList.add('hidden');
                 }
             }
             
@@ -13433,7 +13433,7 @@ function activateGoal() {
             console.log('=== HEALTH SCORE DEBUG ===');
             console.log('DOMElements.healthScoreValue:', DOMElements?.healthScoreValue);
             console.log('Element by ID:', document.getElementById('health-score-value'));
-            console.log('Current textContent:', document.getElementById('health-score-value')?.textContent);
+            console.log('Current textContent:', document.getElementById('health-score-value').textContent);
             console.log('All health score elements:', document.querySelectorAll('[id*="health"]'));
             
             // Check if there's any element showing £211.26
@@ -26780,13 +26780,13 @@ function updateDashboardTiles() {
     
     // Use DOMElements cache - this is the KEY FIX
     if (DOMElements && DOMElements.monthlyBudgetDisplay) {
-        DOMElements.monthlyBudgetDisplay.textContent = formatCurrency(monthlyBudget);
+        DOMElements.monthlyBudgetDisplay.textContent = monthlyBudget.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         console.log('✅ Updated budget display via DOMElements');
     } else {
         // Fallback to direct getElementById
         const budgetDisplay = document.getElementById('monthly-budget');
         if (budgetDisplay) {
-            budgetDisplay.textContent = formatCurrency(monthlyBudget);
+            budgetDisplay.textContent = monthlyBudget.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             console.log('✅ Updated budget display via getElementById');
         } else {
             console.log('❌ Budget display element not found');
@@ -26853,7 +26853,7 @@ function updateDashboardTiles() {
     
     // Update income display if it exists
     if (DOMElements && DOMElements.totalIncomeDisplay && monthlyIncome > 0) {
-        DOMElements.totalIncomeDisplay.textContent = formatCurrency(monthlyIncome);
+        DOMElements.totalIncomeDisplay.textContent = monthlyIncome.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         console.log('✅ Updated income display');
     }
     
@@ -28598,7 +28598,7 @@ function setInsightsPeriod(period) {
         activeBtn.classList.add('active');
         // Apply active styling (Navy Design Guide)
         activeBtn.className = 'period-toggle active px-4 py-2 rounded-lg font-medium transition-all duration-200 text-white shadow-sm';
-        activeBtn.style.backgroundColor = '#3949ab'; // Lighter Navy (more readable)
+        activeBtn.style.backgroundColor = '#22c55e'; // Green color for active state
         console.log('✅ Button state updated for:', period);
     } else {
         console.error('❌ Button not found for period:', period);
@@ -28726,12 +28726,7 @@ function applyAdvancedTooltipSystem() {
     let currentChartData = getDailySpendingInsightsData();
     
     // Helper functions
-    function formatCurrency(amount) {
-        return new Intl.NumberFormat('en-GB', { 
-            style: 'currency', 
-            currency: 'GBP' 
-        }).format(amount);
-    }
+    // Use global formatCurrency function instead of hardcoded one
     
     function getExpensesForDate(dateString) {
         if (!expenses || !Array.isArray(expenses)) return [];
