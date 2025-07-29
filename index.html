@@ -1942,7 +1942,7 @@
             }
             
             /* Health score positioning mobile - TARGETED */
-            .card.p-6 .text-center {
+            .card.p-6 .text-left {
                 margin-top: 0 !important;
                 width: 100% !important;
                 display: flex !important;
@@ -3631,7 +3631,7 @@
         
         @media (min-width: 1024px) {
             .stat-card-value {
-                font-size: 1.875rem; /* text-3xl on lg+ */
+                font-size: 1.875rem; /* text-2xl on lg+ */
             }
         }
         .stat-card-value.text-green-600 { color: var(--accent-green); }
@@ -7684,7 +7684,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 quick-add-grid">
                             <div id="quick-add-coffee" class="quick-add-wrapper">
-                                <button class="w-full bg-gray-50 hover:bg-accent-primary/10 dark:bg-gray-700 dark:hover:bg-accent-primary/20 border border-gray-200 dark:border-gray-600 hover:border-accent-primary/30 dark:hover:border-accent-primary/50 rounded-lg p-3 text-left transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Coffee', 'Food/Drink', 'Non-Essential', 5.00)">
+                                <button class="w-full bg-gray-50 hover:bg-accent-primary/10 dark:bg-gray-700 dark:hover:bg-accent-primary/20 border border-gray-200 dark:border-gray-600 hover:border-accent-primary/30 dark:hover:border-accent-primary/50 rounded-lg p-3 text-center transition-all duration-200 group hover:shadow-sm quick-add-button" onclick="quickAddExpense('Coffee', 'Food/Drink', 'Non-Essential', 5.00)">
                                     <div class="flex items-center gap-3 quick-add-content">
                                         <div class="w-10 h-10 bg-amber-500 group-hover:bg-amber-600 rounded-lg flex items-center justify-center text-white transition-colors duration-200 quick-add-icon">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -8490,7 +8490,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 
 <!-- Settings Tab -->
 <div id="settings-tab" class="tab-content hidden fade-in">
-    <div class="max-w-4xl mx-auto">
+    <div class="">
         <div class="mb-6">
             <p class="text-gray-600 dark:text-gray-300">Customize your experience and manage your data</p>
         </div>
@@ -10507,7 +10507,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 
                 if (loading) {
                     button.disabled = true;
-                    textEl.classList.add('hidden');
+                    textEl?.classList.add('hidden');
                     loadingEl?.classList.remove('hidden');
                 } else {
                     button.disabled = false;
@@ -26780,13 +26780,13 @@ function updateDashboardTiles() {
     
     // Use DOMElements cache - this is the KEY FIX
     if (DOMElements && DOMElements.monthlyBudgetDisplay) {
-        DOMElements.monthlyBudgetDisplay.textContent = monthlyBudget.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        DOMElements.monthlyBudgetDisplay.textContent = formatCurrency(monthlyBudget);
         console.log('✅ Updated budget display via DOMElements');
     } else {
         // Fallback to direct getElementById
         const budgetDisplay = document.getElementById('monthly-budget');
         if (budgetDisplay) {
-            budgetDisplay.textContent = monthlyBudget.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            budgetDisplay.textContent = formatCurrency(monthlyBudget);
             console.log('✅ Updated budget display via getElementById');
         } else {
             console.log('❌ Budget display element not found');
@@ -26853,7 +26853,7 @@ function updateDashboardTiles() {
     
     // Update income display if it exists
     if (DOMElements && DOMElements.totalIncomeDisplay && monthlyIncome > 0) {
-        DOMElements.totalIncomeDisplay.textContent = monthlyIncome.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        DOMElements.totalIncomeDisplay.textContent = formatCurrency(monthlyIncome);
         console.log('✅ Updated income display');
     }
     
