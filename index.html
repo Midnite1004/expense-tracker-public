@@ -45,6 +45,38 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
+        /* Toggle border visibility in unchecked state */
+        .w-11.h-6.bg-gray-200 {
+            border: 1px solid #d1d5db !important;
+        }
+        
+        [data-theme="dark"] .w-11.h-6.dark\:bg-gray-700 {
+            border: 1px solid #4b5563 !important;
+        }
+        
+        /* Ultimate toggle background fix */
+        input#dark-mode-toggle:checked + div,
+        input#income-display-enabled:checked + div,
+        input#daily-budget-enabled:checked + div,
+        input#daily-budget-line-enabled:checked + div {
+            background-color: #2e7d32 !important;
+            border: 2px solid #1b5e20 !important;
+        }
+        
+        /* More specific toggle rules */
+        input.peer:checked + div.w-11,
+        input.peer:checked ~ div.w-11,
+        .peer:checked + .w-11.h-6 {
+            background-color: #2e7d32 !important;
+        }
+        
+        /* Specific toggle checked styling */
+        input[id*="toggle"]:checked ~ label > div,
+        input[id*="enabled"]:checked ~ div,
+        .peer:checked ~ .w-11 {
+            background-color: #2e7d32 !important;
+        }
+        
         /* MOBILE FAB - FORCE HIDE REDUNDANT ELEMENTS */
         @media (max-width: 640px) {
             /* NUCLEAR OPTION - FORCE HIDE QUICK ACTIONS */
@@ -262,8 +294,8 @@
         }
         
         /* Ensure all secondary text is visible in dark mode */
-        html.dark .text-gray-500.dark\\:text-gray-300,
-        html.dark .text-gray-600.dark\\:text-gray-300 {
+        html.dark .text-gray-800.dark\\:text-gray-300,
+        html.dark .text-gray-900.dark\\:text-gray-300 {
             color: #f3f4f6 !important; /* gray-100 */
         }
         
@@ -2877,7 +2909,7 @@
             
             /* Quick Actions buttons - uniform hover (desktop only) */
             @media (min-width: 769px) {
-                button[onclick="showAddForm()"].hover\:bg-gray-500:hover {
+                button[onclick="showAddForm()"].hover\:bg-green-500:hover {
                     background-color: #374151 !important; /* uniform dark gray hover */
                 }
                 button[onclick="showAddIncomeForm()"].hover\:bg-gray-500:hover {
@@ -3636,10 +3668,10 @@
         }
         .stat-card-value.text-green-600 { color: var(--accent-green); }
         .stat-card-value.text-red-600 { color: var(--accent-red); }
-        .stat-card-value.text-blue-600 { color: var(--accent-primary); }
+        .stat-card-value.text-green-600 { color: var(--accent-primary); }
         [data-theme="dark"] .stat-card-value.text-green-600 { color: var(--accent-success); }
 [data-theme="dark"] .stat-card-value.text-red-600 { color: var(--accent-warning); }
-[data-theme="dark"] .stat-card-value.text-blue-600 { color: var(--accent-primary); }
+[data-theme="dark"] .stat-card-value.text-green-600 { color: var(--accent-primary); }
         
         /* Google Sign-In Button Styling */
         #googleSignInButton {
@@ -4098,7 +4130,7 @@
         }
         
         /* Checked state visibility in light mode */
-        .w-11.h-6.peer-checked\\:bg-blue-600 {
+        .w-11.h-6.peer-checked\\:bg-green-600 {
             background-color: #22c55e !important;
             border: 2px solid #22c55e !important;
         }
@@ -6417,7 +6449,7 @@ body, .app-container {
   color: var(--color-text-primary) !important;
 }
 /* Remove all colored borders except semantic */
-.border-blue-200, .border-blue-800, .border-red-200, .border-red-800, .border-green-200, .border-green-800, .border-purple-200, .border-purple-800, .border-orange-200, .border-orange-700, .border-gray-200, .border-gray-700 {
+.border-blue-200, .border-green-800, .border-red-200, .border-red-800, .border-green-200, .border-green-800, .border-purple-200, .border-purple-800, .border-orange-200, .border-orange-700, .border-gray-200, .border-gray-700 {
   border-color: var(--color-border) !important;
 }
         
@@ -6457,7 +6489,7 @@ body, .app-container {
             color: var(--accent-warning) !important;
         }
         
-        .text-gray-600, .text-gray-500, .text-gray-400 {
+        .text-gray-600, .text-gray-500, .text-gray-900 {
             color: var(--text-secondary) !important;
         }
         
@@ -6666,11 +6698,11 @@ button, .btn, input[type="button"], input[type="submit"] {
     background-color: var(--accent-primary)/20 !important;
 }
 
-.text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900, .text-blue-500, .text-blue-400, .text-blue-300, .text-blue-200, .text-blue-100 {
+.text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900, .text-blue-500, .text-blue-400, .text-green-300, .text-blue-200, .text-blue-100 {
     color: var(--accent-primary) !important;
 }
 
-[data-theme="dark"] .text-blue-600, [data-theme="dark"] .text-blue-700, [data-theme="dark"] .text-blue-800, [data-theme="dark"] .text-blue-900, [data-theme="dark"] .text-blue-500, [data-theme="dark"] .text-blue-400, [data-theme="dark"] .text-blue-300, [data-theme="dark"] .text-blue-200, [data-theme="dark"] .text-blue-100 {
+[data-theme="dark"] .text-blue-600, [data-theme="dark"] .text-blue-700, [data-theme="dark"] .text-blue-800, [data-theme="dark"] .text-blue-900, [data-theme="dark"] .text-blue-500, [data-theme="dark"] .text-blue-400, [data-theme="dark"] .text-green-300, [data-theme="dark"] .text-blue-200, [data-theme="dark"] .text-blue-100 {
     color: var(--accent-primary) !important;
 }
 
@@ -7764,7 +7796,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <div class="flex items-center gap-2">
                                         <h3 class="text-xl font-semibold">Budget Progress & Health</h3>
                                         <div class="relative">
-                                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="toggleBudgetHealthTooltip()">
+                                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="toggleBudgetHealthTooltip()">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                             <div id="budget-health-tooltip-container" class="absolute left-1/2 transform -translate-x-1/2 top-8 text-xs rounded-lg px-3 py-2 opacity-0 transition-opacity whitespace-nowrap z-10 pointer-events-none" style="background-color: var(--tooltip-bg-color, #1a1a1a); color: var(--tooltip-text-color, #ffffff);">
@@ -8513,7 +8545,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <div id="essential-content" class="settings-section-content show">
                     <div class="p-6 space-y-4">
                         <div>
-                            <label for="settings-monthly-income" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label for="settings-monthly-income" class="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                                 Monthly Income
                             </label>
                         <div class="relative">
@@ -8582,7 +8614,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="dark-mode-toggle" class="sr-only peer" onchange="toggleTheme(this.checked)">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent-primary/30 dark:peer-focus:ring-accent-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent-primary/30 dark:peer-focus:ring-accent-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#2e7d32]"></div>
                             </label>
                         </div>
                         
@@ -8605,7 +8637,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="income-display-enabled" class="sr-only peer" onchange="toggleIncomeDisplay()">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent-primary/30 dark:peer-focus:ring-accent-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent-primary/30 dark:peer-focus:ring-accent-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#2e7d32]"></div>
                             </label>
                         </div>
                     </div>
@@ -8651,7 +8683,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="daily-budget-enabled" class="sr-only peer" onchange="toggleDailyBudgetCoaching()">
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#2e7d32]"></div>
                             </label>
                         </div>
                         
@@ -8662,7 +8694,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="daily-budget-line-enabled" class="sr-only peer" onchange="toggleDailyBudgetLine()" checked>
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#2e7d32]"></div>
                             </label>
                         </div>
                     </div>
