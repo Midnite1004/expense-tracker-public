@@ -11520,6 +11520,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                 
                 // Call updateDisplay AFTER tabs are properly shown/hidden to prevent recurring content on wrong pages
                 updateDisplay();
+                
+                // Update dashboard tiles after all other initialization
+                setTimeout(() => {
+                    updateDashboardTiles();
+                }, 100);
                 DOMElements.expenseDate.value = getLocalDateString();
                 DOMElements.recurringStartDate.value = getLocalDateString();
 
@@ -11685,6 +11690,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 // Force render recent expenses after processing recurring
                 setTimeout(() => {
                     renderRecentExpenses();
+                    updateDashboardTiles(); // Update dashboard after recurring processing
                 }, 50);
                 
                 let message = '';
@@ -16965,6 +16971,10 @@ function closeGoalSelection() {
                     renderGoalsPage();
                 } else if (activeTab === 'recurring') {
                     renderRecurringTable();
+                } else if (activeTab === 'insights') {
+                    updateIntegratedBlueCards();
+                    updateInsightsFinancialMetrics();
+                    updateTodaysSpendingDisplay();
                 } else if (activeTab === 'settings') {
                     populateSettingsForm();
                 } else if (activeTab === 'help') {
@@ -17885,9 +17895,92 @@ function closeGoalSelection() {
                 element.textContent = symbol;
             });
             
+            // Update settings fields with new currency
+            const currencySelect = document.getElementById('currency-selector');
+            if (currencySelect) {
+                currencySelect.value = currentCurrencyCode;
+            }
+            
             // Update insights chart if on insights tab
             if (activeTab === 'insights' && dailySpendingInsightsChart) {
-                updateDailySpendingInsightsChart();
+                // SIMPLE FIX: Update tooltip configuration with new currency
+                if (dailySpendingInsightsChart.options.plugins && dailySpendingInsightsChart.options.plugins.tooltip) {
+                    dailySpendingInsightsChart.options.plugins.tooltip.callbacks.label = function(context) {
+                        // For bar charts (12 months), show the dataset label and value
+                        if (currentInsightsPeriod === '12months') {
+                            return `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
+                        }
+                        
+                        // For month view, show the category
+                        if (currentInsightsPeriod === 'month') {
+                            return `${context.label}: ${formatCurrency(context.parsed.y)}`;
+                        }
+                        
+                        const dataIndex = context.dataIndex;
+                        const amount = context.parsed.y;
+                        
+                        // Get the date string for expense lookup
+                        const chartData = dailySpendingInsightsChart.data.datasets[0].data;
+                        const dataPoint = chartData[dataIndex];
+                        const dateString = dataPoint?.dateString;
+                        
+                        if (!dateString) return [`Total spent: ${formatCurrency(amount)}`];
+                        
+                        const dayExpenses = getExpensesForDate(dateString);
+                        
+                        const lines = [];
+                        // Calculate net amount (expenses - income) for proper display
+                        const dayIncome = dayExpenses.filter(e => e.isIncome || e.type === 'Income')
+                            .reduce((sum, e) => sum + Math.abs(e.cost || e.amount || 0), 0);
+                        const dayExpensesOnly = dayExpenses.filter(e => !e.isIncome && e.type !== 'Income')
+                            .reduce((sum, e) => sum + (e.cost || e.amount || 0), 0);
+                        const netAmount = dayExpensesOnly - dayIncome;
+                        
+                        if (dayIncome > 0) {
+                            lines.push(`Net: ${formatCurrency(netAmount)} (${formatCurrency(dayExpensesOnly)} spent, +${formatCurrency(dayIncome)} income)`);
+                        } else {
+                            lines.push(`Total spent: ${formatCurrency(amount)}`);
+                        }
+                        
+                        // Add budget comparison if daily budget is set
+                        const currentDailyBudget = getActualDailyBudget();
+                        if (currentDailyBudget > 0) {
+                            const comparisonAmount = dayIncome > 0 ? netAmount : amount;
+                            if (comparisonAmount > currentDailyBudget) {
+                                lines.push(`⚠️ Over daily budget by ${formatCurrency(comparisonAmount - currentDailyBudget)}`);
+                            }
+                        }
+                        
+                        lines.push(`📊 ${dayExpenses.length} expense${dayExpenses.length !== 1 ? 's' : ''}`);
+                        
+                        // Show individual expenses (limit to prevent huge tooltips)
+                        if (dayExpenses.length > 0) {
+                            lines.push(''); // Empty line for spacing
+                            dayExpenses.slice(0, 5).forEach(expense => {
+                                const cost = expense.cost || expense.amount || 0;
+                                const description = expense.name || expense.description || expense.merchant || 'Unknown';
+                                // Show income as positive values in tooltips
+                                const displayCost = expense.isIncome || expense.type === 'Income' ? Math.abs(cost) : cost;
+                                const prefix = expense.isIncome || expense.type === 'Income' ? '+' : '';
+                                lines.push(`• ${truncateText(description)}: ${prefix}${formatCurrency(displayCost)}`);
+                            });
+                            
+                            if (dayExpenses.length > 5) {
+                                lines.push(`... and ${dayExpenses.length - 5} more`);
+                            }
+                        }
+                        
+                        return lines;
+                    };
+                }
+                
+                // Force chart update to refresh tooltips
+                dailySpendingInsightsChart.update('none');
+            }
+            
+            // Update ALL insights components immediately when currency changes
+            if (activeTab === 'insights') {
+                forceUpdateAllInsights();
             }
         }
 
@@ -18101,7 +18194,16 @@ function closeGoalSelection() {
             
             // Refresh insights after adding expense
             if (activeTab === 'insights') {
-                setTimeout(updateChartsAndInsights, 100);
+                setTimeout(() => {
+                    // CRITICAL FIX: Re-initialize chart to show new data with correct currency
+                    if (dailySpendingInsightsChart) {
+                        dailySpendingInsightsChart.destroy();
+                        setTimeout(() => {
+                            initializeDailySpendingInsightsChart();
+                        }, 50);
+                    }
+                    forceUpdateAllInsights();
+                }, 100);
             }
         }
         
@@ -18164,7 +18266,16 @@ function closeGoalSelection() {
             
             // Refresh insights after adding expense
             if (activeTab === 'insights') {
-                setTimeout(updateChartsAndInsights, 100);
+                setTimeout(() => {
+                    // CRITICAL FIX: Re-initialize chart to show new data with correct currency
+                    if (dailySpendingInsightsChart) {
+                        dailySpendingInsightsChart.destroy();
+                        setTimeout(() => {
+                            initializeDailySpendingInsightsChart();
+                        }, 50);
+                    }
+                    forceUpdateAllInsights();
+                }, 100);
             }
         }
 
@@ -18206,7 +18317,16 @@ function closeGoalSelection() {
                 
                 // Refresh insights after deleting expense
                 if (activeTab === 'insights') {
-                    setTimeout(updateChartsAndInsights, 100);
+                    setTimeout(() => {
+                        // CRITICAL FIX: Re-initialize chart to show new data with correct currency
+                        if (dailySpendingInsightsChart) {
+                            dailySpendingInsightsChart.destroy();
+                            setTimeout(() => {
+                                initializeDailySpendingInsightsChart();
+                            }, 50);
+                        }
+                        forceUpdateAllInsights();
+                    }, 100);
                 }
             }
         }
@@ -18222,6 +18342,20 @@ function closeGoalSelection() {
                 renderExpensesTable();
                 
                 showToast(`Expense status updated to ${expense.status}.`);
+                
+                // Refresh insights after status change
+                if (activeTab === 'insights') {
+                    setTimeout(() => {
+                        // CRITICAL FIX: Re-initialize chart to show new data with correct currency
+                        if (dailySpendingInsightsChart) {
+                            dailySpendingInsightsChart.destroy();
+                            setTimeout(() => {
+                                initializeDailySpendingInsightsChart();
+                            }, 50);
+                        }
+                        forceUpdateAllInsights();
+                    }, 100);
+                }
             }
         }
 
@@ -18308,6 +18442,13 @@ function closeGoalSelection() {
 
             if (!name || isNaN(amount) || amount <= 0 || !startDate) {
                  showToast('Please fill in recurring item fields correctly.', 'error');
+                return;
+            }
+
+            // Enforce category selection for income items
+            const category = DOMElements.recurringCategory.value;
+            if (type === 'income' && !category) {
+                showToast('Category is required for income items.', 'error');
                 return;
             }
 
@@ -18749,6 +18890,7 @@ function closeGoalSelection() {
             return expenses.filter(e => {
                 const expenseDate = new Date(e.date);
                 return e.status === 'active' && 
+                       !e.isIncome &&  // CRITICAL FIX: Exclude income entries
                        expenseDate.getMonth() === month && 
                        expenseDate.getFullYear() === year;
             }).reduce((sum, e) => sum + e.cost, 0);
@@ -18922,14 +19064,15 @@ function closeGoalSelection() {
 
             // Centralized calculations for all expenses this month
             const monthlyRecurring = getMonthlyRecurringTotals(currentYear, currentMonth);
-            const totalMonthlyIncome = monthlyIncome + monthlyRecurring.income;
+            const totalMonthlyIncome = monthlyIncome; // monthlyIncome already contains recurring income
 
             // ✅ FIXED: Only use the main expenses array (recurring expenses are already there)
             const allMonthlyExpenses = expenses.filter(e => {
                 const expenseDate = new Date(e.date);
                 return e.status === 'active' && 
                        expenseDate.getMonth() === currentMonth && 
-                       expenseDate.getFullYear() === currentYear;
+                       expenseDate.getFullYear() === currentYear &&
+                       !e.isIncome; // Exclude income entries
             });
             
             const totalSpent = allMonthlyExpenses.reduce((sum, e) => {
@@ -19184,6 +19327,12 @@ function closeGoalSelection() {
                 // Update Today's Budget section (only in insights tab)
                 updateTodaysBudget();
             }
+            
+            // Always update insights components regardless of current tab
+            updateTodaysSpendingDisplay();
+            updateIntegratedBlueCards();
+            updateInsightsFinancialMetrics();
+            updateInsightsTiles();
             updateDeleteSelectedButton();
             updateDeleteSelectedRecurringButton();
             
@@ -19257,10 +19406,11 @@ function closeGoalSelection() {
                 const expenseDate = new Date(e.date);
                 return e.status === 'active' && 
                        expenseDate.getMonth() === currentMonth && 
-                       expenseDate.getFullYear() === currentYear;
+                       expenseDate.getFullYear() === currentYear &&
+                       !e.isIncome; // Exclude income entries
             }).reduce((sum, e) => {
                 const cost = parseFloat(e.cost) || 0;
-                console.log('💰 Expense cost debug:', { name: e.name, cost: e.cost, parsed: cost });
+                console.log('💰 Expense cost debug:', { name: e.name, cost: e.cost, parsed: cost, isIncome: e.isIncome });
                 return sum + cost;
             }, 0);
             
@@ -19890,7 +20040,7 @@ function closeGoalSelection() {
                         <p class="font-medium text-sm text-gray-900 dark:text-white">${escapeHTML(expense.name)}</p>
                         <p class="text-xs text-gray-500">${formattedDate} - ${escapeHTML(expense.category)}</p>
                     </div>
-                    <p class="font-medium text-sm text-red-600">-${formatCurrency(expense.cost)}</p>
+                    <p class="font-medium text-sm ${expense.isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-600'}">${expense.isIncome ? '+' : '-'}${formatCurrency(Math.abs(expense.cost))}</p>
                 `;
                 DOMElements.recentExpensesContainer.appendChild(div);
             });
@@ -20953,6 +21103,160 @@ function closeGoalSelection() {
             renderMonthlySavingsChart();
             updateAiInsightsWithSmartAnalytics(); // NEW
             initInsightsDashboard(); // Initialize new insights dashboard
+            
+            // Update ALL insights components for real-time reactivity
+            updateInsightsFinancialMetrics();
+            updateInsightsTiles();
+            
+            // Force update all charts to reflect new data
+            if (dailySpendingInsightsChart) {
+                dailySpendingInsightsChart.update('none');
+            }
+            if (window.insightsDashboard && window.insightsDashboard.categoryChart) {
+                window.insightsDashboard.categoryChart.update('none');
+            }
+        }
+        
+        // NEW: Comprehensive insights update function for real-time reactivity
+        function forceUpdateAllInsights() {
+            console.log('🔄 Force updating all insights components...');
+            
+            // Update all financial metrics
+            updateInsightsFinancialMetrics();
+            updateInsightsTiles();
+            
+            // CRITICAL: Update the blue cards that show the main metrics
+            updateIntegratedBlueCards();
+            
+            // CRITICAL: Update today's spending display
+            updateTodaysSpendingDisplay();
+            
+            // Update all charts
+            updateChartsAndInsights();
+            
+            // Force chart updates with new currency
+            if (dailySpendingInsightsChart) {
+                // SIMPLE FIX: Update tooltip configuration with new currency
+                if (dailySpendingInsightsChart.options.plugins && dailySpendingInsightsChart.options.plugins.tooltip) {
+                    dailySpendingInsightsChart.options.plugins.tooltip.callbacks.label = function(context) {
+                        // For bar charts (12 months), show the dataset label and value
+                        if (currentInsightsPeriod === '12months') {
+                            return `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
+                        }
+                        
+                        // For month view, show the category
+                        if (currentInsightsPeriod === 'month') {
+                            return `${context.label}: ${formatCurrency(context.parsed.y)}`;
+                        }
+                        
+                        const dataIndex = context.dataIndex;
+                        const amount = context.parsed.y;
+                        
+                        // Get the date string for expense lookup
+                        const chartData = dailySpendingInsightsChart.data.datasets[0].data;
+                        const dataPoint = chartData[dataIndex];
+                        const dateString = dataPoint?.dateString;
+                        
+                        if (!dateString) return [`Total spent: ${formatCurrency(amount)}`];
+                        
+                        const dayExpenses = getExpensesForDate(dateString);
+                        
+                        const lines = [];
+                        // Calculate net amount (expenses - income) for proper display
+                        const dayIncome = dayExpenses.filter(e => e.isIncome || e.type === 'Income')
+                            .reduce((sum, e) => sum + Math.abs(e.cost || e.amount || 0), 0);
+                        const dayExpensesOnly = dayExpenses.filter(e => !e.isIncome && e.type !== 'Income')
+                            .reduce((sum, e) => sum + (e.cost || e.amount || 0), 0);
+                        const netAmount = dayExpensesOnly - dayIncome;
+                        
+                        if (dayIncome > 0) {
+                            lines.push(`Net: ${formatCurrency(netAmount)} (${formatCurrency(dayExpensesOnly)} spent, +${formatCurrency(dayIncome)} income)`);
+                        } else {
+                            lines.push(`Total spent: ${formatCurrency(amount)}`);
+                        }
+                        
+                        // Add budget comparison if daily budget is set
+                        const currentDailyBudget = getActualDailyBudget();
+                        if (currentDailyBudget > 0) {
+                            const comparisonAmount = dayIncome > 0 ? netAmount : amount;
+                            if (comparisonAmount > currentDailyBudget) {
+                                lines.push(`⚠️ Over daily budget by ${formatCurrency(comparisonAmount - currentDailyBudget)}`);
+                            }
+                        }
+                        
+                        lines.push(`📊 ${dayExpenses.length} expense${dayExpenses.length !== 1 ? 's' : ''}`);
+                        
+                        // Show individual expenses (limit to prevent huge tooltips)
+                        if (dayExpenses.length > 0) {
+                            lines.push(''); // Empty line for spacing
+                            dayExpenses.slice(0, 5).forEach(expense => {
+                                const cost = expense.cost || expense.amount || 0;
+                                const description = expense.name || expense.description || expense.merchant || 'Unknown';
+                                // Show income as positive values in tooltips
+                                const displayCost = expense.isIncome || expense.type === 'Income' ? Math.abs(cost) : cost;
+                                const prefix = expense.isIncome || expense.type === 'Income' ? '+' : '';
+                                lines.push(`• ${truncateText(description)}: ${prefix}${formatCurrency(displayCost)}`);
+                            });
+                            
+                            if (dayExpenses.length > 5) {
+                                lines.push(`... and ${dayExpenses.length - 5} more`);
+                            }
+                        }
+                        
+                        return lines;
+                    };
+                }
+                
+                // Force chart update to refresh tooltips
+                dailySpendingInsightsChart.update('none');
+            }
+            if (window.insightsDashboard && window.insightsDashboard.categoryChart) {
+                window.insightsDashboard.categoryChart.update('none');
+            }
+            
+            // Force update all other charts that might have tooltips
+            if (spendingTrendChart) {
+                spendingTrendChart.update('none');
+            }
+            if (categorySpendingChart) {
+                categorySpendingChart.update('none');
+            }
+            if (monthlySavingsChart) {
+                monthlySavingsChart.update('none');
+            }
+            
+            console.log('✅ All insights components updated successfully');
+        }
+        
+        // DEBUG: Test function to verify all updates are working
+        window.testInsightsUpdates = function() {
+            console.log('🧪 Testing insights updates...');
+            
+            // Test currency change
+            console.log('1. Testing currency change...');
+            const oldCurrency = currentCurrencyCode;
+            currentCurrencyCode = currentCurrencyCode === 'GBP' ? 'USD' : 'GBP';
+            updateCurrencyUI();
+            currentCurrencyCode = oldCurrency;
+            updateCurrencyUI();
+            
+            // Test expense addition
+            console.log('2. Testing expense addition...');
+            const testExpense = {
+                id: Date.now(),
+                name: 'Test Expense',
+                cost: 10,
+                type: 'Non-Essential',
+                category: 'Food/Drink',
+                date: getLocalDateString(),
+                status: 'active'
+            };
+            expenses.push(testExpense);
+            forceUpdateAllInsights();
+            expenses.pop(); // Remove test expense
+            forceUpdateAllInsights();
+            
+            console.log('✅ All tests completed!');
         }
 
         const chartColors = [
@@ -22440,6 +22744,9 @@ function closeGoalSelection() {
             // Update global monthlyIncome from recurring entries (single source of truth)
             monthlyIncome = calculateTotalIncomeFromRecurring();
             console.log('🔄 Synced global monthlyIncome:', monthlyIncome);
+            
+            // Update dashboard after income sync
+            updateDashboardTiles();
         }
 
         function populateSettingsForm() {
@@ -23674,6 +23981,13 @@ function showInsightsError() {
 
             if (!name || isNaN(amount) || amount <= 0 || !startDate) {
                  showToast('Please fill in recurring item fields correctly.', 'error');
+                return;
+            }
+
+            // Enforce category selection for income items
+            const category = DOMElements.recurringCategory.value;
+            if (type === 'income' && !category) {
+                showToast('Category is required for income items.', 'error');
                 return;
             }
 
@@ -25075,7 +25389,8 @@ function getRealSpendingData() {
         const expenseDate = new Date(expense.date);
         return expenseDate.getMonth() === currentMonth && 
                expenseDate.getFullYear() === currentYear &&
-               expense.status === 'active';
+               expense.status === 'active' &&
+               !expense.isIncome; // Exclude income entries
     });
     
     // Create daily spending breakdown
@@ -25110,7 +25425,8 @@ function getRealCategoryData() {
         const expenseDate = new Date(expense.date);
         return expenseDate.getMonth() === currentMonth && 
                expenseDate.getFullYear() === currentYear &&
-               expense.status === 'active';
+               expense.status === 'active' &&
+               !expense.isIncome; // Exclude income entries
     });
     
     const categoryTotals = {};
@@ -25661,7 +25977,14 @@ function saveSettingsWithInsightsUpdate() {
         
         // Force update insights if on insights tab
         if (activeTab === 'insights') {
-            updateChartsAndInsights();
+            // CRITICAL FIX: Re-initialize chart to show new data with correct currency
+            if (dailySpendingInsightsChart) {
+                dailySpendingInsightsChart.destroy();
+                setTimeout(() => {
+                    initializeDailySpendingInsightsChart();
+                }, 50);
+            }
+            forceUpdateAllInsights();
             console.log('✅ Updated insights');
         }
         
@@ -25734,7 +26057,7 @@ function updateIntegratedBlueCards() {
     const recurringIncome = recurringItems
         .filter(item => item.type === 'income' && item.status === 'active')
         .reduce((sum, item) => sum + item.amount, 0);
-    const totalIncome = monthlyIncome + recurringIncome;
+    const totalIncome = monthlyIncome; // monthlyIncome already contains recurring income
     
     const monthExpenses = getCurrentMonthExpenses();
     const totalSpent = monthExpenses.reduce((sum, exp) => sum + (exp.amount || exp.cost || 0), 0);
@@ -25746,6 +26069,11 @@ function updateIntegratedBlueCards() {
     updateElementText('insights-total-spent', formatCurrency(totalSpent));
     updateElementText('insights-daily-budget', formatCurrency(dailyBudget));
     updateElementText('insights-today-spending', formatCurrency(todaySpent));
+}
+
+// Function to update financial metrics - calls all integrated insights functions
+function updateInsightsFinancialMetrics() {
+    updateIntegratedInsights();
 }
 
 function updateIntegratedPeriodMetrics() {
@@ -26156,10 +26484,8 @@ function loadMoreInsightsMonths() {
 
 // Helper functions
 function getCurrentPeriodDays() {
-    const activeTab = document.querySelector('#insights-tab .period-toggle.active');
-    if (!activeTab) return 7;
-    
-    const period = activeTab.getAttribute('data-period');
+    // Use global currentInsightsPeriod variable instead of DOM queries
+    const period = currentInsightsPeriod || '7days';
     switch(period) {
         case '7days': return 7;
         case '30days': return 30;
@@ -26175,7 +26501,7 @@ function getExpensesForPeriod(days) {
     
     return expenses.filter(exp => {
         const expDate = new Date(exp.date);
-        return expDate >= startDate && expDate <= now && exp.status === 'active';
+        return expDate >= startDate && expDate <= now && exp.status === 'active' && !exp.isIncome;
     });
 }
 
@@ -26185,7 +26511,8 @@ function getCurrentMonthExpenses() {
         const expDate = new Date(exp.date);
         return expDate.getMonth() === now.getMonth() && 
                expDate.getFullYear() === now.getFullYear() && 
-               exp.status === 'active';
+               exp.status === 'active' &&
+               !exp.isIncome; // Exclude income entries
     });
 }
 
@@ -26197,13 +26524,14 @@ function getLastMonthExpenses() {
         const expDate = new Date(exp.date);
         return expDate.getMonth() === lastMonth.getMonth() && 
                expDate.getFullYear() === lastMonth.getFullYear() && 
-               exp.status === 'active';
+               exp.status === 'active' &&
+               !exp.isIncome; // Exclude income entries
     });
 }
 
 function getTodayExpenses() {
     const today = new Date().toISOString().split('T')[0];
-    return expenses.filter(exp => exp.date === today && exp.status === 'active');
+    return expenses.filter(exp => exp.date === today && exp.status === 'active' && !exp.isIncome);
 }
 
 function getYTDExpenses() {
@@ -26212,7 +26540,7 @@ function getYTDExpenses() {
     
     return expenses.filter(exp => {
         const expDate = new Date(exp.date);
-        return expDate >= yearStart && expDate <= now && exp.status === 'active';
+        return expDate >= yearStart && expDate <= now && exp.status === 'active' && !exp.isIncome;
     });
 }
 
@@ -26221,7 +26549,7 @@ function getExpensesForMonth(monthDate) {
         const expDate = new Date(exp.date);
         return expDate.getMonth() === monthDate.getMonth() && 
                expDate.getFullYear() === monthDate.getFullYear() && 
-               exp.status === 'active';
+               exp.status === 'active' && !exp.isIncome;
     });
 }
 
@@ -26265,7 +26593,8 @@ function generateBasicInsights() {
         const expenseDate = new Date(expense.date);
         return expenseDate.getMonth() === currentMonth && 
                expenseDate.getFullYear() === currentYear &&
-               expense.status === 'active';
+               expense.status === 'active' &&
+               !expense.isIncome; // Exclude income entries
     });
     
     const totalSpent = monthlyExpenses.reduce((sum, e) => {
@@ -26436,7 +26765,8 @@ function updateDashboardTiles() {
         const expenseDate = new Date(expense.date);
         return expenseDate.getMonth() === currentMonth && 
                expenseDate.getFullYear() === currentYear &&
-               expense.status === 'active';
+               expense.status === 'active' &&
+               !expense.isIncome; // Exclude income entries
     });
     
     const totalSpent = monthlyExpenses.reduce((sum, e) => {
@@ -26444,8 +26774,9 @@ function updateDashboardTiles() {
         return sum + (isNaN(cost) ? 0 : cost);
     }, 0);
     const remaining = (monthlyBudget || 0) - (totalSpent || 0);
+    const monthlySavings = (monthlyIncome || 0) - (totalSpent || 0);
     
-    console.log('Calculated values:', { totalSpent, remaining });
+    console.log('Calculated values:', { totalSpent, remaining, monthlySavings, monthlyIncome });
     
     // Use DOMElements cache - this is the KEY FIX
     if (DOMElements && DOMElements.monthlyBudgetDisplay) {
@@ -26504,6 +26835,22 @@ function updateDashboardTiles() {
         }
     }
     
+    // Update monthly savings display
+    const monthlySavingsElement = document.getElementById('monthly-savings');
+    if (monthlySavingsElement) {
+        monthlySavingsElement.textContent = formatCurrency(monthlySavings);
+        
+        // Update color based on savings amount
+        if (monthlySavings >= 0) {
+            monthlySavingsElement.classList.remove('text-red-600', 'dark:text-red-400');
+            monthlySavingsElement.classList.add('text-purple-600', 'dark:text-purple-400');
+        } else {
+            monthlySavingsElement.classList.remove('text-purple-600', 'dark:text-purple-400');
+            monthlySavingsElement.classList.add('text-red-600', 'dark:text-red-400');
+        }
+        console.log('✅ Updated monthly savings display');
+    }
+    
     // Update income display if it exists
     if (DOMElements && DOMElements.totalIncomeDisplay && monthlyIncome > 0) {
         DOMElements.totalIncomeDisplay.textContent = formatCurrency(monthlyIncome);
@@ -26536,6 +26883,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (activeTab === 'insights') {
             setTimeout(updateChartsAndInsights, 100);
         }
+        // Always update Today's Spending regardless of current tab
+        setTimeout(() => {
+            updateTodaysSpendingDisplay();
+            updateInsightsFinancialMetrics();
+        }, 100);
         return result;
     };
     
@@ -27538,6 +27890,7 @@ function getSevenDaySpendingData() {
         const dayTotal = expenses
             .filter(expense => {
                 if (expense.status !== 'active') return false;
+                if (expense.isIncome) return false; // CRITICAL FIX: Exclude income entries
                 // Use string comparison for consistent date matching
                 const expenseDate = expense.date.split('T')[0]; // Handle ISO format
                 return expenseDate === dateStr;
@@ -27936,25 +28289,45 @@ function initializeDailySpendingInsightsChart() {
                                            String(date.getMonth() + 1).padStart(2, '0') + '-' + 
                                            String(date.getDate()).padStart(2, '0');
                             
-                            const dayExpenses = expenses.filter(expense => {
+                            const dayTransactions = expenses.filter(expense => {
                                 if (expense.status !== 'active') return false;
                                 const expenseDate = expense.date.split('T')[0];
                                 return expenseDate === dateStr;
                             });
                             
-                            if (dayExpenses.length === 0) return ['Click to view expenses for this day'];
+                            const dayExpenses = dayTransactions.filter(t => !t.isIncome && !(t.cost < 0 && t.type === 'Income'));
+                            const dayIncome = dayTransactions.filter(t => t.isIncome || (t.cost < 0 && t.type === 'Income'));
                             
-                            const lines = ['', 'Expenses:'];
-                            dayExpenses.slice(0, 3).forEach(expense => {
-                                const cost = parseFloat(expense.cost || expense.amount || 0);
-                                lines.push(`• ${expense.description || 'Expense'}: £${cost.toFixed(2)}`);
-                            });
+                            if (dayExpenses.length === 0 && dayIncome.length === 0) return ['Click to view transactions for this day'];
                             
-                            if (dayExpenses.length > 3) {
-                                lines.push(`• ... and ${dayExpenses.length - 3} more`);
+                            const lines = [''];
+                            
+                            // Show income received
+                            if (dayIncome.length > 0) {
+                                lines.push('Income Received:');
+                                dayIncome.slice(0, 3).forEach(income => {
+                                    const amount = Math.abs(parseFloat(income.cost || income.amount || 0));
+                                    lines.push(`• ${income.description || income.name || 'Income'}: +${formatCurrency(amount)}`);
+                                });
+                                if (dayIncome.length > 3) {
+                                    lines.push(`• ... and ${dayIncome.length - 3} more`);
+                                }
+                                lines.push('');
                             }
                             
-                            lines.push('', 'Click to view all expenses');
+                            // Show money spent
+                            if (dayExpenses.length > 0) {
+                                lines.push('Money Spent:');
+                                dayExpenses.slice(0, 3).forEach(expense => {
+                                    const cost = parseFloat(expense.cost || expense.amount || 0);
+                                    lines.push(`• ${expense.description || expense.name || 'Expense'}: ${formatCurrency(cost)}`);
+                                });
+                                if (dayExpenses.length > 3) {
+                                    lines.push(`• ... and ${dayExpenses.length - 3} more`);
+                                }
+                            }
+                            
+                            lines.push('', 'Click to view all transactions');
                             return lines;
                         }
                     }
@@ -28022,7 +28395,7 @@ function getMonthBudgetData() {
     // Calculate spent this month
     let monthlySpent = 0;
     expenses.forEach(expense => {
-        if (expense.status !== 'active') return;
+        if (expense.status !== 'active' || expense.isIncome) return;
         const expenseDate = new Date(expense.date);
         if (expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear) {
             monthlySpent += parseFloat(expense.cost || expense.amount || 0);
@@ -28069,7 +28442,7 @@ function get12MonthsComparisonData() {
         // Calculate spending for this month
         let monthlySpent = 0;
         expenses.forEach(expense => {
-            if (expense.status !== 'active') return;
+            if (expense.status !== 'active' || expense.isIncome) return;
             const expenseDate = new Date(expense.date);
             if (expenseDate.getMonth() === date.getMonth() && 
                 expenseDate.getFullYear() === date.getFullYear()) {
@@ -28163,9 +28536,9 @@ function getDailySpendingInsightsData() {
         dailyTotals[dateStr] = 0;
     });
     
-    // Sum expenses by date
+    // Sum expenses by date (exclude income entries)
     expenses.forEach(expense => {
-        if (expense.status !== 'active') return;
+        if (expense.status !== 'active' || expense.isIncome) return;
         
         const expenseDate = expense.date;
         if (dailyTotals.hasOwnProperty(expenseDate)) {
@@ -28251,6 +28624,9 @@ function setInsightsPeriod(period) {
         // Update chart data for all periods
         updateDailySpendingInsightsChart();
     }
+    
+    // Update Budget Overview cards for the new period
+    updateInsightsFinancialMetrics();
     
     // Reapply tooltip system for new period
     setTimeout(() => {
@@ -28438,13 +28814,25 @@ function applyAdvancedTooltipSystem() {
                 const dayExpenses = getExpensesForDate(dateString);
                 
                 const lines = [];
-                lines.push(`Total spent: ${formatCurrency(amount)}`);
+                // FIX: Calculate net amount (expenses - income) for proper display
+                const dayIncome = dayExpenses.filter(e => e.isIncome || e.type === 'Income')
+                    .reduce((sum, e) => sum + Math.abs(e.cost || e.amount || 0), 0);
+                const dayExpensesOnly = dayExpenses.filter(e => !e.isIncome && e.type !== 'Income')
+                    .reduce((sum, e) => sum + (e.cost || e.amount || 0), 0);
+                const netAmount = dayExpensesOnly - dayIncome;
+                
+                if (dayIncome > 0) {
+                    lines.push(`Net: ${formatCurrency(netAmount)} (${formatCurrency(dayExpensesOnly)} spent, +${formatCurrency(dayIncome)} income)`);
+                } else {
+                    lines.push(`Total spent: ${formatCurrency(amount)}`);
+                }
                 
                 // Add budget comparison if daily budget is set
                 const currentDailyBudget = getActualDailyBudget();
                 if (currentDailyBudget > 0) {
-                    if (amount > currentDailyBudget) {
-                        lines.push(`⚠️ Over daily budget by ${formatCurrency(amount - currentDailyBudget)}`);
+                    const comparisonAmount = dayIncome > 0 ? netAmount : amount;
+                    if (comparisonAmount > currentDailyBudget) {
+                        lines.push(`⚠️ Over daily budget by ${formatCurrency(comparisonAmount - currentDailyBudget)}`);
                     }
                 }
                 
@@ -28456,7 +28844,10 @@ function applyAdvancedTooltipSystem() {
                     dayExpenses.slice(0, 5).forEach(expense => {
                         const cost = expense.cost || expense.amount || 0;
                         const description = expense.name || expense.description || expense.merchant || 'Unknown';
-                        lines.push(`• ${truncateText(description)}: ${formatCurrency(cost)}`);
+                        // FIX: Show income as positive values in tooltips
+                        const displayCost = expense.isIncome || expense.type === 'Income' ? Math.abs(cost) : cost;
+                        const prefix = expense.isIncome || expense.type === 'Income' ? '+' : '';
+                        lines.push(`• ${truncateText(description)}: ${prefix}${formatCurrency(displayCost)}`);
                     });
                     
                     if (dayExpenses.length > 5) {
@@ -28764,18 +29155,21 @@ window.showTab = function(tabName) {
 const originalAddExpenseInsights = window.addExpense;
 window.addExpense = function() {
     const result = originalAddExpenseInsights ? originalAddExpenseInsights.apply(this, arguments) : null;
-    if (window.FinanceInsights && activeTab === 'insights') {
-        setTimeout(() => {
+    // Always update insights and spending displays when expenses are added - remove tab restriction
+    setTimeout(() => {
+        if (window.FinanceInsights) {
             window.FinanceInsights.refresh();
             updateDailySpendingInsightsChart();
-            updateTodaysSpendingDisplay();        // ADD THIS LINE
-            updateCurrentSpendingRateDisplay();   // ADD THIS LINE
-            updateCurrentSpendingRate();
-            updateDailyBudgetCoach();
-            updateSpendingBreakdown();
-            updateTodaysBudget();
-        }, 100);
-    }
+        }
+        updateTodaysSpendingDisplay();        
+        updateCurrentSpendingRateDisplay();   
+        updateCurrentSpendingRate();
+        updateDailyBudgetCoach();
+        updateSpendingBreakdown();
+        updateTodaysBudget();
+        updateInsightsFinancialMetrics();
+        updateIntegratedBlueCards();
+    }, 100);
     
     // Check for spending alerts on new expenses
     if (arguments.length >= 2) {
@@ -28790,18 +29184,20 @@ window.addExpense = function() {
 const originalDeleteExpenseInsights = window.deleteExpense;
 window.deleteExpense = function() {
     const result = originalDeleteExpenseInsights ? originalDeleteExpenseInsights.apply(this, arguments) : null;
-    if (window.FinanceInsights && activeTab === 'insights') {
-        setTimeout(() => {
+    setTimeout(() => {
+        if (window.FinanceInsights) {
             window.FinanceInsights.refresh();
             updateDailySpendingInsightsChart();
-            updateTodaysSpendingDisplay();        // ADD THIS LINE
-            updateCurrentSpendingRateDisplay();   // ADD THIS LINE
-            updateCurrentSpendingRate();
-            updateDailyBudgetCoach();
-            updateSpendingBreakdown();
-            updateTodaysBudget();
-        }, 100);
-    }
+        }
+        updateTodaysSpendingDisplay();        
+        updateCurrentSpendingRateDisplay();   
+        updateCurrentSpendingRate();
+        updateDailyBudgetCoach();
+        updateSpendingBreakdown();
+        updateTodaysBudget();
+        updateInsightsFinancialMetrics();
+        updateIntegratedBlueCards();
+    }, 100);
     return result;
 };
 
@@ -29374,7 +29770,7 @@ function updateTodaysSpendingDisplay() {
     console.log('🔍 Looking for today\'s spending element...');
     
     // Find the correct today's spending element
-    const todaysSpendingElement = document.getElementById('today-spent-display');
+    const todaysSpendingElement = document.getElementById('insights-today-spending');
     
     if (!todaysSpendingElement) {
         console.log('❌ Today\'s spending element not found');
@@ -29390,15 +29786,17 @@ function updateTodaysSpendingDisplay() {
     }
     
     const today = getLocalDateString();
-    const todayExpenses = expenses.filter(e => e.date === today);
+    const todayExpenses = expenses.filter(e => e.date === today && e.status === 'active' && !e.isIncome);
     const todaySpent = todayExpenses.reduce((sum, e) => sum + (parseFloat(e.cost || e.amount) || 0), 0);
     
     console.log('📅 Today:', today);
+    console.log('📅 All expense dates:', expenses.map(e => e.date).slice(0, 10));
+    console.log('🔍 Date matches for today:', expenses.filter(e => e.date === today).map(e => ({ name: e.name, date: e.date, cost: e.cost, isIncome: e.isIncome })));
     console.log('💰 Today expenses:', todayExpenses.length);
     console.log('💵 Today spent:', todaySpent);
     
-    todaysSpendingElement.textContent = `£${todaySpent.toFixed(2)}`;
-    console.log('✅ Updated today\'s spending to £' + todaySpent.toFixed(2));
+    todaysSpendingElement.textContent = formatCurrency(todaySpent);
+    console.log('✅ Updated today\'s spending to', formatCurrency(todaySpent));
 }
 
 // Fix current spending rate display - look for multiple possible elements
