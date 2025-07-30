@@ -8400,6 +8400,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             <!-- Score text in center -->
                                             <div class="absolute inset-0 flex items-center justify-center">
                                                 <span class="text-xl font-bold" id="health-score-display">--</span>
+                                                <span class="text-xl font-bold" id="health-score-value" style="display: none;">--</span>
                                             </div>
                                             <!-- Info icon positioned at top right of circle -->
                                             <div class="absolute -top-1 -right-1">
@@ -8420,6 +8421,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </div>
                                         </div>
                                         <div class="text-xs text-gray-500 dark:text-gray-100 mt-1" id="health-score-status">No data</div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-100 mt-1" id="health-score-label" style="display: none;">Health Score</div>
                                     </div>
                                 </div>
                             </div>
@@ -8444,6 +8446,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <button onclick="showTab('goals')" class="text-sm hover:underline" style="color: #1976d2;">
                                         Manage Goals
                                     </button>
+                                </div>
+                                <div id="goal-progress-display" class="space-y-4">
+                                    <!-- Goals will be populated dynamically -->
                                 </div>
                                 <div id="dashboard-goals-container" class="space-y-4">
                                     <!-- Goals will be populated dynamically -->
@@ -8702,6 +8707,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <!-- Goals will be populated here -->
                         </div>
                         
+                        <!-- Goals Dashboard Container -->
+                        <div id="goals-dashboard">
+                            <!-- Goals dashboard content will be populated here -->
+                        </div>
+                        
                         <!-- Empty State -->
                         <div id="goals-empty-state" class="card p-8 text-center" style="display: none;">
                             <div class="text-6xl mb-4">🎯</div>
@@ -8919,24 +8929,21 @@ button, .btn, input[type="button"], input[type="submit"] {
         <!-- 3. Goals Progress (Always visible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Goal Progress</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="insights-goals-progress">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="insights-goals-progress">
                 <!-- Goals with flat progress bars -->
             </div>
         </div>
         
         <!-- 4. Smart Insights (Always visible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Smart Insights</h3>
-                <span onclick="toggleAllInsightsSections()" class="cursor-pointer transition-colors">
-                    <span id="insights-all-toggle-text" class="hidden md:inline text-lg font-semibold text-gray-900 dark:text-white">Expand All</span>
-                    <svg id="insights-all-toggle-icon" class="inline md:hidden w-5 h-5 transition-transform duration-200 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transform: rotate(-90deg);">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </span>
-            </div>
-            <div class="space-y-3" id="insights-smart-insights">
-                <!-- Consolidated insights, alerts, and actions -->
+            <button onclick="toggleInsightsSection('smart-insights')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
+                <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">💡 Smart Insights</h3>
+                <span id="smart-insights-toggle" class="text-lg" style="color: var(--color-text-primary);">▶</span>
+            </button>
+            <div id="smart-insights-content" class="hidden">
+                <div class="space-y-4" id="insights-container">
+                    <!-- Will be populated by JavaScript -->
+                </div>
             </div>
         </div>
         
@@ -11871,10 +11878,10 @@ button, .btn, input[type="button"], input[type="submit"] {
         }
 
         // Pre-defined expense categories for consistent classification
-        const expenseCategories = ["Housing", "Utilities", "Transport", "Food/Drink", "Entertainment", "Shopping", "Health", "Personal Care", "Education", "Debt", "Subscriptions", "Other"];
+        const expenseCategories = ["Housing", "Utilities", "Transport", "Food/Drink", "Entertainment", "Shopping", "Health", "Personal Care", "Education", "Debt", "Subscriptions", "Investment", "Other"];
         
         // Income categories for revenue tracking
-        const incomeCategories = ["Salary", "Bonus", "Investment", "Gift", "Other Income"];
+        const incomeCategories = ["Salary", "Bonus", "Investment Returns", "Gift", "Other Income"];
 
         // Keyword mapping for intelligent auto-categorization of transactions
         const categoryKeywords = {
@@ -11888,7 +11895,8 @@ button, .btn, input[type="button"], input[type="submit"] {
             'Personal Care': ['haircut', 'toiletries'],
             'Education': ['books', 'course', 'tuition'],
             'Debt': ['loan', 'credit card'],
-            'Subscriptions': ['subscription']
+            'Subscriptions': ['subscription'],
+            'Investment': ['stocks', 'shares', 'etf', 'fund', 'bond', 'crypto', 'bitcoin', 'trading', 'vanguard', 'fidelity', 'schwab', 'robinhood', 'investment']
         };
 
         const essentialKeywords = [
@@ -15337,15 +15345,25 @@ function removeGoal(index) {
  * Updates progress based on actual transaction data
  */
 function calculateGoalProgress() {
-    if (!userGoals || userGoals.length === 0) return;
+    if (!userGoals || userGoals.length === 0) {
+        console.log('🎯 calculateGoalProgress: No goals found');
+        return;
+    }
+    
+    console.log('🎯 calculateGoalProgress: Processing', userGoals.length, 'goals');
     
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
     
-    userGoals.forEach(goal => {
+    userGoals.forEach((goal, index) => {
+        console.log(`🎯 Processing goal ${index + 1}:`, goal.name, 'Type:', goal.type, 'Manually edited:', goal.manuallyEdited);
+        
         // Skip goals that have been manually adjusted by user
-        if (goal.manuallyEdited) return;
+        if (goal.manuallyEdited) {
+            console.log('⏭️ Skipping manually edited goal:', goal.name);
+            return;
+        }
         
         // Calculate progress based on goal type
         switch(goal.type) {
@@ -15373,6 +15391,12 @@ function calculateGoalProgress() {
                 // These are manual savings goals
                 if (!goal.manuallyEdited) {
                     goal.currentProgress = calculateEmergencyFundProgress(goal);
+                }
+                break;
+            case 'investment':
+                // Calculate investment progress from Investment category expenses
+                if (!goal.manuallyEdited) {
+                    goal.currentProgress = calculateInvestmentProgress(goal);
                 }
                 break;
         }
@@ -15489,6 +15513,45 @@ function calculateEmergencyFundProgress(goal) {
     // It should only use the amount the user has specifically saved for emergencies
     // If no manual amount is set, return 0
     return goal.currentProgress || 0;
+}
+
+/**
+ * Calculate investment goal progress based on expenses with Investment category
+ * @param {Object} goal - The investment goal object
+ * @returns {number} Total amount invested (sum of all Investment category expenses)
+ */
+function calculateInvestmentProgress(goal) {
+    if (!expenses || expenses.length === 0) {
+        console.log('📈 Investment Progress: No expenses found');
+        return goal.currentProgress || 0;
+    }
+    
+    // Sum up all expenses with category "Investment"
+    const investmentExpenses = expenses.filter(expense => 
+        expense.category === 'Investment' && 
+        expense.status === 'active'
+    );
+    
+    console.log('📈 Investment Progress Debug:');
+    console.log('- Total expenses:', expenses.length);
+    console.log('- Investment expenses found:', investmentExpenses.length);
+    console.log('- Investment expenses:', investmentExpenses);
+    
+    const totalInvested = investmentExpenses.reduce((sum, expense) => {
+        const amount = parseFloat(expense.amount || expense.cost || 0);
+        console.log(`- Adding expense: ${expense.name || 'Unknown'} = £${amount}`);
+        return sum + amount;
+    }, 0);
+    
+    // If there's existing manual progress, add to it
+    const baseProgress = goal.baseProgress || 0;
+    const finalProgress = baseProgress + totalInvested;
+    
+    console.log('- Base progress:', baseProgress);
+    console.log('- Total invested (expenses):', totalInvested);
+    console.log('- Final progress:', finalProgress);
+    
+    return finalProgress;
 }
 
 function addDirectCSS() {
@@ -15641,6 +15704,9 @@ function updateGoalProgressDisplay() {
     
     // Update dashboard goals display
     updateDashboardGoals();
+    
+    // Update insights goal progress section
+    updateIntegratedGoalsProgress();
     
     const goalDisplay = document.getElementById('goal-progress-display');
     
@@ -18756,6 +18822,7 @@ function closeGoalSelection() {
             sortExpenses();
             saveData();
             updateDisplay();
+            updateGoalProgressDisplay(); // Explicitly update goals after adding expense
             closeModal();
             showToast(`Expense '${name}' saved successfully.`, "success");
             
@@ -18823,6 +18890,7 @@ function closeGoalSelection() {
             sortExpenses();
             saveData();
             updateDisplay();
+            updateGoalProgressDisplay(); // Explicitly update goals after quick add
             
             // Force render recent expenses after adding
             setTimeout(() => {
@@ -20535,7 +20603,11 @@ function closeGoalSelection() {
         
         function getExpensesForMonth(year, month) {
             return expenses.filter(e => {
+                if (!e.date) return false; // Skip expenses without dates
+                
                 const expenseDate = new Date(e.date);
+                if (isNaN(expenseDate.getTime())) return false; // Skip invalid dates
+                
                 return expenseDate.getFullYear() === year && expenseDate.getMonth() === month;
             });
         }
@@ -21252,6 +21324,7 @@ function closeGoalSelection() {
             const icons = {
                 'Food/Drink': '🍽️',
                 'Transport': '🚗',
+                'Investment': '📈',
                 'Shopping': '🛒',
                 'Entertainment': '🎬',
                 'Bills': '📄',
@@ -23402,18 +23475,25 @@ class LensSmartInsights {
 
     enrichExpenseData() {
         return this.expenses
-            .filter(e => e.status === 'active')
-            .map(expense => ({
-                ...expense,
-                cost: parseFloat(expense.cost) || 0,
-                date: new Date(expense.date),
-                dayOfWeek: new Date(expense.date).getDay(),
-                isWeekend: [0, 6].includes(new Date(expense.date).getDay()),
-                isRecurring: !!expense.recurringSourceId,
-                merchantName: this.extractMerchant(expense.name),
-                month: new Date(expense.date).getMonth(),
-                year: new Date(expense.date).getFullYear()
-            }))
+            .filter(e => e.status === 'active' && e.date) // Also filter out expenses without dates
+            .map(expense => {
+                const expenseDate = new Date(expense.date);
+                // Skip invalid dates
+                if (isNaN(expenseDate.getTime())) return null;
+                
+                return {
+                    ...expense,
+                    cost: parseFloat(expense.cost) || 0,
+                    date: expenseDate,
+                    dayOfWeek: expenseDate.getDay(),
+                    isWeekend: [0, 6].includes(expenseDate.getDay()),
+                    isRecurring: !!expense.recurringSourceId,
+                    merchantName: this.extractMerchant(expense.name),
+                    month: expenseDate.getMonth(),
+                    year: expenseDate.getFullYear()
+                };
+            })
+            .filter(e => e !== null) // Remove null entries (invalid dates)
             .sort((a, b) => b.date - a.date);
     }
 
@@ -24630,8 +24710,8 @@ function showInsightsError() {
         const categoryIcons = {
             "Housing": "🏠", "Utilities": "💡", "Transport": "🛍️", "Food/Drink": "🍔",
             "Entertainment": "🎬", "Shopping": "🛍️", "Health": "❤️", "Personal Care": "🧴",
-            "Education": "🎓", "Debt": "💳", "Subscriptions": "🔁", "Other": "❔",
-            "Salary": "💰", "Bonus": "⭐", "Investment": "📈", "Gift": "🎁", "Other Income": "🪙"
+            "Education": "🎓", "Debt": "💳", "Subscriptions": "🔁", "Investment": "📈", "Other": "❔",
+            "Salary": "💰", "Bonus": "⭐", "Investment Returns": "💹", "Gift": "🎁", "Other Income": "🪙"
         };
 
         // DEPRECATED: Enhanced renderExpensesTable function (replaced with paginated version)
@@ -25745,6 +25825,7 @@ window.categoryIcons = {
     'Travel': '✈️',
     'Subscriptions': '📱',
     'Insurance': '🛡️',
+    'Investment': '📈',
     'Utilities': '⚡',
     'Rent/Mortgage': '🏠'
 };
@@ -26672,7 +26753,7 @@ function updateIntegratedGoalsProgress() {
         return;
     }
     
-    const goalsHTML = userGoals.slice(0, 2).map(goal => {
+    const goalsHTML = userGoals.map(goal => {
         const current = goal.currentProgress || goal.currentAmount || 0;
         const target = goal.target || goal.targetAmount || 1;
         const progressPercent = target > 0 ? (current / target) * 100 : 0;
@@ -27163,7 +27244,14 @@ function getYTDExpenses() {
 
 function getExpensesForMonth(monthDate) {
     return expenses.filter(exp => {
+        if (!exp.date) return false; // Skip expenses without dates
+        
         const expDate = new Date(exp.date);
+        if (isNaN(expDate.getTime())) return false; // Skip invalid dates
+        
+        // Ensure monthDate is valid too
+        if (!monthDate || isNaN(monthDate.getTime())) return false;
+        
         return expDate.getMonth() === monthDate.getMonth() && 
                expDate.getFullYear() === monthDate.getFullYear() && 
                exp.status === 'active' && !exp.isIncome;
@@ -29013,7 +29101,11 @@ function getMonthBudgetData() {
     let monthlySpent = 0;
     expenses.forEach(expense => {
         if (expense.status !== 'active' || expense.isIncome) return;
+        if (!expense.date) return; // Skip expenses without dates
+        
         const expenseDate = new Date(expense.date);
+        if (isNaN(expenseDate.getTime())) return; // Skip invalid dates
+        
         if (expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear) {
             monthlySpent += parseFloat(expense.cost || expense.amount || 0);
         }
@@ -29060,7 +29152,11 @@ function get12MonthsComparisonData() {
         let monthlySpent = 0;
         expenses.forEach(expense => {
             if (expense.status !== 'active' || expense.isIncome) return;
+            if (!expense.date) return; // Skip expenses without dates
+            
             const expenseDate = new Date(expense.date);
+            if (isNaN(expenseDate.getTime())) return; // Skip invalid dates
+            
             if (expenseDate.getMonth() === date.getMonth() && 
                 expenseDate.getFullYear() === date.getFullYear()) {
                 monthlySpent += parseFloat(expense.cost || expense.amount || 0);
