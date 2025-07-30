@@ -7916,6 +7916,35 @@ button, .btn, input[type="button"], input[type="submit"] {
             border: 1px solid rgba(255, 255, 255, 0.2) !important;
         }
         
+        /* Smooth transitions for insight card expand/collapse */
+        .insight-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .insight-chevron {
+            transition: transform 0.3s ease;
+        }
+        
+        /* Responsive display for expand/collapse button */
+        @media (min-width: 768px) {
+            #insights-all-toggle-text {
+                display: inline !important;
+            }
+            #insights-all-toggle-icon {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            #insights-all-toggle-text {
+                display: none !important;
+            }
+            #insights-all-toggle-icon {
+                display: block !important;
+            }
+        }
+        
         /* Specific color overrides with maximum specificity - uniform borders */
         .insight-card.border-red-500.bg-red-50 {
             border: 1px solid var(--color-error) !important;
@@ -8835,7 +8864,15 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 4. Smart Insights (Always visible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Smart Insights</h3>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Smart Insights</h3>
+                <span onclick="toggleAllInsightsSections()" class="cursor-pointer transition-colors">
+                    <span id="insights-all-toggle-text" class="hidden md:inline text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">Expand All</span>
+                    <svg id="insights-all-toggle-icon" class="inline md:hidden w-5 h-5 transition-transform duration-200 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transform: rotate(-90deg);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </span>
+            </div>
             <div class="space-y-3" id="insights-smart-insights">
                 <!-- Consolidated insights, alerts, and actions -->
             </div>
@@ -26597,6 +26634,49 @@ function updateIntegratedGoalsProgress() {
     
     if (container) {
         container.innerHTML = goalsHTML;
+    }
+}
+
+// Global state for insights sections collapse - starts true since sections are collapsed by default
+let allInsightsSectionsCollapsed = true;
+
+function toggleAllInsightsSections() {
+    const toggleText = document.getElementById('insights-all-toggle-text');
+    const toggleIcon = document.getElementById('insights-all-toggle-icon');
+    const sections = ['categories', 'comparison', 'monthly', 'annual'];
+    
+    if (!allInsightsSectionsCollapsed) {
+        // Collapse all sections
+        sections.forEach(sectionId => {
+            const content = document.getElementById(`${sectionId}-content`);
+            const chevron = document.getElementById(`${sectionId}-chevron`);
+            
+            if (content && !content.classList.contains('hidden')) {
+                content.classList.add('hidden');
+                if (chevron) {
+                    chevron.style.transform = 'rotate(0deg)';
+                }
+            }
+        });
+        if (toggleText) toggleText.textContent = 'Expand All';
+        if (toggleIcon) toggleIcon.style.transform = 'rotate(-90deg)'; // Point right when collapsed
+        allInsightsSectionsCollapsed = true;
+    } else {
+        // Expand all sections
+        sections.forEach(sectionId => {
+            const content = document.getElementById(`${sectionId}-content`);
+            const chevron = document.getElementById(`${sectionId}-chevron`);
+            
+            if (content && content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                if (chevron) {
+                    chevron.style.transform = 'rotate(90deg)';
+                }
+            }
+        });
+        if (toggleText) toggleText.textContent = 'Collapse All';
+        if (toggleIcon) toggleIcon.style.transform = 'rotate(0deg)'; // Point down when expanded
+        allInsightsSectionsCollapsed = false;
     }
 }
 
