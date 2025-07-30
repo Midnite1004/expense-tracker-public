@@ -6194,6 +6194,22 @@
                 right: 16px !important;
             }
             
+            /* Override for Expand/Collapse All text to match accordion titles */
+            #insights-all-toggle-text {
+                font-size: 0.5625rem !important; /* Half of text-lg (1.125rem / 2) */
+                font-weight: 600 !important; /* font-semibold equivalent */
+                color: #111827 !important; /* text-gray-900 equivalent */
+                position: static !important; /* Reset position */
+                right: auto !important; /* Reset positioning */
+                text-align: left !important; /* Reset text alignment */
+                font-family: inherit !important; /* Reset font family */
+                line-height: 0.875rem !important; /* Half of text-lg line height */
+                min-width: auto !important; /* Reset min-width */
+                flex-shrink: 1 !important; /* Reset flex-shrink */
+            }
+            
+            /* Dark mode for Expand/Collapse All text - moved to media query */
+            
             .insights-section-toggle h3,
             .help-section-title {
                 font-size: 1rem !important;
@@ -7930,9 +7946,19 @@ button, .btn, input[type="button"], input[type="submit"] {
         @media (min-width: 768px) {
             #insights-all-toggle-text {
                 display: inline !important;
+                font-size: 0.75rem !important; /* One size bigger than 0.5625rem */
+                font-weight: 600 !important;
+                color: #111827 !important;
+                line-height: 1rem !important;
             }
             #insights-all-toggle-icon {
                 display: none !important;
+            }
+            
+            /* Dark mode for desktop */
+            [data-theme="dark"] #insights-all-toggle-text,
+            .dark #insights-all-toggle-text {
+                color: #ffffff !important;
             }
         }
         
@@ -8867,7 +8893,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Smart Insights</h3>
                 <span onclick="toggleAllInsightsSections()" class="cursor-pointer transition-colors">
-                    <span id="insights-all-toggle-text" class="hidden md:inline text-base font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">Expand All</span>
+                    <span id="insights-all-toggle-text" class="hidden md:inline text-lg font-semibold text-gray-900 dark:text-white">Expand All</span>
                     <svg id="insights-all-toggle-icon" class="inline md:hidden w-5 h-5 transition-transform duration-200 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transform: rotate(-90deg);">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
