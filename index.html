@@ -11603,7 +11603,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                     }
                 }
                 
-                return insights.slice(0, 3); // Limit to top 3 insights
+                return insights; // Show all insights
             }
             
             getWeekPerformance() {
@@ -26336,7 +26336,7 @@ function createRealCategoryChart() {
 function generateRealInsights() {
     const insights = calculateRealInsights();
     const spendingData = getRealSpendingData();
-    const container = document.getElementById('smart-insights-content');
+    const container = document.getElementById('insights-smart-insights');
     
     console.log('generateRealInsights called:', { insights, monthlyBudget, hasContainer: !!container });
     
@@ -27001,7 +27001,7 @@ function updateIntegratedSmartInsights() {
         }
     };
     
-    const insightsHTML = insights.slice(0, 3).map(insight => `
+    const insightsHTML = insights.map(insight => `
         <div class="insight-card p-4 rounded-lg ${getCardClass(insight.type)}">
             <div class="flex items-start space-x-3">
                 <div class="flex-shrink-0 mt-0.5">${getSVGIcon(insight.type)}</div>
