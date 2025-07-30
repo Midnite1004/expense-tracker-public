@@ -6689,7 +6689,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 /* Mobile-specific bottom spacing */
 @media (max-width: 768px) {
     .tab-content {
-        padding-bottom: 60px !important;
+        padding-bottom: 10px !important;
     }
     
     /* Ensure last elements in accordions are visible */
@@ -6736,7 +6736,7 @@ button, .btn, input[type="button"], input[type="submit"] {
 @media (max-width: 768px) {
     .app-content {
         padding-top: 5rem !important;
-        padding-bottom: 60px !important;
+        padding-bottom: 10px !important;
     }
     
     .app-header {
@@ -8931,14 +8931,17 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 4. Smart Insights (Always visible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <button onclick="toggleInsightsSection('smart-insights')" class="insights-section-toggle flex items-center justify-between w-full text-left p-2 rounded-lg mb-4">
-                <h3 class="text-lg font-semibold" style="color: var(--color-text-primary);">💡 Smart Insights</h3>
-                <span id="smart-insights-toggle" class="text-lg" style="color: var(--color-text-primary);">▶</span>
-            </button>
-            <div id="smart-insights-content" class="hidden">
-                <div class="space-y-4" id="insights-container">
-                    <!-- Will be populated by JavaScript -->
-                </div>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Smart Insights</h3>
+                <span onclick="toggleAllInsightsSections()" class="cursor-pointer transition-colors">
+                    <span id="insights-all-toggle-text" class="hidden md:inline text-lg font-semibold text-gray-900 dark:text-white">Expand All</span>
+                    <svg id="insights-all-toggle-icon" class="inline md:hidden w-5 h-5 transition-transform duration-200 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transform: rotate(-90deg);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </span>
+            </div>
+            <div class="space-y-3" id="insights-smart-insights">
+                <!-- Consolidated insights, alerts, and actions -->
             </div>
         </div>
         
@@ -20697,7 +20700,7 @@ function closeGoalSelection() {
                     
                     return getNumericId(b.id) - getNumericId(a.id);
                 })
-                .slice(0, 5);
+                .slice(0, 4);
 
             console.log('🎯 Recent expenses to show:', recent.length);
             console.log('📝 Recent expenses:', recent);
