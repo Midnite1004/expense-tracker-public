@@ -381,6 +381,7 @@
             height: 100vh;
             z-index: 40;
             transition: all 0.3s ease;
+            overflow: visible;
         }
         
         .app-sidebar.collapsed {
@@ -528,6 +529,42 @@
         
         .app-sidebar.collapsed .nav-item:hover {
             position: relative;
+        }
+        
+        /* Sidebar edge toggle button */
+        .sidebar-edge-toggle {
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 40px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-edge-toggle:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .sidebar-edge-toggle svg {
+            width: 12px;
+            height: 12px;
+            color: var(--text-secondary);
+            transition: transform 0.3s ease;
+        }
+        
+        /* Arrow points right when collapsed (to expand) */
+        .app-sidebar.collapsed .sidebar-edge-toggle svg {
+            transform: rotate(180deg);
         }
         
         /* Simple tooltip container - Light mode */
@@ -8028,11 +8065,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             </div>
             
             <nav class="sidebar-nav">
-                <button onclick="toggleSidebar()" class="nav-item" title="Toggle sidebar">
-                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
-                    </svg>
-                </button>
+                <!-- Remove old toggle button from nav -->
                 
                 <button onclick="showTab('overview')" id="nav-overview" class="nav-item active" data-tooltip="Overview">
                     <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -8083,6 +8116,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                     <span class="nav-text">Help</span>
                 </button>
             </nav>
+            
+            <!-- Sidebar toggle button on vertical line -->
+            <button onclick="toggleSidebar()" class="sidebar-edge-toggle" title="Toggle sidebar">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path class="toggle-arrow" stroke-linecap="round" stroke-linejoin="round" d="M10 4L6 8L10 12" />
+                </svg>
+            </button>
         </div>
         
         <!-- Main Content Area -->
