@@ -2315,6 +2315,16 @@
             .rounded {
                 border-radius: 4px !important;
             }
+            
+            /* CRITICAL FIX: Goal progress bars on mobile - respect inline width styles */
+            .goal-progress-bar {
+                /* Do not override width - let inline !important style handle it */
+                height: 8px !important;
+                display: block !important;
+                border-radius: 4px !important;
+                transition: width 0.5s ease !important;
+                background-color: #3b82f6 !important; /* blue-500 */
+            }
         }
         
         /* ============================================= 
@@ -7685,7 +7695,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         /* 2. Fix insight card borders */
         .insight-card {
             border-width: 1px !important;
-            border-left-width: 4px !important; /* Keep the left accent border */
+            border-left-width: 1px !important; /* Uniform border thickness as requested */
         }
         
         .insight-card:not(:last-child) {
@@ -7818,7 +7828,7 @@ button, .btn, input[type="button"], input[type="submit"] {
         .insight-card[class*="border-blue-500"],
         .insight-card.border-blue-500 {
             border-width: 1px !important;
-            border-left-width: 4px !important;
+            border-left-width: 1px !important; /* Uniform thickness as requested */
         }
         
         /* Apply thin borders to ALL insight cards regardless of type */
@@ -7826,12 +7836,12 @@ button, .btn, input[type="button"], input[type="submit"] {
             border-top-width: 1px !important;
             border-right-width: 1px !important;
             border-bottom-width: 1px !important;
-            border-left-width: 4px !important; /* Keep accent border on left */
+            border-left-width: 1px !important; /* Uniform thickness as requested */
         }
         
         /* Override the border-l-4 class that's being added by JavaScript */
         .insight-card.border-l-4 {
-            border-left-width: 4px !important; /* This is fine for the accent */
+            border-left-width: 1px !important; /* Uniform thickness as requested */
             border-top-width: 1px !important;
             border-right-width: 1px !important;
             border-bottom-width: 1px !important;
@@ -7846,7 +7856,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             border-top-width: 1px !important;
             border-right-width: 1px !important;
             border-bottom-width: 1px !important;
-            /* Keep the left border at 4px for the accent */
+            border-left-width: 1px !important; /* Uniform thickness as requested */
         }
         
         /* Ensure the border colors are visible but subtle */
@@ -7887,65 +7897,65 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         .insight-card {
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            border-left-width: 4px !important;
+            border-left-width: 1px !important; /* Remove thick left border as requested */
         }
         
-        /* Light mode borders */
-        [data-theme="light"] .insight-card {
-            border: 1px solid rgba(0, 0, 0, 0.1) !important;
-            border-left-width: 4px !important;
+        /* NUCLEAR OPTION: Force light mode borders to be visible */
+        .insight-card,
+        [data-theme="light"] .insight-card,
+        body:not(.dark) .insight-card,
+        html:not(.dark) .insight-card {
+            border: 1px solid #d1d5db !important; /* gray-300 equivalent */
         }
         
-        /* Specific color overrides with maximum specificity */
+        /* Dark mode override */
+        [data-theme="dark"] .insight-card,
+        body.dark .insight-card,
+        html.dark .insight-card,
+        .dark .insight-card {
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        /* Specific color overrides with maximum specificity - uniform borders */
         .insight-card.border-red-500.bg-red-50 {
             border: 1px solid var(--color-error) !important;
-            border-left: 4px solid var(--color-error) !important;
         }
         
         .insight-card.border-yellow-500.bg-yellow-50 {
             border: 1px solid var(--color-warning) !important;
-            border-left: 4px solid var(--color-warning) !important;
         }
         
         .insight-card.border-green-500.bg-green-50 {
             border: 1px solid var(--color-success) !important;
-            border-left: 4px solid var(--color-success) !important;
         }
         
         .insight-card.border-blue-500.bg-blue-50 {
             border: 1px solid var(--color-primary) !important;
-            border-left: 4px solid var(--color-primary) !important;
         }
         
         .insight-card.border-gray-500.bg-gray-50 {
             border: 1px solid #6b7280 !important;
-            border-left: 4px solid #6b7280 !important;
         }
         
-        /* Dark mode specific borders */
+        /* Dark mode specific borders - uniform thickness */
         [data-theme="dark"] .insight-card.border-red-500 {
             border: 1px solid var(--color-error) !important;
-            border-left: 4px solid var(--color-error) !important;
         }
         
         [data-theme="dark"] .insight-card.border-yellow-500 {
             border: 1px solid var(--color-warning) !important;
-            border-left: 4px solid var(--color-warning) !important;
         }
         
         [data-theme="dark"] .insight-card.border-green-500 {
             border: 1px solid var(--color-success) !important;
-            border-left: 4px solid var(--color-success) !important;
         }
         
         [data-theme="dark"] .insight-card.border-blue-500 {
             border: 1px solid var(--color-primary) !important;
-            border-left: 4px solid var(--color-primary) !important;
         }
         
         [data-theme="dark"] .insight-card.border-gray-500 {
             border: 1px solid #4b5563 !important;
-            border-left: 4px solid #4b5563 !important;
         }
         
         </style>
@@ -26575,7 +26585,7 @@ function updateIntegratedGoalsProgress() {
                     <span class="text-sm font-semibold text-blue-600 dark:text-blue-400">${progressPercent.toFixed(1)}%</span>
                 </div>
                 <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full mb-2">
-                    <div class="h-2 bg-blue-500 rounded-full transition-all duration-500" style="width: ${Math.min(progressPercent, 100)}%"></div>
+                    <div class="h-2 bg-blue-500 rounded-full transition-all duration-500 goal-progress-bar" style="width: ${Math.min(progressPercent, 100)}% !important;"></div>
                 </div>
                 <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400">
                     <span>${formatCurrency(current)}</span>
@@ -26706,20 +26716,25 @@ function updateIntegratedSmartInsights() {
     }
     
     const getCardClass = (type) => {
+        // Use single subtle but visible border color for all cards
+        return 'border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800';
+    };
+    
+    const getSVGIcon = (type) => {
         switch(type) {
-            case 'error': return 'border-red-500 bg-red-50 dark:bg-red-900/20';
-            case 'warning': return 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20';
-            case 'success': return 'border-green-500 bg-green-50 dark:bg-green-900/20';
-            case 'info': return 'border-blue-500 bg-blue-50 dark:bg-blue-900/20';
-            default: return 'border-gray-500 bg-gray-50 dark:bg-gray-900/20';
+            case 'error': return `<svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>`;
+            case 'warning': return `<svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>`;
+            case 'success': return `<svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>`;
+            case 'info': return `<svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>`;
+            default: return `<svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>`;
         }
     };
     
     const insightsHTML = insights.slice(0, 3).map(insight => `
-        <div class="insight-card p-4 rounded-lg border-l-4 ${getCardClass(insight.type)}">
+        <div class="insight-card p-4 rounded-lg ${getCardClass(insight.type)}">
             <div class="flex items-start space-x-3">
-                <span class="text-xl flex-shrink-0">${insight.icon}</span>
-                <div class="flex-1">
+                <div class="flex-shrink-0 mt-0.5">${getSVGIcon(insight.type)}</div>
+                <div class="flex-1 min-w-0">
                     <h4 class="font-semibold text-gray-900 dark:text-white mb-1">${insight.title}</h4>
                     <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">${insight.message}</p>
                     <p class="text-xs text-gray-600 dark:text-gray-400 italic">${insight.action}</p>
