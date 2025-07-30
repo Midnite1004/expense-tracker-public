@@ -148,7 +148,7 @@
             --bg-secondary: var(--color-bg-secondary);
             --bg-tertiary: var(--color-bg-tertiary);
             --text-primary: var(--color-text-primary);
-            --text-secondary: var(--color-text-secondary);
+            --text-secondary: var(--color-text-primary);
             --text-tertiary: var(--color-text-tertiary);
             --border-color: var(--color-border);
             --accent-primary: #1a237e;
@@ -218,7 +218,7 @@
             --bg-secondary: var(--color-bg-secondary);
             --bg-tertiary: var(--color-bg-tertiary);
             --text-primary: var(--color-text-primary);
-            --text-secondary: var(--color-text-secondary);
+            --text-secondary: var(--color-text-primary);
             --text-tertiary: var(--color-text-tertiary);
             --border-color: var(--color-border);
             --accent-primary: #1a237e;
@@ -1182,7 +1182,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(4px);
             z-index: 1000;
             display: none;
@@ -2382,7 +2382,7 @@
             padding: 4px;
             cursor: pointer;
             color: var(--color-text-secondary);
-            opacity: 0.7;
+            opacity: 1.0;
             transition: opacity 0.2s ease;
         }
 
@@ -3892,7 +3892,7 @@
              opacity: 0.9;
         }
         .modern-button-outline {
-            background-color: transparent;
+            background-color: #fff;
             color: var(--color-text-secondary);
             border: 1px solid var(--color-border);
         }
@@ -5058,7 +5058,7 @@
         }
         
         .pagination-nav-btn:disabled {
-            opacity: 0.5;
+            opacity: 1.0;
             cursor: not-allowed;
             background-color: var(--bg-tertiary);
         }
@@ -5884,7 +5884,7 @@
         }
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            50% { opacity: 1.0; }
         }
         
         /* Help Accordion Styling */
@@ -6879,7 +6879,7 @@ button, .btn, input[type="button"], input[type="submit"] {
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             opacity: 0;
@@ -7522,7 +7522,69 @@ button, .btn, input[type="button"], input[type="submit"] {
         .dark .expense-item-amount-value {
             color: #ef4444;
         }
-    </style>
+    /* VISIBILITY FIXES */
+        .budget-stat-label,
+        .budget-stat-value,
+        .insight-description,
+        .secondary-text {
+            color: rgba(255, 255, 255, 0.95) !important;
+        }
+        
+        /* ADDITIONAL VISIBILITY FIXES */
+        .annual-overview-amount,
+        .budget-performance-month,
+        .insight-card p,
+        .insight-card .secondary,
+        .percentage-text,
+        .month-label,
+        .amount-display,
+        body.dark-mode .budget-stat-label,
+        body.dark-mode .budget-stat-value,
+        body.dark-mode .secondary-text,
+        body.dark-mode .insight-description {
+            color: rgba(255, 255, 255, 0.95) !important;
+        }
+        
+        /* Fix wrong green color */
+        .time-filter.active,
+        button.active,
+        .btn-success,
+        .bg-green {
+            background-color: #2e7d32 !important;
+        }
+        
+        /* Fix blue text visibility */
+        .accent-blue,
+        .blue-text,
+        .savings-rate {
+            color: #2196f3 !important;
+        }
+        
+        /* VISIBILITY FIXES */
+        .budget-stat-label,
+        .budget-stat-value,
+        .insight-description,
+        .secondary-text {
+            color: rgba(255, 255, 255, 0.95) !important;
+        }
+        
+        /* Fix wrong green color */
+        .time-filter.active,
+        button.active {
+            background-color: #2e7d32 !important;
+        }
+        /* Mobile progress bar fix - only show 2 sections */
+        @media (max-width: 768px) {
+            .income-allocation-bar {
+                display: flex !important;
+                width: 100% !important;
+            }
+            .income-allocation-bar > div:nth-child(n+3) {
+                display: none !important;
+            }
+        }
+        
+        </style>
 
 </head>
 <body class="antialiased">
