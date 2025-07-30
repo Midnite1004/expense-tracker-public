@@ -6594,8 +6594,8 @@ button, .btn, input[type="button"], input[type="submit"] {
     background-color: var(--accent-primary)/10 !important;
 }
 
-/* COMPREHENSIVE BORDER REMOVAL - ALL SCREENS */
-.card, .app-card, .stat-card, .quick-add-button, .budget-progress, .insights-section, .projection-insight, .prediction-card {
+/* COMPREHENSIVE BORDER REMOVAL - ALL SCREENS (EXCLUDING INSIGHT CARDS) */
+.card:not(.insight-card), .app-card:not(.insight-card), .stat-card:not(.insight-card), .quick-add-button, .budget-progress, .insights-section, .projection-insight, .prediction-card {
     border: none !important;
     box-shadow: none !important;
 }
@@ -6655,16 +6655,16 @@ button, .btn, input[type="button"], input[type="submit"] {
     margin-bottom: 0 !important;
 }
 
-/* Remove all borders from cards and containers */
-.card, .app-card, .stat-card, .quick-add-button, .budget-progress, .insights-section, .projection-insight, .prediction-card,
-.stats-grid .stat-card, .quick-add-grid .quick-add-button, .budget-progress .card, .insights-section .card,
+/* Remove all borders from cards and containers (EXCLUDING INSIGHT CARDS) */
+.card:not(.insight-card), .app-card:not(.insight-card), .stat-card:not(.insight-card), .quick-add-button, .budget-progress, .insights-section, .projection-insight, .prediction-card,
+.stats-grid .stat-card:not(.insight-card), .quick-add-grid .quick-add-button, .budget-progress .card:not(.insight-card), .insights-section .card:not(.insight-card),
 .period-toggle, .modern-button, .modern-input, .modern-select {
     border: none !important;
     box-shadow: none !important;
 }
 
-/* Remove borders from specific problematic elements */
-.border, .border-1, .border-2, .border-gray-200, .border-gray-300, .border-gray-400, .border-gray-500, .border-gray-600, .border-gray-700, .border-gray-800 {
+/* Remove borders from specific problematic elements (EXCLUDING INSIGHT CARDS) */
+:not(.insight-card).border, :not(.insight-card).border-1, :not(.insight-card).border-2, :not(.insight-card).border-gray-200, :not(.insight-card).border-gray-300, :not(.insight-card).border-gray-400, :not(.insight-card).border-gray-500, :not(.insight-card).border-gray-600, :not(.insight-card).border-gray-700, :not(.insight-card).border-gray-800 {
     border: none !important;
 }
 
@@ -7371,13 +7371,13 @@ button, .btn, input[type="button"], input[type="submit"] {
         }
         
         .plaid-lock-icon {
-            color: #6b7280;
+            color: rgba(255, 255, 255, 0.95) !important;
             width: 16px;
             height: 16px;
         }
         
         .dark .plaid-lock-icon {
-            color: #9ca3af;
+            color: rgba(255, 255, 255, 0.95) !important;
         }
         
         /* Enhanced tooltip styles for Plaid transactions */
@@ -7491,12 +7491,12 @@ button, .btn, input[type="button"], input[type="submit"] {
 
         .expense-item-subtitle {
             font-size: 13px;
-            color: #6b7280;
+            color: rgba(255, 255, 255, 0.95) !important;
             line-height: 1.2;
         }
 
         .dark .expense-item-subtitle {
-            color: #9ca3af;
+            color: rgba(255, 255, 255, 0.95) !important;
         }
 
         .expense-item-category {
@@ -7560,13 +7560,85 @@ button, .btn, input[type="button"], input[type="submit"] {
             color: #2196f3 !important;
         }
         
-        /* VISIBILITY FIXES */
-        .budget-stat-label,
-        .budget-stat-value,
-        .insight-description,
-        .secondary-text {
-            color: rgba(255, 255, 255, 0.95) !important;
-        }
+.smart-insight p,
+.smart-insight em {
+    color: #333;
+}
+
+/* Light mode specific for better contrast */
+[data-theme="light"] .smart-insight p,
+[data-theme="light"] .smart-insight em {
+    color: #333;
+}
+
+.dark-mode .label,
+.dark-mode .smart-insight p,
+.dark-mode .smart-insight em,
+.dark-mode .currency,
+.dark-mode .budget-label {
+    color: #b0d0ff;
+}
+
+.dark-mode .savings-rate {
+    color: #f2eaff;
+}
+
+.smart-insight {
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 10px 14px;
+}
+
+.smart-insight:not(:last-child) {
+    margin-bottom: 12px;
+}
+
+[data-theme="dark"] .smart-insight {
+    border: 1px solid var(--color-border);
+}
+
+.income-allocation-bar {
+    display: flex;
+    width: 100%;
+    height: 10px;
+    background: #f0f0f0;
+    overflow: hidden;
+    border-radius: 4px;
+    flex-wrap: nowrap;
+}
+
+.dark-mode .income-allocation-bar {
+    background: #374151;
+}
+
+.income-allocation-bar .allocation-bar {
+    height: 100%;
+}
+
+.allocation-bar.expenses {
+    background-color: #f97316;
+}
+
+.income-allocation-bar > div {
+    min-width: 0;
+}
+
+.dark-mode .annual-budget-label {
+    color: #d0d0ff;
+}
+
+.allocation-bar.savings {
+    background-color: #16a34a;
+}
+
+@media (max-width: 768px) {
+    .income-allocation-bar {
+        flex-wrap: nowrap !important;
+    }
+    .income-allocation-bar > div {
+        min-width: 0 !important;
+    }
+}
         
         /* Fix wrong green color */
         .time-filter.active,
@@ -7582,6 +7654,298 @@ button, .btn, input[type="button"], input[type="submit"] {
             .income-allocation-bar > div:nth-child(n+3) {
                 display: none !important;
             }
+        }
+        
+        /* ===== COMPREHENSIVE FIXES FOR ALL IDENTIFIED ISSUES ===== */
+        
+        /* 1. Fix insight-card (not smart-insight) text contrast */
+        .insight-card p,
+        .insight-card em {
+            color: #333 !important;
+        }
+        
+        /* Light mode specific */
+        [data-theme="light"] .insight-card p,
+        [data-theme="light"] .insight-card em,
+        [data-theme="light"] .insight-card .text-sm.text-gray-700,
+        [data-theme="light"] .insight-card .text-xs.text-gray-600 {
+            color: #333 !important;
+        }
+        
+        /* Dark mode - lighter blues for better contrast */
+        [data-theme="dark"] .insight-card p,
+        [data-theme="dark"] .insight-card em,
+        [data-theme="dark"] .insight-card .text-sm.dark\:text-gray-300,
+        [data-theme="dark"] .insight-card .text-xs.dark\:text-gray-400,
+        .dark .insight-card p,
+        .dark .insight-card em {
+            color: #b0d0ff !important;
+        }
+        
+        /* 2. Fix insight card borders */
+        .insight-card {
+            border-width: 1px !important;
+            border-left-width: 4px !important; /* Keep the left accent border */
+        }
+        
+        .insight-card:not(:last-child) {
+            margin-bottom: 12px !important;
+        }
+        
+        /* 3. Fix income allocation bar - ensure proper flex layout */
+        .income-allocation-bar {
+            display: flex !important;
+            width: 100% !important;
+            height: 16px !important;
+            background: #f0f0f0 !important;
+            overflow: hidden !important;
+            border-radius: 9999px !important;
+            flex-wrap: nowrap !important;
+        }
+        
+        [data-theme="dark"] .income-allocation-bar,
+        .dark .income-allocation-bar {
+            background: #374151 !important;
+        }
+        
+        .allocation-bar {
+            height: 100% !important;
+            transition: all 0.5s ease !important;
+            position: relative !important;
+            float: none !important;
+        }
+        
+        .allocation-bar.expenses {
+            background-color: #ff5722 !important;
+        }
+        
+        .allocation-bar.savings {
+            background-color: #2e7d32 !important;
+        }
+        
+        /* Ensure no absolute positioning */
+        #expenses-allocation,
+        #savings-allocation {
+            position: relative !important;
+            left: 0 !important;
+            top: 0 !important;
+        }
+        
+        /* 4. Override Tailwind utility classes with higher specificity */
+        div[id="insights-smart-insights"] .text-gray-700.dark\:text-gray-300,
+        div[id="insights-smart-insights"] .text-gray-600.dark\:text-gray-400 {
+            color: #333 !important;
+        }
+        
+        [data-theme="dark"] div[id="insights-smart-insights"] .text-gray-700.dark\:text-gray-300,
+        [data-theme="dark"] div[id="insights-smart-insights"] .text-gray-600.dark\:text-gray-400,
+        .dark div[id="insights-smart-insights"] .text-gray-700.dark\:text-gray-300,
+        .dark div[id="insights-smart-insights"] .text-gray-600.dark\:text-gray-400 {
+            color: #b0d0ff !important;
+        }
+        
+        /* 5. Budget labels in dark mode */
+        [data-theme="dark"] .budget-label,
+        [data-theme="dark"] .text-sm[style*="color: #1a237e"],
+        .dark .budget-label,
+        .dark .text-sm[style*="color: #1a237e"] {
+            color: #b0d0ff !important;
+        }
+        
+        /* 6. Annual budget text */
+        [data-theme="dark"] .annual-budget-label,
+        [data-theme="dark"] #insights-annual-budget-label,
+        .dark .annual-budget-label,
+        .dark #insights-annual-budget-label {
+            color: #d0d0ff !important;
+        }
+        
+        /* 7. Savings rate in dark mode */
+        [data-theme="dark"] .savings-rate,
+        [data-theme="dark"] #insights-savings-rate,
+        .dark .savings-rate,
+        .dark #insights-savings-rate {
+            color: #f2eaff !important;
+        }
+        
+        /* 8. Income Allocation Title */
+        [data-theme="dark"] div:has(> #expenses-allocation) .text-sm.font-medium,
+        .dark div:has(> #expenses-allocation) .text-sm.font-medium {
+            color: #e0e0ff !important;
+        }
+        
+        /* 9. Fix ALL blue text (#1a237e) in dark mode - comprehensive override */
+        [data-theme="dark"] [style*="color: #1a237e"],
+        [data-theme="dark"] .text-accent-primary,
+        [data-theme="dark"] div[style*="color: #1a237e"],
+        [data-theme="dark"] span[style*="color: #1a237e"],
+        .dark [style*="color: #1a237e"],
+        .dark .text-accent-primary,
+        .dark div[style*="color: #1a237e"],
+        .dark span[style*="color: #1a237e"] {
+            color: var(--accent-secondary) !important; /* Gold color from design system for better contrast */
+        }
+        
+        /* Fix specific Budget Overview elements */
+        [data-theme="dark"] #insights-period-budget,
+        [data-theme="dark"] #insights-annual-budget,
+        [data-theme="dark"] .text-xs.font-medium[style*="#1a237e"],
+        [data-theme="dark"] .text-sm.font-semibold[style*="#1a237e"],
+        .dark #insights-period-budget,
+        .dark #insights-annual-budget,
+        .dark .text-xs.font-medium[style*="#1a237e"],
+        .dark .text-sm.font-semibold[style*="#1a237e"] {
+            color: var(--accent-secondary) !important; /* Gold color for consistency */
+        }
+        
+        /* Fix % Used text color in dark mode */
+        [data-theme="dark"] .text-xs.font-medium[style*="#5f6368"],
+        [data-theme="dark"] .text-sm.font-semibold[style*="#5f6368"],
+        [data-theme="dark"] #insights-period-percent,
+        .dark .text-xs.font-medium[style*="#5f6368"],
+        .dark .text-sm.font-semibold[style*="#5f6368"],
+        .dark #insights-period-percent {
+            color: #9bb5d4 !important; /* Lighter gray-blue for contrast */
+        }
+        
+        /* Fix "X% Used" in Budget Progress */
+        [data-theme="dark"] #budget-progress-used,
+        .dark #budget-progress-used {
+            color: var(--accent-secondary) !important; /* Gold for consistency */
+        }
+        
+        /* 10. Fix Top Spending Category border - make it consistent */
+        .insight-card[class*="border-blue-500"],
+        .insight-card.border-blue-500 {
+            border-width: 1px !important;
+            border-left-width: 4px !important;
+        }
+        
+        /* Apply thin borders to ALL insight cards regardless of type */
+        .insight-card[class*="border-"] {
+            border-top-width: 1px !important;
+            border-right-width: 1px !important;
+            border-bottom-width: 1px !important;
+            border-left-width: 4px !important; /* Keep accent border on left */
+        }
+        
+        /* Override the border-l-4 class that's being added by JavaScript */
+        .insight-card.border-l-4 {
+            border-left-width: 4px !important; /* This is fine for the accent */
+            border-top-width: 1px !important;
+            border-right-width: 1px !important;
+            border-bottom-width: 1px !important;
+        }
+        
+        /* Specifically target insight cards with color borders */
+        .insight-card.border-red-500,
+        .insight-card.border-yellow-500,
+        .insight-card.border-green-500,
+        .insight-card.border-blue-500,
+        .insight-card.border-gray-500 {
+            border-top-width: 1px !important;
+            border-right-width: 1px !important;
+            border-bottom-width: 1px !important;
+            /* Keep the left border at 4px for the accent */
+        }
+        
+        /* Ensure the border colors are visible but subtle */
+        .insight-card.border-red-500 {
+            border-color: #ef4444;
+        }
+        .insight-card.border-yellow-500 {
+            border-color: #f59e0b;
+        }
+        .insight-card.border-green-500 {
+            border-color: #10b981;
+        }
+        .insight-card.border-blue-500 {
+            border-color: #3b82f6;
+        }
+        .insight-card.border-gray-500 {
+            border-color: #6b7280;
+        }
+        
+        /* 11. Improve light mode Smart Insights text for maximum readability */
+        [data-theme="light"] .insight-card p,
+        [data-theme="light"] .insight-card em,
+        [data-theme="light"] .insight-card .text-sm,
+        [data-theme="light"] .insight-card .text-xs,
+        .insight-card p,
+        .insight-card em {
+            color: #1f2937 !important; /* Darker gray for better contrast */
+        }
+        
+        /* Action text in italic should be slightly lighter */
+        [data-theme="light"] .insight-card .text-xs.italic,
+        .insight-card .text-xs.italic {
+            color: #374151 !important; /* Medium gray */
+        }
+        
+        /* ===== NUCLEAR OPTION: FORCE INSIGHT CARD BORDERS ===== */
+        /* Override ALL possible conflicting rules */
+        
+        .insight-card {
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-left-width: 4px !important;
+        }
+        
+        /* Light mode borders */
+        [data-theme="light"] .insight-card {
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            border-left-width: 4px !important;
+        }
+        
+        /* Specific color overrides with maximum specificity */
+        .insight-card.border-red-500.bg-red-50 {
+            border: 1px solid var(--color-error) !important;
+            border-left: 4px solid var(--color-error) !important;
+        }
+        
+        .insight-card.border-yellow-500.bg-yellow-50 {
+            border: 1px solid var(--color-warning) !important;
+            border-left: 4px solid var(--color-warning) !important;
+        }
+        
+        .insight-card.border-green-500.bg-green-50 {
+            border: 1px solid var(--color-success) !important;
+            border-left: 4px solid var(--color-success) !important;
+        }
+        
+        .insight-card.border-blue-500.bg-blue-50 {
+            border: 1px solid var(--color-primary) !important;
+            border-left: 4px solid var(--color-primary) !important;
+        }
+        
+        .insight-card.border-gray-500.bg-gray-50 {
+            border: 1px solid #6b7280 !important;
+            border-left: 4px solid #6b7280 !important;
+        }
+        
+        /* Dark mode specific borders */
+        [data-theme="dark"] .insight-card.border-red-500 {
+            border: 1px solid var(--color-error) !important;
+            border-left: 4px solid var(--color-error) !important;
+        }
+        
+        [data-theme="dark"] .insight-card.border-yellow-500 {
+            border: 1px solid var(--color-warning) !important;
+            border-left: 4px solid var(--color-warning) !important;
+        }
+        
+        [data-theme="dark"] .insight-card.border-green-500 {
+            border: 1px solid var(--color-success) !important;
+            border-left: 4px solid var(--color-success) !important;
+        }
+        
+        [data-theme="dark"] .insight-card.border-blue-500 {
+            border: 1px solid var(--color-primary) !important;
+            border-left: 4px solid var(--color-primary) !important;
+        }
+        
+        [data-theme="dark"] .insight-card.border-gray-500 {
+            border: 1px solid #4b5563 !important;
+            border-left: 4px solid #4b5563 !important;
         }
         
         </style>
@@ -8528,9 +8892,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <!-- Income allocation bar -->
                 <div class="mb-4">
                     <div class="text-sm font-medium mb-2" style="color: #1a237e;">Income Allocation</div>
-                    <div class="h-4 rounded-full overflow-hidden relative" style="background-color: #f5f5f5;">
-                        <div class="h-full rounded-full transition-all duration-500" style="background-color: #ff5722;" id="expenses-allocation"></div>
-                        <div class="h-full rounded-full transition-all duration-500 absolute top-0" style="background-color: #2e7d32;" id="savings-allocation"></div>
+                    <div class="income-allocation-bar">
+                        <div class="allocation-bar expenses" id="expenses-allocation"></div>
+                        <div class="allocation-bar savings" id="savings-allocation"></div>
                     </div>
                     <div class="flex justify-between mt-1 text-xs">
                         <span style="color: #ff5722;">Expenses</span>
@@ -26502,7 +26866,9 @@ function updateIntegratedMonthlyOverview() {
         expensesAllocation.style.backgroundColor = '#ff5722'; // Alert Orange for expenses
         savingsAllocation.style.width = Math.max(0, savingsPercent) + '%';
         savingsAllocation.style.backgroundColor = '#2e7d32'; // Success Green for savings
-        savingsAllocation.style.left = Math.min(expensePercent, 100) + '%';
+        // Remove absolute positioning to prevent overlap
+        savingsAllocation.style.position = 'relative';
+        savingsAllocation.style.left = '0';
     }
 }
 
