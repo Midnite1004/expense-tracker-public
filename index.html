@@ -8864,8 +8864,9 @@ button, .btn, input[type="button"], input[type="submit"] {
 <!-- Insights Tab - Integrated Design -->
 <div id="insights-tab" class="tab-content hidden fade-in space-y-6">
         
+        
         <!-- 1. Four Brand Color Metric Cards -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div class="metric-card p-4 rounded-lg text-center hover:transform hover:-translate-y-1 transition-all duration-200 shadow-lg" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); color: #1b5e20;">
                 <div class="text-2xl md:text-3xl font-bold" id="insights-total-income">£0</div>
                 <div class="text-sm" style="color: #2e7d32;">Monthly Income</div>
@@ -8885,7 +8886,14 @@ button, .btn, input[type="button"], input[type="submit"] {
         </div>
         
         <!-- 2. Budget Overview (Preserve chart functionality) -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 relative">
+            <!-- Expand/Collapse All Button - Just chevron -->
+            <button onclick="toggleAllInsightsSections()" style="position: absolute; top: 12px; right: 12px; z-index: 999; background: none; border: none; padding: 4px;" class="hover:opacity-70 transition-opacity">
+                <svg id="insights-all-toggle-icon" class="w-5 h-5 transition-transform duration-200" style="transform: rotate(-90deg); color: #ffa000;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Budget Overview</h2>
             
             <!-- Period selector -->
@@ -8921,27 +8929,33 @@ button, .btn, input[type="button"], input[type="submit"] {
             </div>
         </div>
         
-        <!-- 3. Goals Progress (Always visible) -->
+        <!-- 3. Goals Progress (Collapsible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Goal Progress</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="insights-goals-progress">
-                <!-- Goals with flat progress bars -->
+            <button onclick="toggleInsightsSection('goals-progress')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Goal Progress</h3>
+                <svg id="goals-progress-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+            <div id="goals-progress-content" class="hidden mt-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="insights-goals-progress">
+                    <!-- Goals with flat progress bars -->
+                </div>
             </div>
         </div>
         
-        <!-- 4. Smart Insights (Always visible) -->
+        <!-- 4. Smart Insights (Collapsible) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <div class="flex items-center justify-between mb-4">
+            <button onclick="toggleInsightsSection('smart-insights')" class="insights-section-toggle flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Smart Insights</h3>
-                <span onclick="toggleAllInsightsSections()" class="cursor-pointer transition-colors">
-                    <span id="insights-all-toggle-text" class="hidden md:inline text-lg font-semibold text-gray-900 dark:text-white">Expand All</span>
-                    <svg id="insights-all-toggle-icon" class="inline md:hidden w-5 h-5 transition-transform duration-200 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transform: rotate(-90deg);">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </span>
-            </div>
-            <div class="space-y-3" id="insights-smart-insights">
-                <!-- Consolidated insights, alerts, and actions -->
+                <svg id="smart-insights-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+            <div id="smart-insights-content" class="hidden mt-4">
+                <div class="space-y-3" id="insights-smart-insights">
+                    <!-- Consolidated insights, alerts, and actions -->
+                </div>
             </div>
         </div>
         
@@ -26834,7 +26848,7 @@ let allInsightsSectionsCollapsed = true;
 function toggleAllInsightsSections() {
     const toggleText = document.getElementById('insights-all-toggle-text');
     const toggleIcon = document.getElementById('insights-all-toggle-icon');
-    const sections = ['categories', 'comparison', 'monthly', 'annual'];
+    const sections = ['goals-progress', 'smart-insights', 'categories', 'comparison', 'monthly', 'annual'];
     
     if (!allInsightsSectionsCollapsed) {
         // Collapse all sections
