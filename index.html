@@ -8323,21 +8323,9 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <div class="flex items-center gap-2">
                                         <h3 class="text-xl font-semibold">Budget Progress & Health</h3>
                                         <div class="relative">
-                                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="toggleBudgetHealthTooltip()">
+                                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" onmouseenter="showBudgetHealthTooltip(event)" onmouseleave="hideBudgetHealthTooltip()">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
-                                            <div id="budget-health-tooltip-container" class="absolute left-1/2 transform -translate-x-1/2 top-8 text-xs rounded-lg px-3 py-2 opacity-0 transition-opacity whitespace-nowrap z-10 pointer-events-none" style="background-color: var(--tooltip-bg-color, #1a1a1a); color: var(--tooltip-text-color, #ffffff);">
-                                                <div id="budget-health-tooltip">
-                                                    <strong>Budget Health Score (0-100)</strong><br>
-                                                    Based on spending habits, budget adherence,<br>
-                                                    savings rate, and consistency over time.<br><br>
-                                                    <strong>Projection Calculation:</strong><br>
-                                                    • Current spending: <span id="tooltip-current-spend">£0</span><br>
-                                                    • Daily average: <span id="tooltip-daily-avg">£0</span><br>
-                                                    • Projected total: <span id="tooltip-projected">£0</span><br>
-                                                    • Monthly budget: <span id="tooltip-budget">£0</span>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                     <button class="text-sm hover:underline" onclick="showTab('settings')" style="color: #1976d2;">
@@ -8404,21 +8392,11 @@ button, .btn, input[type="button"], input[type="submit"] {
                                             </div>
                                             <!-- Info icon positioned at top right of circle -->
                                             <div class="absolute -top-1 -right-1">
-                                                <svg class="w-4 h-4 text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="toggleHealthScoreTooltip()">
+                                                <svg class="w-4 h-4 text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" onmouseenter="showHealthScoreTooltip(event)" onmouseleave="hideHealthScoreTooltip()">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
                                             </div>
                                             <!-- Health Score Tooltip positioned near the circle -->
-                                            <div id="health-score-tooltip-container" class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 text-xs rounded-lg px-3 py-2 opacity-0 transition-opacity whitespace-nowrap z-10 pointer-events-none w-48" style="background-color: var(--tooltip-bg-color, #1a1a1a); color: var(--tooltip-text-color, #ffffff);">
-                                                <div id="health-score-tooltip">
-                                                    <strong>Health Score Components:</strong><br>
-                                                    • Budget usage & spending pace<br>
-                                                    • Savings rate & goal progress<br>
-                                                    • Spending consistency<br>
-                                                    • Emergency fund status<br><br>
-                                                    Higher scores = better financial health
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="text-xs text-gray-500 dark:text-gray-100 mt-1" id="health-score-status">No data</div>
                                         <div class="text-xs text-gray-500 dark:text-gray-100 mt-1" id="health-score-label" style="display: none;">Health Score</div>
@@ -18504,26 +18482,50 @@ function closeGoalSelection() {
         }
 
         // --- Tooltip Management ---
-        function toggleBudgetHealthTooltip() {
+        function showBudgetHealthTooltip(event) {
             const tooltip = document.getElementById('budget-health-tooltip-container');
-            if (tooltip.style.opacity === '1') {
-                tooltip.style.opacity = '0';
-                tooltip.style.pointerEvents = 'none';
-            } else {
-                tooltip.style.opacity = '1';
-                tooltip.style.pointerEvents = 'auto';
-            }
+            const trigger = event.target.closest('svg');
+            const rect = trigger.getBoundingClientRect();
+            
+            tooltip.style.display = 'block';
+            tooltip.style.left = (rect.right + 10) + 'px';
+            tooltip.style.top = rect.top + 'px';
+            tooltip.style.opacity = '1';
+            tooltip.style.pointerEvents = 'auto';
         }
 
-        function toggleHealthScoreTooltip() {
+        function hideBudgetHealthTooltip() {
+            const tooltip = document.getElementById('budget-health-tooltip-container');
+            tooltip.style.opacity = '0';
+            tooltip.style.pointerEvents = 'none';
+            setTimeout(() => {
+                if (tooltip.style.opacity === '0') {
+                    tooltip.style.display = 'none';
+                }
+            }, 200);
+        }
+
+        function showHealthScoreTooltip(event) {
             const tooltip = document.getElementById('health-score-tooltip-container');
-            if (tooltip.style.opacity === '1') {
-                tooltip.style.opacity = '0';
-                tooltip.style.pointerEvents = 'none';
-            } else {
-                tooltip.style.opacity = '1';
-                tooltip.style.pointerEvents = 'auto';
-            }
+            const trigger = event.target.closest('svg');
+            const rect = trigger.getBoundingClientRect();
+            
+            tooltip.style.display = 'block';
+            tooltip.style.left = (rect.right + 10) + 'px';
+            tooltip.style.top = rect.top + 'px';
+            tooltip.style.opacity = '1';
+            tooltip.style.pointerEvents = 'auto';
+        }
+
+        function hideHealthScoreTooltip() {
+            const tooltip = document.getElementById('health-score-tooltip-container');
+            tooltip.style.opacity = '0';
+            tooltip.style.pointerEvents = 'none';
+            setTimeout(() => {
+                if (tooltip.style.opacity === '0') {
+                    tooltip.style.display = 'none';
+                }
+            }, 200);
         }
 
         function toggleGoalsProgressTooltip() {
@@ -32292,6 +32294,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     </script>
+
+<!-- Tooltip containers positioned at body level to avoid stacking context issues -->
+<div id="budget-health-tooltip-container" class="fixed text-xs rounded-lg px-3 py-2 opacity-0 transition-opacity pointer-events-none" style="background-color: var(--tooltip-bg-color, #1a1a1a); color: var(--tooltip-text-color, #ffffff); z-index: 99999; white-space: normal; width: max-content; min-width: 250px; display: none;">
+    <div id="budget-health-tooltip">
+        <strong>Budget Health Score (0-100)</strong><br>
+        Based on spending habits, budget adherence,<br>
+        savings rate, and consistency over time.<br><br>
+        <strong>Projection Calculation:</strong><br>
+        • Current spending: <span id="tooltip-current-spend">£0</span><br>
+        • Daily average: <span id="tooltip-daily-avg">£0</span><br>
+        • Projected total: <span id="tooltip-projected">£0</span><br>
+        • Monthly budget: <span id="tooltip-budget">£0</span>
+    </div>
+</div>
+
+<div id="health-score-tooltip-container" class="fixed text-xs rounded-lg px-3 py-2 opacity-0 transition-opacity pointer-events-none" style="background-color: var(--tooltip-bg-color, #1a1a1a); color: var(--tooltip-text-color, #ffffff); z-index: 99999; white-space: normal; width: max-content; min-width: 200px; display: none;">
+    <div id="health-score-tooltip">
+        <strong>Health Score Components:</strong><br>
+        • Budget usage & spending pace<br>
+        • Savings rate & goal progress<br>
+        • Spending consistency<br>
+        • Emergency fund status<br><br>
+        Higher scores = better financial health
+    </div>
+</div>
 
 </body>
 </html>
