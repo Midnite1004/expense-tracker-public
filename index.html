@@ -8707,11 +8707,6 @@ button, .btn, input[type="button"], input[type="submit"] {
                             <!-- Goals will be populated here -->
                         </div>
                         
-                        <!-- Goals Dashboard Container -->
-                        <div id="goals-dashboard">
-                            <!-- Goals dashboard content will be populated here -->
-                        </div>
-                        
                         <!-- Empty State -->
                         <div id="goals-empty-state" class="card p-8 text-center" style="display: none;">
                             <div class="text-6xl mb-4">🎯</div>
@@ -16769,6 +16764,17 @@ function renderGoalsPage() {
     
     if (!userGoals) userGoals = [];
     
+    // Remove any duplicate goals with same ID
+    const uniqueGoals = [];
+    const seenIds = new Set();
+    userGoals.forEach(goal => {
+        if (!seenIds.has(goal.id)) {
+            seenIds.add(goal.id);
+            uniqueGoals.push(goal);
+        }
+    });
+    userGoals = uniqueGoals;
+    
     const activeGoals = userGoals.filter(g => !g.completed);
     const completedGoals = userGoals.filter(g => g.completed);
     const totalProgress = userGoals.length > 0 ? 
@@ -16785,6 +16791,28 @@ function renderGoalsPage() {
     const emptyState = document.getElementById('goals-empty-state');
     const listContainer = document.getElementById('goals-list-container');
     
+    // Clear the container first to prevent stale content
+    if (listContainer) {
+        listContainer.innerHTML = '';
+        listContainer.style.display = 'block';
+    }
+    
+    // Also clear any potential leftover content in the parent
+    const goalsTab = document.getElementById('goals-tab');
+    if (goalsTab) {
+        // Remove any stray text nodes or elements that shouldn't be there
+        const cardElement = goalsTab.querySelector('.card');
+        if (cardElement) {
+            // Find any text nodes that are direct children of the card
+            const childNodes = Array.from(cardElement.childNodes);
+            childNodes.forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('£')) {
+                    node.remove();
+                }
+            });
+        }
+    }
+    
     // Check for duplicate IDs
     const allEmptyStates = document.querySelectorAll('#goals-empty-state');
     const allListContainers = document.querySelectorAll('#goals-list-container');
@@ -16800,7 +16828,10 @@ function renderGoalsPage() {
             document.documentElement.style.setProperty('--goals-empty-display', 'block');
             emptyState.style.display = 'block';
         }
-        if (listContainer) listContainer.style.display = 'none';
+        if (listContainer) {
+            listContainer.style.display = 'none';
+            listContainer.innerHTML = ''; // Clear any content
+        }
         return;
     }
     
@@ -17054,10 +17085,24 @@ function createNewGoal(event, type) {
     };
     
     if (!userGoals) userGoals = [];
-    userGoals.push(newGoal);
     
-    console.log('🆕 Creating goal:', newGoal);
-    console.log('📊 Goals before save:', userGoals.length);
+    // Check for duplicate goals before adding
+    const duplicateIndex = userGoals.findIndex(g => 
+        g.name === newGoal.name && 
+        g.type === newGoal.type && 
+        g.target === newGoal.target
+    );
+    
+    if (duplicateIndex !== -1) {
+        // Update existing goal instead of creating duplicate
+        userGoals[duplicateIndex] = newGoal;
+        console.log('📝 Updated existing goal instead of creating duplicate');
+    } else {
+        userGoals.push(newGoal);
+        console.log('🆕 Creating new goal:', newGoal);
+    }
+    
+    console.log('📊 Goals after update:', userGoals.length);
     
     saveData();
     
