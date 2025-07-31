@@ -1182,6 +1182,7 @@
         
         /* Active/expanded state styling */
         .settings-section-content.show {
+            display: block !important;
             background-color: var(--bg-primary);
         }
         
@@ -1190,16 +1191,10 @@
         }
 
         .settings-section-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            display: none;
             border-top: 1px solid var(--border-color);
         }
 
-        .settings-section-content.show {
-            max-height: 1000px;
-            transition: max-height 0.5s ease-in;
-        }
 
         .settings-toggle {
             font-size: 14px;
@@ -8741,7 +8736,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                     <h3 class="font-semibold text-purple-800 dark:text-purple-200">Available Daily</h3>
                                 </div>
                                 <div class="text-2xl font-bold text-purple-900 dark:text-purple-100" id="available-daily-budget">£0</div>
-                                <div class="text-xs text-purple-600 dark:text-purple-300">(Budget - Fixed) ÷ 30 days</div>
+                                <div class="text-xs text-purple-600 dark:text-purple-300">(Budget - Fixed) ÷ days in month</div>
                             </div>
                         </div>
                         
@@ -9241,7 +9236,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                                        class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-semibold text-lg">
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-300 mt-1">
-                                <span id="daily-budget-calculation">Leave empty to auto-calculate (Monthly ÷ 30)</span>
+                                <span id="daily-budget-calculation">Leave empty to auto-calculate (Monthly ÷ days in month)</span>
                             </p>
                         </div>
                         
@@ -11669,9 +11664,13 @@ button, .btn, input[type="button"], input[type="submit"] {
                 // Calculate fixed outgoings total
                 const fixedOutgoingsTotal = this.calculateFixedOutgoingsTotal();
                 
+                // Get actual days in current month (28, 29, 30, or 31)
+                const currentDate = new Date();
+                const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+                
                 // Auto-calculate from monthly budget minus fixed outgoings
                 const availableForDaily = Math.max(0, monthlyBudget - fixedOutgoingsTotal);
-                dailyBudget = Math.round((availableForDaily / 30) * 100) / 100;
+                dailyBudget = Math.round((availableForDaily / daysInMonth) * 100) / 100;
                 return dailyBudget;
             }
             
@@ -12115,7 +12114,9 @@ button, .btn, input[type="button"], input[type="submit"] {
             
             // Calculate available daily budget
             const availableForDaily = Math.max(0, monthlyBudget - fixedTotal);
-            const dailyBudgetAmount = availableForDaily / 30;
+            const currentDate = new Date();
+            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+            const dailyBudgetAmount = availableForDaily / daysInMonth;
             
             // Update the display elements
             const fixedElement = document.getElementById('fixed-outgoings-total');
@@ -17911,11 +17912,13 @@ function closeGoalSelection() {
             
             if (content && content.classList.contains('show')) {
                 content.classList.remove('show');
+                content.classList.add('hidden');
                 if (chevron) {
                     chevron.style.transform = 'rotate(0deg)'; // Point right when collapsed
                 }
             } else if (content) {
                 content.classList.add('show');
+                content.classList.remove('hidden');
                 if (chevron) {
                     chevron.style.transform = 'rotate(90deg)'; // Point down when expanded
                 }
@@ -18277,7 +18280,7 @@ function closeGoalSelection() {
             const datasets = [
                 {
                     label: 'Monthly Income (Daily Average)',
-                    data: Array(labels.length).fill(financialData.income / 30),
+                    data: Array(labels.length).fill(financialData.income / new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()),
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59, 130, 246, 0.1)',
                     borderWidth: 3,
@@ -18287,7 +18290,7 @@ function closeGoalSelection() {
                 },
                 {
                     label: 'Monthly Budget (Daily Average)',
-                    data: Array(labels.length).fill(financialData.monthlyBudget / 30),
+                    data: Array(labels.length).fill(financialData.monthlyBudget / new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()),
                     borderColor: '#f59e0b',
                     backgroundColor: 'rgba(245, 158, 11, 0.1)',
                     borderWidth: 3,
@@ -18372,7 +18375,7 @@ function closeGoalSelection() {
                         y: {
                             title: { display: true, text: 'Amount (£)' },
                             beginAtZero: true,
-                            max: Math.max(financialData.income / 30 * 1.2, Math.max(...spendingAmounts) * 1.2),
+                            max: Math.max(financialData.income / new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() * 1.2, Math.max(...spendingAmounts) * 1.2),
                             grid: { color: 'rgba(0, 0, 0, 0.12)' }
                         }
                     },
@@ -19130,7 +19133,7 @@ function closeGoalSelection() {
             localStorage.setItem('dailyBudgetEnabled', enabled.toString());
             
             if (enabled) {
-                const amount = parseFloat(document.getElementById('daily-budget-amount').value) || (monthlyBudget / 30);
+                const amount = parseFloat(document.getElementById('daily-budget-amount').value) || (monthlyBudget / new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate());
                 enableDailyBudget(amount);
             } else {
                 disableDailyBudget();
@@ -23290,7 +23293,11 @@ function closeGoalSelection() {
             if (analysis.opportunities.length === 0) {
                 return `
                     <div class="text-center p-6 bg-green-50 dark:bg-green-900/20 rounded-lg mb-4">
-                        <div class="text-2xl mb-2">🎯</div>
+                        <div class="text-2xl mb-2 flex justify-center">
+                            <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L15.09 8.26L22 9L17 14.07L18.18 21L12 17.82L5.82 21L7 14.07L2 9L8.91 8.26L12 2Z"/>
+                            </svg>
+                        </div>
                         <h3 class="font-semibold text-green-800 dark:text-green-200 mb-2">Perfect Optimization!</h3>
                         <p class="text-sm text-green-600 dark:text-green-300">You're already maximizing your points potential.</p>
                     </div>
@@ -23331,8 +23338,13 @@ function closeGoalSelection() {
                 
                 <!-- Top Opportunities -->
                 <div class="space-y-3 mb-4">
-                    <h4 class="font-semibold text-gray-800 dark:text-gray-200 text-sm">🎯 Top Opportunities</h4>
-                    ${analysis.opportunities.slice(0, 3).map(opp => `
+                    <h4 class="font-semibold text-gray-800 dark:text-gray-200 text-sm flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15.09 8.26L22 9L17 14.07L18.18 21L12 17.82L5.82 21L7 14.07L2 9L8.91 8.26L12 2Z"/>
+                        </svg>
+                        Top Opportunities
+                    </h4>
+                    ${analysis.opportunities.map(opp => `
                         <div class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-100 dark:border-gray-700">
                             <div class="flex justify-between items-start mb-2">
                                 <div class="flex-1">
@@ -23354,9 +23366,14 @@ function closeGoalSelection() {
                 <!-- Merchant Recommendations -->
                 ${merchantRecs.length > 0 ? `
                     <div class="mb-4">
-                        <h4 class="font-semibold text-gray-800 dark:text-gray-200 text-sm mb-3">🏪 Your Top Merchants</h4>
+                        <h4 class="font-semibold text-gray-800 dark:text-gray-200 text-sm mb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M16 11H18V9H16M10 11H12V9H10M19 7H5V5H19M19 3H5C3.9 3 3 3.9 3 5V7C3 8.1 3.9 9 5 9V19C5 20.1 5.9 21 7 21H9C10.1 21 11 20.1 11 19V15H13V19C13 20.1 13.9 21 15 21H17C18.1 21 19 20.1 19 19V9C20.1 9 21 8.1 21 7V5C21 3.9 20.1 3 19 3Z"/>
+                            </svg>
+                            Your Top Merchants
+                        </h4>
                         <div class="space-y-2">
-                            ${merchantRecs.slice(0, 3).map(rec => `
+                            ${merchantRecs.map(rec => `
                                 <div class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-100 dark:border-gray-700">
                                     <div class="flex justify-between items-center">
                                         <div>
@@ -24506,7 +24523,7 @@ class LensSmartInsights {
                 const priorityOrder = { urgent: 4, high: 3, medium: 2, low: 1 };
                 return (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
             })
-            .slice(0, 8); // Limit to top 8 recommendations
+; // Show all recommendations (limit removed)
     }
 
     prioritizeRecommendations(recommendations) {
@@ -24516,7 +24533,7 @@ class LensSmartInsights {
                 score: this.calculatePriorityScore(rec)
             }))
             .sort((a, b) => b.score - a.score)
-            .slice(0, 6);
+; // Show all prioritized recommendations (limit removed)
     }
 
     calculatePriorityScore(rec) {
@@ -26554,7 +26571,9 @@ function updateBudgetCalculations() {
     console.log('Values:', { monthlyIncome, monthlyBudget });
     
     const surplus = monthlyIncome - monthlyBudget;
-    const calculatedDailyBudget = monthlyBudget / 30;
+    const currentDate = new Date();
+    const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+    const calculatedDailyBudget = monthlyBudget / daysInMonth;
     const savingsRate = monthlyIncome > 0 ? (surplus / monthlyIncome) * 100 : 0;
     
     console.log('Calculated:', { surplus, savingsRate });
@@ -26576,9 +26595,13 @@ function updateBudgetCalculations() {
             dailyDisplay.innerHTML = `• Custom Daily Budget: <span class="font-semibold">${formatCurrency(displayBudget)}</span>`;
         } else if (fixedOutgoingsTotal > 0) {
             const availableForDaily = Math.max(0, monthlyBudget - fixedOutgoingsTotal);
-            dailyDisplay.innerHTML = `• Daily Budget: <span class="font-semibold">${formatCurrency(displayBudget)}</span><br><span class="text-xs opacity-75">  (${formatCurrency(monthlyBudget)} - ${formatCurrency(fixedOutgoingsTotal)} fixed) ÷ 30</span>`;
+            const currentDate = new Date();
+            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+            dailyDisplay.innerHTML = `• Daily Budget: <span class="font-semibold">${formatCurrency(displayBudget)}</span><br><span class="text-xs opacity-75">  (${formatCurrency(monthlyBudget)} - ${formatCurrency(fixedOutgoingsTotal)} fixed) ÷ ${daysInMonth}</span>`;
         } else {
-            dailyDisplay.innerHTML = `• Daily Budget: <span class="font-semibold">${formatCurrency(displayBudget)}</span><br><span class="text-xs opacity-75">  ${formatCurrency(monthlyBudget)} ÷ 30 days</span>`;
+            const currentDate = new Date();
+            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+            dailyDisplay.innerHTML = `• Daily Budget: <span class="font-semibold">${formatCurrency(displayBudget)}</span><br><span class="text-xs opacity-75">  ${formatCurrency(monthlyBudget)} ÷ ${daysInMonth} days</span>`;
         }
     }
     
@@ -26695,8 +26718,10 @@ function calculateRealInsights() {
     const daysElapsed = spendingData.length;
     const averageDaily = daysElapsed > 0 ? totalSpent / daysElapsed : 0;
     
-    // Calculate daily budget (from monthly budget or override)
-    const realDailyBudget = dailyBudgetOverride ? dailyBudget : (monthlyBudget / 30);
+    // Calculate daily budget using fixed outgoings system
+    const realDailyBudget = dailyBudgetCoach && dailyBudgetCoach.calculateDailyBudget ? 
+        dailyBudgetCoach.calculateDailyBudget() : 
+        (dailyBudgetOverride ? dailyBudget : (monthlyBudget / new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()));
     
     // Project spending to end of month
     const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
@@ -26900,14 +26925,14 @@ function generateRealInsights() {
     
     const insightsList = [
         {
-            icon: '🎯',
+            icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9L17 14.07L18.18 21L12 17.82L5.82 21L7 14.07L2 9L8.91 8.26L12 2Z"/></svg>',
             title: 'Month-End Projection',
             description: `Based on your current spending of £${insights.totalSpent.toFixed(2)} over ${insights.daysElapsed} days, you're projected to spend £${insights.projectedMonthly.toFixed(2)} this month.`,
             status: 'info',
             action: `You have £${Math.abs(monthlyBudget - insights.projectedMonthly).toFixed(2)} ${insights.projectedMonthly > monthlyBudget ? 'over' : 'under'} projected budget.`
         },
         {
-            icon: '📊',
+            icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22 21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z"/></svg>',
             title: 'Daily Budget Performance',
             description: `You've exceeded your daily budget of £${insights.dailyBudgetTarget.toFixed(2)} on ${insights.daysOverBudget} out of ${insights.daysElapsed} days.`,
             status: 'info',
@@ -26916,7 +26941,7 @@ function generateRealInsights() {
                 : 'Great job maintaining daily spending discipline!'
         },
         {
-            icon: '💰',
+            icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L13.09 8.26L22 9L17 14.07L18.18 21L12 17.82L5.82 21L7 14.07L2 9L8.91 8.26L12 2ZM12 15.4L16.76 18L15.77 12.68L20 9.24L14.45 8.63L12 3.5L9.55 8.63L4 9.24L8.23 12.68L7.24 18L12 15.4Z"/></svg>',
             title: 'Income vs Spending',
             description: monthlyIncome > 0 
                 ? `Your projected monthly spending (£${insights.projectedMonthly.toFixed(2)}) is ${insights.projectedMonthly > monthlyIncome ? 'exceeding' : 'within'} your income of £${monthlyIncome.toFixed(2)}.`
@@ -26925,7 +26950,7 @@ function generateRealInsights() {
             action: monthlyIncome > 0 ? 'You\'re living within your means!' : 'Go to Settings → Budget & Income to set your monthly income'
         },
         {
-            icon: '📈',
+            icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M16 6L18.29 8.29L13.41 13.17L9.41 9.17L2 16.59L3.41 18L9.41 12L13.41 16L19.71 9.71L22 12V6H16Z"/></svg>',
             title: 'Spending Trend',
             description: getSpendingTrendDescription(spendingData),
             status: 'info',
@@ -27279,8 +27304,10 @@ function updateInsightsTiles() {
     }
     
     if (insightsDailyBudget) {
-        insightsDailyBudget.textContent = formatCurrency(dailyBudget);
-        console.log('✅ Updated insights daily budget to:', formatCurrency(dailyBudget));
+        // Calculate daily budget with fixed outgoings deducted
+        const actualDailyBudget = dailyBudgetCoach ? dailyBudgetCoach.calculateDailyBudget() : dailyBudget;
+        insightsDailyBudget.textContent = formatCurrency(actualDailyBudget);
+        console.log('✅ Updated insights daily budget to:', formatCurrency(actualDailyBudget));
     }
     
     if (budgetPercentage && monthlyIncome > 0) {
@@ -27298,7 +27325,7 @@ function updateIntegratedInsights() {
     updateIntegratedBlueCards();
     updateIntegratedPeriodMetrics();
     updateIntegratedGoalsProgress();
-    updateIntegratedSmartInsights();
+    // DISABLED: updateIntegratedSmartInsights(); - conflicts with main insights system
     updateIntegratedCategories();
     updateIntegratedMonthComparison();
     updateIntegratedMonthlyOverview();
@@ -27319,7 +27346,9 @@ function updateIntegratedBlueCards() {
     
     updateElementText('insights-total-income', formatCurrency(totalIncome));
     updateElementText('insights-total-spent', formatCurrency(totalSpent));
-    updateElementText('insights-daily-budget', formatCurrency(dailyBudget));
+    // Calculate daily budget with fixed outgoings deducted
+    const actualDailyBudget = dailyBudgetCoach ? dailyBudgetCoach.calculateDailyBudget() : dailyBudget;
+    updateElementText('insights-daily-budget', formatCurrency(actualDailyBudget));
     updateElementText('insights-today-spending', formatCurrency(todaySpent));
 }
 
@@ -28644,7 +28673,7 @@ class FinanceInsights {
         this.generateDailyCoaching();
         this.renderAlerts();
         this.renderCategoryBreakdown();
-        this.renderInsights();
+        // REMOVED: this.renderInsights(); - was conflicting with main insights system
         this.renderCoaching();
     }
 
@@ -28866,37 +28895,7 @@ class FinanceInsights {
         }).join('');
     }
 
-    renderInsights() {
-        const container = document.getElementById('insights-container');
-        if (!container) return;
-        
-        const insights = this.calculateInsights();
-        
-        const insightsList = [
-            {
-                icon: '📊',
-                title: 'Spending Pattern',
-                description: `You're averaging £${insights.dailyAverage.toFixed(2)} per day in expenses.`,
-                type: 'info'
-            },
-            {
-                icon: '🎯',
-                title: 'Monthly Projection',
-                description: `At current rate, you'll spend £${insights.projectedTotal.toFixed(2)} this month.`,
-                type: insights.projectedTotal > this.monthlyBudget ? 'warning' : 'success'
-            }
-        ];
-
-        container.innerHTML = insightsList.map(insight => `
-            <div class="flex items-start gap-4 p-4 rounded-lg ${insight.type === 'warning' ? 'bg-yellow-50 border border-yellow-200' : insight.type === 'success' ? 'bg-green-50 border border-green-200' : 'bg-blue-50 border border-blue-200'}">
-                <div class="text-2xl">${insight.icon}</div>
-                <div class="flex-1">
-                    <h4 class="font-semibold mb-1" style="color: var(--color-text-primary);">${insight.title}</h4>
-                    <p class="text-sm" style="color: var(--color-text-primary);">${insight.description}</p>
-                </div>
-            </div>
-        `).join('');
-    }
+    // REMOVED: renderInsights() method was conflicting with main insights system
 
     renderCoaching() {
         const container = document.getElementById('budget-performance-content');
@@ -30436,11 +30435,12 @@ window.showTab = function(tabName) {
         }
         
         setTimeout(() => {
-            if (!window.FinanceInsights) {
-                window.FinanceInsights = new FinanceInsights();
-            } else {
-                window.FinanceInsights.refresh();
-            }
+            // DISABLED: FinanceInsights class conflicts with main insights system
+            // if (!window.FinanceInsights) {
+            //     window.FinanceInsights = new FinanceInsights();
+            // } else {
+            //     window.FinanceInsights.refresh();
+            // }
             
             // Initialize the new daily spending insights chart
             initializeDailySpendingInsightsChart();
@@ -32004,14 +32004,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     accelerationInsight.className = 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4';
                     accelerationInsight.innerHTML = `
                         <div class="flex items-start gap-3">
-                            <span class="text-2xl">🚨</span>
+                            <svg class="w-6 h-6 text-red-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 9V11M12 15H12.01M5.07 19.93A10 10 0 1 1 19.93 4.07A10 10 0 0 1 5.07 19.93Z"/>
+                            </svg>
                             <div>
                                 <h4 class="font-semibold text-gray-900 dark:text-white mb-1">Spending Acceleration Alert</h4>
                                 <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
                                     At £${dailyRate.toFixed(0)}/day pace, you'll hit £${projectedEnd.toFixed(0)} by month-end
                                 </p>
-                                <div class="text-xs bg-white dark:bg-gray-800 px-3 py-1 rounded-full">
-                                    💡 Reduce to £${((budget - currentSpending) / daysRemaining).toFixed(0)}/day for remaining ${daysRemaining} days
+                                <div class="text-xs bg-white dark:bg-gray-800 px-3 py-1 rounded-full flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M21 9V7L12 2L3 7V9C3 10.1 3.9 11 5 11V13C5 14.1 5.9 15 7 15H9C10.1 15 11 14.1 11 13V11C12.1 11 13 10.1 13 9V7C13 5.9 12.1 5 11 5H13C14.1 5 15 5.9 15 7V9C15 10.1 15.9 11 17 11V13C17 14.1 17.9 15 19 15H21C22.1 15 23 14.1 23 13V11C23 9.9 22.1 9 21 9Z"/>
+                                    </svg>
+                                    Reduce to £${((budget - currentSpending) / daysRemaining).toFixed(0)}/day for remaining ${daysRemaining} days
                                 </div>
                             </div>
                         </div>
@@ -32039,7 +32044,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     const optimizationBox = document.createElement('div');
                     optimizationBox.className = 'optimization-added mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700';
                     optimizationBox.innerHTML = `
-                        <h5 class="font-medium text-yellow-800 dark:text-yellow-200 mb-2">🎯 Quick Wins This Month</h5>
+                        <h5 class="font-medium text-yellow-800 dark:text-yellow-200 mb-2 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L15.09 8.26L22 9L17 14.07L18.18 21L12 17.82L5.82 21L7 14.07L2 9L8.91 8.26L12 2Z"/>
+                            </svg>
+                            Quick Wins This Month
+                        </h5>
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">
                                 <span class="text-sm">Food/Drink (reduce by 20%)</span>
@@ -32151,7 +32161,11 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="fab-section-title">Quick Add</div>
             <div class="fab-quick-grid">
                 <button class="fab-quick-item" onclick="fabQuickAddExpense('Coffee', 5, 'Food/Drink')">
-                    <div class="fab-quick-icon coffee">☕</div>
+                    <div class="fab-quick-icon coffee">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2 21V19H20V21H2M20 8V5H18V8H20M20 3A2 2 0 0 1 22 5V8A2 2 0 0 1 20 10H18V13A4 4 0 0 1 14 17H8A4 4 0 0 1 4 13V3H20M16 5H6V13A2 2 0 0 0 8 15H14A2 2 0 0 0 16 13V5Z"/>
+                        </svg>
+                    </div>
                     <div class="fab-quick-content">
                         <div class="fab-quick-label">Coffee</div>
                         <div class="fab-quick-amount">£5</div>
