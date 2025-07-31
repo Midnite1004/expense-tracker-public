@@ -26908,7 +26908,143 @@ function createRealCategoryChart() {
 }
 
 // ===========================
-// 3. INSIGHTS GENERATION WITH REAL DATA
+// 3. BEHAVIORAL INSIGHTS HELPER FUNCTIONS
+// ===========================
+
+function calculateSpendingStreak() {
+    const spendingData = getRealSpendingData();
+    const dailyBudgetTarget = dailyBudgetCoach && dailyBudgetCoach.calculateDailyBudget ? 
+        dailyBudgetCoach.calculateDailyBudget() : 
+        (monthlyBudget / new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate());
+    
+    let currentStreak = 0;
+    let longestStreak = 0;
+    let tempStreak = 0;
+    
+    // Check from most recent backwards
+    for (let i = spendingData.length - 1; i >= 0; i--) {
+        if (spendingData[i].amount <= dailyBudgetTarget) {
+            tempStreak++;
+            if (i === spendingData.length - 1) currentStreak = tempStreak;
+        } else {
+            if (tempStreak > longestStreak) longestStreak = tempStreak;
+            tempStreak = 0;
+        }
+    }
+    if (tempStreak > longestStreak) longestStreak = tempStreak;
+    
+    return { current: currentStreak, longest: Math.max(longestStreak, currentStreak) };
+}
+
+function calculateGoalImpact() {
+    const surplus = monthlyIncome - monthlyBudget;
+    if (!userGoals || userGoals.length === 0 || surplus <= 100) {
+        return { hasGoals: false };
+    }
+    
+    const primaryGoal = userGoals.find(g => g.isPrimary) || userGoals[0];
+    const monthlyProgress = Math.max(0, surplus);
+    const remaining = (primaryGoal.target || 0) - (primaryGoal.currentProgress || 0);
+    const monthsToGoal = remaining > 0 ? Math.ceil(remaining / monthlyProgress) : 0;
+    const percentComplete = ((primaryGoal.currentProgress || 0) / (primaryGoal.target || 1)) * 100;
+    
+    return {
+        hasGoals: true,
+        monthlyProgress,
+        primaryGoal: primaryGoal.name || 'financial goal',
+        monthsToGoal,
+        percentComplete: Math.min(100, percentComplete)
+    };
+}
+
+function calculatePowerMoves() {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+    const recentCancellations = recurringItems.filter(item => 
+        item.status === 'cancelled' && 
+        new Date(item.lastUpdated || item.date) >= thirtyDaysAgo &&
+        item.type === 'expense'
+    );
+    
+    if (recentCancellations.length === 0) {
+        return { recentSaving: 0 };
+    }
+    
+    const totalSaving = recentCancellations.reduce((sum, item) => sum + (item.amount || 0), 0);
+    const description = recentCancellations.length === 1 
+        ? `Canceling ${recentCancellations[0].description || 'a subscription'}`
+        : `Canceling ${recentCancellations.length} subscriptions`;
+    
+    return { recentSaving: totalSaving, description };
+}
+
+function calculateMoneyPersonality() {
+    const currentMonth = getCurrentMonthExpenses();
+    if (currentMonth.length < 7) {
+        return { hasEnoughData: false };
+    }
+    
+    let weekdaySpending = 0;
+    let weekendSpending = 0;
+    let weekdayCount = 0;
+    let weekendCount = 0;
+    
+    currentMonth.forEach(expense => {
+        const expenseDate = new Date(expense.date);
+        const dayOfWeek = expenseDate.getDay();
+        const amount = expense.cost || expense.amount || 0;
+        
+        if (dayOfWeek === 0 || dayOfWeek === 6) { // Sunday or Saturday
+            weekendSpending += amount;
+            weekendCount++;
+        } else {
+            weekdaySpending += amount;
+            weekdayCount++;
+        }
+    });
+    
+    const weekdayAvg = weekdayCount > 0 ? weekdaySpending / weekdayCount : 0;
+    const weekendAvg = weekendCount > 0 ? weekendSpending / weekendCount : 0;
+    const total = weekdaySpending + weekendSpending;
+    
+    let description, tip;
+    
+    if (weekendSpending / total > 0.6) {
+        description = `You spend most on weekends (${Math.round(weekendSpending/total*100)}% vs weekdays). You're a 'weekend warrior' spender.`;
+        tip = 'Plan weekend activities in advance to avoid impulse spending.';
+    } else if (weekdaySpending / total > 0.7) {
+        description = `You spend more on weekdays (${Math.round(weekdaySpending/total*100)}%). You're a 'workday spender'.`;
+        tip = 'Consider meal prepping to reduce weekday spending.';
+    } else {
+        description = 'You have consistent spending across all days. You\'re a steady, balanced spender.';
+        tip = 'Your balanced approach is great for financial stability!';
+    }
+    
+    return { hasEnoughData: true, description, tip };
+}
+
+function calculateMomentum() {
+    const thisMonth = getCurrentMonthExpenses();
+    const lastMonth = getLastMonthExpenses();
+    
+    if (thisMonth.length === 0 || lastMonth.length === 0) {
+        return { isPositive: false };
+    }
+    
+    const thisMonthTotal = thisMonth.reduce((sum, exp) => sum + (exp.cost || exp.amount || 0), 0);
+    const lastMonthTotal = lastMonth.reduce((sum, exp) => sum + (exp.cost || exp.amount || 0), 0);
+    
+    const improvement = lastMonthTotal - thisMonthTotal;
+    
+    return {
+        isPositive: improvement > 50,
+        improvement: Math.round(improvement)
+    };
+}
+
+// ===========================
+// 4. INSIGHTS GENERATION WITH REAL DATA
 // ===========================
 
 function generateRealInsights() {
@@ -26923,40 +27059,113 @@ function generateRealInsights() {
         return;
     }
     
-    const insightsList = [
-        {
+    // Create dynamic insights array
+    const dynamicInsights = [];
+    
+    // CORE INSIGHTS (always shown)
+    // 1. Month-End Projection
+    dynamicInsights.push({
+        icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9L17 14.07L18.18 21L12 17.82L5.82 21L7 14.07L2 9L8.91 8.26L12 2Z"/></svg>',
+        title: 'Month-End Projection',
+        description: `Based on your current spending of £${insights.totalSpent.toFixed(2)} over ${insights.daysElapsed} days, you're projected to spend £${insights.projectedMonthly.toFixed(2)} this month.`,
+        status: 'info',
+        action: `You have £${Math.abs(monthlyBudget - insights.projectedMonthly).toFixed(2)} ${insights.projectedMonthly > monthlyBudget ? 'over' : 'under'} projected budget.`
+    });
+    
+    // 2. Daily Budget Performance
+    dynamicInsights.push({
+        icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22 21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z"/></svg>',
+        title: 'Daily Budget Performance',
+        description: `You've exceeded your daily budget of £${insights.dailyBudgetTarget.toFixed(2)} on ${insights.daysOverBudget} out of ${insights.daysElapsed} days.`,
+        status: 'info',
+        action: insights.daysOverBudget > insights.daysElapsed * 0.3 
+            ? 'Try to stick to your daily budget more consistently'
+            : 'Great job maintaining daily spending discipline!'
+    });
+    
+    // BEHAVIORAL INSIGHTS (conditional)
+    // 3. Your Streak
+    const streak = calculateSpendingStreak();
+    if (streak.current > 0) {
+        dynamicInsights.push({
+            icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M13.5.67S14.99 1.55 16.28 2.83 17.83 5.29 17.83 6.93C17.83 8.57 16.91 9.74 15.54 10.54C13.88 11.5 12.04 11.5 10.38 10.54C9.01 9.74 8.09 8.57 8.09 6.93C8.09 5.29 9.64 2.83 10.93 2.83S13.5.67 13.5.67M12.92 18C12.92 18.68 12.37 19.23 11.69 19.23S10.46 18.68 10.46 18 11.01 16.77 11.69 16.77 12.92 17.32 12.92 18M9.85 21.08C9.85 21.54 9.5 21.91 9.04 21.91S8.23 21.54 8.23 21.08 8.58 20.27 9.04 20.27 9.85 20.65 9.85 21.08M15.77 21.08C15.77 21.54 15.42 21.91 14.96 21.91S14.15 21.54 14.15 21.08 14.5 20.27 14.96 20.27 15.77 20.65 15.77 21.08Z"/></svg>',
+            title: 'Your Streak',
+            description: `You've stayed under daily budget for ${streak.current} days straight! ${streak.longest > streak.current ? `Your longest streak this year is ${streak.longest} days.` : 'This is your best streak yet!'}`,
+            status: 'success',
+            action: 'Keep it up to build lasting financial habits!'
+        });
+    }
+    
+    // 4. Your Goal Impact
+    const goalImpact = calculateGoalImpact();
+    if (goalImpact.hasGoals) {
+        dynamicInsights.push({
             icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9L17 14.07L18.18 21L12 17.82L5.82 21L7 14.07L2 9L8.91 8.26L12 2Z"/></svg>',
-            title: 'Month-End Projection',
-            description: `Based on your current spending of £${insights.totalSpent.toFixed(2)} over ${insights.daysElapsed} days, you're projected to spend £${insights.projectedMonthly.toFixed(2)} this month.`,
+            title: 'Your Goal Impact',
+            description: `Staying under budget puts you £${goalImpact.monthlyProgress} closer to your ${goalImpact.primaryGoal}. At this rate, you'll reach it in ${goalImpact.monthsToGoal} months.`,
             status: 'info',
-            action: `You have £${Math.abs(monthlyBudget - insights.projectedMonthly).toFixed(2)} ${insights.projectedMonthly > monthlyBudget ? 'over' : 'under'} projected budget.`
-        },
-        {
-            icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22 21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z"/></svg>',
-            title: 'Daily Budget Performance',
-            description: `You've exceeded your daily budget of £${insights.dailyBudgetTarget.toFixed(2)} on ${insights.daysOverBudget} out of ${insights.daysElapsed} days.`,
+            action: `You're ${goalImpact.percentComplete.toFixed(0)}% of the way there!`
+        });
+    }
+    
+    // 5. Your Power Moves
+    const powerMoves = calculatePowerMoves();
+    if (powerMoves.recentSaving > 0) {
+        dynamicInsights.push({
+            icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M7 7H17V9H19V6C19 5.45 18.55 5 18 5H6C5.45 5 5 5.45 5 6V9H7V7M5 11V16H7V11H5M19 11V16H17V11H19M12 11L16 15L14.5 16.5L13 15V19H11V15L9.5 16.5L8 15L12 11Z"/></svg>',
+            title: 'Your Power Moves',
+            description: `${powerMoves.description} freed up £${powerMoves.recentSaving}/month for your goals!`,
+            status: 'success',
+            action: `That's £${powerMoves.recentSaving * 12}/year toward your future!`
+        });
+    }
+    
+    // 6. Your Money Personality
+    const personality = calculateMoneyPersonality();
+    if (personality.hasEnoughData) {
+        dynamicInsights.push({
+            icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4A4 4 0 0 1 16 8A4 4 0 0 1 12 12A4 4 0 0 1 8 8A4 4 0 0 1 12 4M12 14C16.42 14 20 15.79 20 18V20H4V18C4 15.79 7.58 14 12 14Z"/></svg>',
+            title: 'Your Money Personality',
+            description: personality.description,
             status: 'info',
-            action: insights.daysOverBudget > insights.daysElapsed * 0.3 
-                ? 'Try to stick to your daily budget more consistently'
-                : 'Great job maintaining daily spending discipline!'
-        },
-        {
-            icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L13.09 8.26L22 9L17 14.07L18.18 21L12 17.82L5.82 21L7 14.07L2 9L8.91 8.26L12 2ZM12 15.4L16.76 18L15.77 12.68L20 9.24L14.45 8.63L12 3.5L9.55 8.63L4 9.24L8.23 12.68L7.24 18L12 15.4Z"/></svg>',
-            title: 'Income vs Spending',
-            description: monthlyIncome > 0 
-                ? `Your projected monthly spending (£${insights.projectedMonthly.toFixed(2)}) is ${insights.projectedMonthly > monthlyIncome ? 'exceeding' : 'within'} your income of £${monthlyIncome.toFixed(2)}.`
-                : 'Set your monthly income in Settings to get income-based insights.',
-            status: 'info',
-            action: monthlyIncome > 0 ? 'You\'re living within your means!' : 'Go to Settings → Budget & Income to set your monthly income'
-        },
-        {
+            action: personality.tip
+        });
+    }
+    
+    // 7. Your Momentum
+    const momentum = calculateMomentum();
+    if (momentum.isPositive) {
+        dynamicInsights.push({
             icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M16 6L18.29 8.29L13.41 13.17L9.41 9.17L2 16.59L3.41 18L9.41 12L13.41 16L19.71 9.71L22 12V6H16Z"/></svg>',
-            title: 'Spending Trend',
-            description: getSpendingTrendDescription(spendingData),
-            status: 'info',
-            action: getSpendingTrendAction(spendingData, insights)
-        }
-    ];
+            title: 'Your Momentum',
+            description: `This month you're £${momentum.improvement} ahead of last month. You're building serious momentum!`,
+            status: 'success',
+            action: `Keep this up and you'll save an extra £${momentum.improvement * 12} this year!`
+        });
+    }
+    
+    // TRADITIONAL INSIGHTS (always shown)
+    // Income vs Spending
+    dynamicInsights.push({
+        icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L13.09 8.26L22 9L17 14.07L18.18 21L12 17.82L5.82 21L7 14.07L2 9L8.91 8.26L12 2ZM12 15.4L16.76 18L15.77 12.68L20 9.24L14.45 8.63L12 3.5L9.55 8.63L4 9.24L8.23 12.68L7.24 18L12 15.4Z"/></svg>',
+        title: 'Income vs Spending',
+        description: monthlyIncome > 0 
+            ? `Your projected monthly spending (£${insights.projectedMonthly.toFixed(2)}) is ${insights.projectedMonthly > monthlyIncome ? 'exceeding' : 'within'} your income of £${monthlyIncome.toFixed(2)}.`
+            : 'Set your monthly income in Settings to get income-based insights.',
+        status: 'info',
+        action: monthlyIncome > 0 ? 'You\'re living within your means!' : 'Go to Settings → Budget & Income to set your monthly income'
+    });
+    
+    // Spending Trend
+    dynamicInsights.push({
+        icon: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M16 6L18.29 8.29L13.41 13.17L9.41 9.17L2 16.59L3.41 18L9.41 12L13.41 16L19.71 9.71L22 12V6H16Z"/></svg>',
+        title: 'Spending Trend',
+        description: getSpendingTrendDescription(spendingData),
+        status: 'info',
+        action: getSpendingTrendAction(spendingData, insights)
+    });
+    
+    const insightsList = dynamicInsights;
     
     container.innerHTML = insightsList.map(insight => `
         <div class="flex items-start gap-4 p-4 rounded-lg ${getInsightCardClass(insight.status)}">
