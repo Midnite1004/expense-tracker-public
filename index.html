@@ -7985,7 +7985,7 @@ button, .btn, input[type="button"], input[type="submit"] {
                 line-height: 1rem !important;
             }
             #insights-all-toggle-icon {
-                display: none !important;
+                display: block !important;
             }
             
             /* Dark mode for desktop */
@@ -8865,8 +8865,9 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         <!-- 2. Budget Overview (Preserve chart functionality) -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 relative">
-            <!-- Expand/Collapse All Button - Just chevron -->
-            <button onclick="toggleAllInsightsSections()" style="position: absolute; top: 12px; right: 12px; z-index: 999; background: none; border: none; padding: 4px;" class="hover:opacity-70 transition-opacity">
+            <!-- Expand/Collapse All Button -->
+            <button onclick="toggleAllInsightsSections()" style="position: absolute; top: 12px; right: 12px; z-index: 999; background: none; border: none; padding: 4px; display: flex; align-items: center; gap: 4px;" class="hover:opacity-70 transition-opacity">
+                <span id="insights-all-toggle-text" style="color: #ffa000;">Expand All</span>
                 <svg id="insights-all-toggle-icon" class="w-5 h-5 transition-transform duration-200" style="transform: rotate(-90deg); color: #ffa000;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
@@ -9047,77 +9048,6 @@ button, .btn, input[type="button"], input[type="submit"] {
                 <button id="insights-load-more-months" class="w-full mt-4 py-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium" onclick="loadMoreInsightsMonths()">
                     Load More Months
                 </button>
-            </div>
-            
-            <!-- Mobile & UI Enhancements -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-                <button onclick="toggleHelpSection('mobile-ui')" class="flex items-center justify-between w-full text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">📱 Mobile & UI Enhancements</h3>
-                    <svg id="mobile-ui-chevron" class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </button>
-                <div id="mobile-ui-content" class="help-section-content hidden">
-                    <div class="help-component">
-                        <h4 class="help-component-title">📱 Mobile-First Design</h4>
-                        <p class="help-component-description">
-                            Optimized mobile experience with responsive design, touch-friendly interfaces, and mobile-specific features.
-                        </p>
-                        <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">Mobile optimizations:</h5>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li><strong>Responsive Cards:</strong> 2-column grid layout on mobile for better space usage</li>
-                                <li><strong>Touch Targets:</strong> Larger buttons and touch areas for easy interaction</li>
-                                <li><strong>Chart Adaptations:</strong> Different chart periods for mobile vs desktop</li>
-                                <li><strong>Compact Navigation:</strong> Bottom navigation bar with essential tabs</li>
-                                <li><strong>Optimized Layouts:</strong> Reduced padding and spacing for better mobile fit</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="help-component">
-                        <h4 class="help-component-title">🎨 User Interface Improvements</h4>
-                        <p class="help-component-description">
-                            Enhanced visual design with better organization, hover effects, and interactive elements.
-                        </p>
-                        <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">UI enhancements:</h5>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li><strong>Hover Tooltips:</strong> Budget Health and Health Score info icons show detailed information on hover</li>
-                                <li><strong>Collapsible Sections:</strong> Insights sections with expand/collapse functionality</li>
-                                <li><strong>Search Functionality:</strong> Working search fields in Expenses and Recurring tabs</li>
-                                <li><strong>Visual Feedback:</strong> Clear hover states, transitions, and loading indicators</li>
-                                <li><strong>Consistent Iconography:</strong> SVG icons throughout for crisp display</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="help-component">
-                        <h4 class="help-component-title">🎯 Dashboard Optimizations</h4>
-                        <p class="help-component-description">
-                            Streamlined dashboard with focused content, better organization, and improved mobile experience.
-                        </p>
-                        <div class="help-component-steps">
-                            <h5 class="font-medium mb-2">Recent improvements:</h5>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li><strong>Recent Activity:</strong> Shows last 4 expenses (optimized from 5) for cleaner display</li>
-                                <li><strong>Reduced Whitespace:</strong> Better spacing between sections and components</li>
-                                <li><strong>Quick Actions:</strong> Functional quick add buttons with proper handlers</li>
-                                <li><strong>Visual Separation:</strong> Clear date grouping with improved headers</li>
-                                <li><strong>Mobile Charts:</strong> Optimized chart periods (7 Days, Month, 12 Months on mobile)</li>
-                            </ul>
-                        </div>
-                        <div class="help-component-tips">
-                            <h5 class="font-medium mb-2">💡 Pro Tips:</h5>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>Hover over info icons (ℹ) for detailed explanations</li>
-                                <li>Use expand/collapse buttons to organize your view</li>
-                                <li>Try different chart periods to see spending patterns</li>
-                                <li>Access full menu via hamburger button (☰) on mobile</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         
