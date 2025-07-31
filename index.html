@@ -8709,6 +8709,42 @@ button, .btn, input[type="button"], input[type="submit"] {
                             </div>
                         </div>
                         
+                        <!-- Fixed vs Discretionary Summary -->
+                        <div id="recurring-summary" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 12L11 14L22 3L20.59 1.58L11 11.17L6.41 6.58L5 8L9 12Z"/>
+                                    </svg>
+                                    <h3 class="font-semibold text-blue-800 dark:text-blue-200">Fixed Outgoings</h3>
+                                </div>
+                                <div class="text-2xl font-bold text-blue-900 dark:text-blue-100" id="fixed-outgoings-total">£0</div>
+                                <div class="text-xs text-blue-600 dark:text-blue-300">Deducted before daily budget</div>
+                            </div>
+                            
+                            <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"/>
+                                    </svg>
+                                    <h3 class="font-semibold text-green-800 dark:text-green-200">Discretionary</h3>
+                                </div>
+                                <div class="text-2xl font-bold text-green-900 dark:text-green-100" id="discretionary-total">£0</div>
+                                <div class="text-xs text-green-600 dark:text-green-300">Comes from daily budget</div>
+                            </div>
+                            
+                            <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M7 13C5.34 13 4 14.34 4 16S5.34 19 7 19 10 17.66 10 16 8.66 13 7 13M12 8C10.34 8 9 9.34 9 11S10.34 14 12 14 15 12.66 15 11 13.66 8 12 8M17 13C15.34 13 14 14.34 14 16S15.34 19 17 19 20 17.66 20 16 18.66 13 17 13Z"/>
+                                    </svg>
+                                    <h3 class="font-semibold text-purple-800 dark:text-purple-200">Available Daily</h3>
+                                </div>
+                                <div class="text-2xl font-bold text-purple-900 dark:text-purple-100" id="available-daily-budget">£0</div>
+                                <div class="text-xs text-purple-600 dark:text-purple-300">(Budget - Fixed) ÷ 30 days</div>
+                            </div>
+                        </div>
+                        
                         <!-- Search Field -->
                         <div class="relative mb-4">
                             <input type="text" id="recurring-search" placeholder="Search recurring items..." class="w-full px-4 py-2 pl-10 pr-4 border border-gray-400 dark:border-gray-500 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:ring-0 focus:border-blue-500" onkeyup="renderRecurringTable()">
@@ -10261,6 +10297,18 @@ button, .btn, input[type="button"], input[type="submit"] {
                         </select>
                     </div>
                 </div>
+                <div id="recurring-fixed-outgoing-wrapper" class="hidden">
+                    <label class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <div>
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Fixed Outgoing</span>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">This expense is deducted before calculating daily budget (e.g., mortgage, utilities, insurance)</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="recurring-is-fixed-outgoing" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                    </label>
+                </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
@@ -11617,9 +11665,50 @@ button, .btn, input[type="button"], input[type="submit"] {
                 if (dailyBudgetOverride && dailyBudget) {
                     return dailyBudget; // User has set custom daily budget
                 }
-                // Auto-calculate from monthly budget
-                dailyBudget = Math.round((monthlyBudget / 30) * 100) / 100;
+                
+                // Calculate fixed outgoings total
+                const fixedOutgoingsTotal = this.calculateFixedOutgoingsTotal();
+                
+                // Auto-calculate from monthly budget minus fixed outgoings
+                const availableForDaily = Math.max(0, monthlyBudget - fixedOutgoingsTotal);
+                dailyBudget = Math.round((availableForDaily / 30) * 100) / 100;
                 return dailyBudget;
+            }
+            
+            calculateFixedOutgoingsTotal() {
+                const currentDate = new Date();
+                const currentMonth = currentDate.getMonth();
+                const currentYear = currentDate.getFullYear();
+                
+                return recurringItems
+                    .filter(item => item.status === 'active' && item.type === 'expense' && item.isFixedOutgoing)
+                    .reduce((total, item) => {
+                        // Convert to monthly equivalent
+                        let monthlyAmount = 0;
+                        switch (item.frequency) {
+                            case 'Daily':
+                                monthlyAmount = item.amount * 30;
+                                break;
+                            case 'Weekly':
+                                monthlyAmount = item.amount * 4.33;
+                                break;
+                            case 'Bi-Weekly':
+                                monthlyAmount = item.amount * 2.17;
+                                break;
+                            case 'Monthly':
+                                monthlyAmount = item.amount;
+                                break;
+                            case 'Quarterly':
+                                monthlyAmount = item.amount / 3;
+                                break;
+                            case 'Annual':
+                                monthlyAmount = item.amount / 12;
+                                break;
+                            default:
+                                monthlyAmount = item.amount;
+                        }
+                        return total + monthlyAmount;
+                    }, 0);
             }
             
             updateTodaySpent() {
@@ -11915,6 +12004,135 @@ button, .btn, input[type="button"], input[type="submit"] {
         
         const dailyBudgetCoach = new DailyBudgetCoach();
         
+        // Global helper function to calculate fixed outgoings total
+        function calculateFixedOutgoingsTotal() {
+            return recurringItems
+                .filter(item => item.status === 'active' && item.type === 'expense' && item.isFixedOutgoing)
+                .reduce((total, item) => {
+                    // Convert to monthly equivalent
+                    let monthlyAmount = 0;
+                    switch (item.frequency) {
+                        case 'Daily':
+                            monthlyAmount = item.amount * 30;
+                            break;
+                        case 'Weekly':
+                            monthlyAmount = item.amount * 4.33;
+                            break;
+                        case 'Bi-Weekly':
+                            monthlyAmount = item.amount * 2.17;
+                            break;
+                        case 'Monthly':
+                            monthlyAmount = item.amount;
+                            break;
+                        case 'Quarterly':
+                            monthlyAmount = item.amount / 3;
+                            break;
+                        case 'Annual':
+                            monthlyAmount = item.amount / 12;
+                            break;
+                        default:
+                            monthlyAmount = item.amount;
+                    }
+                    return total + monthlyAmount;
+                }, 0);
+        }
+        
+        // Migration function to add isFixedOutgoing property to existing items
+        function migrateRecurringItemsFixedOutgoing() {
+            let migrated = false;
+            const fixedCategories = ['Housing', 'Utilities', 'Insurance', 'Debt'];
+            
+            recurringItems.forEach(item => {
+                if (item.type === 'expense' && (item.isFixedOutgoing === undefined || item.isFixedOutgoing === false)) {
+                    // Auto-set based on category
+                    const shouldBeFixed = fixedCategories.includes(item.category);
+                    if (shouldBeFixed) {
+                        item.isFixedOutgoing = true;
+                        migrated = true;
+                        console.log(`✅ Updated ${item.name} (${item.category}) to be fixed outgoing`);
+                    }
+                }
+            });
+            
+            if (migrated) {
+                saveData();
+                console.log('✅ Migration complete - fixed outgoings updated');
+            }
+            return migrated;
+        }
+        
+        // Manual fix function for console
+        window.fixRecurringItems = function() {
+            console.log('🔧 Fixing recurring items...');
+            const migrated = migrateRecurringItemsFixedOutgoing();
+            if (migrated) {
+                renderRecurringTable();
+                updateRecurringSummary();
+                console.log('✅ Fixed! Refresh the page to see changes.');
+            } else {
+                console.log('ℹ️ No items needed fixing.');
+            }
+        };
+        
+        // Function to update recurring summary cards
+        function updateRecurringSummary() {
+            console.log('🔄 updateRecurringSummary called');
+            console.log('📊 Total recurring items:', recurringItems.length);
+            console.log('📊 Recurring items:', recurringItems);
+            
+            const fixedTotal = calculateFixedOutgoingsTotal();
+            console.log('💰 Fixed total calculated:', fixedTotal);
+            
+            // Calculate discretionary expenses (non-fixed recurring expenses)
+            const discretionaryTotal = recurringItems
+                .filter(item => item.status === 'active' && item.type === 'expense' && !item.isFixedOutgoing)
+                .reduce((total, item) => {
+                    let monthlyAmount = 0;
+                    switch (item.frequency) {
+                        case 'Daily':
+                            monthlyAmount = item.amount * 30;
+                            break;
+                        case 'Weekly':
+                            monthlyAmount = item.amount * 4.33;
+                            break;
+                        case 'Bi-Weekly':
+                            monthlyAmount = item.amount * 2.17;
+                            break;
+                        case 'Monthly':
+                            monthlyAmount = item.amount;
+                            break;
+                        case 'Quarterly':
+                            monthlyAmount = item.amount / 3;
+                            break;
+                        case 'Annual':
+                            monthlyAmount = item.amount / 12;
+                            break;
+                        default:
+                            monthlyAmount = item.amount;
+                    }
+                    return total + monthlyAmount;
+                }, 0);
+            
+            // Calculate available daily budget
+            const availableForDaily = Math.max(0, monthlyBudget - fixedTotal);
+            const dailyBudgetAmount = availableForDaily / 30;
+            
+            // Update the display elements
+            const fixedElement = document.getElementById('fixed-outgoings-total');
+            const discretionaryElement = document.getElementById('discretionary-total');
+            const dailyElement = document.getElementById('available-daily-budget');
+            
+            if (fixedElement) {
+                fixedElement.textContent = formatCurrency(fixedTotal);
+            }
+            if (discretionaryElement) {
+                discretionaryElement.textContent = formatCurrency(discretionaryTotal);
+            }
+            if (dailyElement) {
+                dailyElement.textContent = formatCurrency(dailyBudgetAmount);
+            }
+        }
+        
         /**
          * Global Application State Management
          * Core data structures that power the entire application
@@ -12152,6 +12370,23 @@ button, .btn, input[type="button"], input[type="submit"] {
             
             // Apply saved theme to prevent flash of unstyled content
             applyTheme();
+            
+            // Add event listener for recurring category changes
+            const recurringCategory = document.getElementById('recurring-category');
+            if (recurringCategory) {
+                recurringCategory.addEventListener('change', function() {
+                    const category = this.value;
+                    const isFixedCheckbox = document.getElementById('recurring-is-fixed-outgoing');
+                    
+                    // Categories that are typically fixed outgoings
+                    const fixedCategories = ['Housing', 'Utilities', 'Insurance', 'Debt'];
+                    
+                    if (isFixedCheckbox) {
+                        // Auto-check for fixed categories
+                        isFixedCheckbox.checked = fixedCategories.includes(category);
+                    }
+                });
+            }
             
             // Ensure theme icons are properly initialized
             setTimeout(() => {
@@ -17817,6 +18052,7 @@ function closeGoalSelection() {
                     renderGoalsPage();
                 } else if (activeTab === 'recurring') {
                     renderRecurringTable();
+                    updateRecurringSummary();
                 } else if (activeTab === 'insights') {
                     updateIntegratedBlueCards();
                     updateInsightsFinancialMetrics();
@@ -19287,6 +19523,12 @@ function closeGoalSelection() {
             DOMElements.recurringCategory.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
             
             DOMElements.recurringEssentialTypeWrapper.style.display = type === 'expense' ? 'block' : 'none';
+            
+            // Show/hide fixed outgoing toggle
+            const fixedOutgoingWrapper = document.getElementById('recurring-fixed-outgoing-wrapper');
+            if (fixedOutgoingWrapper) {
+                fixedOutgoingWrapper.style.display = type === 'expense' ? 'block' : 'none';
+            }
         }
 
          function showRecurringForm() {
@@ -19304,6 +19546,12 @@ function closeGoalSelection() {
             DOMElements.recurringCategory.value = 'Other';
             if (DOMElements.recurringEssentialType) {
                 DOMElements.recurringEssentialType.value = 'Non-Essential';
+            }
+            
+            // Reset fixed outgoing checkbox
+            const isFixedCheckbox = document.getElementById('recurring-is-fixed-outgoing');
+            if (isFixedCheckbox) {
+                isFixedCheckbox.checked = false;
             }
             
             // Initialize the form properly
@@ -19366,6 +19614,19 @@ function closeGoalSelection() {
                 frequency: DOMElements.recurringFrequency.value,
                 category: DOMElements.recurringCategory.value,
                 essentialType: type === 'expense' ? DOMElements.recurringEssentialType.value : null,
+                isFixedOutgoing: type === 'expense' ? (function() {
+                    const checkbox = document.getElementById('recurring-is-fixed-outgoing');
+                    const category = DOMElements.recurringCategory.value;
+                    const fixedCategories = ['Housing', 'Utilities', 'Insurance', 'Debt'];
+                    
+                    // If checkbox exists and is explicitly set, use that value
+                    if (checkbox && checkbox.checked !== undefined) {
+                        return checkbox.checked;
+                    }
+                    
+                    // Otherwise, auto-determine based on category
+                    return fixedCategories.includes(category);
+                })() : false,
                 paymentMethod: DOMElements.recurringPaymentMethod.value,
                 startDate: startDate,
                 endDate: endDate,
@@ -19387,6 +19648,12 @@ function closeGoalSelection() {
             updateDisplay();
             
             closeRecurringModal();
+            
+            // Update the summary cards
+            if (activeTab === 'recurring') {
+                updateRecurringSummary();
+            }
+            
             showToast(`Recurring item '${name}' saved successfully.`, "success");
         }
 
@@ -19403,6 +19670,11 @@ function closeGoalSelection() {
             DOMElements.recurringCategory.value = item.category;
             if (item.type === 'expense') {
                 DOMElements.recurringEssentialType.value = item.essentialType || 'Non-Essential';
+                // Set fixed outgoing checkbox
+                const isFixedCheckbox = document.getElementById('recurring-is-fixed-outgoing');
+                if (isFixedCheckbox) {
+                    isFixedCheckbox.checked = item.isFixedOutgoing || false;
+                }
             }
             DOMElements.recurringPaymentMethod.value = item.paymentMethod || '';
             DOMElements.recurringStartDate.value = item.startDate;
@@ -21648,6 +21920,9 @@ function closeGoalSelection() {
             console.log('📊 Total recurring items:', recurringItems.length);
             console.log('📊 Recurring items data:', recurringItems);
             
+            // Migrate existing items if needed
+            migrateRecurringItemsFixedOutgoing();
+            
             DOMElements.recurringTableBody.innerHTML = '';
             const type = document.getElementById('recurring-filter-type').value;
             const category = document.getElementById('recurring-filter-category').value;
@@ -21789,7 +22064,17 @@ function closeGoalSelection() {
                         <span class="text-gray-800 dark:text-white font-medium">${escapeHTML(item.name)}</span>
                     </td>
                     <td class="px-6 py-4 capitalize text-gray-900 dark:text-white" data-label="Type">${item.type}</td>
-                    <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Category">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Category">
+                        <div class="flex items-center gap-2">
+                            ${item.type === 'expense' && item.isFixedOutgoing ? 
+                                '<svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24" title="Fixed Outgoing"><path d="M9 12L11 14L22 3L20.59 1.58L11 11.17L6.41 6.58L5 8L9 12Z"/><path d="M19 15V17C19 18.1 18.1 19 17 19H7C5.9 19 5 18.1 5 17V7C5 5.9 5.9 5 7 5H16L18 3H7C4.79 3 3 4.79 3 7V17C3 19.21 4.79 21 7 21H17C19.21 21 21 19.21 21 17V13L19 15Z"/></svg>' : 
+                                item.type === 'expense' ? 
+                                '<svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 24 24" title="Discretionary Spending"><path d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"/></svg>' : 
+                                ''
+                            }
+                            <span>${escapeHTML(item.category)}</span>
+                        </div>
+                    </td>
                     <td class="px-6 py-4 font-medium ${itemTypeClass}" data-label="Amount">${formatCurrency(item.amount)}</td>
                     <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Frequency">${item.frequency}</td>
                     <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Date">${formattedStartDate}</td>
@@ -21808,6 +22093,9 @@ function closeGoalSelection() {
             
             // Update pagination
             updateRecurringPagination(totalItems, totalPages);
+            
+            // Update summary cards
+            updateRecurringSummary();
         }
 
         // --- Pagination Functions ---
@@ -24917,6 +25205,19 @@ function showInsightsError() {
                 frequency: DOMElements.recurringFrequency.value,
                 category: DOMElements.recurringCategory.value,
                 essentialType: type === 'expense' ? DOMElements.recurringEssentialType.value : null,
+                isFixedOutgoing: type === 'expense' ? (function() {
+                    const checkbox = document.getElementById('recurring-is-fixed-outgoing');
+                    const category = DOMElements.recurringCategory.value;
+                    const fixedCategories = ['Housing', 'Utilities', 'Insurance', 'Debt'];
+                    
+                    // If checkbox exists and is explicitly set, use that value
+                    if (checkbox && checkbox.checked !== undefined) {
+                        return checkbox.checked;
+                    }
+                    
+                    // Otherwise, auto-determine based on category
+                    return fixedCategories.includes(category);
+                })() : false,
                 paymentMethod: DOMElements.recurringPaymentMethod.value,
                 startDate: startDate,
                 endDate: endDate,
@@ -24973,6 +25274,11 @@ function showInsightsError() {
     updateDisplay();
             
             closeRecurringModal();
+            
+            // Update the summary cards
+            if (activeTab === 'recurring') {
+                updateRecurringSummary();
+            }
         }
 
         // Enhanced Mobile Rendering Functions
@@ -25415,7 +25721,12 @@ function showInsightsError() {
                         <input type="checkbox" data-id="${item.id}" onchange="toggleRecurringSelection(this, ${item.id})" 
                                class="mr-3 table-checkbox recurring-checkbox">
                         <div class="flex-1 flex items-center cursor-pointer" onclick="editRecurring(${item.id})">
-                             <div class="mobile-card-icon">${window.categoryIcons[item.category] || window.categoryIcons['Other']}</div>
+                             <div class="mobile-card-icon">${item.type === 'expense' && item.isFixedOutgoing ? 
+                                '<svg class="w-5 h-5" style="color: #2563eb;" fill="currentColor" viewBox="0 0 24 24" title="Fixed Outgoing"><path d="M9 12L11 14L22 3L20.59 1.58L11 11.17L6.41 6.58L5 8L9 12Z"/><path d="M19 15V17C19 18.1 18.1 19 17 19H7C5.9 19 5 18.1 5 17V7C5 5.9 5.9 5 7 5H16L18 3H7C4.79 3 3 4.79 3 7V17C3 19.21 4.79 21 7 21H17C19.21 21 21 19.21 21 17V13L19 15Z"/></svg>' : 
+                                item.type === 'expense' ? 
+                                '<svg class="w-5 h-5" style="color: #16a34a;" fill="currentColor" viewBox="0 0 24 24" title="Discretionary Spending"><path d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"/></svg>' : 
+                                (window.categoryIcons[item.category] || window.categoryIcons['Other'])
+                             }</div>
                              <div class="mobile-card-main flex-1">
                                 <p class="mobile-card-title">${escapeHTML(item.name)}</p>
                                 <div class="mobile-card-subtitle">
@@ -25479,7 +25790,17 @@ function showInsightsError() {
                         <span class="text-gray-800 dark:text-white font-medium">${escapeHTML(item.name)}</span>
                     </td>
                     <td class="px-6 py-4 capitalize text-gray-900 dark:text-white" data-label="Type">${item.type}</td>
-                    <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Category">${escapeHTML(item.category)}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Category">
+                        <div class="flex items-center gap-2">
+                            ${item.type === 'expense' && item.isFixedOutgoing ? 
+                                '<svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24" title="Fixed Outgoing"><path d="M9 12L11 14L22 3L20.59 1.58L11 11.17L6.41 6.58L5 8L9 12Z"/><path d="M19 15V17C19 18.1 18.1 19 17 19H7C5.9 19 5 18.1 5 17V7C5 5.9 5.9 5 7 5H16L18 3H7C4.79 3 3 4.79 3 7V17C3 19.21 4.79 21 7 21H17C19.21 21 21 19.21 21 17V13L19 15Z"/></svg>' : 
+                                item.type === 'expense' ? 
+                                '<svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 24 24" title="Discretionary Spending"><path d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"/></svg>' : 
+                                ''
+                            }
+                            <span>${escapeHTML(item.category)}</span>
+                        </div>
+                    </td>
                     <td class="px-6 py-4 font-medium ${itemTypeClass}" data-label="Amount">${formatCurrency(item.amount)}</td>
                     <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Frequency">${item.frequency}</td>
                     <td class="px-6 py-4 text-gray-900 dark:text-white" data-label="Date">${formattedStartDate}</td>
@@ -26249,7 +26570,16 @@ function updateBudgetCalculations() {
     
     if (dailyDisplay) {
         const displayBudget = dailyBudgetOverride && dailyBudget > 0 ? dailyBudget : calculatedDailyBudget;
-        dailyDisplay.innerHTML = `• ${dailyBudgetOverride ? 'Custom' : 'Calculated'} Daily Budget: <span class="font-semibold">${formatCurrency(displayBudget)}</span>`;
+        const fixedOutgoingsTotal = calculateFixedOutgoingsTotal();
+        
+        if (dailyBudgetOverride) {
+            dailyDisplay.innerHTML = `• Custom Daily Budget: <span class="font-semibold">${formatCurrency(displayBudget)}</span>`;
+        } else if (fixedOutgoingsTotal > 0) {
+            const availableForDaily = Math.max(0, monthlyBudget - fixedOutgoingsTotal);
+            dailyDisplay.innerHTML = `• Daily Budget: <span class="font-semibold">${formatCurrency(displayBudget)}</span><br><span class="text-xs opacity-75">  (${formatCurrency(monthlyBudget)} - ${formatCurrency(fixedOutgoingsTotal)} fixed) ÷ 30</span>`;
+        } else {
+            dailyDisplay.innerHTML = `• Daily Budget: <span class="font-semibold">${formatCurrency(displayBudget)}</span><br><span class="text-xs opacity-75">  ${formatCurrency(monthlyBudget)} ÷ 30 days</span>`;
+        }
     }
     
     if (savingsDisplay) {
@@ -26853,7 +27183,10 @@ function saveSettingsWithInsightsUpdate() {
         dailyBudget = dailyValue;
         dailyBudgetOverride = true;
     } else {
-        dailyBudget = Math.round((monthlyBudget / 30) * 100) / 100;
+        // Calculate daily budget excluding fixed outgoings
+        const fixedOutgoingsTotal = calculateFixedOutgoingsTotal();
+        const availableForDaily = Math.max(0, monthlyBudget - fixedOutgoingsTotal);
+        dailyBudget = Math.round((availableForDaily / 30) * 100) / 100;
         dailyBudgetOverride = false;
     }
     
